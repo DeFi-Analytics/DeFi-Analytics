@@ -49,6 +49,30 @@ class defichainAnalyticsViewClass:
             ),
         ]
 
+        submenu_liquidityMining = [
+            html.Li(
+                # use Row and Col components to position the chevrons
+                dbc.Row(
+                    [
+                        dbc.Col("Liquidity Mining"),
+                        dbc.Col(
+                            html.I(className="fas fa-chevron-right mr-3"), width="auto"
+                        ),
+                    ],
+                    className="my-1",
+                ),
+                style={"cursor": "pointer"},
+                id="submenu-liquidityMining",
+            ),
+            # we use the Collapse component to hide and reveal the navigation links
+            dbc.Collapse(
+                [
+                    dbc.NavLink("Fees", href="/liquidityMining?entry=fees")
+                ],
+                id="submenu-liquidityMining-collapse",
+            ),
+        ]
+
         submenu_2 = [
             html.Li(
                 dbc.Row(
@@ -74,12 +98,9 @@ class defichainAnalyticsViewClass:
 
         sidebar = html.Div(
             [
-                html.H2("Sidebar", className="display-4"),
+                html.H2("DeFi Analytics", className="display-4"),
                 html.Hr(),
-                html.P(
-                    "A sidebar with collapsible navigation links", className="lead"
-                ),
-                dbc.Nav(submenu_blockchain + submenu_2, vertical=True, ),
+                dbc.Nav(submenu_blockchain + submenu_liquidityMining + submenu_2, vertical=True, ),
             ],
             style=SIDEBAR_STYLE,
             id="sidebar",

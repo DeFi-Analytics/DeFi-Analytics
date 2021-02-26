@@ -4,10 +4,10 @@ from dash.dependencies import Input, Output, State
 from urllib.parse import urlparse, parse_qs
 
 class defichainAnalyticsCallbacksClass:
-    def __init__(self, blockchainController, submenu2Controller):
+    def __init__(self, blockchainController, liquidityMiningController, submenu2Controller):
         self.blockchainController = blockchainController
         self.submenu2Controller = submenu2Controller
-
+        self.liquidityMiningController = liquidityMiningController
 
     def register_callbacks(self, app):
         # this function is used to toggle the is_open property of each Collapse
@@ -41,6 +41,10 @@ class defichainAnalyticsCallbacksClass:
         def toggleBlockchainMenu(n,isOpen):
             return toggle_collapse(n,isOpen)
 
+        # toggle liquidityMining menu
+        @app.callback(Output("submenu-liquidityMining-collapse", "is_open"),[Input("submenu-liquidityMining", "n_clicks")],[State("submenu-liquidityMining-collapse", "is_open")])
+        def toggleLiquidityMiningMenu(n,isOpen):
+            return toggle_collapse(n,isOpen)
 
         @app.callback(Output("page-content", "children"), [Input("url", "href")])
         def render_page_content(hrefPath):
@@ -58,7 +62,8 @@ class defichainAnalyticsCallbacksClass:
 
             if urlPath in ["/", "/blockchain"]:
                 return self.blockchainController.getContent(selectedEntry)
-
+            elif urlPath in ["/liquidityMining"]:
+                return self.liquidityMiningController.getContent(selectedEntry)
             elif urlPath in ["/page-2/1", "/page-2/2"]:
                 return self.submenu2Controller.getContent(urlPath)
 

@@ -5,7 +5,7 @@ class defichainAnalyticsModelClass:
     def __init__(self):
         workDir = os.path.abspath(os.getcwd())
         self.dataPath = workDir[:-9] + '/data/'
-        self.dailyData = pd.DataFrame(columns=columnsExtractedRichlist)
+        self.dailyData = pd.DataFrame()
         self.lmData = None
 
     def loadDailyData(self):

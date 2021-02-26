@@ -9,18 +9,14 @@ import time
 
 class addressesViewClass:
     def __init__(self):
-        self.content = [html.I("Try typing in input 1"),
-                            html.Br(),
-                            dcc.Input(id="input1", type="text", placeholder=""),
-                            html.Div(id="output")]
+        None
 
     def getAddressContent(self, data):
-        content = [dbc.Card([dcc.Graph(figure=self.createAddressesFigure(data),config={'displayModeBar': False})]),
-                    dbc.Card(dbc.CardBody(self.getAddressExplanation()),style={'margin-top': '1.0rem'})]
+        content = [dbc.Card(dbc.CardBody([dcc.Graph(figure=self.createAddressesFigure(data),config={'displayModeBar': False})])),
+                   dbc.Card(dbc.CardBody(self.getAddressExplanation()),style={'margin-top': '1.0rem'})]
         return content
 
     def createAddressesFigure(self, data):
-        time.sleep(5)
         figAddress = make_subplots(
             rows=3, cols=1,
             vertical_spacing=0.15,
@@ -38,7 +34,7 @@ class addressesViewClass:
         figAddress.layout.annotations[2].font.size = 20
 
         # generate over addresses
-        trace_AllAddresses = dict(type='scatter', name='Overall', x=data.index, y=data['nbOverall'],
+        trace_AllAddresses = dict(type='scatter', name='Overall', x=data.index, y=data['nbOverall'].dropna(),
                                   mode='lines', line=dict(color='#8097ee'), line_width=3, marker_size=8,
                                   hovertemplate='%{y:.f}')
         figAddress.add_trace(trace_AllAddresses, 1, 1)
@@ -46,12 +42,12 @@ class addressesViewClass:
                                 zerolinecolor='#6c757d', row=1, col=1)
 
         # generate specific addresses
-        trace_mnAddresses = dict(type='scatter', name='Full Masternodes',x=data.index, y=data['nbMnId'] - data['nbMnGenesisId'],
+        trace_mnAddresses = dict(type='scatter', name='Full Masternodes',x=data.index, y=data['nbMnId'].dropna() - data['nbMnGenesisId'].dropna(),
                                  mode='lines', line=dict(color='#da3832'), line_width=3, marker_size=8,
                                  hovertemplate='%{y:.f}')
         figAddress.add_trace(trace_mnAddresses, 2, 1)
 
-        trace_otherAddresses = dict(type='scatter', name='Other', x=data.index, y=data['nbOtherId'],
+        trace_otherAddresses = dict(type='scatter', name='Other', x=data.index, y=data['nbOtherId'].dropna(),
                                     mode='lines', line=dict(color='#7f50ff'), line_width=3, marker_size=8,
                                     hovertemplate='%{y:.f}')
         figAddress.add_trace(trace_otherAddresses, 2, 1)
@@ -59,7 +55,7 @@ class addressesViewClass:
                                 zerolinecolor='#6c757d', row=2, col=1)
 
         # generate genesis masternodes
-        trace_mnGenesisAddresses = dict(type='scatter', name='Genesis Masternodes', x=data.index, y=data['nbMnGenesisId'],
+        trace_mnGenesisAddresses = dict(type='scatter', name='Genesis Masternodes', x=data.index, y=data['nbMnGenesisId'].dropna(),
                                         mode='lines', line=dict(color='#ff00af'), line_width=3, marker_size=8,
                                         hovertemplate='%{y:.f}')
         figAddress.add_trace(trace_mnGenesisAddresses, 3, 1)

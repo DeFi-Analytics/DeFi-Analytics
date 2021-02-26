@@ -7,12 +7,12 @@ class blockchainControllerClass:
         self.defichainAnalyticsModel = defichainAnalyticsModel
         self.app = app
 
-        # initialize coinprices classes
+        # initialize fees classes
         # self.addressesView = addressesViewClass()
         # self.addressesCallbacks = addressesCallbacksClass()       # create callbacks on top level
         # self.addressesCallbacks.register_callbacks(app)
 
 
     def getContent(self,entry):
-        if entry in ["", "coinprices"]:
+        if entry in ["", "fees"]:
             # return self.coinpricesView.getAddressContent(self.defichainAnalyticsModel.dailyData)

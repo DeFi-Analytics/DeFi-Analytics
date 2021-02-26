@@ -20,7 +20,7 @@
 
 
 .dash-spinner.dash-default-spinner {
-    margin-top: 50rem auto;
+    margin-top: 0rem auto;
     text-align: center;
     font-size: 50px;
     color: #ff00af;
@@ -36,6 +36,6 @@
     background-color: #ff00af !important;
     height: 5rem !important;
     width: 1rem !important;
-    margin-top: 50rem auto;
+    margin-top: 0rem auto;
 
 
