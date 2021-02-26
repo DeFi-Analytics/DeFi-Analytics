@@ -1,0 +1,28 @@
+/* Format title of graphic */
+.gtitle {font-size: 18px !important;}
+/* Format title of subplots */
+.annotation-text{font-size: 18px !important;}
+
+/* Format legend */
+.legendtext {font-size: 14px !important;}
+
+/* Format 3 x-axis */
+.xtick text{font-size: 12px !important;}
+.x2tick text{font-size: 12px !important;}
+.x3tick text{font-size: 12px !important;}
+.xtitle {font-size: 14px !important;}
+.x2title {font-size: 14px !important;}
+.x3title {font-size: 14px !important;}
+
+/* Format 4 y-axis */
+.ytick text{font-size: 12px !important;}
+.y2tick text{font-size: 12px !important;}
+.y3tick text{font-size: 12px !important;}
+.y4tick text{font-size: 12px !important;}
+.ytitle {font-size: 14px !important;}
+.y2title {font-size: 14px !important;}
+.y3title {font-size: 14px !important;}
+.y4title {font-size: 14px !important;}
+
+/* Font Size Pie Chart */
+.slicetext {font-size: 16px !important;}

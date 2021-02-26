@@ -1,0 +1,41 @@
+.card {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 0.8rem;
+    /*-webkit-box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);*/
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+}
+
+
+
+.dash-spinner.dash-default-spinner {
+    margin-top: 50rem auto;
+    text-align: center;
+    font-size: 50px;
+    color: #ff00af;
+    height: 5rem !important;
+    width: 10rem !important;
+}
+
+.dash-default-spinner-rect1,
+.dash-default-spinner-rect2,
+.dash-default-spinner-rect3,
+.dash-default-spinner-rect4,
+.dash-default-spinner-rect5{
+    background-color: #ff00af !important;
+    height: 5rem !important;
+    width: 1rem !important;
+    margin-top: 50rem auto;
+
+
