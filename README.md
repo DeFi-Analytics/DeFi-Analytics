@@ -1,7 +1,6 @@
 ### DeFiChain Analytics
 
-This will be the new Dashboard with keys and figures about DefiChain. Till now, it is included and mixed with Cake-related topics under
-
+This will be the new Dashboard with keys and figures about DefiChain. Till now, it is included and mixed with Cake-related topics under:
 https://www.cakedefi-review.com/DefiChain
 
 <!--
