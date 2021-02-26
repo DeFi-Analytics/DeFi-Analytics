@@ -1,4 +1,8 @@
-### Hi there 👋
+### DeFiChain Analytics
+
+This will be the new Dashboard with keys and figures about DefiChain. Till now, it is included and mixed with Cake-related topics under
+
+https://www.cakedefi-review.com/DefiChain
 
 <!--
 **DeFi-Analytics/DeFi-Analytics** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
