@@ -5,35 +5,22 @@ import dash_html_components as html
 import os
 import base64
 
+PFEIL_ZU = "fas fa-chevron-right mr-3"
+PFEIL_OFFEN = "fas fa-chevron-down mr-3"
+
 class defichainAnalyticsViewClass:
     def __init__(self):
-        # the style arguments for the sidebar. We use position:fixed and a fixed width
-        SIDEBAR_STYLE = {
-            "position": "fixed",
-            "top": 0,
-            "left": 0,
-            "bottom": 0,
-            "width": "16rem",
-            "padding": "2rem 1rem",
-            "background-color": "#cecfcf",
-        }
 
-        # the styles for the main content position it to the right of the sidebar and
-        # add some padding.
-        CONTENT_STYLE = {
-            "margin-left": "18rem",
-            "margin-right": "2rem",
-            "padding": "2rem 1rem",
-        }
-
+        #define submenu_blockchain
         submenu_blockchain = [
             html.Li(
                 # use Row and Col components to position the chevrons
                 dbc.Row(
                     [
+                        #submenu_name is "Blockchain"
                         dbc.Col("Blockchain"),
                         dbc.Col(
-                            html.I(className="fas fa-chevron-right mr-3"), width="auto"
+                            html.I(className=PFEIL_ZU, id="submenu-blockchain-arrow"), width="auto"
                         ),
                     ],
                     className="my-1",
@@ -44,8 +31,8 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Addresses", href="/blockchain?entry=addresses"),
-                    dbc.NavLink("DAA", href="/blockchain?entry=daa"),
+                    dbc.NavLink("Addresses", href="/blockchain?entry=addresses", className="linkstyle"),
+                    dbc.NavLink("DAA", href="/blockchain?entry=daa", className="linkstyle"),
                 ],
                 id="submenu-blockchain-collapse",
             ),
@@ -58,7 +45,7 @@ class defichainAnalyticsViewClass:
                     [
                         dbc.Col("Liquidity Mining"),
                         dbc.Col(
-                            html.I(className="fas fa-chevron-right mr-3"), width="auto"
+                            html.I(className=PFEIL_ZU, id="submenu-liquidityMining-arrow"), width="auto"
                         ),
                     ],
                     className="my-1",
@@ -69,7 +56,7 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Fees", href="/liquidityMining?entry=fees")
+                    dbc.NavLink("Fees", href="/liquidityMining?entry=fees", className="linkstyle")
                 ],
                 id="submenu-liquidityMining-collapse",
             ),
@@ -81,7 +68,7 @@ class defichainAnalyticsViewClass:
                     [
                         dbc.Col("Menu 2"),
                         dbc.Col(
-                            html.I(className="fas fa-chevron-right mr-3"), width="auto"
+                            html.I(className=PFEIL_ZU, id="collapseAnzeige-2"), width="auto"
                         ),
                     ],
                     className="my-1",
@@ -91,8 +78,8 @@ class defichainAnalyticsViewClass:
             ),
             dbc.Collapse(
                 [
-                    dbc.NavLink("Page 2.1", href="/page-2/1"),
-                    dbc.NavLink("Page 2.2", href="/page-2/2"),
+                    dbc.NavLink("Page 2.1", href="/page-2/1", className="linkstyle"),
+                    dbc.NavLink("Page 2.2", href="/page-2/2",className="linkstyle"),
                 ],
                 id="submenu-2-collapse",
             ),
@@ -113,9 +100,9 @@ class defichainAnalyticsViewClass:
                 html.Hr(),
                 dbc.Nav(submenu_blockchain + submenu_liquidityMining + submenu_2, vertical=True, ),
             ],
-            style=SIDEBAR_STYLE,
+            className="sidebarstyle",
             id="sidebar",
         )
 
-        MainWindow = dcc.Loading(html.Div(id="page-content", style=CONTENT_STYLE), type="default")
+        MainWindow = dcc.Loading(html.Div(id="page-content", className="contentstyle"), type="default")
         self.layout = html.Div([dcc.Location(id="url"), sidebar, MainWindow])

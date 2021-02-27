@@ -3,11 +3,15 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from urllib.parse import urlparse, parse_qs
 
+PFEIL_ZU = "fas fa-chevron-right mr-3"
+PFEIL_OFFEN = "fas fa-chevron-down mr-3"
+
 class defichainAnalyticsCallbacksClass:
     def __init__(self, blockchainController, liquidityMiningController, submenu2Controller):
         self.blockchainController = blockchainController
         self.submenu2Controller = submenu2Controller
         self.liquidityMiningController = liquidityMiningController
+
 
     def register_callbacks(self, app):
         # this function is used to toggle the is_open property of each Collapse
@@ -16,6 +20,19 @@ class defichainAnalyticsCallbacksClass:
                 return not is_open
             return is_open
 
+        # this function is used to toggle the is_open property of each Collapse
+        def toggle_collapse(n, is_open):
+            # wenn geklickt wurde, dann ändere die Pfeilrichtung
+            if n:
+                if is_open:
+                    # wenn offen, dann setze auf zu und auch den Pfeil
+                    className = PFEIL_ZU
+                else:
+                    className = PFEIL_OFFEN
+                # toggle is_open und Pfeilrichtung zurückgeben
+                return not is_open, className
+            # wurde noch nicht geklickt, setze den pfeil auf zu
+            return is_open, PFEIL_ZU
 
         # this function applies the "open" class to rotate the chevron
         def set_navitem_class(is_open):
@@ -23,10 +40,12 @@ class defichainAnalyticsCallbacksClass:
                 return "open"
             return ""
 
-
         for i in [1, 2]:
             app.callback(
-                Output(f"submenu-{i}-collapse", "is_open"),
+                # setze collapse is_open auf gegenteil
+                [Output(f"submenu-{i}-collapse", "is_open"),
+                 Output(f'collapseAnzeige-{i}', "className")],
+                # wenn auf submenü geklickt wird
                 [Input(f"submenu-{i}", "n_clicks")],
                 [State(f"submenu-{i}-collapse", "is_open")],
             )(toggle_collapse)
@@ -37,12 +56,14 @@ class defichainAnalyticsCallbacksClass:
             )(set_navitem_class)
 
         # toggle blockchain menu
-        @app.callback(Output("submenu-blockchain-collapse", "is_open"),[Input("submenu-blockchain", "n_clicks")],[State("submenu-blockchain-collapse", "is_open")])
+        @app.callback([Output("submenu-blockchain-collapse", "is_open"),Output("submenu-blockchain-arrow", "className")],
+                      [Input("submenu-blockchain", "n_clicks")], [State("submenu-blockchain-collapse", "is_open")])
         def toggleBlockchainMenu(n,isOpen):
             return toggle_collapse(n,isOpen)
 
         # toggle liquidityMining menu
-        @app.callback(Output("submenu-liquidityMining-collapse", "is_open"),[Input("submenu-liquidityMining", "n_clicks")],[State("submenu-liquidityMining-collapse", "is_open")])
+        @app.callback([Output("submenu-liquidityMining-collapse", "is_open"),Output("submenu-liquidityMining-arrow", "className")],
+                      [Input("submenu-liquidityMining", "n_clicks")], [State("submenu-liquidityMining-collapse", "is_open")])
         def toggleLiquidityMiningMenu(n,isOpen):
             return toggle_collapse(n,isOpen)
 
