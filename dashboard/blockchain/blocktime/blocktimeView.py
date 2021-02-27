@@ -7,7 +7,7 @@ from plotly.subplots import make_subplots
 
 class blocktimeViewClass:
 
-    def getAddressContent(self, data):
+    def getBlocktimeContent(self, data):
         content = [dbc.Card(dbc.CardBody([dcc.Graph(figure=self.createBlocktimeFigure(data),
                                                     config={'displayModeBar': False})])),
                    dbc.Card(dbc.CardBody(self.getBlockTimeExplanation()), style={'margin-top': '1.0rem'})]
@@ -49,8 +49,8 @@ class blocktimeViewClass:
                              fill='tonexty', fillcolor='rgba(144, 209, 229, 0.5)',
                              mode='lines', line=dict(color='#90d1e5'), line_width=0, hoverinfo='none', showlegend=False)
         trace_30Perc = dict(type='scatter', name='30% quantile',
-                            x=data['30PercentBlockTime'].drop().index.values[1:],
-                            y=data['30PercentBlockTime'].drop().values[1:], fill='tonexty',
+                            x=data['30PercentBlockTime'].dropna().index.values[1:],
+                            y=data['30PercentBlockTime'].dropna().values[1:], fill='tonexty',
                             mode='lines', line=dict(color='#3fbadf'), line_width=2, hovertemplate='%{y:.0f}s')
         trace_4Fill30 = dict(type='scatter', name='4Filling',
                              x=data['medianBlockTime'].dropna().index.values[1:],

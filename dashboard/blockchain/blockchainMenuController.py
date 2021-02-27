@@ -2,6 +2,8 @@ import dash_html_components as html
 from .addresses.addressesView import addressesViewClass
 from .addresses.addressesCallbacks import addressesCallbacksClass
 
+from .blocktime.blocktimeView import blocktimeViewClass
+
 class blockchainControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -12,9 +14,16 @@ class blockchainControllerClass:
         self.addressesCallbacks = addressesCallbacksClass()       # create callbacks on top level
         self.addressesCallbacks.register_callbacks(app)
 
+        # initialize blocktime classes
+        self.blocktimeView = blocktimeViewClass()
 
-    def getContent(self,entry):
+    def getContent(self, entry):
         if entry in ["", "addresses"]:
-            return self.addressesView.getAddressContent(self.defichainAnalyticsModel.dailyData)
-        elif entry == "/page-1/2":
-            return html.P("This is the content of page 1.2. Yay!")
+            self.defichainAnalyticsModel.loadExtractedRichlistData()
+            pageContent = self.addressesView.getAddressContent(self.defichainAnalyticsModel.dailyData)
+        elif entry in ["blocktime"]:
+            self.defichainAnalyticsModel.loadDailyBlocktimeData()
+            pageContent = self.blocktimeView.getBlocktimeContent(self.defichainAnalyticsModel.dailyData)
+
+
+        return pageContent
