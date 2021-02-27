@@ -1,0 +1,39 @@
+
+h1, h2, h3, h4, h5, h6 {
+    color: #ff00af
+}
+
+a:link{
+color: #a6a4a4
+}
+a:hover{
+color: #ffffff
+}
+a:focus{
+color: #ffffff
+}
+
+.sidebarstyle{
+    background-color: #000000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 16rem;
+    padding: 2rem 1rem;
+    color:#ffffff
+}
+.linkstyle{
+    background-color: #000000;
+    margin-top: 0.3rem;
+    background-image: url('Rechteck1.png');
+    background-size: 100% 100%;
+    color: #a6a4a4
+}
+
+.contentstyle {
+    margin-left: 18rem;
+    margin-right: 2rem;
+    padding: 2rem 1rem
+}
+
