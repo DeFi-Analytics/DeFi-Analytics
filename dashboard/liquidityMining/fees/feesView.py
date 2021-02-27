@@ -38,6 +38,7 @@ class feesViewClass:
             subplot_titles=(['Paid trading Fees to Liquidity Providers']))
         figFee.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figFee.layout.annotations[0].font.size = 20
+        figFee.layout.annotations[0].update(y=1.075)
         hoverTemplateRepresenation = '$%{y:,.0f}'
 
         # single TVL graphs
@@ -104,11 +105,10 @@ class feesViewClass:
                               dict(count=1, label="YTD", step="year", stepmode="todate"),
                               dict(count=1, label="1y", step="year", stepmode="backward"),
                               dict(step="all")])),
-            rangeslider=dict(visible=False),
-            type="date"))
+            rangeslider=dict(visible=False),type="date"))
 
         figFee.update_layout(height=600,
-                             margin={"t": 40, "l": 130, "b": 30},
+                             margin={"t": 80, "l": 130, "b": 30},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",

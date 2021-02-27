@@ -2,6 +2,8 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 
+import os
+import base64
 
 class defichainAnalyticsViewClass:
     def __init__(self):
@@ -13,7 +15,7 @@ class defichainAnalyticsViewClass:
             "bottom": 0,
             "width": "16rem",
             "padding": "2rem 1rem",
-            "background-color": "#f8f9fa",
+            "background-color": "#cecfcf",
         }
 
         # the styles for the main content position it to the right of the sidebar and
@@ -96,9 +98,18 @@ class defichainAnalyticsViewClass:
             ),
         ]
 
+        workDir = os.path.abspath(os.getcwd())
+        image_filename = workDir + '/assets/'+'logo-defi-analytics.png'
+        encoded_image = base64.b64encode(open(image_filename, 'rb').read()).decode('ascii')
+
         sidebar = html.Div(
             [
-                html.H2("DeFi Analytics", className="display-4"),
+                html.A(html.Img(src='data:image/png;base64,{}'.format(encoded_image),
+                         style={
+                             'width': '14rem',
+                             'padding-top': 20,
+                             'padding-right': 0,
+                             'padding-buttom': 0})),
                 html.Hr(),
                 dbc.Nav(submenu_blockchain + submenu_liquidityMining + submenu_2, vertical=True, ),
             ],

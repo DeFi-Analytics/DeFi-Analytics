@@ -34,7 +34,7 @@ class addressesViewClass:
         figAddress.layout.annotations[2].font.size = 20
 
         # generate over addresses
-        trace_AllAddresses = dict(type='scatter', name='Overall', x=data.index, y=data['nbOverall'].dropna(),
+        trace_AllAddresses = dict(type='scatter', name='Overall', x=data['nbOverall'].dropna().index, y=data['nbOverall'].dropna(),
                                   mode='lines', line=dict(color='#8097ee'), line_width=3, marker_size=8,
                                   hovertemplate='%{y:.f}')
         figAddress.add_trace(trace_AllAddresses, 1, 1)
@@ -42,12 +42,12 @@ class addressesViewClass:
                                 zerolinecolor='#6c757d', row=1, col=1)
 
         # generate specific addresses
-        trace_mnAddresses = dict(type='scatter', name='Full Masternodes',x=data.index, y=data['nbMnId'].dropna() - data['nbMnGenesisId'].dropna(),
+        trace_mnAddresses = dict(type='scatter', name='Full Masternodes',x=data['nbMnGenesisId'].dropna().index, y=(data['nbMnId'] - data['nbMnGenesisId']).dropna(),
                                  mode='lines', line=dict(color='#da3832'), line_width=3, marker_size=8,
                                  hovertemplate='%{y:.f}')
         figAddress.add_trace(trace_mnAddresses, 2, 1)
 
-        trace_otherAddresses = dict(type='scatter', name='Other', x=data.index, y=data['nbOtherId'].dropna(),
+        trace_otherAddresses = dict(type='scatter', name='Other', x=data['nbOtherId'].dropna().index, y=data['nbOtherId'].dropna(),
                                     mode='lines', line=dict(color='#7f50ff'), line_width=3, marker_size=8,
                                     hovertemplate='%{y:.f}')
         figAddress.add_trace(trace_otherAddresses, 2, 1)
@@ -55,7 +55,7 @@ class addressesViewClass:
                                 zerolinecolor='#6c757d', row=2, col=1)
 
         # generate genesis masternodes
-        trace_mnGenesisAddresses = dict(type='scatter', name='Genesis Masternodes', x=data.index, y=data['nbMnGenesisId'].dropna(),
+        trace_mnGenesisAddresses = dict(type='scatter', name='Genesis Masternodes', x=data['nbMnGenesisId'].dropna().index, y=data['nbMnGenesisId'].dropna(),
                                         mode='lines', line=dict(color='#ff00af'), line_width=3, marker_size=8,
                                         hovertemplate='%{y:.f}')
         figAddress.add_trace(trace_mnGenesisAddresses, 3, 1)

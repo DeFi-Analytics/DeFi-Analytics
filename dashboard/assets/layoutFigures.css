@@ -1,7 +1,8 @@
 /* Format title of graphic */
 .gtitle {font-size: 18px !important;}
 /* Format title of subplots */
-.annotation-text{font-size: 18px !important;}
+.annotation-text{font-size: 18px !important;
+                 margin-bottom: 200px}
 
 /* Format legend */
 .legendtext {font-size: 14px !important;}
