@@ -3,6 +3,7 @@ from .addresses.addressesView import addressesViewClass
 from .addresses.addressesCallbacks import addressesCallbacksClass
 from .blocktime.blocktimeView import blocktimeViewClass
 from .coin.coinView import coinViewClass
+from .changeCoinAddresses.changeCoinAdressesView import  changeCoinAddressesViewClass
 
 class blockchainControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -20,6 +21,9 @@ class blockchainControllerClass:
         # initialize coin classes
         self.coinView = coinViewClass()
 
+        # initialize change classes
+        self.changeCoinAddresses = changeCoinAddressesViewClass()
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "addresses"]:
@@ -32,5 +36,8 @@ class blockchainControllerClass:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadExtractedRichlistData()
             pageContent = self.coinView.getCoinContent(self.defichainAnalyticsModel.dailyData)
+        elif entry in ["changeCoinAdresses"]:
+            self.defichainAnalyticsModel.loadExtractedRichlistData()
+            pageContent = self.changeCoinAddresses.getChangeCoinsAddressesContent(self.defichainAnalyticsModel.dailyData)
 
         return pageContent

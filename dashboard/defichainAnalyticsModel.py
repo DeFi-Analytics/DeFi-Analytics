@@ -47,6 +47,22 @@ class defichainAnalyticsModelClass:
             self.dailyData['totalDFI'] = self.dailyData['fundDFI'] + self.dailyData['mnDFI'] + self.dailyData['otherDFI'] + \
                                        self.dailyData['foundationDFI'].fillna(0) + self.dailyData['lmDFI'].fillna(0)
 
+            # calculate daily change in addresses and DFI amount
+            self.dailyData['diffDate'] = pd.to_datetime(self.dailyData.index).to_series().diff().values
+            self.dailyData['diffDate'] = self.dailyData['diffDate'].fillna(pd.Timedelta(seconds=0))  # set nan-entry to timedelta 0
+            self.dailyData['diffDate'] = self.dailyData['diffDate'].apply(lambda x: float(x.days))
+
+            self.dailyData['diffNbOther'] = self.dailyData['nbOtherId'].diff() / self.dailyData['diffDate']
+            self.dailyData['diffNbMN'] = self.dailyData['nbMnId'].diff() / self.dailyData['diffDate']
+            self.dailyData['diffNbNone'] = None
+
+            self.dailyData['diffotherDFI'] = self.dailyData['otherDFI'].diff() / self.dailyData['diffDate']
+            self.dailyData['diffmnDFI'] = self.dailyData['mnDFI'].diff() / self.dailyData['diffDate']
+            self.dailyData['difffundDFI'] = self.dailyData['fundDFI'].diff() / self.dailyData['diffDate']
+            self.dailyData['difffoundationDFI'] = self.dailyData['foundationDFI'].diff() / self.dailyData['diffDate']
+            self.dailyData['diffLMDFI'] = self.dailyData['lmDFI'].diff() / self.dailyData['diffDate']
+
+
             self.updated_extractedRichlist = fileInfo.stat()
             print('>>>> Richlist data loaded from csv-file <<<<')
 
@@ -58,7 +74,7 @@ class defichainAnalyticsModelClass:
 
             ind2Delete = self.dailyData.columns.intersection(dailyTradingResults.columns)                               # check if columns exist
             self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete exisiting columns to add new ones
-            self.dailyData = self.dailyData.merge(dailyTradingResults, how='outer',left_index=True,right_index=True)    # add new columns to daily table
+            self.dailyData = self.dailyData.merge(dailyTradingResults, how='outer', left_index=True, right_index=True)    # add new columns to daily table
 
             self.updated_tradingData = fileInfo.stat()
             print('>>>> Trading data loaded from csv-file <<<<')
@@ -77,6 +93,7 @@ class defichainAnalyticsModelClass:
             self.updated_blocktime = fileInfo.stat()
             print('>>>> Blocktime data loaded from csv-file <<<<')
 
+    #### HOURLY DATA ####
     def loadHourlyDEXdata(self):
         filePath = self.dataPath + 'LMPoolData.csv'
         fileInfo = pathlib.Path(filePath)
