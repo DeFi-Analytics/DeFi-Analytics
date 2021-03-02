@@ -3,7 +3,9 @@ from .addresses.addressesView import addressesViewClass
 from .addresses.addressesCallbacks import addressesCallbacksClass
 from .blocktime.blocktimeView import blocktimeViewClass
 from .coin.coinView import coinViewClass
-from .changeCoinAddresses.changeCoinAdressesView import  changeCoinAddressesViewClass
+
+from .changeCoinAddresses.changeCoinAddressesView import changeCoinAddressesViewClass
+from .changeCoinAddresses.changeCoinAddressesCallbacks import changeCoinAddressesCallbacksClass
 
 class blockchainControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -13,7 +15,6 @@ class blockchainControllerClass:
         # initialize addresses classes
         self.addressesView = addressesViewClass()
         self.addressesCallbacks = addressesCallbacksClass()       # create callbacks on top level
-        self.addressesCallbacks.register_callbacks(app)
 
         # initialize blocktime classes
         self.blocktimeView = blocktimeViewClass()
@@ -22,7 +23,8 @@ class blockchainControllerClass:
         self.coinView = coinViewClass()
 
         # initialize change classes
-        self.changeCoinAddresses = changeCoinAddressesViewClass()
+        self.changeCoinAddressesView = changeCoinAddressesViewClass()
+        self.changeCoinAddressesCallbacks = changeCoinAddressesCallbacksClass()       # create callbacks on top level
 
     def getContent(self, entry):
         pageContent = None
@@ -38,6 +40,9 @@ class blockchainControllerClass:
             pageContent = self.coinView.getCoinContent(self.defichainAnalyticsModel.dailyData)
         elif entry in ["changeCoinAdresses"]:
             self.defichainAnalyticsModel.loadExtractedRichlistData()
-            pageContent = self.changeCoinAddresses.getChangeCoinsAddressesContent(self.defichainAnalyticsModel.dailyData)
+            pageContent = self.changeCoinAddressesView.getChangeCoinsAddressesContent(self.defichainAnalyticsModel.dailyData)
 
         return pageContent
+
+    def registerCallbacks(self, app):
+        self.changeCoinAddressesCallbacks.register_callbacks(self.app)

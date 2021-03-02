@@ -15,6 +15,8 @@ class defichainAnalyticsControllerClass:
         self.defichainAnalyticsModel.loadDailyData()
 
         self.blockchainController = blockchainControllerClass(app, self.defichainAnalyticsModel)
+        self.blockchainController.registerCallbacks(app)
+
         self.liquidityMiningController = liquidityMiningControllerClass(app, self.defichainAnalyticsModel)
         self.submenu2Controller = sub2ControllerClass()
 
