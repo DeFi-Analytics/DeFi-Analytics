@@ -22,38 +22,19 @@ class defichainAnalyticsCallbacksClass:
 
         # this function is used to toggle the is_open property of each Collapse
         def toggle_collapse(n, is_open):
-            # wenn geklickt wurde, dann ändere die Pfeilrichtung
+            # only if clicked, change arrow (first load, does not change the arrow)
             if n:
                 if is_open:
-                    # wenn offen, dann setze auf zu und auch den Pfeil
+                    # if menu is open (and will close), close the arrow
                     className = PFEIL_ZU
                 else:
+                    # if menu is closed (and will open), open the arrow
                     className = PFEIL_OFFEN
-                # toggle is_open und Pfeilrichtung zurückgeben
+                # toggle is_open and return with arrow
                 return not is_open, className
-            # wurde noch nicht geklickt, setze den pfeil auf zu
+            # if it is initial, just give a closed arrow
             return is_open, PFEIL_ZU
 
-        # this function applies the "open" class to rotate the chevron
-        def set_navitem_class(is_open):
-            if is_open:
-                return "open"
-            return ""
-
-        for i in [1, 2]:
-            app.callback(
-                # setze collapse is_open auf gegenteil
-                [Output(f"submenu-{i}-collapse", "is_open"),
-                 Output(f'collapseAnzeige-{i}', "className")],
-                # wenn auf submenü geklickt wird
-                [Input(f"submenu-{i}", "n_clicks")],
-                [State(f"submenu-{i}-collapse", "is_open")],
-            )(toggle_collapse)
-
-            app.callback(
-                Output(f"submenu-{i}", "className"),
-                [Input(f"submenu-{i}-collapse", "is_open")],
-            )(set_navitem_class)
 
         # toggle blockchain menu
         @app.callback([Output("submenu-blockchain-collapse", "is_open"),Output("submenu-blockchain-arrow", "className")],
@@ -62,10 +43,27 @@ class defichainAnalyticsCallbacksClass:
             return toggle_collapse(n,isOpen)
 
         # toggle liquidityMining menu
-        @app.callback([Output("submenu-liquidityMining-collapse", "is_open"),Output("submenu-liquidityMining-arrow", "className")],
+        @app.callback([Output("submenu-liquidityMining-collapse", "is_open"), Output("submenu-liquidityMining-arrow", "className")],
                       [Input("submenu-liquidityMining", "n_clicks")], [State("submenu-liquidityMining-collapse", "is_open")])
         def toggleLiquidityMiningMenu(n,isOpen):
             return toggle_collapse(n,isOpen)
+
+        # set active link
+        @app.callback([Output('addresses', 'className'), Output('daa', 'className'), Output('fees', 'className')],
+                       [Input('addresses', 'n_clicks_timestamp'), Input('daa', 'n_clicks_timestamp'), Input('fees', 'n_clicks_timestamp')])
+        def addresses_state1(n_addy, n_daa, n_fees):
+            if n_daa==None: n_daa=0;
+            if n_fees==None: n_fees=0;
+            if n_addy==None: n_addy=0;
+
+            if (n_addy > n_daa and n_addy > n_fees):
+                return 'activelink', 'linkstyle', 'linkstyle'
+            elif n_daa>n_addy and n_daa>n_fees:
+                return 'linkstyle' , 'activelink', 'linkstyle'
+            elif n_fees>n_addy and n_fees>n_daa:
+                return 'linkstyle', 'linkstyle', 'activelink'
+            else:
+                return 'activelink', 'linkstyle', 'linkstyle'
 
         @app.callback(Output("page-content", "children"), [Input("url", "href")])
         def render_page_content(hrefPath):

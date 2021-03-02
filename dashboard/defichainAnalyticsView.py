@@ -11,6 +11,7 @@ PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 class defichainAnalyticsViewClass:
     def __init__(self):
 
+
         #define submenu_blockchain
         submenu_blockchain = [
             html.Li(
@@ -31,8 +32,8 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Addresses", href="/blockchain?entry=addresses", className="linkstyle"),
-                    dbc.NavLink("DAA", href="/blockchain?entry=daa", className="linkstyle"),
+                    dbc.NavLink("Addresses", href="/blockchain?entry=addresses", className="linkstyle", id="addresses", active='partial'),
+                    dbc.NavLink("DAA", href="/blockchain?entry=daa", className="linkstyle", id="daa", active='partial'),
                 ],
                 id="submenu-blockchain-collapse",
             ),
@@ -56,34 +57,12 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Fees", href="/liquidityMining?entry=fees", className="linkstyle")
+                    dbc.NavLink("Fees", href="/liquidityMining?entry=fees", className="linkstyle", id="fees", active='partial')
                 ],
                 id="submenu-liquidityMining-collapse",
             ),
         ]
 
-        submenu_2 = [
-            html.Li(
-                dbc.Row(
-                    [
-                        dbc.Col("Menu 2"),
-                        dbc.Col(
-                            html.I(className=PFEIL_ZU, id="collapseAnzeige-2"), width="auto"
-                        ),
-                    ],
-                    className="my-1",
-                ),
-                style={"cursor": "pointer"},
-                id="submenu-2",
-            ),
-            dbc.Collapse(
-                [
-                    dbc.NavLink("Page 2.1", href="/page-2/1", className="linkstyle"),
-                    dbc.NavLink("Page 2.2", href="/page-2/2",className="linkstyle"),
-                ],
-                id="submenu-2-collapse",
-            ),
-        ]
 
         workDir = os.path.abspath(os.getcwd())
         image_filename = workDir + '/assets/'+'logo-defi-analytics.png'
@@ -91,14 +70,15 @@ class defichainAnalyticsViewClass:
 
         sidebar = html.Div(
             [
-                html.A(html.Img(src='data:image/png;base64,{}'.format(encoded_image),
+                html.Div(html.Img(src='data:image/png;base64,{}'.format(encoded_image),
                          style={
                              'width': '14rem',
                              'padding-top': 20,
                              'padding-right': 0,
                              'padding-buttom': 0})),
                 html.Hr(),
-                dbc.Nav(submenu_blockchain + submenu_liquidityMining + submenu_2, vertical=True, ),
+                dbc.Nav(submenu_blockchain + submenu_liquidityMining, vertical=True, id='navbar-container'),
+
             ],
             className="sidebarstyle",
             id="sidebar",
