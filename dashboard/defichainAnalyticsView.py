@@ -62,28 +62,6 @@ class defichainAnalyticsViewClass:
             ),
         ]
 
-        submenu_2 = [
-            html.Li(
-                dbc.Row(
-                    [
-                        dbc.Col("Menu 2"),
-                        dbc.Col(
-                            html.I(className=PFEIL_ZU, id="collapseAnzeige-2"), width="auto"
-                        ),
-                    ],
-                    className="my-1",
-                ),
-                style={"cursor": "pointer"},
-                id="submenu-2",
-            ),
-            dbc.Collapse(
-                [
-                    dbc.NavLink("Page 2.1", href="/page-2/1", className="linkstyle"),
-                    dbc.NavLink("Page 2.2", href="/page-2/2",className="linkstyle"),
-                ],
-                id="submenu-2-collapse",
-            ),
-        ]
 
         workDir = os.path.abspath(os.getcwd())
         image_filename = workDir + '/assets/'+'logo-defi-analytics.png'
@@ -98,7 +76,7 @@ class defichainAnalyticsViewClass:
                              'padding-right': 0,
                              'padding-buttom': 0})),
                 html.Hr(),
-                dbc.Nav(submenu_blockchain + submenu_liquidityMining + submenu_2, vertical=True, ),
+                dbc.Nav(submenu_blockchain + submenu_liquidityMining , vertical=True, ),
             ],
             className="sidebarstyle",
             id="sidebar",

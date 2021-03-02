@@ -22,38 +22,18 @@ class defichainAnalyticsCallbacksClass:
 
         # this function is used to toggle the is_open property of each Collapse
         def toggle_collapse(n, is_open):
-            # wenn geklickt wurde, dann ändere die Pfeilrichtung
+            # only if clicked, change arrow (first load, does not change the arrow)
             if n:
                 if is_open:
-                    # wenn offen, dann setze auf zu und auch den Pfeil
+                    # if menu is open (and will close), close the arrow
                     className = PFEIL_ZU
                 else:
+                    # if menu is closed (and will open), open the arrow
                     className = PFEIL_OFFEN
-                # toggle is_open und Pfeilrichtung zurückgeben
+                # toggle is_open and return with arrow
                 return not is_open, className
-            # wurde noch nicht geklickt, setze den pfeil auf zu
+            # if it is initial, just give a closed arrow
             return is_open, PFEIL_ZU
-
-        # this function applies the "open" class to rotate the chevron
-        def set_navitem_class(is_open):
-            if is_open:
-                return "open"
-            return ""
-
-        for i in [1, 2]:
-            app.callback(
-                # setze collapse is_open auf gegenteil
-                [Output(f"submenu-{i}-collapse", "is_open"),
-                 Output(f'collapseAnzeige-{i}', "className")],
-                # wenn auf submenü geklickt wird
-                [Input(f"submenu-{i}", "n_clicks")],
-                [State(f"submenu-{i}-collapse", "is_open")],
-            )(toggle_collapse)
-
-            app.callback(
-                Output(f"submenu-{i}", "className"),
-                [Input(f"submenu-{i}-collapse", "is_open")],
-            )(set_navitem_class)
 
         # toggle blockchain menu
         @app.callback([Output("submenu-blockchain-collapse", "is_open"),Output("submenu-blockchain-arrow", "className")],
