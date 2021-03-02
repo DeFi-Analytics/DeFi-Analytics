@@ -35,6 +35,7 @@ class defichainAnalyticsCallbacksClass:
             # if it is initial, just give a closed arrow
             return is_open, PFEIL_ZU
 
+
         # toggle blockchain menu
         @app.callback([Output("submenu-blockchain-collapse", "is_open"),Output("submenu-blockchain-arrow", "className")],
                       [Input("submenu-blockchain", "n_clicks")], [State("submenu-blockchain-collapse", "is_open")])
@@ -42,10 +43,27 @@ class defichainAnalyticsCallbacksClass:
             return toggle_collapse(n,isOpen)
 
         # toggle liquidityMining menu
-        @app.callback([Output("submenu-liquidityMining-collapse", "is_open"),Output("submenu-liquidityMining-arrow", "className")],
+        @app.callback([Output("submenu-liquidityMining-collapse", "is_open"), Output("submenu-liquidityMining-arrow", "className")],
                       [Input("submenu-liquidityMining", "n_clicks")], [State("submenu-liquidityMining-collapse", "is_open")])
         def toggleLiquidityMiningMenu(n,isOpen):
             return toggle_collapse(n,isOpen)
+
+        # set active link
+        @app.callback([Output('addresses', 'className'), Output('daa', 'className'), Output('fees', 'className')],
+                       [Input('addresses', 'n_clicks_timestamp'), Input('daa', 'n_clicks_timestamp'), Input('fees', 'n_clicks_timestamp')])
+        def addresses_state1(n_addy, n_daa, n_fees):
+            if n_daa==None: n_daa=0;
+            if n_fees==None: n_fees=0;
+            if n_addy==None: n_addy=0;
+
+            if (n_addy > n_daa and n_addy > n_fees):
+                return 'activelink', 'linkstyle', 'linkstyle'
+            elif n_daa>n_addy and n_daa>n_fees:
+                return 'linkstyle' , 'activelink', 'linkstyle'
+            elif n_fees>n_addy and n_fees>n_daa:
+                return 'linkstyle', 'linkstyle', 'activelink'
+            else:
+                return 'activelink', 'linkstyle', 'linkstyle'
 
         @app.callback(Output("page-content", "children"), [Input("url", "href")])
         def render_page_content(hrefPath):
