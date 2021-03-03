@@ -61,7 +61,7 @@ class defichainAnalyticsCallbacksClass:
         # set active links of sidebar
         @app.callback(sidebar_active_link_array_output,
                       sidebar_active_link_array_input)
-        def submenu_link_state(*args):
+        def sidebar_link_state(*args):
             #change None-values to 0 to be able to compare with timestamp
             timestamp_array = []
             for item in args:
