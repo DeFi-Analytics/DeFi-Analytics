@@ -48,22 +48,43 @@ class defichainAnalyticsCallbacksClass:
         def toggleLiquidityMiningMenu(n,isOpen):
             return toggle_collapse(n,isOpen)
 
-        # set active link
-        @app.callback([Output('addresses', 'className'), Output('daa', 'className'), Output('fees', 'className')],
-                       [Input('addresses', 'n_clicks_timestamp'), Input('daa', 'n_clicks_timestamp'), Input('fees', 'n_clicks_timestamp')])
-        def addresses_state1(n_addy, n_daa, n_fees):
-            if n_daa==None: n_daa=0;
-            if n_fees==None: n_fees=0;
-            if n_addy==None: n_addy=0;
 
-            if (n_addy > n_daa and n_addy > n_fees):
-                return 'activelink', 'linkstyle', 'linkstyle'
-            elif n_daa>n_addy and n_daa>n_fees:
-                return 'linkstyle' , 'activelink', 'linkstyle'
-            elif n_fees>n_addy and n_fees>n_daa:
-                return 'linkstyle', 'linkstyle', 'activelink'
-            else:
-                return 'activelink', 'linkstyle', 'linkstyle'
+        #define callback sidebar_link_state input array
+        sidebar_active_link_array_input = [Input('addresses', 'n_clicks_timestamp'),
+                                           Input('daa', 'n_clicks_timestamp'),
+                                           Input('fees', 'n_clicks_timestamp')]
+        # define callback sidebar_link_state output array
+        sidebar_active_link_array_output = [Output('addresses', 'className'),
+                                            Output('daa', 'className'),
+                                            Output('fees', 'className')]
+
+        # set active links of sidebar
+        @app.callback(sidebar_active_link_array_output,
+                      sidebar_active_link_array_input)
+        def submenu_link_state(*args):
+            #change None-values to 0 to be able to compare with timestamp
+            timestamp_array = []
+            for item in args:
+                if item is None:
+                    timestamp_array.append(0)
+                else:
+                    timestamp_array.append(item)
+
+            #fill return array with style information
+            active_link = max(timestamp_array)
+            return_array =[]
+            for item in timestamp_array:
+                if active_link == 0:
+                    #this is necessary for the first pageload without any clicks
+                    return_array.append('linkstyle')
+                else:
+                    if item == active_link:
+                        return_array.append('activelink')
+                    else:
+                        return_array.append('linkstyle')
+
+            return return_array
+
 
         @app.callback(Output("page-content", "children"), [Input("url", "href")])
         def render_page_content(hrefPath):
