@@ -32,10 +32,41 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Addresses", href="/blockchain?entry=addresses", className="linkstyle", id="addresses", active='partial'),
-                    dbc.NavLink("DAA", href="/blockchain?entry=daa", className="linkstyle", id="daa", active='partial'),
+                    dbc.NavLink("Addresses", href="/blockchain?entry=addresses", className="linkstyle", id="addresses"),
+                    dbc.NavLink("DAA", href="/blockchain?entry=daa", className="linkstyle", id="daa"),
+                    dbc.NavLink("Coins", href="/blockchain?entry=coins", className="linkstyle", id="coins"),
+                    dbc.NavLink("Change", href="/blockchain?entry=change", className="linkstyle", id="change"),
+                    dbc.NavLink("Coins/Addresses", href="/blockchain?entry=coinsAddresses", className="linkstyle", id="coinsAddresses"),
+                    dbc.NavLink("Block Time", href="/blockchain?entry=blockTime", className="linkstyle", id="blockTime"),
+                    dbc.NavLink("Transactions", href="/blockchain?entry=transactions", className="linkstyle", id="transactions")
                 ],
                 id="submenu-blockchain-collapse",
+            ),
+        ]
+
+        submenu_dex = [
+            html.Li(
+                # use Row and Col components to position the chevrons
+                dbc.Row(
+                    [
+                        # submenu_name is "Blockchain"
+                        dbc.Col("DEX"),
+                        dbc.Col(
+                            html.I(className=PFEIL_ZU, id="submenu-dex-arrow"), width="auto"
+                        ),
+                    ],
+                    className="my-1",
+                ),
+                style={"cursor": "pointer"},
+                id="submenu-dex",
+            ),
+            # we use the Collapse component to hide and reveal the navigation links
+            dbc.Collapse(
+                [
+                    dbc.NavLink("Coinprices", href="/blockchain?entry=coinprices", className="linkstyle", id="coinPrices"),
+                    dbc.NavLink("Volume", href="/blockchain?entry=volume", className="linkstyle", id="volume"),
+                ],
+                id="submenu-dex-collapse",
             ),
         ]
 
@@ -57,9 +88,37 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Fees", href="/liquidityMining?entry=fees", className="linkstyle", id="fees", active='partial')
+                    dbc.NavLink("Liquidity Token", href="/liquidityMining?entry=liquidityToken", className="linkstyle", id="liquidityToken"),
+                    dbc.NavLink("TVL", href="/liquidityMining?entry=tvl", className="linkstyle", id="tvl"),
+                    dbc.NavLink("Fees", href="/liquidityMining?entry=fees", className="linkstyle", id="fees")
                 ],
                 id="submenu-liquidityMining-collapse",
+            ),
+        ]
+
+        submenu_token = [
+            html.Li(
+                # use Row and Col components to position the chevrons
+                dbc.Row(
+                    [
+                        # submenu_name is "Blockchain"
+                        dbc.Col("Token"),
+                        dbc.Col(
+                            html.I(className=PFEIL_ZU, id="submenu-token-arrow"), width="auto"
+                        ),
+                    ],
+                    className="my-1",
+                ),
+                style={"cursor": "pointer"},
+                id="submenu-token",
+            ),
+            # we use the Collapse component to hide and reveal the navigation links
+            dbc.Collapse(
+                [
+                    dbc.NavLink("Cryptos-DAT", href="/blockchain?entry=cryptosDAT", className="linkstyle",
+                                id="cryptosDAT")
+                ],
+                id="submenu-Token-collapse",
             ),
         ]
 
@@ -77,7 +136,8 @@ class defichainAnalyticsViewClass:
                              'padding-right': 0,
                              'padding-buttom': 0})),
                 html.Hr(),
-                dbc.Nav(submenu_blockchain + submenu_liquidityMining, vertical=True, id='navbar-container'),
+                dbc.Nav(submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token,
+                        vertical=True, id='navbar-container'),
 
             ],
             className="sidebarstyle",

@@ -42,21 +42,54 @@ class defichainAnalyticsCallbacksClass:
         def toggleBlockchainMenu(n,isOpen):
             return toggle_collapse(n,isOpen)
 
+        # toggle dex menu
+        @app.callback(
+            [Output("submenu-dex-collapse", "is_open"), Output("submenu-dex-arrow", "className")],
+            [Input("submenu-dex", "n_clicks")], [State("submenu-dex-collapse", "is_open")])
+        def toggleDEXMenu(n, isOpen):
+            return toggle_collapse(n, isOpen)
+
         # toggle liquidityMining menu
         @app.callback([Output("submenu-liquidityMining-collapse", "is_open"), Output("submenu-liquidityMining-arrow", "className")],
                       [Input("submenu-liquidityMining", "n_clicks")], [State("submenu-liquidityMining-collapse", "is_open")])
         def toggleLiquidityMiningMenu(n,isOpen):
             return toggle_collapse(n,isOpen)
 
+        # toggle token menu
+        @app.callback(
+            [Output("submenu-token-collapse", "is_open"), Output("submenu-token-arrow", "className")],
+            [Input("submenu-token", "n_clicks")], [State("submenu-token-collapse", "is_open")])
+        def toggleTokenMenu(n, isOpen):
+            return toggle_collapse(n, isOpen)
 
         #define callback sidebar_link_state input array
         sidebar_active_link_array_input = [Input('addresses', 'n_clicks_timestamp'),
                                            Input('daa', 'n_clicks_timestamp'),
-                                           Input('fees', 'n_clicks_timestamp')]
+                                           Input('coins', 'n_clicks_timestamp'),
+                                           Input('change', 'n_clicks_timestamp'),
+                                           Input('coinsAddresses', 'n_clicks_timestamp'),
+                                           Input('blockTime', 'n_clicks_timestamp'),
+                                           Input('transactions', 'n_clicks_timestamp'),
+                                           Input('coinPrices', 'n_clicks_timestamp'),
+                                           Input('volume', 'n_clicks_timestamp'),
+                                           Input('liquidityToken', 'n_clicks_timestamp'),
+                                           Input('tvl', 'n_clicks_timestamp'),
+                                           Input('fees', 'n_clicks_timestamp'),
+                                           Input('cryptosDAT', 'n_clicks_timestamp')]
         # define callback sidebar_link_state output array
         sidebar_active_link_array_output = [Output('addresses', 'className'),
                                             Output('daa', 'className'),
-                                            Output('fees', 'className')]
+                                            Output('coins', 'className'),
+                                            Output('change', 'className'),
+                                            Output('coinsAddresses', 'className'),
+                                            Output('blockTime', 'className'),
+                                            Output('transactions', 'className'),
+                                            Output('coinPrices', 'className'),
+                                            Output('volume', 'className'),
+                                            Output('liquidityToken', 'className'),
+                                            Output('tvl', 'className'),
+                                            Output('fees', 'className'),
+                                            Output('cryptosDAT', 'className')]
 
         # set active links of sidebar
         @app.callback(sidebar_active_link_array_output,
