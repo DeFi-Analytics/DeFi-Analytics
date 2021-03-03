@@ -7,6 +7,9 @@ from .coin.coinView import coinViewClass
 from .changeCoinAddresses.changeCoinAddressesView import changeCoinAddressesViewClass
 from .changeCoinAddresses.changeCoinAddressesCallbacks import changeCoinAddressesCallbacksClass
 
+from .daa.daaView import daaViewClass
+from .daa.daaCallbacks import  daaCallbacksClass
+
 class blockchainControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -26,6 +29,10 @@ class blockchainControllerClass:
         self.changeCoinAddressesView = changeCoinAddressesViewClass()
         self.changeCoinAddressesCallbacks = changeCoinAddressesCallbacksClass()       # create callbacks on top level
 
+        # initialize daa classes
+        self.daaView = daaViewClass()
+        self.daaCallbacks = daaCallbacksClass()
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "addresses"]:
@@ -41,8 +48,12 @@ class blockchainControllerClass:
         elif entry in ["changeCoinAdresses"]:
             self.defichainAnalyticsModel.loadExtractedRichlistData()
             pageContent = self.changeCoinAddressesView.getChangeCoinsAddressesContent(self.defichainAnalyticsModel.dailyData)
+        elif entry in ["daa"]:
+            self.defichainAnalyticsModel.loadExtractedRichlistData()
+            pageContent = self.daaView.getDAAContent(self.defichainAnalyticsModel.dailyData)
 
         return pageContent
 
     def registerCallbacks(self, app):
         self.changeCoinAddressesCallbacks.register_callbacks(self.app)
+        self.daaCallbacks.register_callbacks(self.app)

@@ -14,6 +14,7 @@ class defichainAnalyticsModelClass:
         self.updated_tradingData = None
         self.updated_blocktime = None
         self.updated_dexHourly = None
+        self.updated_daa = None
 
     #### DAILY DATA #####
     def loadDailyData(self):
@@ -21,6 +22,7 @@ class defichainAnalyticsModelClass:
         self.loadExtractedRichlistData()
         self.loadDailyTradingData()
         self.loadDailyBlocktimeData()
+        self.loadDAAData()
 
     def loadExtractedRichlistData(self):
         filePath = self.dataPath + 'extractedDFIdata.csv'
@@ -91,6 +93,18 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(dailyBlocktimeData, how='outer', left_index=True,right_index=True)    # add new columns to daily table
 
             self.updated_blocktime = fileInfo.stat()
+            print('>>>> Blocktime data loaded from csv-file <<<<')
+
+    def loadDAAData(self):
+        filePath = self.dataPath + 'analyzedDataDAA.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_daa:
+            dailyDAAData = pd.read_csv(filePath, index_col=0)
+            self.dailyData = self.dailyData.merge(dailyDAAData, how='outer', left_index=True, right_on='Date')
+            self.dailyData.set_index('Date', inplace=True)
+            self.dailyData.sort_index(inplace=True)
+
+            self.updated_daa = fileInfo.stat()
             print('>>>> Blocktime data loaded from csv-file <<<<')
 
     #### HOURLY DATA ####

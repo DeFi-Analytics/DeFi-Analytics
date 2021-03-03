@@ -1,17 +1,16 @@
 from dash.dependencies import Input, Output, State
 
 
-class changeCoinAddressesCallbacksClass:
+class daaCallbacksClass:
     def __init__(self):
         None
 
 
     def register_callbacks(self, app):
-
         @app.callback(
-            Output("modalChangeCoinAddresses", "is_open"),
-            [Input("openInfoChangeCoinAddresses", "n_clicks"), Input("closeInfoChangeCoinAddresses", "n_clicks")],
-            [State("modalChangeCoinAddresses", "is_open")],
+            Output("modalDAA", "is_open"),
+            [Input("openInfoDAA", "n_clicks"), Input("closeInfoDAA", "n_clicks")],
+            [State("modalDAA", "is_open")],
         )
         def toggle_modal(n1, n2, is_open):
             if n1 or n2:
