@@ -34,10 +34,10 @@ class defichainAnalyticsViewClass:
                 [
                     dbc.NavLink("Addresses", href="/blockchain?entry=addresses", className="linkstyle", id="addresses"),
                     dbc.NavLink("DAA", href="/blockchain?entry=daa", className="linkstyle", id="daa"),
-                    dbc.NavLink("Coins", href="/blockchain?entry=coins", className="linkstyle", id="coins"),
-                    dbc.NavLink("Change", href="/blockchain?entry=change", className="linkstyle", id="change"),
+                    dbc.NavLink("Coins", href="/blockchain?entry=coin", className="linkstyle", id="coins"),
+                    dbc.NavLink("Change Coins/Addresses", href="/blockchain?entry=changeCoinAdresses", className="linkstyle", id="change"),
                     dbc.NavLink("Coins/Addresses", href="/blockchain?entry=coinsAddresses", className="linkstyle", id="coinsAddresses"),
-                    dbc.NavLink("Block Time", href="/blockchain?entry=blockTime", className="linkstyle", id="blockTime"),
+                    dbc.NavLink("Block Time", href="/blockchain?entry=blocktime", className="linkstyle", id="blockTime"),
                     dbc.NavLink("Transactions", href="/blockchain?entry=transactions", className="linkstyle", id="transactions")
                 ],
                 id="submenu-blockchain-collapse",
