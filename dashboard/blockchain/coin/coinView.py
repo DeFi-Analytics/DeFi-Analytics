@@ -8,10 +8,16 @@ from plotly.subplots import make_subplots
 class coinViewClass:
 
     def getCoinContent(self, data):
-        content = [dbc.Card(dbc.CardBody([dcc.Graph(figure=self.createCoinFigure(data),
-                                                    config={'displayModeBar': False})])),
-                   dbc.Card(dbc.CardBody(self.getCoinExplanation()), style={'margin-top': '1.0rem'})]
+        content = [dbc.Modal([dbc.ModalHeader("Info Coins"),
+                              dbc.ModalBody(self.getCoinExplanation()),
+                              dbc.ModalFooter(dbc.Button("close", id="closeInfoCoin", className="ml-auto"))],
+                                    id="modalCoin", size='xl'),
+                   html.Div(id='hidden', style = {'display':'none'}),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createCoinFigure(data), config={'displayModeBar': False}))),
+                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoin")))
+                                          ]))]
         return content
+
 
     @staticmethod
     def createCoinFigure(data):
@@ -92,13 +98,13 @@ class coinViewClass:
             rangeslider=dict(visible=False),
             type="date"))
 
-        figDFI.update_layout(height=680,
+        figDFI.update_layout(height=800,
                              margin={"t": 40, "l": 130, "b": 20},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",
                                          yanchor="bottom",
-                                         y=-0.3,
+                                         y=-0.15,
                                          xanchor="right",
                                          x=1),
                              )
@@ -108,9 +114,9 @@ class coinViewClass:
 
         return figDFI
 
-    def getCoinExplanation(self):
-        coinCardExplanation = [html.H4("Info Coins"),
-                               html.P(['For tracking the amount of DFI and their distribution a snapshot of the DeFiChain richlist is made once a day (in the night).', html.Br(),
+    @staticmethod
+    def getCoinExplanation():
+        coinCardExplanation = [html.P(['For tracking the amount of DFI and their distribution a snapshot of the DeFiChain richlist is made once a day (in the night).', html.Br(),
                                        html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list',
                                               target='_blank')], style={'text-align': 'justify'}),
 

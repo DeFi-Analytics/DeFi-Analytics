@@ -11,7 +11,7 @@ from plotly.subplots import make_subplots
 class daaViewClass:
 
     def getDAAContent(self, data):
-        content = [dbc.Modal([dbc.ModalHeader("Info Change of Addresses number and Coins amount"),
+        content = [dbc.Modal([dbc.ModalHeader("Info Daily Active Addresses"),
                               dbc.ModalBody(self.getDAAExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoDAA", className="ml-auto"))],
                                     id="modalDAA", size='xl'),
@@ -58,7 +58,7 @@ class daaViewClass:
             rangeslider=dict(visible=False),
             type="date"))
 
-        figDAA.update_layout(height=600,
+        figDAA.update_layout(height=800,
                              margin={"t": 40, "l": 130, "b": 20},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d",
@@ -77,8 +77,7 @@ class daaViewClass:
 
     @staticmethod
     def getDAAExplanation():
-        daaCardExplanation = [html.H4("Info Daily Active Addresses"),
-                               html.P(['The characteristic value DAA (daily active addresses) indicates the number of addresses with at least one transaction on the selected day. '
+        daaCardExplanation = [html.P(['The characteristic value DAA (daily active addresses) indicates the number of addresses with at least one transaction on the selected day. '
                                        'The address can be the sender or receiver of any amount.'],style={'text-align': 'justify'}),
                                html.P(['The data is extracted by analyzing each block and getting the included transactions. With this transaction information '
                                        'the sending and receiving addresses are determined.'],style={'text-align': 'justify'}),

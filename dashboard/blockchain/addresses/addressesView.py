@@ -12,11 +12,18 @@ class addressesViewClass:
         None
 
     def getAddressContent(self, data):
-        content = [dbc.Card(dbc.CardBody([dcc.Graph(figure=self.createAddressesFigure(data),config={'displayModeBar': False})])),
-                   dbc.Card(dbc.CardBody(self.getAddressExplanation()),style={'margin-top': '1.0rem'})]
+        content = [dbc.Modal([dbc.ModalHeader("Info Addresses"),
+                              dbc.ModalBody(self.getAddressExplanation()),
+                              dbc.ModalFooter(dbc.Button("close", id="closeInfoAddresses", className="ml-auto"))],
+                                    id="modalAddresses", size='xl'),
+                   html.Div(id='hidden', style = {'display':'none'}),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createAddressesFigure(data), config={'displayModeBar': False}))),
+                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoAddresses")))
+                                          ]))]
         return content
 
-    def createAddressesFigure(self, data):
+    @staticmethod
+    def createAddressesFigure(data):
         figAddress = make_subplots(
             rows=3, cols=1,
             vertical_spacing=0.15,
@@ -67,14 +74,14 @@ class addressesViewClass:
         figAddress.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=3,
                                 col=1)
 
-        figAddress.update_layout(height=850,
+        figAddress.update_layout(height=800,
                                  margin={"t": 70, "l": 130, "b": 20},
                                  barmode='stack',
                                  hovermode='x unified',
                                  hoverlabel=dict(font_color="#6c757d"),
                                  legend=dict(orientation="h",
                                              yanchor="bottom",
-                                             y=-0.25,
+                                             y=-0.15,
                                              xanchor="right",
                                              x=1),
                                  )
@@ -83,9 +90,9 @@ class addressesViewClass:
         figAddress.layout.legend.font.color = '#6c757d'  # font color legend
         return figAddress
 
-    def getAddressExplanation(self):
-        addressCardExplanation = [html.H4("Info Addresses"),
-                                  html.P([
+    @staticmethod
+    def getAddressExplanation():
+        addressCardExplanation = [html.P([
                                             'For tracking the number of addresses a snapshot of the DeFiChain richlist is made once a day (in the night).',
                                              html.Br(),
                                              html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list',
@@ -94,9 +101,13 @@ class addressesViewClass:
                                   html.P(
                                             'The first diagram shows the overall number of addresses with a DFI amount greater zero.'),
                                   html.P([
-                                             'The second diagram shows the number of masternodes and all other addresses. Currently there is no API-function'
-                                             ' for identifying masternodes, so the DFI-amount deposited on the address is used. The needed range for a masternode is between '
-                                             '1 and 1.2 million DFI'], style={'text-align': 'justify'}),
+                                             'The second diagram shows the number of masternodes and all other addresses. For identification of the masternodes '
+                                            'the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
+                                            html.Br(),
+                                            html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED',
+                                             href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED',
+                                             target='_blank'),
+                                 ], style={'text-align': 'justify'}),
                                   html.P([
                                              'The last graphic shows the genesis masternode number. The DefiChain started with 3 genesis masternodes, which do not need'
                                              ' the the amount of 1 million DFI. Sometimes a genesis node is not represented in the snapshot, because on the corresponding address there are no DFI.'

@@ -92,13 +92,13 @@ class changeCoinAddressesViewClass:
             rangeslider=dict(visible=False),
             type="date"))
 
-        figChange.update_layout(height=680,
+        figChange.update_layout(height=800,
                                 margin={"t": 40, "l": 130, "b": 20},
                                 hovermode='x unified',
                                 hoverlabel=dict(font_color="#6c757d"),
                                 legend=dict(orientation="h",
                                             yanchor="bottom",
-                                            y=-0.3,
+                                            y=-0.15,
                                             xanchor="right",
                                             x=1),
                                 )

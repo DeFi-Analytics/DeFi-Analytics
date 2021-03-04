@@ -8,10 +8,16 @@ from plotly.subplots import make_subplots
 class blocktimeViewClass:
 
     def getBlocktimeContent(self, data):
-        content = [dbc.Card(dbc.CardBody([dcc.Graph(figure=self.createBlocktimeFigure(data),
-                                                    config={'displayModeBar': False})])),
-                   dbc.Card(dbc.CardBody(self.getBlockTimeExplanation()), style={'margin-top': '1.0rem'})]
+        content = [dbc.Modal([dbc.ModalHeader("Info Block Time"),
+                              dbc.ModalBody(self.getBlockTimeExplanation()),
+                              dbc.ModalFooter(dbc.Button("close", id="closeInfoBlocktime", className="ml-auto"))],
+                                    id="modalBlocktime", size='xl'),
+                   html.Div(id='hidden', style = {'display':'none'}),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createBlocktimeFigure(data), config={'displayModeBar': False}))),
+                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoBlocktime")))
+                                          ]))]
         return content
+
 
     @staticmethod
     def createBlocktimeFigure(data):
@@ -94,13 +100,13 @@ class blocktimeViewClass:
         figBlockTime.update_xaxes(gridcolor='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figBlockTime.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
                                   row=2, col=1)
-        figBlockTime.update_layout(height=680,
+        figBlockTime.update_layout(height=800,
                                    margin={"t": 40, "l": 130, "b": 20},
                                    hovermode='x unified',
                                    hoverlabel=dict(font_color="#6c757d"),
                                    legend=dict(orientation="h",
                                                yanchor="bottom",
-                                               y=-0.3,
+                                               y=-0.15,
                                                xanchor="right",
                                                x=1),
                                    )
@@ -110,15 +116,14 @@ class blocktimeViewClass:
 
         return figBlockTime
 
-
-    def getBlockTimeExplanation(self):
-        coinAddressCardExplanation = [html.H4("Info Block Time"),
-                                      html.P(['On this tab the block time of Defichain is tracked. With the help of the API a database is generated, where for each block ',
+    @staticmethod
+    def getBlockTimeExplanation():
+        coinAddressCardExplanation = [html.P(['On this tab the block time of Defichain is tracked. With the help of the API a database is generated, where for each block ',
                                                  'the generation time is saved. With these timestamps the mean value of the time difference between 2 blocks is calculated for each day.'],
                                              style={'text-align': 'justify'}),
                                       html.P([
                                                  'Beside the mean value also the distribution of the blocktime for each day could be interesting. To visualize this, 5 different quantiles are ',
-                                                 'plottes as lines over time']),
+                                                 'plotted as lines over time']),
                                       html.P([html.B('Hint:'),
                                               ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                               ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
