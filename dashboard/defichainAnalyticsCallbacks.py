@@ -57,7 +57,7 @@ class defichainAnalyticsCallbacksClass:
 
         # toggle token menu
         @app.callback(
-            [Output("submenu-token-collapse", "is_open"), Output("submenu-token-arrow", "className")],
+            [Output("submenu-Token-collapse", "is_open"), Output("submenu-token-arrow", "className")],
             [Input("submenu-token", "n_clicks")], [State("submenu-token-collapse", "is_open")])
         def toggleTokenMenu(n, isOpen):
             return toggle_collapse(n, isOpen)

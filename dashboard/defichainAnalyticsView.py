@@ -118,7 +118,7 @@ class defichainAnalyticsViewClass:
                     dbc.NavLink("Cryptos-DAT", href="/blockchain?entry=cryptosDAT", className="linkstyle",
                                 id="cryptosDAT")
                 ],
-                id="submenu-Token-collapse",
+                id="submenu-token-collapse",
             ),
         ]
 
