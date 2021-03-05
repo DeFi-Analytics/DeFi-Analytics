@@ -74,6 +74,7 @@ class defichainAnalyticsCallbacksClass:
                                            Input('volume', 'n_clicks_timestamp'),
                                            Input('liquidityToken', 'n_clicks_timestamp'),
                                            Input('tvl', 'n_clicks_timestamp'),
+                                           #Input('coinsLocked', 'n_clicks_timestamp'),
                                            Input('fees', 'n_clicks_timestamp'),
                                            Input('cryptosDAT', 'n_clicks_timestamp')]
         # define callback sidebar_link_state output array
@@ -88,6 +89,7 @@ class defichainAnalyticsCallbacksClass:
                                             Output('volume', 'className'),
                                             Output('liquidityToken', 'className'),
                                             Output('tvl', 'className'),
+                                            #Output('coinsLocked', 'className'),
                                             Output('fees', 'className'),
                                             Output('cryptosDAT', 'className')]
 
