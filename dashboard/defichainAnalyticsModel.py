@@ -75,7 +75,7 @@ class defichainAnalyticsModelClass:
             dailyTradingResults = pd.read_csv(self.dataPath+'dailyTradingResultsDEX.csv',index_col=0)
 
             ind2Delete = self.dailyData.columns.intersection(dailyTradingResults.columns)                               # check if columns exist
-            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete exisiting columns to add new ones
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete existing columns to add new ones
             self.dailyData = self.dailyData.merge(dailyTradingResults, how='outer', left_index=True, right_index=True)    # add new columns to daily table
 
             self.updated_tradingData = fileInfo.stat()
@@ -89,7 +89,7 @@ class defichainAnalyticsModelClass:
             dailyBlocktimeData['tps'] = dailyBlocktimeData['txCount'] / (24 * 60 * 60)
 
             ind2Delete = self.dailyData.columns.intersection(dailyBlocktimeData.columns)                                # check if columns exist
-            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete exisiting columns to add new ones
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete existing columns to add new ones
             self.dailyData = self.dailyData.merge(dailyBlocktimeData, how='outer', left_index=True,right_index=True)    # add new columns to daily table
 
             self.updated_blocktime = fileInfo.stat()
@@ -100,7 +100,10 @@ class defichainAnalyticsModelClass:
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_daa:
             dailyDAAData = pd.read_csv(filePath, index_col=0)
-            self.dailyData = self.dailyData.merge(dailyDAAData, how='outer', left_index=True, right_on='Date')
+
+            ind2Delete = self.dailyData.columns.intersection(dailyDAAData.columns)                                          # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                           # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(dailyDAAData, how='outer', left_index=True, right_on='Date')              # add new columns to daily table
             self.dailyData.set_index('Date', inplace=True)
             self.dailyData.sort_index(inplace=True)
 

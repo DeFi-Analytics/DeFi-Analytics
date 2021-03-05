@@ -8,11 +8,14 @@ from .daa.daaCallbacks import  daaCallbacksClass
 from .coin.coinView import coinViewClass
 from .coin.coinCallbacks import coinCallbacksClass
 
+from .changeCoinAddresses.changeCoinAddressesView import changeCoinAddressesViewClass
+from .changeCoinAddresses.changeCoinAddressesCallbacks import changeCoinAddressesCallbacksClass
+
 from .blocktime.blocktimeView import blocktimeViewClass
 from .blocktime.blocktimeCallbacks import blocktimeCallbacksClass
 
-from .changeCoinAddresses.changeCoinAddressesView import changeCoinAddressesViewClass
-from .changeCoinAddresses.changeCoinAddressesCallbacks import changeCoinAddressesCallbacksClass
+from .transactions.transactionsView import transactionsViewClass
+from .transactions.transactionsCallback import transactionsCallbacksClass
 
 
 
@@ -33,13 +36,17 @@ class blockchainControllerClass:
         self.coinView = coinViewClass()
         self.coinCallbacks = coinCallbacksClass()
 
+        # initialize change classes
+        self.changeCoinAddressesView = changeCoinAddressesViewClass()
+        self.changeCoinAddressesCallbacks = changeCoinAddressesCallbacksClass()       # create callbacks on top level
+
         # initialize blocktime classes
         self.blocktimeView = blocktimeViewClass()
         self.blocktimeCallbacks = blocktimeCallbacksClass()
 
-        # initialize change classes
-        self.changeCoinAddressesView = changeCoinAddressesViewClass()
-        self.changeCoinAddressesCallbacks = changeCoinAddressesCallbacksClass()       # create callbacks on top level
+        # initialize transactions classes
+        self.transactionsView = transactionsViewClass()
+        self.transactionsCallbacks = transactionsCallbacksClass()
 
     def getContent(self, entry):
         pageContent = None
@@ -47,7 +54,7 @@ class blockchainControllerClass:
             self.defichainAnalyticsModel.loadExtractedRichlistData()
             pageContent = self.addressesView.getAddressContent(self.defichainAnalyticsModel.dailyData)
         elif entry in ["daa"]:
-            self.defichainAnalyticsModel.loadExtractedRichlistData()
+            self.defichainAnalyticsModel.loadDAAData()
             pageContent = self.daaView.getDAAContent(self.defichainAnalyticsModel.dailyData)
         elif entry in ["coin"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
@@ -59,6 +66,9 @@ class blockchainControllerClass:
         elif entry in ["blocktime"]:
             self.defichainAnalyticsModel.loadDailyBlocktimeData()
             pageContent = self.blocktimeView.getBlocktimeContent(self.defichainAnalyticsModel.dailyData)
+        elif entry in ["transactions"]:
+            self.defichainAnalyticsModel.loadDailyBlocktimeData()
+            pageContent = self.transactionsView.getTransactionsContent(self.defichainAnalyticsModel.dailyData)
 
         return pageContent
 
@@ -68,3 +78,4 @@ class blockchainControllerClass:
         self.coinCallbacks.register_callbacks(self.app)
         self.changeCoinAddressesCallbacks.register_callbacks(self.app)
         self.blocktimeCallbacks.register_callbacks(self.app)
+        self.transactionsCallbacks.register_callbacks(self.app)
