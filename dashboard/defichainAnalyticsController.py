@@ -13,6 +13,7 @@ class defichainAnalyticsControllerClass:
     def __init__(self):
         self.defichainAnalyticsModel = defichainAnalyticsModelClass()
         self.defichainAnalyticsModel.loadDailyData()
+        self.defichainAnalyticsModel.loadLastRichlist()
 
         self.blockchainController = blockchainControllerClass(app, self.defichainAnalyticsModel)
         self.blockchainController.registerCallbacks(app)

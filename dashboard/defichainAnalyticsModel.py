@@ -1,6 +1,10 @@
 import os
-import pandas as pd
+import glob
 import pathlib
+import re
+
+import pandas as pd
+
 
 class defichainAnalyticsModelClass:
     def __init__(self):
@@ -9,12 +13,15 @@ class defichainAnalyticsModelClass:
         self.dailyData = pd.DataFrame()
         self.hourlyData = pd.DataFrame()
 
+        self.lastRichlist = None
+
         # last update of csv-files
         self.updated_extractedRichlist = None
         self.updated_tradingData = None
         self.updated_blocktime = None
         self.updated_dexHourly = None
         self.updated_daa = None
+        self.updated_LastRichlist = None
 
     #### DAILY DATA #####
     def loadDailyData(self):
@@ -125,3 +132,21 @@ class defichainAnalyticsModelClass:
     def loadShortTermDEXPrice(self):
         ShortTermDEXPrice = pd.read_csv(self.dataPath+'LMPoolData_ShortTerm.csv',index_col=0)
         # self.dailyData = self.dailyData.merge(ShortTermDEXPrice, how='outer')
+
+    #### load last Richlist ####
+    def loadLastRichlist(self):
+        filePath = self.dataPath + 'Richlist/'
+        listCSVFiles = glob.glob(filePath + "*_01-*.csv")  # get all csv-files generated at night
+
+        newestDate = self.dailyData['nbMnId'].dropna().index.max()  # find newest date in extracted Data
+        file2Load = [x for x in listCSVFiles if re.search(newestDate, x)]  # find corresponding csv-file of richlist
+
+        fname = pathlib.Path(file2Load[0])
+        if fname.stat() != self.updated_LastRichlist:
+            self.lastRichlist = pd.read_csv(file2Load[0])  # load richlist
+
+            # date for information/explanation
+            self.lastRichlist['date'] = pd.to_datetime(newestDate)
+
+            self.updated_LastRichlist = fname.stat()
+            print('>>>>>>>>>>>>> Richlist ', file2Load[0], ' loaded <<<<<<<<<<<<<')
