@@ -8,17 +8,17 @@ import plotly.graph_objects as go
 class coinsAddressesViewClass:
 
     def getCoinsAddressesContent(self, data):
-        content = [ dbc.Modal([dbc.ModalHeader("Info Transactions"),
+        content = [ dbc.Modal([dbc.ModalHeader("Info Coins/Addresses"),
                           dbc.ModalBody(self.getCoinAddressExplanation(data)),
-                          dbc.ModalFooter(dbc.Button("close", id="closeInfoTransactions", className="ml-auto"))],
-                         id="modalTransactions", size='xl'),
-                    dbc.Card(dbc.CardBody([dbc.Row(dbc.Col([dcc.Graph(figure=self.getCoinAddressFigure(data, 0, 4000000), config={'displayModeBar': False}),
+                          dbc.ModalFooter(dbc.Button("close", id="closeInfoCoinsAddresses", className="ml-auto"))],
+                         id="modalCoinsAddresses", size='xl'),
+                    dbc.Card(dbc.CardBody([dbc.Row(dbc.Col([dcc.Graph(figure=self.getCoinAddressFigure(data, 0, 4000000), config={'displayModeBar': False}, id='figCoinsAddresses'),
                                                        html.Div(['Select DFI-range of interest.'], style={'margin-top': 10, 'margin-left': 125}),
                                                        html.Div(['Minimum: ', dcc.Input(id="minDFIValueInput", type="number", debounce=True, value=0, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 125}),
                                                        html.Div(['Maximum: ', dcc.Input(id="maxDFIValueInput", type="number", debounce=True, value=4000000, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 125}),
                                                        html.Div(dcc.RangeSlider(id='DFIAddSlider', min=0, max=4000000, step=100, value=[0, 4000000]), style={'margin-left': 100, 'margin-right': 50, 'margin-top': 10, }), html.Div(id='DFIAddSliderOutput')
                                                        ])),
-                                      dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTransactions")))
+                                      dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinsAddresses")))
                                       ]))]
         return content
 
@@ -57,15 +57,13 @@ class coinsAddressesViewClass:
 
     @staticmethod
     def getCoinAddressExplanation(data):
-        coinAddressCardExplanation = [html.H4("Info Coins/Addresses"),
-                               html.P(['For distribution visualization of DFI-deposits per address a snapshot of the Richlist is used as a base.',html.Br(),
-                               html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list',href='http://explorer.defichain.io/#/DFI/mainnet/rich-list',target='_blank')],style={'text-align': 'justify'}),
-                               html.P('From this snapshop all individual addresses are extracted. This means, that the following categories are not displayed here:',style={'text-align': 'justify'}),
+        coinAddressCardExplanation = [html.P(['For distribution visualization of DFI-deposits per address a snapshot of the Richlist is used as a base.', html.Br(),
+                               html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank')], style={'text-align': 'justify'}),
+                               html.P('From this snapshop all individual addresses are extracted. This means, that the following categories are not displayed here:', style={'text-align': 'justify'}),
                                html.Ul([html.Li('Foundation coins'),
-                                        html.Li('Community fund coins'),
-                                        html.Li('Masternode coins')]),
-                               html.P('You can select a specific range of your interest and the complete histogram is recalculated.',style={'text-align': 'justify'}),
-                               html.P(['Defichain Richlist: last update ', data['date'].dt.strftime("%Y-%m-%d").values[0],' 01:00' ,html.Br(),
-                                 html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list',href='http://explorer.defichain.io/#/DFI/mainnet/rich-list',target='_blank')],
-                                        style={'fontSize':'0.65rem', 'padding-top':'20px'})]
+                                        html.Li('Community fund coins')]),
+                               html.P('You can select a specific range of your interest and the complete histogram is recalculated.', style={'text-align': 'justify'}),
+                               html.P(['Defichain Richlist: last update ', data['date'].dt.strftime("%Y-%m-%d").values[0], ' 01:00' , html.Br(),
+                                        html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank')],
+                                        style={'fontSize': '0.65rem', 'padding-top': '20px'})]
         return coinAddressCardExplanation

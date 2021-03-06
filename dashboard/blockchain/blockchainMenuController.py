@@ -12,6 +12,7 @@ from .changeCoinAddresses.changeCoinAddressesView import changeCoinAddressesView
 from .changeCoinAddresses.changeCoinAddressesCallbacks import changeCoinAddressesCallbacksClass
 
 from .coinsAddresses.coinsAddressesView import coinsAddressesViewClass
+from .coinsAddresses.coinsAddressesCallbacks import coinsAddressesCallbacksClass
 
 from .blocktime.blocktimeView import blocktimeViewClass
 from .blocktime.blocktimeCallbacks import blocktimeCallbacksClass
@@ -44,7 +45,7 @@ class blockchainControllerClass:
 
         # initialize coins per addresses classes
         self.coinsAddressesView = coinsAddressesViewClass()
-        # self.blocktimeCallbacks = blocktimeCallbacksClass()
+        self.coinsAddressesCallbacks = coinsAddressesCallbacksClass(self.defichainAnalyticsModel, self.coinsAddressesView, self.app)
 
         # initialize blocktime classes
         self.blocktimeView = blocktimeViewClass()
@@ -81,10 +82,11 @@ class blockchainControllerClass:
 
         return pageContent
 
-    def registerCallbacks(self, app):
+    def registerCallbacks(self):
         self.addressesCallbacks.register_callbacks(self.app)
         self.daaCallbacks.register_callbacks(self.app)
         self.coinCallbacks.register_callbacks(self.app)
         self.changeCoinAddressesCallbacks.register_callbacks(self.app)
         self.blocktimeCallbacks.register_callbacks(self.app)
         self.transactionsCallbacks.register_callbacks(self.app)
+
