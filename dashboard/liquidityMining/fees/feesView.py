@@ -4,30 +4,32 @@ import dash_bootstrap_components as dbc
 
 from plotly.subplots import make_subplots
 
+
 class feesViewClass:
-    def __init__(self):
-        None
 
     def getAddressContent(self, data):
-        content = [dbc.Card(dbc.CardBody([html.Table([html.Tr([html.Td('Select representation style for fee graphic: '),
-                                           html.Td(dcc.Dropdown(id='defiFeeRepresentation',options=[
-                                            {'label':'stacked area curves','value':'stacked'},
-                                            {'label':'individual line curves','value':'individual'}],
-                                            value='stacked', style=dict(width='200px',verticalAlign="bottom")))])]),
-                        dcc.Graph(id = 'dexPaidFees',figure = self.createFeesGraph(data,'stacked'),config={'displayModeBar': False}),
-                        html.Table([html.Tr([html.Td('Select pool for showing paid fees as native token: '),
-                                           html.Td(dcc.Dropdown(id='defiFeeNativeCoin',options=[
-                                          {'label':'BTC','value':'BTC'},
-                                          {'label':'ETH','value':'ETH'},
-                                          {'label':'USDT','value':'USDT'},
-                                          {'label':'LTC','value':'LTC'},
-                                          {'label':'DOGE','value':'DOGE'}],
-                                            value='BTC', style=dict(width='200px',verticalAlign="bottom")))])]),
-                        dcc.Graph(id = 'dexPaidCoinFees',figure = self.createFeesCoinFigure(data, 'BTC'),config={'displayModeBar': False})])),
-                    dbc.Card(dbc.CardBody(self.getFeesExplanation()),style={'margin-top': '1.0rem'})]
+        content = [dbc.Modal([dbc.ModalHeader("Info DEX Trading Fees"),
+                              dbc.ModalBody(self.getFeesExplanation()),
+                              dbc.ModalFooter(dbc.Button("close", id="closeInfoFees", className="ml-auto"))], id="modalFees", size='xl'),
+                   dbc.Card(dbc.CardBody([html.Table([html.Tr([html.Td('Select representation style for fee graphic: '),
+                                          html.Td(dcc.Dropdown(id='feeRepresentation', options=[
+                                            {'label': 'stacked area curves', 'value': 'stacked'},
+                                            {'label': 'individual line curves', 'value': 'individual'}],
+                                            value='stacked', style=dict(width='200px', verticalAlign="bottom")))])]),
+                                          dcc.Graph(id='lmPaidFees', figure=self.createFeesGraph(data, 'stacked'), config={'displayModeBar': False}),
+                                          html.Table([html.Tr([html.Td('Select pool for showing paid fees as native token: '),
+                                                               html.Td(dcc.Dropdown(id='feeNativeCoin', options=[{'label': 'BTC', 'value': 'BTC'},
+                                                                                                                 {'label': 'ETH', 'value': 'ETH'},
+                                                                                                                 {'label': 'USDT', 'value': 'USDT'},
+                                                                                                                 {'label': 'LTC', 'value': 'LTC'},
+                                                                                                                 {'label': 'DOGE', 'value': 'DOGE'}],
+                                                                                    value='BTC', style=dict(width='200px', verticalAlign="bottom")))])]),
+                                          dcc.Graph(id='lmPaidCoinFees', figure=self.createFeesCoinFigure(data, 'BTC'), config={'displayModeBar': False}),
+                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoFees")))]))]
         return content
 
-    def createFeesGraph(self, data, representationStyle):
+    @staticmethod
+    def createFeesGraph(data, representationStyle):
         # Plotting paid Fees in USD
         figFee = make_subplots(
             rows=1, cols=1,
@@ -123,7 +125,8 @@ class feesViewClass:
 
         return figFee
 
-    def createFeesCoinFigure(self, data, selectedCoin):
+    @staticmethod
+    def createFeesCoinFigure(data, selectedCoin):
         figFeeCoins = make_subplots(
             rows=2, cols=1,
             vertical_spacing=0.15,
@@ -186,8 +189,7 @@ class feesViewClass:
         return figFeeCoins
 
     def getFeesExplanation(self):
-        feeCardExplanation = [html.H4("Info DEX Trading Fees"),
-                              html.P(['For every coinswap on DefiChain-DEX the user have to pay a fee of 0.2% for the coins given into the pool to the liquidity providers.'],
+        feeCardExplanation = [html.P(['For every coinswap on DefiChain-DEX the user have to pay a fee of 0.2% for the coins given into the pool to the liquidity providers.'],
                                      style={'text-align': 'justify'}),
                               html.P(['In this evaluation every trade is analyzed regarding the Coin given into the DEX. This can be done via a DEX API (',
                                          html.A('API-Link last 20 Trades BTC-Pool',

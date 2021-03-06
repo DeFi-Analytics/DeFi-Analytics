@@ -1,18 +1,16 @@
-import dash_html_components as html
 from .fees.feesView import feesViewClass
-# from .addresses.addressesCallbacks import addressesCallbacksClass
+from .fees.feesCallbacks import feesCallbacksClass
+
 
 class liquidityMiningControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
-        self.app = app
 
         # initialize fees classes
         self.feesView = feesViewClass()
-        # self.addressesCallbacks = addressesCallbacksClass()       # create callbacks on top level
-        # self.addressesCallbacks.register_callbacks(app)
+        self.feesCallback = feesCallbacksClass(self.defichainAnalyticsModel, self.feesView, app)
 
 
-    def getContent(self,entry):
-        if entry in ["", "fees"]:
+    def getContent(self, entry):
+        if entry in ["fees"]:
             return self.feesView.getAddressContent(self.defichainAnalyticsModel.dailyData)
