@@ -2,11 +2,7 @@ from dash.dependencies import Input, Output, State
 
 
 class changeCoinAddressesCallbacksClass:
-    def __init__(self):
-        None
-
-
-    def register_callbacks(self, app):
+    def __init__(self, app):
 
         @app.callback(
             Output("modalChangeCoinAddresses", "is_open"),

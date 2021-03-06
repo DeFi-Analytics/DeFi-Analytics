@@ -2,9 +2,8 @@ from dash.dependencies import Input, Output, State
 
 
 class blocktimeCallbacksClass:
+    def __init__(self, app):
 
-    @staticmethod
-    def register_callbacks(app):
         @app.callback(
             Output("modalBlocktime", "is_open"),
             [Input("openInfoBlocktime", "n_clicks"), Input("closeInfoBlocktime", "n_clicks")],

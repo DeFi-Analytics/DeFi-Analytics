@@ -25,35 +25,34 @@ from .transactions.transactionsCallback import transactionsCallbacksClass
 class blockchainControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
-        self.app = app
 
         # initialize addresses classes
         self.addressesView = addressesViewClass()
-        self.addressesCallbacks = addressesCallbacksClass()       # create callbacks on top level
+        self.addressesCallbacks = addressesCallbacksClass(app)       # create callbacks on top level
 
         # initialize daa classes
         self.daaView = daaViewClass()
-        self.daaCallbacks = daaCallbacksClass()
+        self.daaCallbacks = daaCallbacksClass(app)
 
         # initialize coin classes
         self.coinView = coinViewClass()
-        self.coinCallbacks = coinCallbacksClass()
+        self.coinCallbacks = coinCallbacksClass(app)
 
         # initialize change classes
         self.changeCoinAddressesView = changeCoinAddressesViewClass()
-        self.changeCoinAddressesCallbacks = changeCoinAddressesCallbacksClass()       # create callbacks on top level
+        self.changeCoinAddressesCallbacks = changeCoinAddressesCallbacksClass(app)      # create callbacks on top level
 
         # initialize coins per addresses classes
         self.coinsAddressesView = coinsAddressesViewClass()
-        self.coinsAddressesCallbacks = coinsAddressesCallbacksClass(self.defichainAnalyticsModel, self.coinsAddressesView, self.app)
+        self.coinsAddressesCallbacks = coinsAddressesCallbacksClass(self.defichainAnalyticsModel, self.coinsAddressesView, app)
 
         # initialize blocktime classes
         self.blocktimeView = blocktimeViewClass()
-        self.blocktimeCallbacks = blocktimeCallbacksClass()
+        self.blocktimeCallbacks = blocktimeCallbacksClass(app)
 
         # initialize transactions classes
         self.transactionsView = transactionsViewClass()
-        self.transactionsCallbacks = transactionsCallbacksClass()
+        self.transactionsCallbacks = transactionsCallbacksClass(app)
 
     def getContent(self, entry):
         pageContent = None
@@ -82,11 +81,4 @@ class blockchainControllerClass:
 
         return pageContent
 
-    def registerCallbacks(self):
-        self.addressesCallbacks.register_callbacks(self.app)
-        self.daaCallbacks.register_callbacks(self.app)
-        self.coinCallbacks.register_callbacks(self.app)
-        self.changeCoinAddressesCallbacks.register_callbacks(self.app)
-        self.blocktimeCallbacks.register_callbacks(self.app)
-        self.transactionsCallbacks.register_callbacks(self.app)
 

@@ -2,9 +2,8 @@ from dash.dependencies import Input, Output, State
 
 
 class transactionsCallbacksClass:
+    def __init__(self, app):
 
-    @staticmethod
-    def register_callbacks(app):
         @app.callback(
             Output("modalTransactions", "is_open"),
             [Input("openInfoTransactions", "n_clicks"), Input("closeInfoTransactions", "n_clicks")],

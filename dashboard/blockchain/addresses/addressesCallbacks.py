@@ -1,9 +1,9 @@
 from dash.dependencies import Input, Output, State
 
-class addressesCallbacksClass:
 
-    @staticmethod
-    def register_callbacks(app):
+class addressesCallbacksClass:
+    def __init__(self, app):
+
         @app.callback(
             Output("modalAddresses", "is_open"),
             [Input("openInfoAddresses", "n_clicks"), Input("closeInfoAddresses", "n_clicks")],

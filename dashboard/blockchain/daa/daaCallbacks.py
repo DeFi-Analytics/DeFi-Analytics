@@ -2,9 +2,7 @@ from dash.dependencies import Input, Output, State
 
 
 class daaCallbacksClass:
-
-    @staticmethod
-    def register_callbacks(app):
+    def __init__(self, app):
         @app.callback(
             Output("modalDAA", "is_open"),
             [Input("openInfoDAA", "n_clicks"), Input("closeInfoDAA", "n_clicks")],

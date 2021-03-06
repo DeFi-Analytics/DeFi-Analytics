@@ -2,9 +2,8 @@ from dash.dependencies import Input, Output, State
 
 
 class coinCallbacksClass:
+    def __init__(self, app):
 
-    @staticmethod
-    def register_callbacks(app):
         @app.callback(
             Output("modalCoin", "is_open"),
             [Input("openInfoCoin", "n_clicks"), Input("closeInfoCoin", "n_clicks")],
@@ -14,3 +13,4 @@ class coinCallbacksClass:
             if n1 or n2:
                 return not is_open
             return is_open
+
