@@ -11,11 +11,11 @@ background-image: url('rect_light_grey.png');
 color:#000000;
 }
 a:focus{
-background-image: url('rect_light_grey.png');
+background-image: url('rect_pink.png');
 color: #ffffff;
 }
 a:active{
-background-image: url('rect_light_grey.png');
+background-image: url('rect_pink.png');
 color: #ffffff;
 }
 
@@ -39,9 +39,9 @@ color: #ffffff;
 .activelink{
     background-color: #000000;
     margin-top: 0.3rem;
-    background-image: url('rect_light_grey.png');
+    background-image: url('rect_pink.png');
     background-size: 100% 100%;
-    color: #ffffff
+    color: #ffffff;
 }
 
 .contentstyle {

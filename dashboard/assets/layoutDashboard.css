@@ -28,7 +28,9 @@ body {
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.4);
 }
 
-
+.btn.btn-secondary{
+    background-color: #fe00ae;
+}
 
 .dash-spinner.dash-default-spinner {
     margin-top: 0rem auto;
