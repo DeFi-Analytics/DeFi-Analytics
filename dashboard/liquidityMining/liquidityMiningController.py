@@ -12,5 +12,8 @@ class liquidityMiningControllerClass:
 
 
     def getContent(self, entry):
+        pageContent = None
         if entry in ["fees"]:
-            return self.feesView.getAddressContent(self.defichainAnalyticsModel.dailyData)
+            pageContent = self.feesView.getFeesContent(self.defichainAnalyticsModel.dailyData)
+
+        return pageContent

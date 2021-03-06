@@ -7,7 +7,7 @@ from plotly.subplots import make_subplots
 
 class feesViewClass:
 
-    def getAddressContent(self, data):
+    def getFeesContent(self, data):
         content = [dbc.Modal([dbc.ModalHeader("Info DEX Trading Fees"),
                               dbc.ModalBody(self.getFeesExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoFees", className="ml-auto"))], id="modalFees", size='xl'),
