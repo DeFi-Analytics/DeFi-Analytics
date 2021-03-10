@@ -52,8 +52,8 @@ class defichainAnalyticsCallbacksClass:
         # toggle liquidityMining menu
         @app.callback([Output("submenu-liquidityMining-collapse", "is_open"), Output("submenu-liquidityMining-arrow", "className")],
                       [Input("submenu-liquidityMining", "n_clicks")], [State("submenu-liquidityMining-collapse", "is_open")])
-        def toggleLiquidityMiningMenu(n,isOpen):
-            return toggle_collapse(n,isOpen)
+        def toggleLiquidityMiningMenu(n, isOpen):
+            return toggle_collapse(n, isOpen)
 
         # toggle token menu
         @app.callback(
@@ -104,6 +104,7 @@ class defichainAnalyticsCallbacksClass:
                     timestamp_array.append(0)
                 else:
                     timestamp_array.append(item)
+
 
             #fill return array with style information
             active_link = max(timestamp_array)

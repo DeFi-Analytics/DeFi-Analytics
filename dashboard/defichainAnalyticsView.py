@@ -26,7 +26,7 @@ class defichainAnalyticsViewClass:
                     ],
                     className="my-1",
                 ),
-                style={"cursor": "pointer"},
+                className="submenu_linkstyle",
                 id="submenu-blockchain",
             ),
             # we use the Collapse component to hide and reveal the navigation links
@@ -57,7 +57,7 @@ class defichainAnalyticsViewClass:
                     ],
                     className="my-1",
                 ),
-                style={"cursor": "pointer"},
+                className="submenu_linkstyle",
                 id="submenu-dex",
             ),
             # we use the Collapse component to hide and reveal the navigation links
@@ -82,7 +82,7 @@ class defichainAnalyticsViewClass:
                     ],
                     className="my-1",
                 ),
-                style={"cursor": "pointer"},
+                className="submenu_linkstyle",
                 id="submenu-liquidityMining",
             ),
             # we use the Collapse component to hide and reveal the navigation links
@@ -110,7 +110,7 @@ class defichainAnalyticsViewClass:
                     ],
                     className="my-1",
                 ),
-                style={"cursor": "pointer"},
+                className="submenu_linkstyle",
                 id="submenu-token",
             ),
             # we use the Collapse component to hide and reveal the navigation links
@@ -130,20 +130,11 @@ class defichainAnalyticsViewClass:
 
         sidebar = html.Div(
             [
-                html.Div(html.Img(src='data:image/png;base64,{}'.format(encoded_image),
-                         style={
-                             'position': 'relative',
-                             'width': '14rem',
-                             'padding-top': 20,
-                             'padding-right': 0,
-                             'padding-bottom': 0,
-                             'z-index': 'inherit'}), style={'position': 'relative', 'left': 0,'z-index': 5}),
-                html.Hr(),
+
+                html.Img(src='data:image/png;base64,{}'.format(encoded_image),
+                         className="logo_sidebar"),
                 html.Div(dbc.Nav(submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token,
                         vertical=True, id='navbar-container'), className="scrollbar_sidemenu"),
-
-                # dbc.Nav(submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token,
-                #         vertical=True, id='navbar-container'),
 
             ],
             className="sidebarstyle",

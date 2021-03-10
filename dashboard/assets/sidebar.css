@@ -7,7 +7,7 @@ a:link{
 color: #a6a4a4
 }
 a:hover{
-background-image: url('rect_light_grey.png');
+background-image: url('rect_pink.png');
 color:#000000;
 }
 a:focus{
@@ -26,14 +26,20 @@ color: #ffffff;
     left: 0;
     bottom: 0;
     width:18rem;
-    padding: 2rem 1rem;
+    padding: 0.5rem 1rem;
     color:#ffffff;
-    /*overflow-y: scroll;
+    overflow-y: scroll;
     overflow-x: hidden;
     scrollbar-face-color: #858585;
-    scrollbar-width: thin;*/
+    scrollbar-width: thin;
     height: 100vh;
 }
+
+.submenu_linkstyle{
+    cursor: pointer;
+    margin-left: 0.1rem;
+}
+
 .linkstyle{
     background-color: #000000;
     margin-top: 0.3rem;
@@ -57,20 +63,10 @@ color: #ffffff;
     padding: 2rem 1rem;
 }
 
-.scrollbar_sidemenu {
-    padding-top: 230px;
-    padding-bottom: 30px;
-    margin: 0;
-    position: absolute;
-    right: 0;
-    left: 7;
-    top: 0;
-    bottom: 0;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    scrollbar-face-color: #858585;
-    scrollbar-width: thin;
-    height: 100%;
-    width: 90%;
-    z-index=1;
+.logo_sidebar{
+    width: 14rem;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    background-color: #000000;
 }
