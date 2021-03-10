@@ -1,4 +1,3 @@
-import dash_html_components as html
 from .addresses.addressesView import addressesViewClass
 from .addresses.addressesCallbacks import addressesCallbacksClass
 
