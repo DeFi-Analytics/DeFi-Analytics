@@ -43,11 +43,11 @@ class defichainAnalyticsModelClass:
 
             # extracting DFI in Liquidity-Mining
             lmCoins = pd.DataFrame(index=self.dailyData.index)
-            lmCoins['BTC_pool'] = self.hourlyData[self.hourlyData.symbol == 'BTC-DFI'].groupby('date')['reserveB'].first()
-            lmCoins['ETH_pool'] = self.hourlyData[self.hourlyData.symbol == 'ETH-DFI'].groupby('date')['reserveB'].first()
-            lmCoins['USDT_pool'] = self.hourlyData[self.hourlyData.symbol == 'USDT-DFI'].groupby('date')['reserveB'].first()
-            lmCoins['DOGE_pool'] = self.hourlyData[self.hourlyData.symbol == 'DOGE-DFI'].groupby('date')['reserveB'].first()
-            lmCoins['LTC_pool'] = self.hourlyData[self.hourlyData.symbol == 'LTC-DFI'].groupby('date')['reserveB'].first()
+            lmCoins['BTC_pool'] = self.hourlyData.groupby('Date')['BTC-DFI_reserveB'].first()
+            lmCoins['ETH_pool'] = self.hourlyData.groupby('Date')['ETH-DFI_reserveB'].first()
+            lmCoins['USDT_pool'] = self.hourlyData.groupby('Date')['USDT-DFI_reserveB'].first()
+            lmCoins['DOGE_pool'] = self.hourlyData.groupby('Date')['DOGE-DFI_reserveB'].first()
+            lmCoins['LTC_pool'] = self.hourlyData.groupby('Date')['LTC-DFI_reserveB'].first()
             lmCoins['overall'] = lmCoins['BTC_pool'] + lmCoins['ETH_pool'] + lmCoins['USDT_pool'] + lmCoins['DOGE_pool'].fillna(0) + lmCoins['LTC_pool'].fillna(0)
             self.dailyData['lmDFI'] = lmCoins['overall']
 
