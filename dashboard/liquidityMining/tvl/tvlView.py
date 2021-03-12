@@ -97,13 +97,13 @@ class tvlViewClass:
             rangeslider=dict(visible=False),
             type="date"))
 
-        figTVL.update_layout(height=600,
+        figTVL.update_layout(height=765,
                              margin={"t": 40, "l": 130, "b": 20},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",
                                          yanchor="bottom",
-                                         y=-0.25,
+                                         y=-0.15,
                                          xanchor="right",
                                          x=1),
                              )
@@ -125,4 +125,4 @@ class tvlViewClass:
                                        ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                         style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})
                                   ]
-        return coinTVLCardExplanation 
+        return coinTVLCardExplanation
