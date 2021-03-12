@@ -17,7 +17,7 @@ class tvlViewClass:
                                                                                              {'label': 'BTC', 'value': 'BTC'},
                                                                                              {'label': 'DFI', 'value': 'DFI'}],
                                             value='USD', style=dict(width='200px',verticalAlign="bottom")))])]),
-                        dbc.Col(dcc.Graph(id = 'dexTVL',figure = self.createTVLGraph(data,'USD'), config={'displayModeBar': False})),
+                        dbc.Col(dcc.Graph(id = 'dexTVL', config={'displayModeBar': False})),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTVL")))]))]
         return content
 

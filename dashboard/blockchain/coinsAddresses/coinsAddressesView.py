@@ -12,7 +12,7 @@ class coinsAddressesViewClass:
                           dbc.ModalBody(self.getCoinAddressExplanation(data)),
                           dbc.ModalFooter(dbc.Button("close", id="closeInfoCoinsAddresses", className="ml-auto"))],
                          id="modalCoinsAddresses", size='xl'),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col([dcc.Graph(figure=self.getCoinAddressFigure(data, 0, 4000000), config={'displayModeBar': False}, id='figCoinsAddresses'),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col([dcc.Graph(config={'displayModeBar': False}, id='figCoinsAddresses'),
                                                        html.Div(['Select DFI-range of interest.'], style={'margin-top': 10, 'margin-left': 125}),
                                                        html.Div(['Minimum: ', dcc.Input(id="minDFIValueInput", type="number", debounce=True, value=0, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 125}),
                                                        html.Div(['Maximum: ', dcc.Input(id="maxDFIValueInput", type="number", debounce=True, value=4000000, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 125}),

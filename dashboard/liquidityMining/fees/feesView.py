@@ -16,7 +16,7 @@ class feesViewClass:
                                             {'label': 'stacked area curves', 'value': 'stacked'},
                                             {'label': 'individual line curves', 'value': 'individual'}],
                                             value='stacked', style=dict(width='200px', verticalAlign="bottom")))])]),
-                                          dcc.Graph(id='lmPaidFees', figure=self.createFeesGraph(data, 'stacked'), config={'displayModeBar': False}),
+                                          dcc.Graph(id='lmPaidFees', config={'displayModeBar': False}),
                                           html.Table([html.Tr([html.Td('Select pool for showing paid fees as native token: '),
                                                                html.Td(dcc.Dropdown(id='feeNativeCoin', options=[{'label': 'BTC', 'value': 'BTC'},
                                                                                                                  {'label': 'ETH', 'value': 'ETH'},
@@ -24,7 +24,7 @@ class feesViewClass:
                                                                                                                  {'label': 'LTC', 'value': 'LTC'},
                                                                                                                  {'label': 'DOGE', 'value': 'DOGE'}],
                                                                                     value='BTC', style=dict(width='200px', verticalAlign="bottom")))])]),
-                                          dcc.Graph(id='lmPaidCoinFees', figure=self.createFeesCoinFigure(data, 'BTC'), config={'displayModeBar': False}),
+                                          dcc.Graph(id='lmPaidCoinFees', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoFees")))]))]
         return content
 
