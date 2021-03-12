@@ -8,18 +8,17 @@ import plotly.graph_objects as go
 class coinsAddressesViewClass:
 
     def getCoinsAddressesContent(self, data):
-        content = [ dbc.Modal([dbc.ModalHeader("Info Coins/Addresses"),
+        content = [dbc.Modal([dbc.ModalHeader("Info Coins/Addresses"),
                           dbc.ModalBody(self.getCoinAddressExplanation(data)),
                           dbc.ModalFooter(dbc.Button("close", id="closeInfoCoinsAddresses", className="ml-auto"))],
                          id="modalCoinsAddresses", size='xl'),
-                    dbc.Card(dbc.CardBody([dbc.Row(dbc.Col([dcc.Graph(figure=self.getCoinAddressFigure(data, 0, 4000000), config={'displayModeBar': False}, id='figCoinsAddresses'),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col([dcc.Graph(figure=self.getCoinAddressFigure(data, 0, 4000000), config={'displayModeBar': False}, id='figCoinsAddresses'),
                                                        html.Div(['Select DFI-range of interest.'], style={'margin-top': 10, 'margin-left': 125}),
                                                        html.Div(['Minimum: ', dcc.Input(id="minDFIValueInput", type="number", debounce=True, value=0, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 125}),
                                                        html.Div(['Maximum: ', dcc.Input(id="maxDFIValueInput", type="number", debounce=True, value=4000000, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 125}),
                                                        html.Div(dcc.RangeSlider(id='DFIAddSlider', min=0, max=4000000, step=100, value=[0, 4000000]), style={'margin-left': 100, 'margin-right': 50, 'margin-top': 10, }), html.Div(id='DFIAddSliderOutput')
                                                        ])),
-                                      dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinsAddresses")))
-                                      ]))]
+                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinsAddresses")))]))]
         return content
 
     @staticmethod

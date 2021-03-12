@@ -9,16 +9,16 @@ import dateutil.relativedelta
 class tvlViewClass:
 
     def getTVLContent(self, data):
-        content = [dbc.Modal([dbc.ModalHeader("Info DEX Trading Fees"),
-                              dbc.ModalBody(self.getFeesExplanation()),
-                              dbc.ModalFooter(dbc.Button("close", id="closeInfoFees", className="ml-auto"))], id="modalFees", size='xl'),
+        content = [dbc.Modal([dbc.ModalHeader("Info Total Value Locked (TVL)"),
+                              dbc.ModalBody(self.getTVLExplanation()),
+                              dbc.ModalFooter(dbc.Button("close", id="closeInfoTVL", className="ml-auto"))], id="modalTVL", size='xl'),
                    dbc.Card(dbc.CardBody([html.Table([html.Tr([html.Td('Select currency for TVL representation:'),
                                           html.Td(dcc.Dropdown(id='defiTVLCurrency',options=[{'label': 'USD', 'value': 'USD'},
                                                                                              {'label': 'BTC', 'value': 'BTC'},
                                                                                              {'label': 'DFI', 'value': 'DFI'}],
                                             value='USD', style=dict(width='200px',verticalAlign="bottom")))])]),
                         dbc.Col(dcc.Graph(id = 'dexTVL',figure = self.createTVLGraph(data,'USD'), config={'displayModeBar': False})),
-                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoFees")))]))]
+                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTVL")))]))]
         return content
 
     @staticmethod
@@ -113,22 +113,16 @@ class tvlViewClass:
 
         return figTVL
 
-
-
-    def getFeesExplanation(self):
-        feeCardExplanation = [html.P(['For every coinswap on DefiChain-DEX the user have to pay a fee of 0.2% for the coins given into the pool to the liquidity providers.'],
-                                     style={'text-align': 'justify'}),
-                              html.P(['In this evaluation every trade is analyzed regarding the Coin given into the DEX. This can be done via a DEX API (',
-                                         html.A('API-Link last 20 Trades BTC-Pool',
-                                                href='https://api.defichain.io/v1/getswaptransaction?id=5&network=mainnet&skip=0&limit=20',
-                                                target='_blank'),
-                                         '). For these coins the fee part is calculated and converted to the USD-value.'],
-                                     style={'text-align': 'justify'}),
-                              html.P(['The summation of all single fees per pool and day gives the graphs on the right side. You can choose between a stacked and an individual curve representation. '],
-                                     style={'text-align': 'justify'}),
-                              html.P([html.B('Hint:'),
-                                      ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
-                                      ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
-                                     style={'text-align': 'justify', 'fontSize': '0.7rem', 'color': '#6c757d'})
-                              ]
-        return feeCardExplanation
+    @staticmethod
+    def getTVLExplanation():
+        coinTVLCardExplanation = [html.P(['The total value locked is a key figure, that describes the Fiat value (here in Dollar) stored in the DEX.'],style={'text-align': 'justify'}),
+                                  html.P(['The purple line represents the overall value of the DefiChain-DEX and the single pool-pairs are represented as stacked areas.',html.Br(),
+                                       ' All values are calculated with the help of the DEX-API (',html.A('API-Link',href='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false',target='_blank'),
+                                       ') and the Coingecko price feed. So, the TVL can be different if you use a single Exchange for the DFI-price.'],style={'text-align': 'justify'}),
+                                  html.P(['Normally the TVL is shown in USD. But in this presentation the value can be influenced by new invested capital and by the coinprices. With beginning of Liquidity Mining we see a big price increase for DFI. ',
+                                       'So, maybe the reprensentation in BTC or DFI is also interesting for giving some information of the TVL.'],style={'text-align': 'justify'}),
+                                   html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
+                                       ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
+                                        style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})
+                                  ]
+        return coinTVLCardExplanation 

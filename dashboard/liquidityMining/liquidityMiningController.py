@@ -2,6 +2,7 @@ from .fees.feesView import feesViewClass
 from .fees.feesCallbacks import feesCallbacksClass
 
 from .tvl.tvlView import tvlViewClass
+from .tvl.tvlCallbacks import tvlCallbacksClass
 
 class liquidityMiningControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -13,7 +14,7 @@ class liquidityMiningControllerClass:
 
         # initialize tvl classes
         self.tvlView = tvlViewClass()
-        # self.feesCallback = feesCallbacksClass(self.defichainAnalyticsModel, self.feesView, app)
+        self.tvlCallbacksClass = tvlCallbacksClass(self.defichainAnalyticsModel, self.tvlView, app)
 
     def getContent(self, entry):
         pageContent = None

@@ -121,34 +121,34 @@ class defichainAnalyticsModelClass:
     def loadHourlyDEXdata(self):
         filePath = self.dataPath + 'LMPoolData.csv'
         fileInfo = pathlib.Path(filePath)
-        # if fileInfo.stat() != self.updated_dexHourly:
-        hourlyDEXData = pd.read_csv(filePath, index_col=0)
-        hourlyDEXData['timeRounded'] = pd.to_datetime(hourlyDEXData.Time).dt.floor('H')
-        hourlyDEXData.set_index(['timeRounded'], inplace=True)
-        hourlyDEXData['reserveA_DFI'] = hourlyDEXData['reserveA'] / hourlyDEXData['DFIPrices']
+        if fileInfo.stat() != self.updated_dexHourly:
+            hourlyDEXData = pd.read_csv(filePath, index_col=0)
+            hourlyDEXData['timeRounded'] = pd.to_datetime(hourlyDEXData.Time).dt.floor('H')
+            hourlyDEXData.set_index(['timeRounded'], inplace=True)
+            hourlyDEXData['reserveA_DFI'] = hourlyDEXData['reserveA'] / hourlyDEXData['DFIPrices']
 
-        for poolSymbol in hourlyDEXData.symbol.unique():
-            df2Add = hourlyDEXData[hourlyDEXData.symbol == poolSymbol]
-            df2Add = df2Add.drop(columns=['Time', 'symbol'])
+            for poolSymbol in hourlyDEXData.symbol.unique():
+                df2Add = hourlyDEXData[hourlyDEXData.symbol == poolSymbol]
+                df2Add = df2Add.drop(columns=['Time', 'symbol'])
 
-            # calculate locked DFI and corresponding values
-            df2Add = df2Add.assign(lockedDFI=df2Add['reserveB'] + df2Add['reserveA_DFI'])
-            df2Add = df2Add.assign(lockedUSD=df2Add['lockedDFI']*hourlyDEXData[hourlyDEXData.symbol == 'USDT-DFI'].DFIPrices)
-            df2Add = df2Add.assign(lockedBTC=df2Add['lockedDFI'] * hourlyDEXData[hourlyDEXData.symbol == 'BTC-DFI'].DFIPrices)
+                # calculate locked DFI and corresponding values
+                df2Add = df2Add.assign(lockedDFI=df2Add['reserveB'] + df2Add['reserveA_DFI'])
+                df2Add = df2Add.assign(lockedUSD=df2Add['lockedDFI']*hourlyDEXData[hourlyDEXData.symbol == 'USDT-DFI'].DFIPrices)
+                df2Add = df2Add.assign(lockedBTC=df2Add['lockedDFI'] * hourlyDEXData[hourlyDEXData.symbol == 'BTC-DFI'].DFIPrices)
 
-            # add prefix to column names for pool identification
-            colNamesOrig = df2Add.columns.astype(str)
-            colNamesNew = poolSymbol+'_' + colNamesOrig
-            df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+                # add prefix to column names for pool identification
+                colNamesOrig = df2Add.columns.astype(str)
+                colNamesNew = poolSymbol+'_' + colNamesOrig
+                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
 
-            # delete existing information and add new one
-            ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
-            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
-            self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+                # delete existing information and add new one
+                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
+                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
-        self.hourlyData['Date'] = pd.to_datetime(hourlyDEXData[hourlyDEXData.symbol=='BTC-DFI'].index).strftime('%Y-%m-%d')
-        self.updated_dexHourly = fileInfo.stat()
-        print('>>>> Hourly DEX data loaded from csv-file <<<<')
+            self.hourlyData['Date'] = pd.to_datetime(hourlyDEXData[hourlyDEXData.symbol=='BTC-DFI'].index).strftime('%Y-%m-%d')
+            self.updated_dexHourly = fileInfo.stat()
+            print('>>>> Hourly DEX data loaded from csv-file <<<<')
 
     #### MINUTELY DATA ####
     def loadShortTermDEXPrice(self):
