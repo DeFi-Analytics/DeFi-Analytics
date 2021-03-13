@@ -55,8 +55,8 @@ class liquidityTokenViewClass:
         else:
             lineColor = '#da3832'
 
-        trace_LiquidityToken = dict(type='scatter', name='Liquidity Token', x=data[selectedCoin + '-DFI_totalLiquidity'].index,
-                                    y=data[selectedCoin + '-DFI_totalLiquidity'],
+        trace_LiquidityToken = dict(type='scatter', name='Liquidity Token', x=data[selectedCoin + '-DFI_totalLiquidity'].dropna().index,
+                                    y=data[selectedCoin + '-DFI_totalLiquidity'].dropna(),
                                     mode='lines', line=dict(color=lineColor), line_width=2, hovertemplate='%{y:,.1f} ' + selectedCoin + '-DFI')
         trace_dailyChange = dict(type='scatter', name='Absolute Daily Change',
                                  x=data.groupby('Date')[selectedCoin + '-DFI_totalLiquidity'].first().diff().index,
