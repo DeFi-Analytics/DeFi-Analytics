@@ -74,8 +74,8 @@ class addressesViewClass:
         figAddress.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=3,
                                 col=1)
 
-        figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.8, sizex=0.25, sizey=0.25,  xanchor="center", yanchor="middle", opacity=0.2))
-        figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.32, sizex=0.2, sizey=0.2,  xanchor="center", yanchor="middle", opacity=0.2))
+        figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.81, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
+        figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.35, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
 
 
         figAddress.update_layout(height=800,

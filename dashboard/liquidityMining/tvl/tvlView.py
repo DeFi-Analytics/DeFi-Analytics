@@ -98,7 +98,7 @@ class tvlViewClass:
             type="date"))
 
         # add background picture
-        figTVL.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.25))
+        figTVL.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.25))
 
         figTVL.update_layout(height=765,
                              margin={"t": 40, "l": 130, "b": 20},

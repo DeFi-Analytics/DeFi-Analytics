@@ -82,9 +82,9 @@ class liquidityTokenViewClass:
         figLiquidityToken.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=3, col=1)
 
         # add background picture
-        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.83, sizex=0.2, sizey=0.2,  xanchor="center", yanchor="middle", opacity=0.25))
-        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.46, sizex=0.2, sizey=0.2,  xanchor="center", yanchor="middle", opacity=0.25))
-        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.11, sizex=0.2, sizey=0.2,  xanchor="center", yanchor="middle", opacity=0.25))
+        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.85, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
+        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.46, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
+        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.13, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
 
         figLiquidityToken.update_layout(height=765,
                                         margin={"t": 40, "l": 120, "b": 20, "r": 20},

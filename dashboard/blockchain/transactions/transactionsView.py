@@ -65,8 +65,8 @@ class transactionsViewClass:
             type="date"))
 
         # add background picture
-        figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.87, sizex=0.2, sizey=0.2,  xanchor="center", yanchor="middle", opacity=0.2))
-        figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.3, sizex=0.3, sizey=0.3, xanchor="center", yanchor="middle", opacity=0.2))
+        figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.87, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
+        figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.3, sizex=0.4, sizey=0.4, xanchor="center", yanchor="middle", opacity=0.2))
 
         figTxOverview.update_layout(height=800,
                                     margin={"t": 40, "l": 130, "b": 20},

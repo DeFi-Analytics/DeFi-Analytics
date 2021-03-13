@@ -27,7 +27,7 @@ class defichainAnalyticsModelClass:
         self.updated_dexVolume = None
 
         # background image for figures
-        with open(workDir + "/assets/logo-defi-analytics_grey.png", "rb") as image_file:
+        with open(workDir + "/assets/logo-defi-analytics_LandscapeGrey.png", "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode()
         self.figBackgroundImage = "data:image/png;base64," + encoded_string         # Add the prefix that plotly will want when using the string as source
 

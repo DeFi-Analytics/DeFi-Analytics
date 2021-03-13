@@ -61,7 +61,7 @@ class volumeViewClass:
         figDEXVol.update_xaxes(title_text="Date", gridcolor='#6c757d', showticklabels=True, color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
 
         # add background picture
-        figDEXVol.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
+        figDEXVol.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
         figDEXVol.update_layout(height=800,
                                 margin={"t": 40, "l": 130, "b": 20},

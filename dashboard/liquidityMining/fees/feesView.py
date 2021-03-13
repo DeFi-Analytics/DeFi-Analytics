@@ -176,8 +176,8 @@ class feesViewClass:
                                  row=2, col=1)
 
         # add background picture
-        figFeeCoins.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.78, sizex=0.25, sizey=0.25,  xanchor="center", yanchor="middle", opacity=0.2))
-        figFeeCoins.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.2, sizex=0.25, sizey=0.25,  xanchor="center", yanchor="middle", opacity=0.2))
+        figFeeCoins.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.78, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
+        figFeeCoins.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.22, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
 
         figFeeCoins.update_layout(height=680,
                                   margin={"t": 40, "l": 120, "b": 20},

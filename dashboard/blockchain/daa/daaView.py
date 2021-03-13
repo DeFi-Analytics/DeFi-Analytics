@@ -59,7 +59,7 @@ class daaViewClass:
             type="date"))
 
         # add background picture
-        figDAA.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
+        figDAA.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
         figDAA.update_layout(height=800,
                              margin={"t": 40, "l": 130, "b": 20},

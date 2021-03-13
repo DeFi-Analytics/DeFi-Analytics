@@ -98,8 +98,8 @@ class coinViewClass:
             rangeslider=dict(visible=False),
             type="date"))
         # add background picture
-        figDFI.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.78, sizex=0.25, sizey=0.25,  xanchor="center", yanchor="middle", opacity=0.2))
-        figDFI.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.2, sizex=0.25, sizey=0.25, xanchor="center", yanchor="middle", opacity=0.2))
+        figDFI.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.79, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
+        figDFI.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.22, sizex=0.45, sizey=0.45, xanchor="center", yanchor="middle", opacity=0.2))
 
         figDFI.update_layout(height=800,
                              margin={"t": 40, "l": 130, "b": 20},
