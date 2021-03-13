@@ -7,9 +7,8 @@ PFEIL_ZU = "fas fa-chevron-right mr-3"
 PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 
 class defichainAnalyticsCallbacksClass:
-    def __init__(self, blockchainController, liquidityMiningController, submenu2Controller):
+    def __init__(self, blockchainController, liquidityMiningController):
         self.blockchainController = blockchainController
-        self.submenu2Controller = submenu2Controller
         self.liquidityMiningController = liquidityMiningController
 
 
