@@ -7,19 +7,19 @@ from plotly.subplots import make_subplots
 
 class changeCoinAddressesViewClass:
 
-    def getChangeCoinsAddressesContent(self, data):
+    def getChangeCoinsAddressesContent(self, data, bgImage):
         content = [dbc.Modal([dbc.ModalHeader("Info Change of Addresses number and Coins amount"),
                               dbc.ModalBody(self.getChangeExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoChangeCoinAddresses", className="ml-auto"))],
                                     id="modalChangeCoinAddresses", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createCoinChangeAddressesFigure(data), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createCoinChangeAddressesFigure(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoChangeCoinAddresses")))
                                           ]))]
         return content
 
     @staticmethod
-    def createCoinChangeAddressesFigure(data):
+    def createCoinChangeAddressesFigure(data, bgImage):
         figChange = make_subplots(
             rows=2, cols=1,
             vertical_spacing=0.15,
@@ -91,6 +91,10 @@ class changeCoinAddressesViewClass:
                               dict(step="all")])),
             rangeslider=dict(visible=False),
             type="date"))
+
+        # add background picture
+        figChange.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.78, sizex=0.25, sizey=0.25,  xanchor="center", yanchor="middle", opacity=0.2))
+        figChange.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.2, sizex=0.25, sizey=0.25, xanchor="center", yanchor="middle", opacity=0.2))
 
         figChange.update_layout(height=800,
                                 margin={"t": 40, "l": 130, "b": 20},

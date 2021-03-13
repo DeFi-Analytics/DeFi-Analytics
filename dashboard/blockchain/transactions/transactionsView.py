@@ -7,18 +7,18 @@ from plotly.subplots import make_subplots
 
 class transactionsViewClass:
 
-    def getTransactionsContent(self, data):
+    def getTransactionsContent(self, data, bgImage):
         content = [dbc.Modal([dbc.ModalHeader("Info Transactions"),
                               dbc.ModalBody(self.getTxOverviewExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoTransactions", className="ml-auto"))],
                                     id="modalTransactions", size='xl'),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.getTransactionsFigure(data), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.getTransactionsFigure(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTransactions")))
                                           ]))]
         return content
 
     @staticmethod
-    def getTransactionsFigure(data):
+    def getTransactionsFigure(data, bgImage):
         figTxOverview = make_subplots(
             rows=2, cols=1,
             vertical_spacing=0.15,
@@ -63,6 +63,10 @@ class transactionsViewClass:
                               dict(step="all")])),
             rangeslider=dict(visible=False),
             type="date"))
+
+        # add background picture
+        figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.87, sizex=0.2, sizey=0.2,  xanchor="center", yanchor="middle", opacity=0.2))
+        figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.3, sizex=0.3, sizey=0.3, xanchor="center", yanchor="middle", opacity=0.2))
 
         figTxOverview.update_layout(height=800,
                                     margin={"t": 40, "l": 130, "b": 20},

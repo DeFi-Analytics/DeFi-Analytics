@@ -60,23 +60,23 @@ class blockchainControllerClass:
             pageContent = self.addressesView.getAddressContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["daa"]:
             self.defichainAnalyticsModel.loadDAAData()
-            pageContent = self.daaView.getDAAContent(self.defichainAnalyticsModel.dailyData)
+            pageContent = self.daaView.getDAAContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["coin"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadExtractedRichlistData()
-            pageContent = self.coinView.getCoinContent(self.defichainAnalyticsModel.dailyData)
+            pageContent = self.coinView.getCoinContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["changeCoinAdresses"]:
             self.defichainAnalyticsModel.loadExtractedRichlistData()
-            pageContent = self.changeCoinAddressesView.getChangeCoinsAddressesContent(self.defichainAnalyticsModel.dailyData)
+            pageContent = self.changeCoinAddressesView.getChangeCoinsAddressesContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["coinsAddresses"]:
             self.defichainAnalyticsModel.loadLastRichlist()
             pageContent = self.coinsAddressesView.getCoinsAddressesContent(self.defichainAnalyticsModel.lastRichlist)
         elif entry in ["blocktime"]:
             self.defichainAnalyticsModel.loadDailyBlocktimeData()
-            pageContent = self.blocktimeView.getBlocktimeContent(self.defichainAnalyticsModel.dailyData)
+            pageContent = self.blocktimeView.getBlocktimeContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["transactions"]:
             self.defichainAnalyticsModel.loadDailyBlocktimeData()
-            pageContent = self.transactionsView.getTransactionsContent(self.defichainAnalyticsModel.dailyData)
+            pageContent = self.transactionsView.getTransactionsContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent
 
