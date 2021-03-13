@@ -2,6 +2,7 @@ import os
 import glob
 import pathlib
 import re
+import base64
 
 import pandas as pd
 
@@ -10,9 +11,10 @@ class defichainAnalyticsModelClass:
     def __init__(self):
         workDir = os.path.abspath(os.getcwd())
         self.dataPath = workDir[:-9] + '/data/'
+
+        # data for controller/views
         self.dailyData = pd.DataFrame()
         self.hourlyData = pd.DataFrame()
-
         self.lastRichlist = None
 
         # last update of csv-files
@@ -22,6 +24,11 @@ class defichainAnalyticsModelClass:
         self.updated_dexHourly = None
         self.updated_daa = None
         self.updated_LastRichlist = None
+
+        # background image for figures
+        with open(workDir + "/assets/logo-defi-analytics_grey.png", "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode()
+        self.figBackgroundImage = "data:image/png;base64," + encoded_string         # Add the prefix that plotly will want when using the string as source
 
     #### DAILY DATA #####
     def loadDailyData(self):

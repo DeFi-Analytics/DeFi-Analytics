@@ -57,7 +57,7 @@ class blockchainControllerClass:
         pageContent = None
         if entry in ["", "addresses"]:
             self.defichainAnalyticsModel.loadExtractedRichlistData()
-            pageContent = self.addressesView.getAddressContent(self.defichainAnalyticsModel.dailyData)
+            pageContent = self.addressesView.getAddressContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["daa"]:
             self.defichainAnalyticsModel.loadDAAData()
             pageContent = self.daaView.getDAAContent(self.defichainAnalyticsModel.dailyData)
