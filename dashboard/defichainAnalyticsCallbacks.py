@@ -104,9 +104,9 @@ class defichainAnalyticsCallbacksClass:
                 else:
                     timestamp_array.append(item)
 
-
             #fill return array with style information
             active_link = max(timestamp_array)
+
             return_array =[]
             for item in timestamp_array:
                 if active_link == 0:
