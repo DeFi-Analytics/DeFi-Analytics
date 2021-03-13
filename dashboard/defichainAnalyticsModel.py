@@ -24,6 +24,7 @@ class defichainAnalyticsModelClass:
         self.updated_dexHourly = None
         self.updated_daa = None
         self.updated_LastRichlist = None
+        self.updated_dexVolume = None
 
         # background image for figures
         with open(workDir + "/assets/logo-defi-analytics_grey.png", "rb") as image_file:
@@ -33,6 +34,7 @@ class defichainAnalyticsModelClass:
     #### DAILY DATA #####
     def loadDailyData(self):
         self.loadHourlyDEXdata()
+        self.loadDEXVolume()
         self.loadExtractedRichlistData()
         self.loadDailyTradingData()
         self.loadDailyBlocktimeData()
@@ -156,6 +158,36 @@ class defichainAnalyticsModelClass:
             self.hourlyData['Date'] = pd.to_datetime(hourlyDEXData[hourlyDEXData.symbol=='BTC-DFI'].index).strftime('%Y-%m-%d')
             self.updated_dexHourly = fileInfo.stat()
             print('>>>> Hourly DEX data loaded from csv-file <<<<')
+
+    def loadDEXVolume(self):
+        filePath = self.dataPath + 'DEXVolumeData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_dexVolume:
+            volumeData = pd.read_csv(filePath, index_col=0)
+            volumeData['timeRounded'] = pd.to_datetime(volumeData.Time).dt.floor('H')
+            volumeData.set_index(['timeRounded'], inplace=True)
+
+            for poolSymbol in volumeData['base_name'].unique():
+                df2Add = volumeData[volumeData['base_name']==poolSymbol][['base_volume', 'quote_volume']]
+                df2Add['VolTotal'] = df2Add[['base_volume', 'quote_volume']].sum(axis=1)
+                # add prefix to column names for pool identification
+                colNamesOrig = df2Add.columns.astype(str)
+                colNamesNew = poolSymbol + '_' + colNamesOrig
+                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+
+                # delete existing information and add new one
+                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
+                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+
+            # calculate total volume after merge of data
+            self.hourlyData['VolTotal'] = self.hourlyData['BTC_VolTotal']*0   # only use rows with data; BTC was the first pool and have to most data (beside ETH, USDT)
+            for poolSymbol in volumeData['base_name'].unique():
+                self.hourlyData['VolTotal'] = self.hourlyData['VolTotal'] + self.hourlyData[poolSymbol+'_'+'VolTotal'].fillna(0)
+
+            self.updated_dexVolume = fileInfo.stat()
+            print('>>>> DEX volume data loaded from csv-file <<<<')
+
 
     #### MINUTELY DATA ####
     def loadShortTermDEXPrice(self):

@@ -7,8 +7,9 @@ PFEIL_ZU = "fas fa-chevron-right mr-3"
 PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 
 class defichainAnalyticsCallbacksClass:
-    def __init__(self, blockchainController, liquidityMiningController):
+    def __init__(self, blockchainController, dexController, liquidityMiningController):
         self.blockchainController = blockchainController
+        self.dexController = dexController
         self.liquidityMiningController = liquidityMiningController
 
 
@@ -137,10 +138,11 @@ class defichainAnalyticsCallbacksClass:
 
             if urlPath in ["/", "/blockchain"]:
                 return self.blockchainController.getContent(selectedEntry)
+            elif urlPath in ["/dex"]:
+                return self.dexController.getContent(selectedEntry)
             elif urlPath in ["/liquidityMining"]:
                 return self.liquidityMiningController.getContent(selectedEntry)
-            elif urlPath in ["/page-2/1", "/page-2/2"]:
-                return self.submenu2Controller.getContent(urlPath)
+
 
             # If the user tries to reach a different page, return a 404 message
             return dbc.Jumbotron(
