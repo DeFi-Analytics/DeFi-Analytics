@@ -25,11 +25,11 @@ class liquidityTokenViewClass:
         return content
 
     @staticmethod
-    def createLiquidityTokenGraph(data, selectedCoin):
+    def createLiquidityTokenGraph(data, selectedCoin, bgImage):
         figLiquidityToken = make_subplots(
             rows=3, cols=1,
-            vertical_spacing=0.15,
-            row_width=[0.4, 0.2, 0.4],  # from bottom to top
+            vertical_spacing=0.10,
+            row_width=[0.3, 0.3, 0.4],  # from bottom to top
             specs=[[{}],
                    [{}],
                    [{}]],
@@ -80,6 +80,11 @@ class liquidityTokenViewClass:
         figLiquidityToken.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figLiquidityToken.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
         figLiquidityToken.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=3, col=1)
+
+        # add background picture
+        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.83, sizex=0.2, sizey=0.2,  xanchor="center", yanchor="middle", opacity=0.25))
+        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.46, sizex=0.2, sizey=0.2,  xanchor="center", yanchor="middle", opacity=0.25))
+        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.11, sizex=0.2, sizey=0.2,  xanchor="center", yanchor="middle", opacity=0.25))
 
         figLiquidityToken.update_layout(height=765,
                                         margin={"t": 40, "l": 120, "b": 20, "r": 20},

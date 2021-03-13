@@ -22,7 +22,7 @@ class tvlViewClass:
         return content
 
     @staticmethod
-    def createTVLGraph(data, currencySelection):
+    def createTVLGraph(data, currencySelection, bgImage):
         if currencySelection == 'BTC':
             DFIPrice = data['BTC-DFI_DFIPrices']       # choose BTC-pool DFI-price in BTC
             columnName = 'lockedBTC'
@@ -96,6 +96,9 @@ class tvlViewClass:
                               dict(step="all")])),
             rangeslider=dict(visible=False),
             type="date"))
+
+        # add background picture
+        figTVL.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.25))
 
         figTVL.update_layout(height=765,
                              margin={"t": 40, "l": 130, "b": 20},
