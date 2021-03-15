@@ -69,7 +69,7 @@ class tvlViewClass:
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # overall TVL graph
-        trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall.index, y=TVLOverall.values,
+        trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall.dropna().index, y=TVLOverall.dropna(),
                                 mode='lines', line=dict(color='#410eb2'), line_width=3, hovertemplate=hoverTemplateRepresenation)
 
         figTVL.add_trace(trace_TVLBTC, 1, 1)
