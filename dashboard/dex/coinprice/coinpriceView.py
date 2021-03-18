@@ -45,6 +45,7 @@ class coinpriceViewClass:
         else:
             leftMarginGraphic = 0
             rightMarginGraphic = 50
+            startIndex = data.index.values[0]
 
         # Plotting long term price
         figPrice = make_subplots(
@@ -128,7 +129,7 @@ class coinpriceViewClass:
                                        hoverlabel=dict(font_color="#6c757d"),
                                        legend=dict(orientation="h",
                                                    yanchor="bottom",
-                                                   y=-0.15,
+                                                   y=-0.25,
                                                    xanchor="right",
                                                    x=1),
                                        )

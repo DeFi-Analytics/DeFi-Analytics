@@ -12,8 +12,11 @@ from liquidityMining.liquidityMiningController import liquidityMiningControllerC
 
 class defichainAnalyticsControllerClass:
     def __init__(self):
+        # initialize model and first load of all data
         self.defichainAnalyticsModel = defichainAnalyticsModelClass()
         self.defichainAnalyticsModel.loadDailyData()
+        self.defichainAnalyticsModel.loadHourlyData()
+        self.defichainAnalyticsModel.loadMinutelyData()
         self.defichainAnalyticsModel.loadLastRichlist()
 
         self.blockchainController = blockchainControllerClass(app, self.defichainAnalyticsModel)

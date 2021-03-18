@@ -15,6 +15,7 @@ class defichainAnalyticsModelClass:
         # data for controller/views
         self.dailyData = pd.DataFrame()
         self.hourlyData = pd.DataFrame()
+        self.minutelyData = pd.DataFrame()
         self.lastRichlist = None
 
         # last update of csv-files
@@ -22,6 +23,7 @@ class defichainAnalyticsModelClass:
         self.updated_tradingData = None
         self.updated_blocktime = None
         self.updated_dexHourly = None
+        self.update_dexMinutely = None
         self.updated_daa = None
         self.updated_LastRichlist = None
         self.updated_dexVolume = None
@@ -127,6 +129,10 @@ class defichainAnalyticsModelClass:
             print('>>>> Blocktime data loaded from csv-file <<<<')
 
     #### HOURLY DATA ####
+    def loadHourlyData(self):
+        self.loadHourlyDEXdata()
+        self.loadDEXVolume()
+
     def loadHourlyDEXdata(self):
         filePath = self.dataPath + 'LMPoolData.csv'
         fileInfo = pathlib.Path(filePath)
@@ -194,9 +200,37 @@ class defichainAnalyticsModelClass:
 
 
     #### MINUTELY DATA ####
-    def loadShortTermDEXPrice(self):
-        ShortTermDEXPrice = pd.read_csv(self.dataPath+'LMPoolData_ShortTerm.csv',index_col=0)
-        # self.dailyData = self.dailyData.merge(ShortTermDEXPrice, how='outer')
+    def loadMinutelyData(self):
+        self.loadMinutelyDEXdata()
+
+    def loadMinutelyDEXdata(self):
+        filePath = self.dataPath + 'LMPoolData_ShortTerm.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_dexMinutely:
+            minutelyDEXData = pd.read_csv(filePath, index_col=0)
+            minutelyDEXData['timeRounded'] = pd.to_datetime(minutelyDEXData.Time).dt.floor('min')
+            minutelyDEXData.set_index(['timeRounded'], inplace=True)
+
+            for poolSymbol in minutelyDEXData.symbol.unique():
+                df2Add = minutelyDEXData[minutelyDEXData.symbol == poolSymbol]
+                df2Add = df2Add.drop(columns=['Time', 'symbol'])
+
+                # calculate relative price deviations
+                df2Add = df2Add.assign(relPriceDevCoingecko=((df2Add['DFIPrices'] - df2Add['reserveA/reserveB'])/df2Add['DFIPrices']))
+                df2Add = df2Add.assign(relPriceDevBittrex=((df2Add['DFIPricesBittrex'] - df2Add['reserveA/reserveB']) / df2Add['DFIPricesBittrex']))
+
+                # add prefix to column names for pool identification
+                colNamesOrig = df2Add.columns.astype(str)
+                colNamesNew = poolSymbol+'_' + colNamesOrig
+                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+
+                # delete existing information and add new one
+                ind2Delete = self.minutelyData.columns.intersection(colNamesNew)                                          # check if columns exist
+                self.minutelyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+                self.minutelyData = self.minutelyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+
+            self.update_dexMinutely = fileInfo.stat()
+            print('>>>> Minutely DEX data loaded from csv-file <<<<')
 
     #### load last Richlist ####
     def loadLastRichlist(self):

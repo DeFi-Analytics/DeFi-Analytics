@@ -14,6 +14,14 @@ class coinpriceCallbacksClass:
             figHourlyGraph = coinpriceView.createPriceGraph(defichainAnalyticsModel.hourlyData, selectedCoin, selectedReference, 'Long')
             return figHourlyGraph
 
+        @app.callback(Output('dexCoinpriceShortterm', 'figure'),
+                      [Input('dexCoinprice60s', 'n_intervals'),
+                       Input('dexCoinpriceCoin', 'value'),
+                       Input('dexCoinpriceReference', 'value'), ])
+        def updateMinutelyCoinpriceGraph(nInt, selectedCoin, selectedReference):
+            defichainAnalyticsModel.loadMinutelyDEXdata()
+            figHourlyGraph = coinpriceView.createPriceGraph(defichainAnalyticsModel.minutelyData, selectedCoin, selectedReference, 'Short')
+            return figHourlyGraph
 
         @app.callback(
             Output("modalCoinprice", "is_open"),
