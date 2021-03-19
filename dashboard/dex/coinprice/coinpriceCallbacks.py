@@ -11,7 +11,7 @@ class coinpriceCallbacksClass:
                        Input('dexCoinpriceReference', 'value'), ])
         def updateHourlyCoinpriceGraph(nInt, selectedCoin, selectedReference):
             defichainAnalyticsModel.loadHourlyDEXdata()
-            figHourlyGraph = coinpriceView.createPriceGraph(defichainAnalyticsModel.hourlyData, selectedCoin, selectedReference, 'Long')
+            figHourlyGraph = coinpriceView.createPriceGraph(defichainAnalyticsModel.hourlyData, selectedCoin, selectedReference, 'Long', defichainAnalyticsModel.figBackgroundImage)
             return figHourlyGraph
 
         @app.callback(Output('dexCoinpriceShortterm', 'figure'),
@@ -20,7 +20,7 @@ class coinpriceCallbacksClass:
                        Input('dexCoinpriceReference', 'value'), ])
         def updateMinutelyCoinpriceGraph(nInt, selectedCoin, selectedReference):
             defichainAnalyticsModel.loadMinutelyDEXdata()
-            figHourlyGraph = coinpriceView.createPriceGraph(defichainAnalyticsModel.minutelyData, selectedCoin, selectedReference, 'Short')
+            figHourlyGraph = coinpriceView.createPriceGraph(defichainAnalyticsModel.minutelyData, selectedCoin, selectedReference, 'Short', defichainAnalyticsModel.figBackgroundImage)
             return figHourlyGraph
 
         @app.callback(

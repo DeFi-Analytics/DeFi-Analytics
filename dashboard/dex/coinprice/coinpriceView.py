@@ -34,17 +34,19 @@ class coinpriceViewClass:
         return content
 
     @staticmethod
-    def createPriceGraph(data, selectedCoin, selectedReference, selectedTimeRange):
+    def createPriceGraph(data, selectedCoin, selectedReference, selectedTimeRange, bgImage):
 
         if selectedTimeRange == 'Long':
             leftMarginGraphic = 130
             rightMarginGraphic = 20
+            bgimageSize = 0.6
             lastValidDate = datetime.utcfromtimestamp(data.index.values[-1].tolist()/1e9)
             date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
             startIndex = data[data.index > date14DaysBack].index.values[0]
         else:
             leftMarginGraphic = 0
             rightMarginGraphic = 50
+            bgimageSize = 0.8
             startIndex = data.index.values[0]
 
         # Plotting long term price
@@ -122,6 +124,10 @@ class coinpriceViewClass:
 
         figPrice.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figPrice.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
+
+        # add background picture
+        figPrice.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.832, sizex=bgimageSize, sizey=bgimageSize,  xanchor="center", yanchor="middle", opacity=0.25))
+        figPrice.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.26, sizex=bgimageSize, sizey=bgimageSize, xanchor="center", yanchor="middle", opacity=0.25))
 
         figPrice.update_layout(height=730,
                                        margin={"t": 40, "l": leftMarginGraphic, "b": 20, "r": rightMarginGraphic},
