@@ -27,6 +27,7 @@ class defichainAnalyticsModelClass:
         self.updated_daa = None
         self.updated_LastRichlist = None
         self.updated_dexVolume = None
+        self.updated_tokenCryptos = None
 
         # background image for figures
         with open(workDir + "/assets/logo-defi-analytics_LandscapeGrey.png", "rb") as image_file:
@@ -132,6 +133,7 @@ class defichainAnalyticsModelClass:
     def loadHourlyData(self):
         self.loadHourlyDEXdata()
         self.loadDEXVolume()
+        self.loadTokenCrypto
 
     def loadHourlyDEXdata(self):
         filePath = self.dataPath + 'LMPoolData.csv'
@@ -172,7 +174,7 @@ class defichainAnalyticsModelClass:
     def loadDEXVolume(self):
         filePath = self.dataPath + 'DEXVolumeData.csv'
         fileInfo = pathlib.Path(filePath)
-        if fileInfo.stat() != self.updated_dexVolume:
+        if fileInfo.stat() != self.updated_tokenCryptos:
             volumeData = pd.read_csv(filePath, index_col=0)
             volumeData['timeRounded'] = pd.to_datetime(volumeData.Time).dt.floor('H')
             volumeData.set_index(['timeRounded'], inplace=True)
@@ -198,6 +200,31 @@ class defichainAnalyticsModelClass:
             self.updated_dexVolume = fileInfo.stat()
             print('>>>> DEX volume data loaded from csv-file <<<<')
 
+    def loadTokenCrypto(self):
+        filePath = self.dataPath + 'TokenData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_tokenCryptos:
+            tokenData = pd.read_csv(filePath, index_col=0)
+            tokenData['timeRounded'] = pd.to_datetime(tokenData.Time).dt.floor('H')
+            tokenData.set_index(['timeRounded'], inplace=True)
+
+            for coinSymbol in tokenData['symbol'].unique():
+                df2Add = coinSymbol[coinSymbol['symbol']==coinSymbol][['Burned', 'minted', 'Collateral']]
+                df2Add['tokenDefiChain'] = df2Add['minted'] - df2Add['Burned'].fillna(0)
+                df2Add['diffToken'] = df2Add['Collateral']-df2Add['minted']+df2Add['Burned'].fillna(0)
+
+                # add prefix to column names for pool identification
+                colNamesOrig = df2Add.columns.astype(str)
+                colNamesNew = coinSymbol + '_' + colNamesOrig
+                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+
+                # delete existing information and add new one
+                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
+                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+
+            self.updated_tokenCryptos = fileInfo.stat()
+            print('>>>> DAT Cryptos data loaded from csv-file <<<<')
 
     #### MINUTELY DATA ####
     def loadMinutelyData(self):
