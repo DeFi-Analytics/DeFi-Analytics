@@ -22,7 +22,7 @@ filepathMNList = path + 'currentMNList.csv'
 while True:
     print('Start updating ...')
     now = datetime.now()
-    colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'circDFI', 'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank']
+    colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'circDFI', 'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft']
 
     # get DFI richlist data
     print('... getting Richlist')
@@ -113,9 +113,32 @@ while True:
         marketCapRank = marketCapList[marketCapList.market_cap < marketCap].iloc[0].market_cap_rank
 
 
+    # countdown block data data
+    print('... getting block data for countdown')
+    try:
+        linkOverview = "https://api.defichain.io/v1/stats?"
+        overviewContent = requests.get(linkOverview)
+        apiOverviewAsDict = ast.literal_eval(overviewContent.text)
+        reserveLM = float(apiOverviewAsDict['listCommunities']['IncentiveFunding'])
+
+        linkAirdrop = 'https://api.defichain.io/v1/getaccount?owner=8UAhRuUFCyFUHEPD7qvtj8Zy2HxF5HH5nb'
+        airdropContent = requests.get(linkAirdrop)
+        dfAirdrop = pd.read_json(airdropContent.text, typ='series')
+        airdropDFI = float(dfAirdrop[0][:-4])
+
+        currentBlock = apiOverviewAsDict['blockHeight']
+        goalBlock = int(currentBlock + np.floor((reserveLM + airdropDFI) / 57))
+    except:
+        currentBlock = 0
+        goalBlock = 0
+        print('############# Error getting current block #############')
+    blocksLeft = goalBlock - currentBlock
+
+
+
     print('... saving data')
     # convert single data to pandas series
-    listData = [now, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, circDFIValue, totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank]
+    listData = [now, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, circDFIValue, totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft]
     seriesData = pd.Series(listData, index = colNames)
 
     data2Save = pd.DataFrame(columns=colNames)
@@ -126,7 +149,7 @@ while True:
     duration = datetime.now()-now
     print('Data updated. Routine duration: '+str(duration))
     print('  ')
-    time.sleep(60-duration.seconds)
+    time.sleep(120-duration.seconds)
 
 print('Script finished')
 
