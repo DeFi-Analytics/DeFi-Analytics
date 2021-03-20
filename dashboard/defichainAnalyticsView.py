@@ -128,34 +128,33 @@ class defichainAnalyticsViewClass:
         image_filename = workDir + '/assets/'+'logo-defi-analytics.png'
         encoded_image = base64.b64encode(open(image_filename, 'rb').read()).decode('ascii')
 
+        sidebar_header = dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Button(
+                        "Klick",
+                        id="sidebar_button",
+                        className="sidebar_button"
+                    ),
+
+                ),
+
+                dbc.Col(html.Img(src='data:image/png;base64,{}'.format(encoded_image),
+                         className="logo_sidebar"),
+                        ),
+            ],
+            id="header",
+            className="headerStyle",
+        )
 
         sidebar = html.Div(
             [
+                sidebar_header,
 
-                html.Img(src='data:image/png;base64,{}'.format(encoded_image),
-                         className="logo_sidebar"),
-                dbc.Col(
-                    html.Button(
-                        # use the Bootstrap navbar-toggler classes to style the toggle
-                        html.Span(className="navbar-toggler-icon"),
-                        className="navbar-toggler",
-                        # the navbar-toggler classes don't set color, so we do it here
-                        style={
-                            "color": "rgba(0,0,0,.5)",
-                            "border-color": "rgba(0,0,0,.1)",
-                        },
-                        id="toggle",
-                    ),
-                    # the column containing the toggle will be only as wide as the
-                    # toggle, resulting in the toggle being right aligned
-                    width="auto",
-                    # vertically align the toggle in the center
-                    align="center",
-                ),
                 dbc.Collapse(
                     html.Div(dbc.Nav(submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token,
                             vertical=True, id='navbar-container'), className="scrollbar_sidemenu"),
-                    id="menu_collapse", className="menu_collapse")
+                    id="menu_collapse1", className="menu_collapse")
 
             ],
             className="sidebarstyle",

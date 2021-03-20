@@ -36,14 +36,17 @@ class defichainAnalyticsCallbacksClass:
             return is_open, PFEIL_ZU
 
         @app.callback(
-            Output("menu_collapse", "is_open"),
-            [Input("toggle", "n_clicks")],
-            [State("menu_collapse", "is_open")],
+            Output("menu_collapse1", "is_open"),
+            [Input("sidebar_button", "n_clicks")],
+            [State("menu_collapse1", "is_open")],
         )
         def toggle_menu_collapse(n, is_open):
-            if n:
-                return not is_open
-            return is_open
+            if (n==None):
+                return True;
+            else:
+                if n:
+                    return not is_open
+                return is_open
 
 
         # toggle blockchain menu

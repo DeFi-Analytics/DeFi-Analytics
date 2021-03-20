@@ -28,53 +28,8 @@ background-image: url('rect_pink.png');
 color: #ffffff;
 }
 
-.sidebarstyle{
-    background-color: #000000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width:18rem;
-    padding: 0.5rem 1rem;
-    color: #ffffff;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    scrollbar-face-color: #858585;
-    scrollbar-width: thin;
-    height: 100vh;
-}
-
-
 .navStyle{
     vertical=true;
-}
-
-@media only screen and (max-width: 768px) {
-    .sidebarstyle{
-        background-color: #000000;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width:18rem;
-        padding: 0.5rem 1rem;
-        color: #ffffff;
-    }
-
-    .navbar-toggler-icon {
-      background-image: url("rect_pink.png");
-    }
-
-    sidebar {
-      text-align: center;
-      padding: 2rem 1rem;
-      background-color: #f8f9fa;
-    }
-
-    #menu_collapse *:first-child {
-      margin-top: 1rem;
-    }
-
 }
 
 .submenu_linkstyle{
@@ -99,11 +54,6 @@ color: #ffffff;
     color: #ffffff;
 }
 
-.contentstyle {
-    margin-left: 18rem;
-    margin-right: 2rem;
-    padding: 2rem 1rem;
-}
 
 .logo_sidebar{
     width: 14rem;
@@ -113,14 +63,74 @@ color: #ffffff;
     background-color: #000000;
 }
 
-#toggle {
-    display: none;
-  }
+@media only screen and (min-width: 768px) {
+    #menu_collapse1 {
+       display: block;
+    }
 
-#menu_collapse {
-  display: block;
+    .contentstyle {
+        margin-left: 18rem;
+        margin-right: 2rem;
+        padding: 2rem 1rem;
+    }
+
+    .sidebarstyle{
+        background-color: #000000;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width:18rem;
+        padding: 0.5rem 1rem;
+        color: #ffffff;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        scrollbar-face-color: #858585;
+        scrollbar-width: thin;
+        height: 100vh;
+    }
+    .sidebar_button{
+        display: none;
+    }
+
+    #menu_collapse1 *:first-child {
+        margin-top: 0;
+    }
 }
 
-#menu_collapse *:first-child {
-  margin-top: 0;
+@media only screen and (max-width: 768px) {
+    .sidebarstyle{
+        background-color: #000000;
+        padding: 2rem 1rem;
+        width: 100%;
+        color: #ffffff;
+    }
+
+    .contentstyle {
+        margin-left: 0;
+        margin-top: 2rem;
+        padding: 2rem 1rem;
+    }
+
+    .sidebar_button{
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+   /* .headerStyle{
+        width: 100%;
+    }*/
+
+    .logo_sidebar{
+        width: 3rem;
+    }
+
+    #menu_collapse1 *:first-child {
+        margin-top: 1rem;
+    }
+
+   /* #contentstyle *:first-child {
+      margin-top: 1rem;
+    }*/
+
 }
