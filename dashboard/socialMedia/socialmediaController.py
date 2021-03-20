@@ -1,5 +1,5 @@
 from .twitter.twitterView import twitterViewClass
-
+from .twitter.twitterCallbacks import twitterCallbacksClass
 
 class socialmediaControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -8,7 +8,7 @@ class socialmediaControllerClass:
 
         # initialize volume classes
         self.twitterView = twitterViewClass()
-        # self.cryptoTokenCallbacks = cryptoTokenCallbacksClass(self.defichainAnalyticsModel, self.cryptoTokenView, app)       # create callbacks on top level
+        self.twitterCallbacks = twitterCallbacksClass(app)       # create callbacks on top level
 
 
     def getContent(self, entry):
