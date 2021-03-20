@@ -28,6 +28,7 @@ class defichainAnalyticsModelClass:
         self.updated_LastRichlist = None
         self.updated_dexVolume = None
         self.updated_tokenCryptos = None
+        self.updated_twitterData = None
 
         # background image for figures
         with open(workDir + "/assets/logo-defi-analytics_LandscapeGrey.png", "rb") as image_file:
@@ -134,6 +135,7 @@ class defichainAnalyticsModelClass:
         self.loadHourlyDEXdata()
         self.loadDEXVolume()
         self.loadTokenCrypto()
+        self.loadTwitterData()
 
     def loadHourlyDEXdata(self):
         filePath = self.dataPath + 'LMPoolData.csv'
@@ -200,6 +202,22 @@ class defichainAnalyticsModelClass:
             self.updated_dexVolume = fileInfo.stat()
             print('>>>> DEX volume data loaded from csv-file <<<<')
 
+    def loadTwitterData(self):
+        filePath = self.dataPath + 'analyzedTwitterData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_twitterData:
+            twitterData = pd.read_csv(filePath, index_col=0)
+
+            columns2update = ['overall_Activity', 'defichain_Activity', 'dfi_Activity', 'overall_Likes', 'overall_UniqueUserOverall', 'overall_UniqueUserTweet', 'overall_UniqueUserReply', 'overall_UniqueUserRetweet']
+
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(twitterData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_twitterData = fileInfo.stat()
+            print('>>>> Twitter data loaded from csv-file <<<<')
+
     def loadTokenCrypto(self):
         filePath = self.dataPath + 'TokenData.csv'
         fileInfo = pathlib.Path(filePath)
@@ -225,6 +243,7 @@ class defichainAnalyticsModelClass:
 
             self.updated_tokenCryptos = fileInfo.stat()
             print('>>>> DAT Cryptos data loaded from csv-file <<<<')
+
 
     #### MINUTELY DATA ####
     def loadMinutelyData(self):
