@@ -1,6 +1,5 @@
-# from .volume.volumeView import volumeViewClass
-# from .volume.volumeCallbacks import volumeCallbacksClass
-
+from .cryptos.cryptoTokenView import crpytoTokenViewClass
+from .cryptos.cryptoTokenCallbacks import cryptoTokenCallbacksClass
 
 
 class tokenControllerClass:
@@ -9,15 +8,15 @@ class tokenControllerClass:
         self.app = app
 
         # initialize volume classes
-        # self.volumeView = volumeViewClass()
-        # self.volumeCallbacks = volumeCallbacksClass(app)       # create callbacks on top level
+        self.cryptoTokenView = crpytoTokenViewClass()
+        self.cryptoTokenCallbacks = cryptoTokenCallbacksClass(self.defichainAnalyticsModel, self.cryptoTokenView, app)       # create callbacks on top level
 
 
     def getContent(self,entry):
         pageContent = None
-        # if entry in ["", "volume"]:
-        #     self.defichainAnalyticsModel.loadDEXVolume()
-        #     pageContent = self.volumeView.getVolumeContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
+        if entry in ["", "cryptosDAT"]:
+            self.defichainAnalyticsModel.loadTokenCrypto()
+            pageContent = self.cryptoTokenView.getTokenContent()
 
 
         return pageContent

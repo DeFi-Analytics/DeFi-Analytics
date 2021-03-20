@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 from plotly.subplots import make_subplots
 
 
-class tokenViewClass:
+class crpytoTokenViewClass:
 
     def getTokenContent(self):
         content = [dbc.Modal([dbc.ModalHeader("Info DeFi Asset Token (DAT)"),
@@ -17,14 +17,15 @@ class tokenViewClass:
                                           {'label': 'ETH', 'value': 'ETH'},
                                           {'label': 'USDT', 'value': 'USDT'},
                                           {'label': 'DOGE', 'value': 'DOGE'},
-                                          {'label': 'LTC', 'value': 'LTC'}],
-                                            value='BTC', style=dict(width='200px', verticalAlign="bottom")))])),
+                                          {'label': 'LTC', 'value': 'LTC'},
+                                          {'label': 'BCH', 'value': 'BCH'}],
+                                            value='BTC', style=dict(width='200px', verticalAlign="bottom"))),
                    dbc.Col(dcc.Graph(id='tokenCryptosGraph', config={'displayModeBar': False})),
-                   dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoToken")))]
+                   dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoToken")))]))]
         return content
 
     @staticmethod
-    def createTokenGraph(data, selectedCoin):
+    def createTokenGraph(data, selectedCoin, bgImage):
         figTokenData = make_subplots(
             rows=2, cols=1,
             vertical_spacing=0.15,
@@ -58,6 +59,11 @@ class tokenViewClass:
             y1Range = [-100, 1000]
             y1dTick = 200
             nameCollateralBlockchain = 'Litecoinchain'
+        elif selectedCoin == 'BCH':
+            selectedCoinColor = '#410eb2'
+            y1Range = [-100, 1000]
+            y1dTick = 200
+            nameCollateralBlockchain = 'Bitcoin-Cash Chain'
         else:
             selectedCoinColor = '#da3832'
             y1Range = [-10, 60]
@@ -65,9 +71,9 @@ class tokenViewClass:
             nameCollateralBlockchain = 'Bitcoin'
 
         # definition of traces
-        trace_diff = dict(type='scatter', name='Difference', x=data[selectedCoin+'_diffToken'].dropna().index, y=data[selectedCoin+'_Diff'].dropna(),
+        trace_diff = dict(type='scatter', name='Difference', x=data[selectedCoin+'_diffToken'].dropna().index, y=data[selectedCoin+'_diffToken'].dropna(),
                           mode='lines', line=dict(color=selectedCoinColor), line_width=2, hovertemplate='%{y:,.4f} ' + selectedCoin)
-        trace_defiChain = dict(type='scatter', name='DefiChain', x=data[selectedCoin+'_tokenDefiChain'].dropna(), y=data[selectedCoin+'_tokenDefiChain'].dropna(),
+        trace_defiChain = dict(type='scatter', name='DefiChain', x=data[selectedCoin+'_tokenDefiChain'].dropna().index, y=data[selectedCoin+'_tokenDefiChain'].dropna(),
                                mode='lines', line=dict(color=selectedCoinColor, dash='dash'), line_width=2, hovertemplate='%{y:,.4f} ' + selectedCoin)
         trace_collateral = dict(type='scatter', name=nameCollateralBlockchain, x=data[selectedCoin+'_Collateral'].dropna().index, y=data[selectedCoin+'_Collateral'].dropna(),
                                 mode='lines', line=dict(color=selectedCoinColor, dash='dot'), line_width=2, hovertemplate='%{y:,.4f} ' + selectedCoin)
@@ -86,13 +92,17 @@ class tokenViewClass:
         figTokenData.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figTokenData.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
 
-        figTokenData.update_layout(height=680,
+        # add background picture
+        figTokenData.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.785, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
+        figTokenData.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.21, sizex=0.45, sizey=0.45, xanchor="center", yanchor="middle", opacity=0.2))
+
+        figTokenData.update_layout(height=770,
                                    margin={"t": 40, "l": 120, "b": 20, "r": 20},
                                    hovermode='x unified',
                                    hoverlabel=dict(font_color="#6c757d"),
                                    legend=dict(orientation="h",
                                                yanchor="bottom",
-                                               y=-0.3,
+                                               y=-0.15,
                                                xanchor="right",
                                                x=1),
                                    )

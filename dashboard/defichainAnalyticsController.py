@@ -8,7 +8,7 @@ from defichainAnalyticsModel import defichainAnalyticsModelClass
 from blockchain.blockchainMenuController import blockchainControllerClass
 from dex.dexController import dexControllerClass
 from liquidityMining.liquidityMiningController import liquidityMiningControllerClass
-
+from Token.tokenController import tokenControllerClass
 
 class defichainAnalyticsControllerClass:
     def __init__(self):
@@ -22,9 +22,9 @@ class defichainAnalyticsControllerClass:
         self.blockchainController = blockchainControllerClass(app, self.defichainAnalyticsModel)
         self.dexController = dexControllerClass(app, self.defichainAnalyticsModel)
         self.liquidityMiningController = liquidityMiningControllerClass(app, self.defichainAnalyticsModel)
+        self.tokenController = tokenControllerClass(app, self.defichainAnalyticsModel)
 
-
-        self.defichainAnalyticsCallbacks = defichainAnalyticsCallbacksClass(self.blockchainController, self.dexController, self.liquidityMiningController)       # create callbacks on top level
+        self.defichainAnalyticsCallbacks = defichainAnalyticsCallbacksClass(self.blockchainController, self.dexController, self.liquidityMiningController, self.tokenController)       # create callbacks on top level
         self.defichainAnalyticsCallbacks.register_callbacks(app)             #
 
         self.defichainAnalyticsView = defichainAnalyticsViewClass()                 # create main view of Dashboard

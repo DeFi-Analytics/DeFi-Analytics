@@ -116,7 +116,7 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Cryptos-DAT", href="/blockchain?entry=cryptosDAT", className="linkstyle",
+                    dbc.NavLink("Cryptos-DAT", href="/token?entry=cryptosDAT", className="linkstyle",
                                 id="cryptosDAT")
                 ],
                 id="submenu-token-collapse",

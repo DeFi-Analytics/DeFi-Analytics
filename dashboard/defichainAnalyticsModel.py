@@ -133,7 +133,7 @@ class defichainAnalyticsModelClass:
     def loadHourlyData(self):
         self.loadHourlyDEXdata()
         self.loadDEXVolume()
-        self.loadTokenCrypto
+        self.loadTokenCrypto()
 
     def loadHourlyDEXdata(self):
         filePath = self.dataPath + 'LMPoolData.csv'
@@ -209,7 +209,7 @@ class defichainAnalyticsModelClass:
             tokenData.set_index(['timeRounded'], inplace=True)
 
             for coinSymbol in tokenData['symbol'].unique():
-                df2Add = coinSymbol[coinSymbol['symbol']==coinSymbol][['Burned', 'minted', 'Collateral']]
+                df2Add = tokenData[tokenData['symbol']==coinSymbol][['Burned', 'minted', 'Collateral']]
                 df2Add['tokenDefiChain'] = df2Add['minted'] - df2Add['Burned'].fillna(0)
                 df2Add['diffToken'] = df2Add['Collateral']-df2Add['minted']+df2Add['Burned'].fillna(0)
 
