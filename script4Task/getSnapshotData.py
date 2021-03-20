@@ -1,0 +1,155 @@
+import pandas as pd
+import numpy as np
+
+from pycoingecko import CoinGeckoAPI
+from datetime import datetime
+
+import requests
+import ast
+import os
+import time
+
+
+scriptPath = os.path.abspath(os.getcwd())
+if scriptPath.endswith('script4Task'):
+    path = scriptPath[:-11] + '/data/'
+else:
+    path = scriptPath
+filepath = path + 'snapshotData.csv'
+filepathMNList = path + 'currentMNList.csv'
+
+
+while True:
+    print('Start updating ...')
+    now = datetime.now()
+    colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'circDFI', 'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank']
+
+    # get DFI richlist data
+    print('... getting Richlist')
+    link = "http://mainnet-api.defichain.io/api/DFI/mainnet/address/stats/rich-list?pageno=1&pagesize=200000"
+    siteContent = requests.get(link)
+    text2extract = siteContent.text.replace('null','None')
+    apiContentAsDict = ast.literal_eval(text2extract)
+    dfRichList = pd.DataFrame(apiContentAsDict['data'])
+
+    # convert fi balance into dfi balance
+    dfRichList.balance = dfRichList.balance/100000000
+
+    # special DFI addresses
+    addFoundation = 'dJEbxbfufyPF14SC93yxiquECEfq4YSd9L'
+    addFund = 'dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc'
+
+
+    # condition for mn-addresses and private wallets
+    try:
+        print('... getting MN-List')
+        link = 'http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED'
+        siteContent = requests.get(link)
+        dfMNList = pd.read_json(siteContent.text).transpose()
+        dfMNList.to_csv(filepathMNList, index=True)
+        condMN = (dfRichList['address'].isin(dfMNList.ownerAuthAddress)) & (dfRichList['address'].notnull())
+    except:
+        print('Error with API of masternode list')
+        dfOldMNList = pd.read_csv(filepathMNList, index_col=0) # load available MN-List from the past
+        condMN = (dfRichList['address'].isin(dfOldMNList.ownerAuthAddress)) & (dfRichList['address'].notnull())
+
+    condPrivateAddress = (~condMN) & (dfRichList.address != addFund) & (dfRichList.address != addFoundation)
+
+
+    # calc DFI Coin amounts
+    nbMnId = dfRichList[condMN].balance.size
+    nbOtherId = dfRichList[condPrivateAddress].balance.size
+    if addFund in dfRichList.values:
+        fundDFIValue = dfRichList[dfRichList.address == addFund].balance.values[0]
+    mnDFIValue = dfRichList[condMN].balance.sum()
+    otherDFIValue = dfRichList[condPrivateAddress].balance.sum()
+
+    if addFoundation in dfRichList.values:
+        foundationDFIValue = dfRichList[dfRichList.address==addFoundation].balance.values[0]
+    else: # at the beginning there was no foundation address, should not be needed any longer
+        foundationDFIValue = np.NaN
+
+
+    # get DFI from LiquidityMining and DFI-Token
+    print('... getting LM and token data')
+    link='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
+    siteContent = requests.get(link)
+    dfLMPoolData = pd.read_json(siteContent.text).transpose()
+    lmDFIValue = dfLMPoolData.reserveB.astype('float').sum()
+
+    link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
+    siteContent = requests.get(link)
+    dfDFIToken = pd.read_json(siteContent.text)
+    tokenDFIValue = dfDFIToken.balance.sum()
+
+
+    # calculated statistical data
+    totalDFI = mnDFIValue+otherDFIValue+foundationDFIValue+fundDFIValue+lmDFIValue+tokenDFIValue
+    circDFIValue = mnDFIValue+otherDFIValue+lmDFIValue+tokenDFIValue
+    maxDFIValue = 1200000000
+
+    # get data from coingecko
+    print('... getting coingecko data')
+    try:
+        cg = CoinGeckoAPI()
+        DFIData = cg.get_price(ids='defichain', vs_currencies='usd', include_24hr_vol='true')
+        currDFIPrice = DFIData['defichain']['usd']
+        currDFI24hVol = DFIData['defichain']['usd_24h_vol']
+        marketCapListCG = cg.get_coins_markets(vs_currency='usd', per_page=150)
+        marketCapList = pd.DataFrame.from_dict(marketCapListCG)
+
+    except:
+        currDFIPrice = np.NaN
+        currDFI24hVol = np.NaN
+        marketCapList = None
+        print('############# Coingecko-API not reached #############')
+
+    marketCap = currDFIPrice * circDFIValue
+
+    # calculate marketcap rank
+    if (np.isnan(marketCap)) | (marketCapList is None) | (len(marketCapList) == 0) | (circDFIValue < 0):
+        marketCapRank = np.NaN
+    else:
+        marketCapRank = marketCapList[marketCapList.market_cap < marketCap].iloc[0].market_cap_rank
+
+
+    print('... saving data')
+    # convert single data to pandas series
+    listData = [now, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, circDFIValue, totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank]
+    seriesData = pd.Series(listData, index = colNames)
+
+    data2Save = pd.DataFrame(columns=colNames)
+    data2Save = data2Save.append(seriesData, ignore_index=True)
+
+    # saving data and wait for next run
+    data2Save.to_csv(filepath, index=True)
+    duration = datetime.now()-now
+    print('Data updated. Routine duration: '+str(duration))
+    print('  ')
+    time.sleep(60-duration.seconds)
+
+print('Script finished')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
