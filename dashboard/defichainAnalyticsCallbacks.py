@@ -42,12 +42,9 @@ class defichainAnalyticsCallbacksClass:
             [State("menu_collapse1", "is_open")],
         )
         def toggle_menu_collapse(n, is_open):
-            if (n==None):
-                return True;
-            else:
-                if n:
-                    return not is_open
-                return is_open
+            if n:
+                return not is_open
+            return is_open
 
 
         # toggle blockchain menu
