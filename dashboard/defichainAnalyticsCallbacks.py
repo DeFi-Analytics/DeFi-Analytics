@@ -35,6 +35,16 @@ class defichainAnalyticsCallbacksClass:
             # if it is initial, just give a closed arrow
             return is_open, PFEIL_ZU
 
+        @app.callback(
+            Output("menu_collapse", "is_open"),
+            [Input("toggle", "n_clicks")],
+            [State("menu_collapse", "is_open")],
+        )
+        def toggle_menu_collapse(n, is_open):
+            if n:
+                return not is_open
+            return is_open
+
 
         # toggle blockchain menu
         @app.callback([Output("submenu-blockchain-collapse", "is_open"),Output("submenu-blockchain-arrow", "className")],
