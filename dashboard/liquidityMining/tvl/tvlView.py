@@ -22,7 +22,7 @@ class tvlViewClass:
         return content
 
     @staticmethod
-    def createTVLGraph(data, currencySelection):
+    def createTVLGraph(data, currencySelection, bgImage):
         if currencySelection == 'BTC':
             DFIPrice = data['BTC-DFI_DFIPrices']       # choose BTC-pool DFI-price in BTC
             columnName = 'lockedBTC'
@@ -69,7 +69,7 @@ class tvlViewClass:
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # overall TVL graph
-        trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall.index, y=TVLOverall.values,
+        trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall.dropna().index, y=TVLOverall.dropna(),
                                 mode='lines', line=dict(color='#410eb2'), line_width=3, hovertemplate=hoverTemplateRepresenation)
 
         figTVL.add_trace(trace_TVLBTC, 1, 1)
@@ -96,6 +96,9 @@ class tvlViewClass:
                               dict(step="all")])),
             rangeslider=dict(visible=False),
             type="date"))
+
+        # add background picture
+        figTVL.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.25))
 
         figTVL.update_layout(height=765,
                              margin={"t": 40, "l": 130, "b": 20},

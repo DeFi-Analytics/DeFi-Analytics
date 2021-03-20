@@ -3,8 +3,6 @@ from dash.dependencies import Input, Output, State
 
 class coinsAddressesCallbacksClass:
     def __init__(self, defichainAnalyticsModel, coinsAddressesView, app):
-        self.defichainAnalyticsModel = defichainAnalyticsModel
-        self.coinsAddressesView = coinsAddressesView
 
         @app.callback(
             Output('DFIAddSlider', 'value'),
@@ -19,7 +17,7 @@ class coinsAddressesCallbacksClass:
              Output('figCoinsAddresses', 'figure')],
             [Input('DFIAddSlider', 'value')])
         def updateMaxDFIInput(value):
-            figDFIDist = coinsAddressesView.getCoinAddressFigure(defichainAnalyticsModel.lastRichlist, value[0], value[1])
+            figDFIDist = coinsAddressesView.getCoinAddressFigure(defichainAnalyticsModel.lastRichlist, value[0], value[1], defichainAnalyticsModel.figBackgroundImage)
             return value[0], value[1], figDFIDist
 
         @app.callback(

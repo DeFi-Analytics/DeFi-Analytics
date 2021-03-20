@@ -7,11 +7,11 @@ PFEIL_ZU = "fas fa-chevron-right mr-3"
 PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 
 class defichainAnalyticsCallbacksClass:
-    def __init__(self, blockchainController, liquidityMiningController, submenu2Controller):
+    def __init__(self, blockchainController, dexController, liquidityMiningController, tokenController):
         self.blockchainController = blockchainController
-        self.submenu2Controller = submenu2Controller
+        self.dexController = dexController
         self.liquidityMiningController = liquidityMiningController
-
+        self.tokenController = tokenController
 
     def register_callbacks(self, app):
         # this function is used to toggle the is_open property of each Collapse
@@ -148,10 +148,12 @@ class defichainAnalyticsCallbacksClass:
 
             if urlPath in ["/", "/blockchain"]:
                 return self.blockchainController.getContent(selectedEntry)
+            elif urlPath in ["/dex"]:
+                return self.dexController.getContent(selectedEntry)
             elif urlPath in ["/liquidityMining"]:
                 return self.liquidityMiningController.getContent(selectedEntry)
-            elif urlPath in ["/page-2/1", "/page-2/2"]:
-                return self.submenu2Controller.getContent(urlPath)
+            elif urlPath in ["/token"]:
+                return self.tokenController.getContent(selectedEntry)
 
             # If the user tries to reach a different page, return a 404 message
             return dbc.Jumbotron(

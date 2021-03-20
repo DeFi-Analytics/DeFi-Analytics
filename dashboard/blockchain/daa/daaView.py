@@ -10,19 +10,19 @@ from plotly.subplots import make_subplots
 
 class daaViewClass:
 
-    def getDAAContent(self, data):
+    def getDAAContent(self, data, bgImage):
         content = [dbc.Modal([dbc.ModalHeader("Info Daily Active Addresses"),
                               dbc.ModalBody(self.getDAAExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoDAA", className="ml-auto"))],
                                     id="modalDAA", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createDAAFig(data), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createDAAFig(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoDAA")))
                                           ]))]
         return content
 
     @staticmethod
-    def createDAAFig(data):
+    def createDAAFig(data, bgImage):
         figDAA = make_subplots(
             rows=1, cols=1,
             vertical_spacing=0.15,
@@ -57,6 +57,9 @@ class daaViewClass:
                               dict(step="all")])),
             rangeslider=dict(visible=False),
             type="date"))
+
+        # add background picture
+        figDAA.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
         figDAA.update_layout(height=800,
                              margin={"t": 40, "l": 130, "b": 20},

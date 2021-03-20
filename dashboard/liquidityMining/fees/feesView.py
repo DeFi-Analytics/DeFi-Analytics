@@ -29,7 +29,7 @@ class feesViewClass:
         return content
 
     @staticmethod
-    def createFeesGraph(data, representationStyle):
+    def createFeesGraph(data, representationStyle, bgImage):
         # Plotting paid Fees in USD
         figFee = make_subplots(
             rows=1, cols=1,
@@ -109,6 +109,9 @@ class feesViewClass:
                               dict(step="all")])),
             rangeslider=dict(visible=False),type="date"))
 
+        # add background picture
+        figFee.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.5, sizey=0.5,  xanchor="center", yanchor="middle", opacity=0.2))
+
         figFee.update_layout(height=600,
                              margin={"t": 80, "l": 130, "b": 30},
                              hovermode='x unified',
@@ -126,7 +129,7 @@ class feesViewClass:
         return figFee
 
     @staticmethod
-    def createFeesCoinFigure(data, selectedCoin):
+    def createFeesCoinFigure(data, selectedCoin, bgImage):
         figFeeCoins = make_subplots(
             rows=2, cols=1,
             vertical_spacing=0.15,
@@ -171,6 +174,10 @@ class feesViewClass:
         figFeeCoins.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figFeeCoins.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
                                  row=2, col=1)
+
+        # add background picture
+        figFeeCoins.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.78, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
+        figFeeCoins.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.22, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
 
         figFeeCoins.update_layout(height=680,
                                   margin={"t": 40, "l": 120, "b": 20},

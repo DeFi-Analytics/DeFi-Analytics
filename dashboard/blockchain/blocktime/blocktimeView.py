@@ -7,20 +7,20 @@ from plotly.subplots import make_subplots
 
 class blocktimeViewClass:
 
-    def getBlocktimeContent(self, data):
+    def getBlocktimeContent(self, data, bgImage):
         content = [dbc.Modal([dbc.ModalHeader("Info Block Time"),
                               dbc.ModalBody(self.getBlockTimeExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoBlocktime", className="ml-auto"))],
                                     id="modalBlocktime", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createBlocktimeFigure(data), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createBlocktimeFigure(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoBlocktime")))
                                           ]))]
         return content
 
 
     @staticmethod
-    def createBlocktimeFigure(data):
+    def createBlocktimeFigure(data, bgImage):
         figBlockTime = make_subplots(
             rows=2, cols=1,
             vertical_spacing=0.15,
@@ -100,6 +100,11 @@ class blocktimeViewClass:
         figBlockTime.update_xaxes(gridcolor='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figBlockTime.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
                                   row=2, col=1)
+
+        # add background picture
+        figBlockTime.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.87, sizex=0.3, sizey=0.3,  xanchor="center", yanchor="middle", opacity=0.2))
+        figBlockTime.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.3, sizex=0.5, sizey=0.5, xanchor="center", yanchor="middle", opacity=0.2))
+
         figBlockTime.update_layout(height=800,
                                    margin={"t": 40, "l": 130, "b": 20},
                                    hovermode='x unified',

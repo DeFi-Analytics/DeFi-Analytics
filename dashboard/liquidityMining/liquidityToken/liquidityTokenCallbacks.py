@@ -3,12 +3,11 @@ from dash.dependencies import Input, Output, State
 
 class liquidityTokenCallbacksClass:
     def __init__(self, defichainAnalyticsModel, ltView, app):
-        self.defichainAnalyticsModel = defichainAnalyticsModel
 
         @app.callback(Output('liquidityTokenGraph', 'figure'),
                       [Input('LTSelection', 'value')])
         def updateTVLGraphs(selectedCoin):
-            figFee = ltView.createLiquidityTokenGraph(defichainAnalyticsModel.hourlyData, selectedCoin)
+            figFee = ltView.createLiquidityTokenGraph(defichainAnalyticsModel.hourlyData, selectedCoin, defichainAnalyticsModel.figBackgroundImage)
             return figFee
 
         @app.callback(

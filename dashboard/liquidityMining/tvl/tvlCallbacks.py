@@ -3,12 +3,11 @@ from dash.dependencies import Input, Output, State
 
 class tvlCallbacksClass:
     def __init__(self, defichainAnalyticsModel, tvlView, app):
-        self.defichainAnalyticsModel = defichainAnalyticsModel
 
         @app.callback(Output('dexTVL', 'figure'),
                       [Input('defiTVLCurrency', 'value')])
         def updateTVLGraphs(selectedRepresentation):
-            figFee = tvlView.createTVLGraph(defichainAnalyticsModel.hourlyData, selectedRepresentation)
+            figFee = tvlView.createTVLGraph(defichainAnalyticsModel.hourlyData, selectedRepresentation, defichainAnalyticsModel.figBackgroundImage)
             return figFee
 
         @app.callback(

@@ -22,7 +22,7 @@ class coinsAddressesViewClass:
         return content
 
     @staticmethod
-    def getCoinAddressFigure(data, minDFI, maxDFI):
+    def getCoinAddressFigure(data, minDFI, maxDFI, bgImage):
         figDFIDist = go.Figure()
 
         condXValues = (data.balance >= minDFI) & (data.balance <= maxDFI)
@@ -35,6 +35,9 @@ class coinsAddressesViewClass:
         figDFIDist.update_yaxes(title_text='# addresses', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d')
 
         figDFIDist.update_xaxes(title_text="DFI deposited", tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', range=[0, maxDFI])
+
+        # add background picture
+        figDFIDist.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
         figDFIDist.update_layout(height=650,
                                  margin={"t": 40, "l": 130, "b": 20},

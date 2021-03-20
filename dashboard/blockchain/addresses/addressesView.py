@@ -11,19 +11,19 @@ class addressesViewClass:
     def __init__(self):
         None
 
-    def getAddressContent(self, data):
+    def getAddressContent(self, data, bgImage):
         content = [dbc.Modal([dbc.ModalHeader("Info Addresses"),
                               dbc.ModalBody(self.getAddressExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoAddresses", className="ml-auto"))],
                                     id="modalAddresses", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createAddressesFigure(data), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createAddressesFigure(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoAddresses")))
                                           ]))]
         return content
 
     @staticmethod
-    def createAddressesFigure(data):
+    def createAddressesFigure(data, bgImage):
         figAddress = make_subplots(
             rows=3, cols=1,
             vertical_spacing=0.15,
@@ -73,6 +73,10 @@ class addressesViewClass:
         figAddress.update_xaxes(color='#6c757d', gridcolor='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
         figAddress.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=3,
                                 col=1)
+
+        figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.81, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
+        figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.35, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
+
 
         figAddress.update_layout(height=800,
                                  margin={"t": 70, "l": 130, "b": 20},

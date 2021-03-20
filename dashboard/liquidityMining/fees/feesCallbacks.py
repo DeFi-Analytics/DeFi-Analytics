@@ -3,18 +3,17 @@ from dash.dependencies import Input, Output, State
 
 class feesCallbacksClass:
     def __init__(self, defichainAnalyticsModel, feesView, app):
-        self.defichainAnalyticsModel = defichainAnalyticsModel
 
         @app.callback(Output('lmPaidFees', 'figure'),
                       [Input('feeRepresentation', 'value')])
         def updateTradingFeeGraphs(selectedRepresentation):
-            figFee = feesView.createFeesGraph(defichainAnalyticsModel.dailyData, selectedRepresentation)
+            figFee = feesView.createFeesGraph(defichainAnalyticsModel.dailyData, selectedRepresentation, defichainAnalyticsModel.figBackgroundImage)
             return figFee
 
         @app.callback(Output('lmPaidCoinFees', 'figure'),
                       [Input('feeNativeCoin', 'value')])
         def updateTradingFeeCoinGraphs(selectedCoin):
-            figFee = feesView.createFeesCoinFigure(defichainAnalyticsModel.dailyData, selectedCoin)
+            figFee = feesView.createFeesCoinFigure(defichainAnalyticsModel.dailyData, selectedCoin, defichainAnalyticsModel.figBackgroundImage)
             return figFee
 
         @app.callback(

@@ -2,6 +2,7 @@ import os
 import glob
 import pathlib
 import re
+import base64
 
 import pandas as pd
 
@@ -10,9 +11,11 @@ class defichainAnalyticsModelClass:
     def __init__(self):
         workDir = os.path.abspath(os.getcwd())
         self.dataPath = workDir[:-9] + '/data/'
+
+        # data for controller/views
         self.dailyData = pd.DataFrame()
         self.hourlyData = pd.DataFrame()
-
+        self.minutelyData = pd.DataFrame()
         self.lastRichlist = None
 
         # last update of csv-files
@@ -20,12 +23,21 @@ class defichainAnalyticsModelClass:
         self.updated_tradingData = None
         self.updated_blocktime = None
         self.updated_dexHourly = None
+        self.update_dexMinutely = None
         self.updated_daa = None
         self.updated_LastRichlist = None
+        self.updated_dexVolume = None
+        self.updated_tokenCryptos = None
+
+        # background image for figures
+        with open(workDir + "/assets/logo-defi-analytics_LandscapeGrey.png", "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode()
+        self.figBackgroundImage = "data:image/png;base64," + encoded_string         # Add the prefix that plotly will want when using the string as source
 
     #### DAILY DATA #####
     def loadDailyData(self):
         self.loadHourlyDEXdata()
+        self.loadDEXVolume()
         self.loadExtractedRichlistData()
         self.loadDailyTradingData()
         self.loadDailyBlocktimeData()
@@ -118,6 +130,11 @@ class defichainAnalyticsModelClass:
             print('>>>> Blocktime data loaded from csv-file <<<<')
 
     #### HOURLY DATA ####
+    def loadHourlyData(self):
+        self.loadHourlyDEXdata()
+        self.loadDEXVolume()
+        self.loadTokenCrypto()
+
     def loadHourlyDEXdata(self):
         filePath = self.dataPath + 'LMPoolData.csv'
         fileInfo = pathlib.Path(filePath)
@@ -136,6 +153,10 @@ class defichainAnalyticsModelClass:
                 df2Add = df2Add.assign(lockedUSD=df2Add['lockedDFI']*hourlyDEXData[hourlyDEXData.symbol == 'USDT-DFI'].DFIPrices)
                 df2Add = df2Add.assign(lockedBTC=df2Add['lockedDFI'] * hourlyDEXData[hourlyDEXData.symbol == 'BTC-DFI'].DFIPrices)
 
+                # calculate relative price deviations
+                df2Add = df2Add.assign(relPriceDevCoingecko=((df2Add['DFIPrices'] - df2Add['reserveA/reserveB'])/df2Add['DFIPrices']))
+                df2Add = df2Add.assign(relPriceDevBittrex=((df2Add['DFIPricesBittrex'] - df2Add['reserveA/reserveB']) / df2Add['DFIPricesBittrex']))
+
                 # add prefix to column names for pool identification
                 colNamesOrig = df2Add.columns.astype(str)
                 colNamesNew = poolSymbol+'_' + colNamesOrig
@@ -150,10 +171,93 @@ class defichainAnalyticsModelClass:
             self.updated_dexHourly = fileInfo.stat()
             print('>>>> Hourly DEX data loaded from csv-file <<<<')
 
+    def loadDEXVolume(self):
+        filePath = self.dataPath + 'DEXVolumeData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_tokenCryptos:
+            volumeData = pd.read_csv(filePath, index_col=0)
+            volumeData['timeRounded'] = pd.to_datetime(volumeData.Time).dt.floor('H')
+            volumeData.set_index(['timeRounded'], inplace=True)
+
+            for poolSymbol in volumeData['base_name'].unique():
+                df2Add = volumeData[volumeData['base_name']==poolSymbol][['base_volume', 'quote_volume']]
+                df2Add['VolTotal'] = df2Add[['base_volume', 'quote_volume']].sum(axis=1)
+                # add prefix to column names for pool identification
+                colNamesOrig = df2Add.columns.astype(str)
+                colNamesNew = poolSymbol + '_' + colNamesOrig
+                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+
+                # delete existing information and add new one
+                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
+                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+
+            # calculate total volume after merge of data
+            self.hourlyData['VolTotal'] = self.hourlyData['BTC_VolTotal']*0   # only use rows with data; BTC was the first pool and have to most data (beside ETH, USDT)
+            for poolSymbol in volumeData['base_name'].unique():
+                self.hourlyData['VolTotal'] = self.hourlyData['VolTotal'] + self.hourlyData[poolSymbol+'_'+'VolTotal'].fillna(0)
+
+            self.updated_dexVolume = fileInfo.stat()
+            print('>>>> DEX volume data loaded from csv-file <<<<')
+
+    def loadTokenCrypto(self):
+        filePath = self.dataPath + 'TokenData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_tokenCryptos:
+            tokenData = pd.read_csv(filePath, index_col=0)
+            tokenData['timeRounded'] = pd.to_datetime(tokenData.Time).dt.floor('H')
+            tokenData.set_index(['timeRounded'], inplace=True)
+
+            for coinSymbol in tokenData['symbol'].unique():
+                df2Add = tokenData[tokenData['symbol']==coinSymbol][['Burned', 'minted', 'Collateral']]
+                df2Add['tokenDefiChain'] = df2Add['minted'] - df2Add['Burned'].fillna(0)
+                df2Add['diffToken'] = df2Add['Collateral']-df2Add['minted']+df2Add['Burned'].fillna(0)
+
+                # add prefix to column names for pool identification
+                colNamesOrig = df2Add.columns.astype(str)
+                colNamesNew = coinSymbol + '_' + colNamesOrig
+                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+
+                # delete existing information and add new one
+                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
+                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+
+            self.updated_tokenCryptos = fileInfo.stat()
+            print('>>>> DAT Cryptos data loaded from csv-file <<<<')
+
     #### MINUTELY DATA ####
-    def loadShortTermDEXPrice(self):
-        ShortTermDEXPrice = pd.read_csv(self.dataPath+'LMPoolData_ShortTerm.csv',index_col=0)
-        # self.dailyData = self.dailyData.merge(ShortTermDEXPrice, how='outer')
+    def loadMinutelyData(self):
+        self.loadMinutelyDEXdata()
+
+    def loadMinutelyDEXdata(self):
+        filePath = self.dataPath + 'LMPoolData_ShortTerm.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_dexMinutely:
+            minutelyDEXData = pd.read_csv(filePath, index_col=0)
+            minutelyDEXData['timeRounded'] = pd.to_datetime(minutelyDEXData.Time).dt.floor('min')
+            minutelyDEXData.set_index(['timeRounded'], inplace=True)
+
+            for poolSymbol in minutelyDEXData.symbol.unique():
+                df2Add = minutelyDEXData[minutelyDEXData.symbol == poolSymbol]
+                df2Add = df2Add.drop(columns=['Time', 'symbol'])
+
+                # calculate relative price deviations
+                df2Add = df2Add.assign(relPriceDevCoingecko=((df2Add['DFIPrices'] - df2Add['reserveA/reserveB'])/df2Add['DFIPrices']))
+                df2Add = df2Add.assign(relPriceDevBittrex=((df2Add['DFIPricesBittrex'] - df2Add['reserveA/reserveB']) / df2Add['DFIPricesBittrex']))
+
+                # add prefix to column names for pool identification
+                colNamesOrig = df2Add.columns.astype(str)
+                colNamesNew = poolSymbol+'_' + colNamesOrig
+                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+
+                # delete existing information and add new one
+                ind2Delete = self.minutelyData.columns.intersection(colNamesNew)                                          # check if columns exist
+                self.minutelyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+                self.minutelyData = self.minutelyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+
+            self.update_dexMinutely = fileInfo.stat()
+            print('>>>> Minutely DEX data loaded from csv-file <<<<')
 
     #### load last Richlist ####
     def loadLastRichlist(self):
