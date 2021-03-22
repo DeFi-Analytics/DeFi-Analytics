@@ -7,7 +7,8 @@ PFEIL_ZU = "fas fa-chevron-right mr-3"
 PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 
 class defichainAnalyticsCallbacksClass:
-    def __init__(self, blockchainController, dexController, liquidityMiningController, tokenController, socialmediaController):
+    def __init__(self, generalController, blockchainController, dexController, liquidityMiningController, tokenController, socialmediaController):
+        self.generalController = generalController
         self.blockchainController = blockchainController
         self.dexController = dexController
         self.liquidityMiningController = liquidityMiningController
@@ -147,7 +148,9 @@ class defichainAnalyticsCallbacksClass:
                 urlPath = '/'
                 selectedEntry = ''
 
-            if urlPath in ["/", "/blockchain"]:
+            if urlPath in ["/", "/general"]:
+                return self.generalController.getContent(selectedEntry)
+            elif urlPath in ["/blockchain"]:
                 return self.blockchainController.getContent(selectedEntry)
             elif urlPath in ["/dex"]:
                 return self.dexController.getContent(selectedEntry)
