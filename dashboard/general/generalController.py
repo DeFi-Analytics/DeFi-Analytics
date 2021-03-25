@@ -1,4 +1,5 @@
 from .overview.overviewView import overviewViewClass
+from .overview.overviewCallbacks import overviewCallbacksClass
 
 class generalControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -6,7 +7,7 @@ class generalControllerClass:
 
         # initialize overview classes
         self.overviewView = overviewViewClass()
-        #self.feesCallback = feesCallbacksClass(self.defichainAnalyticsModel, self.feesView, app)
+        self.overviewCallback = overviewCallbacksClass(self.defichainAnalyticsModel, self.overviewView, app)
 
 
 

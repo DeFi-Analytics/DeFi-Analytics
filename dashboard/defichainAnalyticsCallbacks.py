@@ -158,7 +158,7 @@ class defichainAnalyticsCallbacksClass:
                 return self.liquidityMiningController.getContent(selectedEntry)
             elif urlPath in ["/token"]:
                 return self.tokenController.getContent(selectedEntry)
-            elif urlPath in ["/social"]:
+            elif urlPath in ["/community"]:
                 return self.socialmediaController.getContent(selectedEntry)
 
             # If the user tries to reach a different page, return a 404 message
