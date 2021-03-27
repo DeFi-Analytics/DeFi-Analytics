@@ -5,8 +5,7 @@ import dash_bootstrap_components as dbc
 class imprintViewClass:
 
     def getImprintContent(self):
-        content = [dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(self.createImprintContent())),
-                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoOverview")))]))]
+        content = [dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(self.createImprintContent()))]))]
         return content
 
     @staticmethod

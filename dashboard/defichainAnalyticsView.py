@@ -196,11 +196,11 @@ class defichainAnalyticsViewClass:
         )
 
         refLink = html.Div(html.Marquee(['Special ',
-                      html.A('Cake', href='https://pool.cakedefi.com/#?ref=476728', target='_blank', className='refLinkLink'),
+                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='refLinkLink'),
                       ' offer: Sign-up Bonus of $20 in DFI (after deposit of $50). You and me get $10 additional in DFI if you use my ',
-                      html.A('Ref-Link', href='https://pool.cakedefi.com/#?ref=476728', target='_blank', className='refLinkLink'),
+                      html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='refLinkLink'),
                       '. Cake is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet. ',
-                      html.A('Offer', href='https://pool.cakedefi.com/#?ref=476728', target='_blank', className='refLinkLink'),
+                      html.A('Offer', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='refLinkLink'),
                       ' Condition: DFI are staking for at least 180 days and generate revenue of ~37% APY.']), className='refLinkMarquee')
 
         sidebar = html.Div(
