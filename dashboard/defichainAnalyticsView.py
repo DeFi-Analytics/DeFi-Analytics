@@ -182,8 +182,8 @@ class defichainAnalyticsViewClass:
             [
                 dbc.Col(
                     dbc.Button(
-                        "Klick",
-                        id="sidebar_button",
+                        "Menu",
+                        id="sidebarResponsiveExpant",
                         className="sidebar_button"
                     ),
 
@@ -204,7 +204,7 @@ class defichainAnalyticsViewClass:
                 dbc.Collapse(
                     html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token + submenu_community,
                             vertical=True, id='navbar-container'), className="scrollbar_sidemenu"),
-                    id="menu_collapse1", className="menu_collapse")
+                    id="menuResponsiveCollapse", className="menu_collapse")
 
             ],
             className="sidebarstyle",

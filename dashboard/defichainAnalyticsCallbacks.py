@@ -17,6 +17,15 @@ class defichainAnalyticsCallbacksClass:
 
     def register_callbacks(self, app):
         # this function is used to toggle the is_open property of each Collapse
+        @app.callback(
+            Output("menuResponsiveCollapse", "is_open"),
+            [Input("sidebarResponsiveExpant", "n_clicks")],
+            [State("menuResponsiveCollapse", "is_open")],
+        )
+        def toggle_menu_collapse(n, is_open):
+            if n:
+                return not is_open
+            return is_open
 
         # this function is used to toggle the is_open property of each Collapse
         def toggle_collapse(n, is_open):
