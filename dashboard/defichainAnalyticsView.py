@@ -11,6 +11,31 @@ PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 class defichainAnalyticsViewClass:
     def __init__(self):
 
+        submenu_general = [
+            html.Li(
+                # use Row and Col components to position the chevrons
+                dbc.Row(
+                    [
+                        # submenu_name is "Blockchain"
+                        dbc.Col("General"),
+                        dbc.Col(
+                            html.I(className=PFEIL_ZU, id="submenu-general-arrow"), width="auto"
+                        ),
+                    ],
+                    className="my-1",
+                ),
+                className="submenu_linkstyle",
+                id="submenu-general",
+            ),
+            # we use the Collapse component to hide and reveal the navigation links
+            dbc.Collapse(
+                [
+                    dbc.NavLink("Overview", href="/general?entry=overview", className="linkstyle",
+                                id="overview")
+                ],
+                id="submenu-general-collapse",
+            ),
+        ]
 
         #define submenu_blockchain
         submenu_blockchain = [
@@ -123,6 +148,31 @@ class defichainAnalyticsViewClass:
             ),
         ]
 
+        submenu_community = [
+            html.Li(
+                # use Row and Col components to position the chevrons
+                dbc.Row(
+                    [
+                        # submenu_name is "Blockchain"
+                        dbc.Col("Community"),
+                        dbc.Col(
+                            html.I(className=PFEIL_ZU, id="submenu-community-arrow"), width="auto"
+                        ),
+                    ],
+                    className="my-1",
+                ),
+                className="submenu_linkstyle",
+                id="submenu-community",
+            ),
+            # we use the Collapse component to hide and reveal the navigation links
+            dbc.Collapse(
+                [
+                    dbc.NavLink("Twitter", href="/community?entry=twitter", className="linkstyle",
+                                id="twitter")
+                ],
+                id="submenu-community-collapse",
+            ),
+        ]
 
         workDir = os.path.abspath(os.getcwd())
         image_filename = workDir + '/assets/'+'logo-defi-analytics.png'
@@ -152,7 +202,7 @@ class defichainAnalyticsViewClass:
                 sidebar_header,
 
                 dbc.Collapse(
-                    html.Div(dbc.Nav(submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token,
+                    html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token + submenu_community,
                             vertical=True, id='navbar-container'), className="scrollbar_sidemenu"),
                     id="menu_collapse1", className="menu_collapse")
 

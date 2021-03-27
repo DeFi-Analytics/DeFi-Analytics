@@ -1,7 +1,7 @@
 from .twitter.twitterView import twitterViewClass
 from .twitter.twitterCallbacks import twitterCallbacksClass
 
-class socialmediaControllerClass:
+class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
         self.app = app
