@@ -64,7 +64,7 @@ color: #ffffff;
 }
 
 @media only screen and (min-width: 768px) {
-    #menu_collapse1 {
+    #menuResponsiveCollapse {
        display: block;
     }
 
@@ -93,7 +93,7 @@ color: #ffffff;
         display: none;
     }
 
-    #menu_collapse1 *:first-child {
+    #menuResponsiveCollapse *:first-child {
         margin-top: 0;
     }
 }
@@ -125,7 +125,7 @@ color: #ffffff;
         width: 5rem;
     }
 
-    #menu_collapse1 *:first-child {
+    #menuResponsiveCollapse *:first-child {
         margin-top: 1rem;
     }
 

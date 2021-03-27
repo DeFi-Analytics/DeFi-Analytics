@@ -183,7 +183,7 @@ class defichainAnalyticsViewClass:
                 dbc.Col(
                     dbc.Button(
                         "Menu",
-                        id="sidebarResponsiveExpant",
+                        id="sidebarResponsiveExpandButton",
                         className="sidebar_button"
                     ),
 
@@ -196,6 +196,8 @@ class defichainAnalyticsViewClass:
             id="header",
             className="headerStyle",
         )
+
+
 
         sidebar = html.Div(
             [
