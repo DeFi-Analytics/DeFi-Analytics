@@ -12,18 +12,38 @@ h1, h2, h3, h4, h5, h6 {
     color: #ff00af
 }
 
-a:link{
+.linkstyle:link{
 color: #a6a4a4
 }
-a:hover{
+.linkstyle:hover{
 background-image: url('rect_pink.png');
-color:#000000;
+color: #000000;
 }
-a:focus{
+.linkstyle:focus{
 background-image: url('rect_pink.png');
 color: #ffffff;
 }
-a:active{
+.linkstyle:active{
+background-image: url('rect_pink.png');
+color: #ffffff;
+}
+
+.activelink:link{
+color: #a6a4a4
+}
+.activelink:hover{
+background-image: url('rect_pink.png');
+color: #000000;
+}
+.activelink:focus{
+background-image: url('rect_pink.png');
+color: #ffffff;
+}
+.activelink:focus:hover{
+background-image: url('rect_pink.png');
+color: #000000;
+}
+.activelink:active{
 background-image: url('rect_pink.png');
 color: #ffffff;
 }
@@ -37,14 +57,6 @@ color: #ffffff;
     margin-left: 0.1rem;
 }
 
-.linkstyle{
-    background-color: #000000;
-    margin-top: 0.3rem;
-    margin-right: 0.7rem;
-    background-image: url('rect_dark_grey.png');
-    background-size: 100% 100%;
-    color: #a6a4a4
-}
 .activelink{
     background-color: #000000;
     margin-top: 0.3rem;
@@ -54,18 +66,27 @@ color: #ffffff;
     color: #ffffff;
 }
 
-
-.logo_sidebar{
-    width: 14rem;
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    background-color: #000000;
-}
-
 @media only screen and (min-width: 768px) {
+    .linkstyle{
+        background-color: #000000;
+        margin-top: 0.3rem;
+        margin-right: 0.7rem;
+        background-image: url('rect_dark_grey.png');
+        background-size: 100% 100%;
+        color: #a6a4a4
+    }
+
     #menuResponsiveCollapse {
        display: block;
+    }
+
+   .logo_sidebar{
+        content: url('logo-defi-analytics.png');
+        width: 14rem;
+        padding-top: 0;
+        padding-right: 0;
+        padding-bottom: 0;
+        background-color: #000000;
     }
 
     .contentstyle {
@@ -99,6 +120,16 @@ color: #ffffff;
 }
 
 @media only screen and (max-width: 768px) {
+
+    .linkstyle{
+        background-color: #000000;
+        margin-top: 0rem;
+        margin-right: 0.7rem;
+        background-image: url('rect_dark_grey.png');
+        background-size: 100% 100%;
+        color: #a6a4a4
+    }
+
     .sidebarstyle{
         background-color: #000000;
         padding: 1rem 1rem;
@@ -108,8 +139,8 @@ color: #ffffff;
 
     .contentstyle {
         margin-left: 0;
-        margin-top: 2rem;
-        padding: 2rem 1rem 0rem 1rem;
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem 0rem 1rem;
     }
 
     .sidebar_button{
@@ -122,20 +153,13 @@ color: #ffffff;
         border: 0 none;
     }
 
-   /* .headerStyle{
-        width: 100%;
-    }*/
-
     .logo_sidebar{
-    height: 35px;
+        content: url('logo-defi-analytics_LandscapePink.png');
+        height: 35px;
     }
 
     #menuResponsiveCollapse *:first-child {
-        margin-top: 1rem;
+        margin-top: 0.3rem;
     }
-
-   /* #contentstyle *:first-child {
-      margin-top: 1rem;
-    }*/
 
 }
