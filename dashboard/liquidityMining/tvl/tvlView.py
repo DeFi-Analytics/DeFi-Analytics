@@ -42,7 +42,7 @@ class tvlViewClass:
         TVLOverall = (data['BTC-DFI_lockedDFI']+data['ETH-DFI_lockedDFI']+data['USDT-DFI_lockedDFI']+ \
                       data['DOGE-DFI_lockedDFI'].fillna(0)+data['LTC-DFI_lockedDFI'].fillna(0)) * DFIPrice  # DFI is USD is highest price of the 3
 
-        lastValidDate = datetime.utcfromtimestamp(data.index.values[-1].tolist()/1e9)
+        lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
         # Plotting long term price

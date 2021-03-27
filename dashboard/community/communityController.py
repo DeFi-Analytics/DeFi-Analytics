@@ -15,7 +15,7 @@ class communityControllerClass:
         pageContent = None
         if entry in ["", "twitter"]:
             self.defichainAnalyticsModel.loadTwitterData()
-            pageContent = self.twitterView.getTwitterContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
+            pageContent = self.twitterView.getTwitterContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
 
 
         return pageContent
