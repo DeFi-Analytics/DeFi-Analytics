@@ -131,8 +131,7 @@ class defichainAnalyticsViewClass:
         sidebar_header = dbc.Row(
             [
                 dbc.Col(
-                    dbc.Button(
-                        "Klick",
+                    html.Button(
                         id="sidebar_button",
                         className="sidebar_button"
                     ),
