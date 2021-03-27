@@ -186,7 +186,8 @@ class defichainAnalyticsViewClass:
                 ),
 
                 dbc.Col(html.Img(
-                         className="logo_sidebar", alt="Defi-Logo")
+                    #reminder: if alt-attribute is deleted, firefox will not show the image!, alt="Defi-Logo"
+                         className="logo_sidebar")
                         ),
 
                 dbc.Col(),
