@@ -7,16 +7,22 @@ PFEIL_ZU = "fas fa-chevron-right mr-3"
 PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 
 class defichainAnalyticsCallbacksClass:
-    def __init__(self, blockchainController, dexController, liquidityMiningController, tokenController, socialmediaController):
+    def __init__(self, generalController, blockchainController, dexController, liquidityMiningController, tokenController, communityController):
+        self.generalController = generalController
         self.blockchainController = blockchainController
         self.dexController = dexController
         self.liquidityMiningController = liquidityMiningController
         self.tokenController = tokenController
-        self.socialmediaController = socialmediaController
+        self.communityController = communityController
 
     def register_callbacks(self, app):
         # this function is used to toggle the is_open property of each Collapse
-        def toggle_collapse(n, is_open):
+        @app.callback(
+            Output("menuResponsiveCollapse", "is_open"),
+            [Input("sidebarResponsiveExpandButton", "n_clicks")],
+            [State("menuResponsiveCollapse", "is_open")],
+        )
+        def toggle_menu_collapse(n, is_open):
             if n:
                 return not is_open
             return is_open
@@ -36,16 +42,11 @@ class defichainAnalyticsCallbacksClass:
             # if it is initial, just give a closed arrow
             return is_open, PFEIL_ZU
 
-        @app.callback(
-            Output("menu_collapse1", "is_open"),
-            [Input("sidebar_button", "n_clicks")],
-            [State("menu_collapse1", "is_open")],
-        )
-        def toggle_menu_collapse(n, is_open):
-            if n:
-                return not is_open
-            return is_open
-
+        # toggle general menu
+        @app.callback([Output("submenu-general-collapse", "is_open"), Output("submenu-general-arrow", "className")],
+                      [Input("submenu-general", "n_clicks")], [State("submenu-general-collapse", "is_open")])
+        def toggleGeneralMenu(n, isOpen):
+            return toggle_collapse(n, isOpen)
 
         # toggle blockchain menu
         @app.callback([Output("submenu-blockchain-collapse", "is_open"),Output("submenu-blockchain-arrow", "className")],
@@ -73,8 +74,15 @@ class defichainAnalyticsCallbacksClass:
         def toggleTokenMenu(n, isOpen):
             return toggle_collapse(n, isOpen)
 
+        # toggle general menu
+        @app.callback([Output("submenu-community-collapse", "is_open"), Output("submenu-community-arrow", "className")],
+                      [Input("submenu-community", "n_clicks")], [State("submenu-community-collapse", "is_open")])
+        def toggleCommunityMenu(n, isOpen):
+            return toggle_collapse(n, isOpen)
+
         #define callback sidebar_link_state input array
-        sidebar_active_link_array_input = [Input('addresses', 'n_clicks_timestamp'),
+        sidebar_active_link_array_input = [Input('overview', 'n_clicks_timestamp'),
+                                           Input('addresses', 'n_clicks_timestamp'),
                                            Input('daa', 'n_clicks_timestamp'),
                                            Input('coins', 'n_clicks_timestamp'),
                                            Input('change', 'n_clicks_timestamp'),
@@ -87,9 +95,11 @@ class defichainAnalyticsCallbacksClass:
                                            Input('tvl', 'n_clicks_timestamp'),
                                            #Input('coinsLocked', 'n_clicks_timestamp'),
                                            Input('fees', 'n_clicks_timestamp'),
-                                           Input('cryptosDAT', 'n_clicks_timestamp')]
+                                           Input('cryptosDAT', 'n_clicks_timestamp'),
+                                           Input('twitter', 'n_clicks_timestamp')]
         # define callback sidebar_link_state output array
-        sidebar_active_link_array_output = [Output('addresses', 'className'),
+        sidebar_active_link_array_output = [Output('overview', 'className'),
+                                            Output('addresses', 'className'),
                                             Output('daa', 'className'),
                                             Output('coins', 'className'),
                                             Output('change', 'className'),
@@ -102,7 +112,8 @@ class defichainAnalyticsCallbacksClass:
                                             Output('tvl', 'className'),
                                             #Output('coinsLocked', 'className'),
                                             Output('fees', 'className'),
-                                            Output('cryptosDAT', 'className')]
+                                            Output('cryptosDAT', 'className'),
+                                            Output('twitter', 'className')]
 
         # set active links of sidebar
         @app.callback(sidebar_active_link_array_output,
@@ -147,7 +158,9 @@ class defichainAnalyticsCallbacksClass:
                 urlPath = '/'
                 selectedEntry = ''
 
-            if urlPath in ["/", "/blockchain"]:
+            if urlPath in ["/", "/general"]:
+                return self.generalController.getContent(selectedEntry)
+            elif urlPath in ["/blockchain"]:
                 return self.blockchainController.getContent(selectedEntry)
             elif urlPath in ["/dex"]:
                 return self.dexController.getContent(selectedEntry)
@@ -155,8 +168,8 @@ class defichainAnalyticsCallbacksClass:
                 return self.liquidityMiningController.getContent(selectedEntry)
             elif urlPath in ["/token"]:
                 return self.tokenController.getContent(selectedEntry)
-            elif urlPath in ["/social"]:
-                return self.socialmediaController.getContent(selectedEntry)
+            elif urlPath in ["/community"]:
+                return self.communityController.getContent(selectedEntry)
 
             # If the user tries to reach a different page, return a 404 message
             return dbc.Jumbotron(

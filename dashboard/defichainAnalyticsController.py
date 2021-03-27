@@ -5,11 +5,12 @@ from defichainAnalyticsView import defichainAnalyticsViewClass
 from defichainAnalyticsCallbacks import defichainAnalyticsCallbacksClass
 from defichainAnalyticsModel import defichainAnalyticsModelClass
 
+from general.generalController import generalControllerClass
 from blockchain.blockchainMenuController import blockchainControllerClass
 from dex.dexController import dexControllerClass
 from liquidityMining.liquidityMiningController import liquidityMiningControllerClass
 from Token.tokenController import tokenControllerClass
-from socialMedia.socialmediaController import socialmediaControllerClass
+from community.communityController import communityControllerClass
 
 class defichainAnalyticsControllerClass:
     def __init__(self):
@@ -18,15 +19,17 @@ class defichainAnalyticsControllerClass:
         self.defichainAnalyticsModel.loadDailyData()
         self.defichainAnalyticsModel.loadHourlyData()
         self.defichainAnalyticsModel.loadMinutelyData()
-        self.defichainAnalyticsModel.loadLastRichlist()
+        self.defichainAnalyticsModel.loadNoTimeseriesData()
 
+        self.generalController = generalControllerClass(app, self.defichainAnalyticsModel)
         self.blockchainController = blockchainControllerClass(app, self.defichainAnalyticsModel)
         self.dexController = dexControllerClass(app, self.defichainAnalyticsModel)
         self.liquidityMiningController = liquidityMiningControllerClass(app, self.defichainAnalyticsModel)
         self.tokenController = tokenControllerClass(app, self.defichainAnalyticsModel)
-        self.socialmediaController = socialmediaControllerClass(app, self.defichainAnalyticsModel)
+        self.communityController = communityControllerClass(app, self.defichainAnalyticsModel)
 
-        self.defichainAnalyticsCallbacks = defichainAnalyticsCallbacksClass(self.blockchainController, self.dexController, self.liquidityMiningController, self.tokenController, self.socialmediaController)       # create callbacks on top level
+        self.defichainAnalyticsCallbacks = defichainAnalyticsCallbacksClass(self.generalController, self.blockchainController, self.dexController,
+                                                                            self.liquidityMiningController, self.tokenController, self.communityController)       # create callbacks on top level
         self.defichainAnalyticsCallbacks.register_callbacks(app)             #
 
         self.defichainAnalyticsView = defichainAnalyticsViewClass()                 # create main view of Dashboard

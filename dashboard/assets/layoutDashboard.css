@@ -32,6 +32,23 @@ body {
     background-color: #fe00ae;
 }
 
+.refLinkMarquee{
+    margin-left: 18rem;
+    margin-right: 0rem;
+    padding: 0rem 1rem 0rem 1rem;
+    }
+
+
+.refLinkLink:link{
+color: #ff00af
+}
+.refLinkLink:hover{
+background-color: #ff00af;
+color:#ffffff;
+text-decoration: none;
+}
+
+
 .dash-spinner.dash-default-spinner {
     margin-top: 0rem auto;
     text-align: center;

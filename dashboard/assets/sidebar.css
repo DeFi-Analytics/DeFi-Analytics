@@ -64,14 +64,14 @@ color: #ffffff;
 }
 
 @media only screen and (min-width: 768px) {
-    #menu_collapse1 {
+    #menuResponsiveCollapse {
        display: block;
     }
 
     .contentstyle {
         margin-left: 18rem;
-        margin-right: 2rem;
-        padding: 2rem 1rem;
+        margin-right: 0rem;
+        padding: 2rem 1rem 0rem 1rem;
     }
 
     .sidebarstyle{
@@ -93,7 +93,7 @@ color: #ffffff;
         display: none;
     }
 
-    #menu_collapse1 *:first-child {
+    #menuResponsiveCollapse *:first-child {
         margin-top: 0;
     }
 }
@@ -109,7 +109,7 @@ color: #ffffff;
     .contentstyle {
         margin-left: 0;
         margin-top: 2rem;
-        padding: 2rem 1rem;
+        padding: 2rem 1rem 0rem 1rem;
     }
 
     .sidebar_button{
@@ -130,7 +130,7 @@ color: #ffffff;
         width: 5rem;
     }
 
-    #menu_collapse1 *:first-child {
+    #menuResponsiveCollapse *:first-child {
         margin-top: 1rem;
     }
 

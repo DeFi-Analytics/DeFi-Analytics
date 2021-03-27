@@ -6,6 +6,7 @@ import base64
 
 import pandas as pd
 
+from datetime import datetime, timedelta
 
 class defichainAnalyticsModelClass:
     def __init__(self):
@@ -17,6 +18,7 @@ class defichainAnalyticsModelClass:
         self.hourlyData = pd.DataFrame()
         self.minutelyData = pd.DataFrame()
         self.lastRichlist = None
+        self.snapshotData = None
 
         # last update of csv-files
         self.updated_extractedRichlist = None
@@ -29,6 +31,7 @@ class defichainAnalyticsModelClass:
         self.updated_dexVolume = None
         self.updated_tokenCryptos = None
         self.updated_twitterData = None
+        self.update_snapshotData = None
 
         # background image for figures
         with open(workDir + "/assets/logo-defi-analytics_LandscapeGrey.png", "rb") as image_file:
@@ -43,6 +46,7 @@ class defichainAnalyticsModelClass:
         self.loadDailyTradingData()
         self.loadDailyBlocktimeData()
         self.loadDAAData()
+        self.loadTwitterData()
 
     def loadExtractedRichlistData(self):
         filePath = self.dataPath + 'extractedDFIdata.csv'
@@ -128,14 +132,30 @@ class defichainAnalyticsModelClass:
             self.dailyData.sort_index(inplace=True)
 
             self.updated_daa = fileInfo.stat()
-            print('>>>> Blocktime data loaded from csv-file <<<<')
+            print('>>>> DAA data loaded from csv-file <<<<')
+
+    def loadTwitterData(self):
+        filePath = self.dataPath + 'analyzedTwitterData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_twitterData:
+            twitterData = pd.read_csv(filePath, index_col=0)
+
+            columns2update = ['overall_Activity', 'defichain_Activity', 'dfi_Activity', 'overall_Likes', 'overall_UniqueUserOverall', 'overall_UniqueUserTweet', 'overall_UniqueUserReply', 'overall_UniqueUserRetweet']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(twitterData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_twitterData = fileInfo.stat()
+            print('>>>> Twitter data loaded from csv-file <<<<')
 
     #### HOURLY DATA ####
     def loadHourlyData(self):
         self.loadHourlyDEXdata()
         self.loadDEXVolume()
         self.loadTokenCrypto()
-        self.loadTwitterData()
+
 
     def loadHourlyDEXdata(self):
         filePath = self.dataPath + 'LMPoolData.csv'
@@ -202,21 +222,6 @@ class defichainAnalyticsModelClass:
             self.updated_dexVolume = fileInfo.stat()
             print('>>>> DEX volume data loaded from csv-file <<<<')
 
-    def loadTwitterData(self):
-        filePath = self.dataPath + 'analyzedTwitterData.csv'
-        fileInfo = pathlib.Path(filePath)
-        if fileInfo.stat() != self.updated_twitterData:
-            twitterData = pd.read_csv(filePath, index_col=0)
-
-            columns2update = ['overall_Activity', 'defichain_Activity', 'dfi_Activity', 'overall_Likes', 'overall_UniqueUserOverall', 'overall_UniqueUserTweet', 'overall_UniqueUserReply', 'overall_UniqueUserRetweet']
-
-            # delete existing information and add new one
-            ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist
-            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
-            self.hourlyData = self.hourlyData.merge(twitterData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
-
-            self.updated_twitterData = fileInfo.stat()
-            print('>>>> Twitter data loaded from csv-file <<<<')
 
     def loadTokenCrypto(self):
         filePath = self.dataPath + 'TokenData.csv'
@@ -278,7 +283,11 @@ class defichainAnalyticsModelClass:
             self.update_dexMinutely = fileInfo.stat()
             print('>>>> Minutely DEX data loaded from csv-file <<<<')
 
-    #### load last Richlist ####
+    #### NO TIMESERIES ####
+    def loadNoTimeseriesData(self):
+        self.loadLastRichlist()
+        self.loadSnapshotData()
+
     def loadLastRichlist(self):
         filePath = self.dataPath + 'Richlist/'
         listCSVFiles = glob.glob(filePath + "*_01-*.csv")  # get all csv-files generated at night
@@ -295,3 +304,15 @@ class defichainAnalyticsModelClass:
 
             self.updated_LastRichlist = fname.stat()
             print('>>>>>>>>>>>>> Richlist ', file2Load[0], ' loaded <<<<<<<<<<<<<')
+
+    def loadSnapshotData(self):
+        filePath = self.dataPath + 'snapshotData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_snapshotData:
+            self.snapshotData = pd.read_csv(filePath, index_col=0)
+            meanBlockTime = self.dailyData['meanBlockTime'].dropna().iloc[-10:].mean()
+            duration = timedelta(seconds=self.snapshotData['blocksLeft'].values[0]*meanBlockTime)
+            self.snapshotData['duration'] = duration-timedelta(microseconds=duration.microseconds)          # remove microseconds
+            self.snapshotData['etaEvent'] = datetime.utcnow()+self.snapshotData['duration']
+            self.update_snapshotData = fileInfo.stat()
+            print('>>>>>>>>>>>>> Snapshot data loaded <<<<<<<<<<<<<')

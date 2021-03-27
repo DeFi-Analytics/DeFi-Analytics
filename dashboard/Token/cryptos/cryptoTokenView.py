@@ -112,7 +112,8 @@ class crpytoTokenViewClass:
 
         return figTokenData
 
-    def getTokenExplanation(self):
+    @staticmethod
+    def getTokenExplanation():
         coinAddressCardExplanation = [
                                html.P(['The native coin of DefiChain is DFI. All other tokens are wrapped ones, means these are tokens on DefiChain with the same value than the underlying asset. '
                                        'To ensure this for BTC, ETH and USDT Cake has transferred native coins/tokens on addresses of the Bitcoin/Ethereum blockchain. ' 
