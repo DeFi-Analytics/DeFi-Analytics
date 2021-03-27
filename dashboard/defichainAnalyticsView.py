@@ -175,14 +175,15 @@ class defichainAnalyticsViewClass:
         ]
 
         workDir = os.path.abspath(os.getcwd())
-        image_filename = workDir + '/assets/'+'logo-defi-analytics.png'
+        image_filename = workDir + '/assets/'+'logo-defi-analytics_LandscapePink.png'
         encoded_image = base64.b64encode(open(image_filename, 'rb').read()).decode('ascii')
 
         sidebar_header = dbc.Row(
             [
                 dbc.Col(
                     html.Button(
-                        id="sidebar_button",
+                        title="Menu",
+                        id="sidebarResponsiveExpandButton",
                         className="sidebar_button"
                     ),
 
@@ -191,6 +192,7 @@ class defichainAnalyticsViewClass:
                 dbc.Col(html.Img(src='data:image/png;base64,{}'.format(encoded_image),
                          className="logo_sidebar"),
                         ),
+                dbc.Col(),
             ],
             id="header",
             className="headerStyle",
