@@ -19,6 +19,7 @@ class defichainAnalyticsModelClass:
         self.minutelyData = pd.DataFrame()
         self.lastRichlist = None
         self.snapshotData = None
+        self.changelogData = None
 
         # last update of csv-files
         self.updated_extractedRichlist = None
@@ -32,6 +33,7 @@ class defichainAnalyticsModelClass:
         self.updated_tokenCryptos = None
         self.updated_twitterData = None
         self.update_snapshotData = None
+        self.update_changelogData = None
 
         # background image for figures
         with open(workDir + "/assets/logo-defi-analytics_LandscapeGrey.png", "rb") as image_file:
@@ -287,6 +289,7 @@ class defichainAnalyticsModelClass:
     def loadNoTimeseriesData(self):
         self.loadLastRichlist()
         self.loadSnapshotData()
+        self.loadChangelogData()
 
     def loadLastRichlist(self):
         filePath = self.dataPath + 'Richlist/'
@@ -316,3 +319,13 @@ class defichainAnalyticsModelClass:
             self.snapshotData['etaEvent'] = datetime.utcnow()+self.snapshotData['duration']
             self.update_snapshotData = fileInfo.stat()
             print('>>>>>>>>>>>>> Snapshot data loaded <<<<<<<<<<<<<')
+
+    def loadChangelogData(self):
+        filePath = self.dataPath + 'changelogHistory.xlsx'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_changelogData:
+            self.changelogData = pd.read_excel(filePath, engine='openpyxl')
+            self.changelogData.sort_values(by=['Date'], inplace=True, ascending=False)
+            self.changelogData['Date'] = pd.to_datetime(self.changelogData['Date'], utc=True).dt.strftime('%Y-%m-%d')
+            self.update_changelogData = fileInfo.stat()
+            print('>>>>>>>>>>>>> Changelog data loaded <<<<<<<<<<<<<')

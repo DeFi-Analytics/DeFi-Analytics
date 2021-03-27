@@ -1,5 +1,6 @@
 from .imprint.imprintView import imprintViewClass
 from .cakereview.cakereviewView import cakereviewViewClass
+from .changelog.changelogView import changelogViewClass
 
 
 class aboutControllerClass:
@@ -9,6 +10,7 @@ class aboutControllerClass:
         # initialize overview classes
         self.imprintView = imprintViewClass()
         self.cakereviewView = cakereviewViewClass()
+        self.changelogView = changelogViewClass()
 
 
     def getContent(self, entry):
@@ -17,6 +19,9 @@ class aboutControllerClass:
             pageContent = self.imprintView.getImprintContent()
         elif entry in ['cakereview']:
             pageContent = self.cakereviewView.getCakereviewContent()
+        elif entry in ['changelog']:
+            pageContent = self.changelogView.getChangelogContent(self.defichainAnalyticsModel.changelogData)
+
 
 
         return pageContent
