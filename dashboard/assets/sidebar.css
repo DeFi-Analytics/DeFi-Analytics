@@ -70,8 +70,8 @@ color: #ffffff;
 
     .contentstyle {
         margin-left: 18rem;
-        margin-right: 2rem;
-        padding: 2rem 1rem;
+        margin-right: 0rem;
+        padding: 2rem 1rem 0rem 1rem;
     }
 
     .sidebarstyle{
@@ -109,7 +109,7 @@ color: #ffffff;
     .contentstyle {
         margin-left: 0;
         margin-top: 2rem;
-        padding: 2rem 1rem;
+        padding: 2rem 1rem 0rem 1rem;
     }
 
     .sidebar_button{
