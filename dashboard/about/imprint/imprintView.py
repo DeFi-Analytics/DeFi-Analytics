@@ -1,8 +1,5 @@
 import dash_html_components as html
-import dash_core_components as dcc
 import dash_bootstrap_components as dbc
-import pandas as pd
-import plotly.graph_objects as go
 
 
 class imprintViewClass:
@@ -44,6 +41,4 @@ class imprintViewClass:
                                   'is not permitted and is punishable by law. Only the production of copies and downloads for personal, private and non-commercial use is '
                                   'permitted. The display of this website in external frames is only permitted with written permission.']),
                           ]
-
-
         return contentImprint
