@@ -20,19 +20,17 @@ color: #a6a4a4
 background-image: url('rect_pink.png');
 color: #000000;
 }
-.linkstyle:focus{
+.linkstyle:visited{
 background-image: url('rect_pink.png');
-color: #ffffff;
+color: #a6a4a4;
 }
-.linkstyle:active{
+.linkstyle:visited:hover{
 background-image: url('rect_pink.png');
-color: #ffffff;
+color: #000000;
 }
 
 /*define the linkstyle of submenu active links*/
-.activelink:link{
-color: #a6a4a4
-}
+
 .activelink:hover{
 background-image: url('rect_pink.png');
 color: #000000;
@@ -45,9 +43,13 @@ color: #ffffff;
 background-image: url('rect_pink.png');
 color: #000000;
 }
-.activelink:active{
+.activelink:visited{
 background-image: url('rect_pink.png');
 color: #ffffff;
+}
+.activelink:visited:hover{
+background-image: url('rect_pink.png');
+color: #000000;
 }
 
 .navStyle{
@@ -76,16 +78,18 @@ color: #ffffff;
         margin-right: 0.7rem;
         background-image: url('rect_dark_grey.png');
         background-size: 100% 100%;
-        color: #a6a4a4
+        color: #a6a4a4;
     }
 
     #menuResponsiveCollapse {
        display: block;
     }
 
-   .logo_sidebar{
-        content: url('logo-defi-analytics.png');
+    #idLogoSidebar{
+        background-image: url("logo-defi-analytics.png");
+        background-size: cover;
         width: 14rem;
+        height: 11rem;
         padding-top: 0;
         padding-right: 0;
         padding-bottom: 0;
@@ -157,7 +161,7 @@ color: #ffffff;
         border: 0 none;
     }
 
-    .logo_sidebar{
+    #idLogoSidebar{
         content: url('logo-defi-analytics_LandscapePink.png');
         height: 35px;
     }

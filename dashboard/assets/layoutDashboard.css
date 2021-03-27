@@ -39,14 +39,14 @@ body {
     }
 
 
-.refLinkLink:link{
+a:link{
     color: #ff00af
 }
-.refLinkLink:visited{
+a:visited{
     color: #ff00af
 }
-.refLinkLink:hover{
-    color:#ffffff;
+a:hover{
+    color:#ff00af;
     text-decoration: underlined;
 }
 

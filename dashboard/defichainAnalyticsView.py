@@ -185,9 +185,9 @@ class defichainAnalyticsViewClass:
 
                 ),
 
-                dbc.Col(html.Img(
+                dbc.Col(html.Div(
                     #reminder: if alt-attribute is deleted, firefox will not show the image!, alt="Defi-Logo"
-                         className="logo_sidebar")
+                         id='idLogoSidebar')
                         ),
 
                 dbc.Col(),
@@ -197,11 +197,11 @@ class defichainAnalyticsViewClass:
         )
 
         refLink = html.Div(html.Marquee(['Special ',
-                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='refLinkLink'),
+                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank'),
                       ' offer: Sign-up Bonus of $20 in DFI (after deposit of $50). You and me get $10 additional in DFI if you use my ',
-                      html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='refLinkLink'),
+                      html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank'),
                       '. Cake is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet. ',
-                      html.A('Offer', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='refLinkLink'),
+                      html.A('Offer', href='https://app.cakedefi.com/?ref=476728', target='_blank'),
                       ' Condition: DFI are staking for at least 180 days and generate revenue of ~37% APY.']), className='refLinkMarquee')
 
         sidebar = html.Div(
