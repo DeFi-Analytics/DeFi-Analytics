@@ -13,41 +13,41 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*define the linkstyle of submenu inactive links*/
-.linkstyle:link{
+.sidebarLinkstyle:link{
 color: #a6a4a4
 }
-.linkstyle:hover{
+.sidebarLinkstyle:hover{
 background-image: url('rect_pink.png');
 color: #000000;
 }
-.linkstyle:visited{
+.sidebarLinkstyle:visited{
 background-image: url('rect_pink.png');
 color: #a6a4a4;
 }
-.linkstyle:visited:hover{
+.sidebarLinkstyle:visited:hover{
 background-image: url('rect_pink.png');
 color: #000000;
 }
 
 /*define the linkstyle of submenu active links*/
 
-.activelink:hover{
+.sidebarActivelink:hover{
 background-image: url('rect_pink.png');
 color: #000000;
 }
-.activelink:focus{
+.sidebarActivelink:focus{
 background-image: url('rect_pink.png');
 color: #ffffff;
 }
-.activelink:focus:hover{
+.sidebarActivelink:focus:hover{
 background-image: url('rect_pink.png');
 color: #000000;
 }
-.activelink:visited{
+.sidebarActivelink:visited{
 background-image: url('rect_pink.png');
 color: #ffffff;
 }
-.activelink:visited:hover{
+.sidebarActivelink:visited:hover{
 background-image: url('rect_pink.png');
 color: #000000;
 }
@@ -61,7 +61,7 @@ color: #000000;
     margin-left: 0.1rem;
 }
 
-.activelink{
+.sidebarActivelink{
     background-color: #000000;
     margin-top: 0.3rem;
     margin-right: 0.7rem;
@@ -72,7 +72,7 @@ color: #000000;
 
 /*for big screens*/
 @media only screen and (min-width: 768px) {
-    .linkstyle{
+    .sidebarLinkstyle{
         background-color: #000000;
         margin-top: 0.3rem;
         margin-right: 0.7rem;
@@ -129,7 +129,7 @@ color: #000000;
 /*for small screens*/
 @media only screen and (max-width: 768px) {
 
-    .linkstyle{
+    .sidebarLinkstyle{
         background-color: #000000;
         margin-top: 0rem;
         margin-right: 0.7rem;
@@ -153,12 +153,16 @@ color: #000000;
 
     .sidebar_button{
         display: block;
-        background-image: url('Menu.png');
+        background-image: url('menu_button.png');
         background-size: 100% 100%;
         background-color: #000000;
         height:30px;
         width:55px;
         border: 0 none;
+    }
+
+    .sidebar_button:focus{
+        outline: none;
     }
 
     #idLogoSidebar{
