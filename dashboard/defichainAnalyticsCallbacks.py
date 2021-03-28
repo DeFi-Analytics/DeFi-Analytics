@@ -17,16 +17,37 @@ class defichainAnalyticsCallbacksClass:
         self.aboutController = aboutController
 
     def register_callbacks(self, app):
-        # this function is used to toggle the is_open property of each Collapse
+
+        #define the inputs for the menu_button handler
+        sidebar_toggle_menu_button_inputs = [     Input("sidebarResponsiveExpandButton", 'n_clicks_timestamp'),
+                                           Input('overview', 'n_clicks_timestamp'),
+                                           Input('addresses', 'n_clicks_timestamp'),
+                                           Input('daa', 'n_clicks_timestamp'),
+                                           Input('coins', 'n_clicks_timestamp'),
+                                           Input('change', 'n_clicks_timestamp'),
+                                           Input('coinsAddresses', 'n_clicks_timestamp'),
+                                           Input('blockTime', 'n_clicks_timestamp'),
+                                           Input('transactions', 'n_clicks_timestamp'),
+                                           Input('coinPrices', 'n_clicks_timestamp'),
+                                           Input('volume', 'n_clicks_timestamp'),
+                                           Input('liquidityToken', 'n_clicks_timestamp'),
+                                           Input('tvl', 'n_clicks_timestamp'),
+                                           # Input('coinsLocked', 'n_clicks_timestamp'),
+                                           Input('fees', 'n_clicks_timestamp'),
+                                           Input('cryptosDAT', 'n_clicks_timestamp'),
+                                           Input('twitter', 'n_clicks_timestamp')]
+        sidebar_toggle_menu_button_states = [State("menuResponsiveCollapse", "is_open")]
+        # this function is used to toggle the is_open property of each Collapse of the menu_button
         @app.callback(
             Output("menuResponsiveCollapse", "is_open"),
-            [Input("sidebarResponsiveExpandButton", "n_clicks")],
-            [State("menuResponsiveCollapse", "is_open")],
+            sidebar_toggle_menu_button_inputs,
+            sidebar_toggle_menu_button_states,
         )
-        def toggle_menu_collapse(n, is_open):
-            if n:
-                return not is_open
-            return is_open
+        def toggle_menu_collapse(*args):
+            if args[0]:
+                #returns on click of menu_button or link a false (link-click menu was opened already) and closes the menu
+                return not args[-1]
+            return args[-1]
 
         # this function is used to toggle the is_open property of each Collapse
         def toggle_collapse(n, is_open):
@@ -114,9 +135,10 @@ class defichainAnalyticsCallbacksClass:
                                             #Output('coinsLocked', 'className'),
                                             Output('fees', 'className'),
                                             Output('cryptosDAT', 'className'),
-                                            Output('twitter', 'className')]
+                                            Output('twitter', 'className')
+                                            ]
 
-        # set active links of sidebar
+        # set active links of sidebar, when clicked
         @app.callback(sidebar_active_link_array_output,
                       sidebar_active_link_array_input)
         def sidebar_link_state(*args):
