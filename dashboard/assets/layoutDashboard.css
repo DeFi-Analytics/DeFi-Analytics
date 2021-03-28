@@ -38,7 +38,7 @@ body {
     padding: 0rem 1rem 0rem 1rem;
     }
 
-
+/* change color of all links */
 a:link{
     color: #ff00af
 }
@@ -50,6 +50,21 @@ a:hover{
     text-decoration: underlined;
 }
 
+/* responsive layout of cards */
+
+/*for big screens*/
+@media only screen and (min-width: 768px) {
+    .card-body{
+        padding: 4rem 4rem 1.25rem 4rem;
+    }
+}
+
+/*for small screens*/
+@media only screen and (max-width: 768px) {
+    .card-body{
+        padding: 1.0rem;
+    }
+}
 
 .dash-spinner.dash-default-spinner {
     margin-top: 0rem auto;

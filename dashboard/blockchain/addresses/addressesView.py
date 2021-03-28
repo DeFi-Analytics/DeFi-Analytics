@@ -78,14 +78,14 @@ class addressesViewClass:
         figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.35, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
 
 
-        figAddress.update_layout(height=800,
-                                 margin={"t": 70, "l": 130, "b": 20},
+        figAddress.update_layout(height=770,
+                                 margin={"t": 20, "l": 0, "b": 0, "r": 0},
                                  barmode='stack',
                                  hovermode='x unified',
                                  hoverlabel=dict(font_color="#6c757d"),
                                  legend=dict(orientation="h",
-                                             yanchor="bottom",
-                                             y=-0.15,
+                                             yanchor="top",
+                                             y=-0.1,
                                              xanchor="right",
                                              x=1),
                                  )
