@@ -135,12 +135,12 @@ class defichainAnalyticsCallbacksClass:
             for item in timestamp_array:
                 if active_link == 0:
                     #this is necessary for the first pageload without any clicks
-                    return_array.append('linkstyle')
+                    return_array.append('sidebarLinkstyle')
                 else:
                     if item == active_link:
-                        return_array.append('activelink')
+                        return_array.append('sidebarActivelink')
                     else:
-                        return_array.append('linkstyle')
+                        return_array.append('sidebarLinkstyle')
 
             return return_array
 
