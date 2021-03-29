@@ -31,6 +31,10 @@ class coinViewClass:
             subplot_titles=(['Total representation', 'Relative representation']))
         figDFI.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figDFI.layout.annotations[0].font.size = 20
+        figDFI.layout.annotations[0].yref = 'paper'
+        figDFI.layout.annotations[0].yanchor = 'bottom'
+        figDFI.layout.annotations[0].y = 1.05
+
         figDFI.layout.annotations[1].font.color = '#6c757d'
         figDFI.layout.annotations[1].font.size = 20
 
@@ -101,15 +105,15 @@ class coinViewClass:
         figDFI.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.79, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
         figDFI.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.22, sizex=0.45, sizey=0.45, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figDFI.update_layout(height=800,
-                             margin={"t": 40, "l": 130, "b": 20},
+        figDFI.update_layout(height=790,
+                             margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",
-                                         yanchor="bottom",
-                                         y=-0.15,
-                                         xanchor="right",
-                                         x=1),
+                                             yanchor="top",
+                                             y=-0.1,
+                                             xanchor="right",
+                                             x=1),
                              )
         figDFI.layout.plot_bgcolor = '#ffffff'  # background plotting area
         figDFI.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area

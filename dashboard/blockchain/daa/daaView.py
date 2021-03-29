@@ -32,6 +32,9 @@ class daaViewClass:
             subplot_titles=(['Daily active addresses']))
         figDAA.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figDAA.layout.annotations[0].font.size = 20
+        figDAA.layout.annotations[0].yref = 'paper'
+        figDAA.layout.annotations[0].yanchor = 'bottom'
+        figDAA.layout.annotations[0].y = 1.05
 
         lastValidDate = datetime.strptime(data['countAddresses'].dropna().index.values[-2], '%Y-%m-%d')
         date6MonthsBack = lastValidDate - dateutil.relativedelta.relativedelta(months=6)
@@ -61,16 +64,16 @@ class daaViewClass:
         # add background picture
         figDAA.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figDAA.update_layout(height=800,
-                             margin={"t": 40, "l": 130, "b": 20},
+        figDAA.update_layout(height=790,
+                             margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d",
                                              bgcolor='#ffffff', ),
                              legend=dict(orientation="h",
-                                         yanchor="bottom",
-                                         y=-0.3,
-                                         xanchor="right",
-                                         x=1),
+                                             yanchor="top",
+                                             y=-0.1,
+                                             xanchor="right",
+                                             x=1),
                              )
         figDAA.layout.plot_bgcolor = '#ffffff'  # background plotting area
         figDAA.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area

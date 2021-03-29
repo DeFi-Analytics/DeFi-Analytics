@@ -30,6 +30,10 @@ class changeCoinAddressesViewClass:
             subplot_titles=(['Change in addresses', 'Change in DFI amount']))
         figChange.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figChange.layout.annotations[0].font.size = 20
+        figChange.layout.annotations[0].yref = 'paper'
+        figChange.layout.annotations[0].yanchor = 'bottom'
+        figChange.layout.annotations[0].y = 1.05
+
         figChange.layout.annotations[1].font.color = '#6c757d'
         figChange.layout.annotations[1].font.size = 20
 
@@ -96,13 +100,13 @@ class changeCoinAddressesViewClass:
         figChange.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.79, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
         figChange.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.22, sizex=0.45, sizey=0.45, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figChange.update_layout(height=800,
-                                margin={"t": 40, "l": 130, "b": 20},
+        figChange.update_layout(height=790,
+                                margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                 hovermode='x unified',
                                 hoverlabel=dict(font_color="#6c757d"),
                                 legend=dict(orientation="h",
-                                            yanchor="bottom",
-                                            y=-0.15,
+                                            yanchor="top",
+                                            y=-0.1,
                                             xanchor="right",
                                             x=1),
                                 )
