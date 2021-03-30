@@ -96,9 +96,15 @@ class defichainAnalyticsCallbacksClass:
         def toggleTokenMenu(n, isOpen):
             return toggle_collapse(n, isOpen)
 
-        # toggle general menu
+        # toggle community menu
         @app.callback([Output("submenu-community-collapse", "is_open"), Output("submenu-community-arrow", "className")],
                       [Input("submenu-community", "n_clicks")], [State("submenu-community-collapse", "is_open")])
+        def toggleCommunityMenu(n, isOpen):
+            return toggle_collapse(n, isOpen)
+
+        # toggle about menu
+        @app.callback([Output("submenu-about-collapse", "is_open"), Output("submenu-about-arrow", "className")],
+                      [Input("submenu-about", "n_clicks")], [State("submenu-about-collapse", "is_open")])
         def toggleCommunityMenu(n, isOpen):
             return toggle_collapse(n, isOpen)
 
@@ -118,7 +124,10 @@ class defichainAnalyticsCallbacksClass:
                                            #Input('coinsLocked', 'n_clicks_timestamp'),
                                            Input('fees', 'n_clicks_timestamp'),
                                            Input('cryptosDAT', 'n_clicks_timestamp'),
-                                           Input('twitter', 'n_clicks_timestamp')]
+                                           Input('twitter', 'n_clicks_timestamp'),
+                                           Input('changelog', 'n_clicks_timestamp'),
+                                           Input('cakereview', 'n_clicks_timestamp'),
+                                           Input('imprint', 'n_clicks_timestamp'),]
         # define callback sidebar_link_state output array
         sidebar_active_link_array_output = [Output('overview', 'className'),
                                             Output('addresses', 'className'),
@@ -135,7 +144,10 @@ class defichainAnalyticsCallbacksClass:
                                             #Output('coinsLocked', 'className'),
                                             Output('fees', 'className'),
                                             Output('cryptosDAT', 'className'),
-                                            Output('twitter', 'className')
+                                            Output('twitter', 'className'),
+                                            Output('changelog', 'className'),
+                                            Output('cakereview', 'className'),
+                                            Output('imprint', 'className')
                                             ]
 
         # set active links of sidebar, when clicked

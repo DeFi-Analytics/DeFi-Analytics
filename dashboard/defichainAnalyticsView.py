@@ -174,6 +174,34 @@ class defichainAnalyticsViewClass:
             ),
         ]
 
+        submenu_about = [
+            html.Li(
+                # use Row and Col components to position the chevrons
+                dbc.Row(
+                    [
+                        # submenu_name is "Blockchain"
+                        dbc.Col("About"),
+                        dbc.Col(
+                            html.I(className=PFEIL_ZU, id="submenu-about-arrow"), width="auto"
+                        ),
+                    ],
+                    className="my-1",
+                ),
+                className="submenu_linkstyle",
+                id="submenu-about",
+                style={'margin-top': '20px'}
+            ),
+            # we use the Collapse component to hide and reveal the navigation links
+            dbc.Collapse(
+                [
+                    dbc.NavLink("Changelog", href="/about?entry=changelog", className="linkstyle", id="changelog"),
+                    dbc.NavLink("CakeDefi-Review", href="/about?entry=cakereview", className="linkstyle", id="cakereview"),
+                    dbc.NavLink("Imprint", href="/about?entry=imprint", className="linkstyle", id="imprint")
+                ],
+                id="submenu-about-collapse",
+            ),
+        ]
+
         sidebar_header = dbc.Row(
             [
                 dbc.Col(
@@ -209,7 +237,7 @@ class defichainAnalyticsViewClass:
                 sidebar_header,
 
                 dbc.Collapse(
-                    html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token + submenu_community,
+                    html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token + submenu_community + submenu_about,
                             vertical=True, id='navbar-container'), className="scrollbar_sidemenu"),
                     id="menuResponsiveCollapse", className="menu_collapse")
 
