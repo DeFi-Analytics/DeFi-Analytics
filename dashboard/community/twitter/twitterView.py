@@ -56,12 +56,12 @@ class twitterViewClass:
         figTwitter.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figTwitter.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
         figTwitter.update_layout(height=680,
-                                 margin={"t": 40, "l": 130, "b": 20},
+                                 margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                  hovermode='x unified',
                                  hoverlabel=dict(font_color="#6c757d"),
                                  legend=dict(orientation="h",
-                                             yanchor="bottom",
-                                             y=-0.15,
+                                             yanchor="top",
+                                             y=-0.12,
                                              xanchor="right",
                                              x=1),
                                  )
@@ -106,12 +106,12 @@ class twitterViewClass:
         figTwitter.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.5, sizey=0.5,  xanchor="center", yanchor="middle", opacity=0.2))
 
         figTwitter.update_layout(height=350,
-                                 margin={"t": 100, "l": 130, "b": 20},
+                                 margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                  hovermode='x unified',
                                  hoverlabel=dict(font_color="#6c757d"),
                                  legend=dict(orientation="h",
-                                             yanchor="bottom",
-                                             y=-0.5,
+                                             yanchor="top",
+                                             y=-0.25,
                                              xanchor="right",
                                              x=1),
                                  )

@@ -26,11 +26,6 @@ class transactionsViewClass:
             specs=[[{}],
                    [{}]],
             shared_xaxes=True)
-        # subplot_titles=(['# Transactions','# Transactions without Rewards']))
-        #        figTxOverview.layout.annotations[0].font.color='#aaaaaa' # subplot title font color
-        #        figTxOverview.layout.annotations[0].font.size=20
-        #        figTxOverview.layout.annotations[1].font.color='#aaaaaa'
-        #        figTxOverview.layout.annotations[1].font.size=20
 
         trace_allTx = dict(type='scatter', name='all Tx', x=data['txCount'].dropna().index.values[:-1], y=data['txCount'].dropna().values[:-1],
                            mode='lines', line=dict(color='#da3832'), line_width=2, hovertemplate='%{y:.0f}')
@@ -68,13 +63,13 @@ class transactionsViewClass:
         figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.87, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
         figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.3, sizex=0.4, sizey=0.4, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figTxOverview.update_layout(height=800,
-                                    margin={"t": 40, "l": 130, "b": 20},
+        figTxOverview.update_layout(height=790,
+                                    margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                     hovermode='x unified',
                                     hoverlabel=dict(font_color="#6c757d"),
                                     legend=dict(orientation="h",
-                                                yanchor="bottom",
-                                                y=-0.15,
+                                                yanchor="top",
+                                                y=-0.12,
                                                 xanchor="right",
                                                 x=1),
                                     )

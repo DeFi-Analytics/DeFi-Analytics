@@ -25,9 +25,14 @@ class volumeViewClass:
             row_width=[1],  # from bottom to top
             specs=[[{}]],
             shared_xaxes=True,
-            subplot_titles=(['Trading volume (24hr) on DEX']))
+            subplot_titles=(['Trading volume on DEX']))
         figDEXVol.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figDEXVol.layout.annotations[0].font.size = 20
+        figDEXVol.layout.annotations[0].yref = 'paper'
+        figDEXVol.layout.annotations[0].yanchor = 'bottom'
+        figDEXVol.layout.annotations[0].y = 1.05
+        figDEXVol.layout.annotations[0].xref = 'paper'
+        figDEXVol.layout.annotations[0].x = 0.5
 
         hoverTemplateRepresenation = '$%{y:,.0f}'
 
@@ -63,13 +68,13 @@ class volumeViewClass:
         # add background picture
         figDEXVol.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figDEXVol.update_layout(height=800,
-                                margin={"t": 40, "l": 130, "b": 20},
+        figDEXVol.update_layout(height=790,
+                                margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                 hovermode='x unified',
                                 hoverlabel=dict(font_color="#6c757d"),
                                 legend=dict(orientation="h",
-                                            yanchor="bottom",
-                                            y=-0.15,
+                                            yanchor="top",
+                                            y=-0.12,
                                             xanchor="right",
                                             x=1),
                                 )

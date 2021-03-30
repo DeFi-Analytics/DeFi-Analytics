@@ -105,13 +105,13 @@ class blocktimeViewClass:
         figBlockTime.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.87, sizex=0.3, sizey=0.3,  xanchor="center", yanchor="middle", opacity=0.2))
         figBlockTime.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.3, sizex=0.5, sizey=0.5, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figBlockTime.update_layout(height=800,
-                                   margin={"t": 40, "l": 130, "b": 20},
+        figBlockTime.update_layout(height=790,
+                                   margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                    hovermode='x unified',
                                    hoverlabel=dict(font_color="#6c757d"),
                                    legend=dict(orientation="h",
-                                               yanchor="bottom",
-                                               y=-0.15,
+                                               yanchor="top",
+                                               y=-0.12,
                                                xanchor="right",
                                                x=1),
                                    )

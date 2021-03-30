@@ -37,7 +37,7 @@ class feesViewClass:
             row_width=[1],  # from bottom to top
             specs=[[{}]],
             shared_xaxes=True,
-            subplot_titles=(['Paid trading Fees to Liquidity Providers']))
+            subplot_titles=(['Paid trading Fees']))
         figFee.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figFee.layout.annotations[0].font.size = 20
         figFee.layout.annotations[0].update(y=1.075)
@@ -113,12 +113,12 @@ class feesViewClass:
         figFee.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.5, sizey=0.5,  xanchor="center", yanchor="middle", opacity=0.2))
 
         figFee.update_layout(height=600,
-                             margin={"t": 80, "l": 130, "b": 30},
+                             margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",
-                                         yanchor="bottom",
-                                         y=-0.25,
+                                         yanchor="top",
+                                         y=-0.12,
                                          xanchor="right",
                                          x=1),
                              )
@@ -180,12 +180,12 @@ class feesViewClass:
         figFeeCoins.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.22, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
 
         figFeeCoins.update_layout(height=680,
-                                  margin={"t": 40, "l": 120, "b": 20},
+                                  margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                   hovermode='x unified',
                                   hoverlabel=dict(font_color="#6c757d"),
                                   legend=dict(orientation="h",
-                                              yanchor="bottom",
-                                              y=-0.3,
+                                              yanchor="top",
+                                              y=-0.12,
                                               xanchor="right",
                                               x=1),
                                   )

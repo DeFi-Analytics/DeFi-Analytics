@@ -96,13 +96,13 @@ class crpytoTokenViewClass:
         figTokenData.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.785, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
         figTokenData.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.21, sizex=0.45, sizey=0.45, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figTokenData.update_layout(height=770,
-                                   margin={"t": 40, "l": 120, "b": 20, "r": 20},
+        figTokenData.update_layout(height=755,
+                                   margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                    hovermode='x unified',
                                    hoverlabel=dict(font_color="#6c757d"),
                                    legend=dict(orientation="h",
-                                               yanchor="bottom",
-                                               y=-0.15,
+                                               yanchor="top",
+                                               y=-0.12,
                                                xanchor="right",
                                                x=1),
                                    )

@@ -13,10 +13,10 @@ class coinsAddressesViewClass:
                           dbc.ModalFooter(dbc.Button("close", id="closeInfoCoinsAddresses", className="ml-auto"))],
                          id="modalCoinsAddresses", size='xl'),
                    dbc.Card(dbc.CardBody([dbc.Row(dbc.Col([dcc.Graph(config={'displayModeBar': False}, id='figCoinsAddresses'),
-                                                       html.Div(['Select DFI-range of interest.'], style={'margin-top': 10, 'margin-left': 125}),
-                                                       html.Div(['Minimum: ', dcc.Input(id="minDFIValueInput", type="number", debounce=True, value=0, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 125}),
-                                                       html.Div(['Maximum: ', dcc.Input(id="maxDFIValueInput", type="number", debounce=True, value=4000000, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 125}),
-                                                       html.Div(dcc.RangeSlider(id='DFIAddSlider', min=0, max=4000000, step=100, value=[0, 4000000]), style={'margin-left': 100, 'margin-right': 50, 'margin-top': 10, }), html.Div(id='DFIAddSliderOutput')
+                                                       html.Div(['Select DFI-range of interest.'], style={'margin-top': 10, 'margin-left': 20}),
+                                                       html.Div(['Minimum: ', dcc.Input(id="minDFIValueInput", type="number", debounce=True, value=0, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 20}),
+                                                       html.Div(['Maximum: ', dcc.Input(id="maxDFIValueInput", type="number", debounce=True, value=4000000, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 20}),
+                                                       html.Div(dcc.RangeSlider(id='DFIAddSlider', min=0, max=4000000, step=100, value=[0, 4000000]), style={'margin-left': 20, 'margin-right': 20, 'margin-top': 10, }), html.Div(id='DFIAddSliderOutput')
                                                        ])),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinsAddresses")))]))]
         return content
@@ -39,8 +39,8 @@ class coinsAddressesViewClass:
         # add background picture
         figDFIDist.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figDFIDist.update_layout(height=650,
-                                 margin={"t": 40, "l": 130, "b": 20},
+        figDFIDist.update_layout(height=640,
+                                 margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                  hovermode='x unified',
                                  hoverlabel=dict(font_color="#6c757d", bgcolor='#ffffff'),
                                  legend=dict(orientation="h",

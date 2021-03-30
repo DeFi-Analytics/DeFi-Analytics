@@ -60,6 +60,7 @@ class coinpriceViewClass:
             subplot_titles=(['Relative price deviation', 'Absolute prices']))
         figPrice.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figPrice.layout.annotations[0].font.size = 20
+
         figPrice.layout.annotations[1].font.color = '#6c757d'
         figPrice.layout.annotations[1].font.size = 20
 
@@ -129,13 +130,13 @@ class coinpriceViewClass:
         figPrice.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.832, sizex=bgimageSize, sizey=bgimageSize,  xanchor="center", yanchor="middle", opacity=0.25))
         figPrice.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.26, sizex=bgimageSize, sizey=bgimageSize, xanchor="center", yanchor="middle", opacity=0.25))
 
-        figPrice.update_layout(height=730,
-                                       margin={"t": 40, "l": leftMarginGraphic, "b": 20, "r": rightMarginGraphic},
+        figPrice.update_layout(height=715,
+                                       margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                        hovermode='x unified',
                                        hoverlabel=dict(font_color="#6c757d"),
                                        legend=dict(orientation="h",
-                                                   yanchor="bottom",
-                                                   y=-0.25,
+                                                   yanchor="top",
+                                                   y=-0.12,
                                                    xanchor="right",
                                                    x=1),
                                        )

@@ -111,7 +111,7 @@ class coinViewClass:
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",
                                              yanchor="top",
-                                             y=-0.1,
+                                             y=-0.12,
                                              xanchor="right",
                                              x=1),
                              )

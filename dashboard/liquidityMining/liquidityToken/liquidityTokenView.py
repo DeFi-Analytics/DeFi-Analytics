@@ -34,7 +34,7 @@ class liquidityTokenViewClass:
                    [{}],
                    [{}]],
             shared_xaxes=True,
-            subplot_titles=(['Liquidity Token', 'Daily change in Liquidity Token', 'Addresses holding Liquidity Token']))
+            subplot_titles=(['Liquidity Token', 'Daily change LT', 'Addresses holding LT']))
         figLiquidityToken.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figLiquidityToken.layout.annotations[0].font.size = 20
         figLiquidityToken.layout.annotations[1].font.color = '#6c757d'
@@ -86,15 +86,15 @@ class liquidityTokenViewClass:
         figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.46, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
         figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.13, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
 
-        figLiquidityToken.update_layout(height=765,
-                                        margin={"t": 40, "l": 120, "b": 20, "r": 20},
+        figLiquidityToken.update_layout(height=755,
+                                        margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                         hovermode='x unified',
                                         hoverlabel=dict(font_color="#6c757d",
                                                         bgcolor='#ffffff', ),
                                         showlegend=False,
                                         legend=dict(orientation="h",
-                                                    yanchor="bottom",
-                                                    y=-0.15,
+                                                    yanchor="top",
+                                                    y=-0.12,
                                                     xanchor="right",
                                                     x=1),
                                         )

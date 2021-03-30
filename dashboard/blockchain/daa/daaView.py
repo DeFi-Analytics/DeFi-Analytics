@@ -71,7 +71,7 @@ class daaViewClass:
                                              bgcolor='#ffffff', ),
                              legend=dict(orientation="h",
                                              yanchor="top",
-                                             y=-0.1,
+                                             y=-0.12,
                                              xanchor="right",
                                              x=1),
                              )
