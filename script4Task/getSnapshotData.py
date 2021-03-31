@@ -6,18 +6,13 @@ from datetime import datetime
 
 import requests
 import ast
-import os
 import time
 
+scriptPath = __file__
+path = scriptPath[:-31] + '/data/'
 
-scriptPath = os.path.abspath(os.getcwd())
-if scriptPath.endswith('script4Task'):
-    path = scriptPath[:-11] + '/data/'
-else:
-    path = scriptPath
 filepath = path + 'snapshotData.csv'
 filepathMNList = path + 'currentMNList.csv'
-
 
 while True:
     print('Start updating ...')
@@ -121,7 +116,7 @@ while True:
         apiOverviewAsDict = ast.literal_eval(overviewContent.text)
         reserveLM = float(apiOverviewAsDict['listCommunities']['IncentiveFunding'])
 
-        linkAirdrop = 'https://api.defichain.io/v1/getaccount?owner=8UAhRuUFCyFUHEPD7qvtj8Zy2HxF5HH5nb'
+        linkAirdrop = 'https://api.defichain.io/v1/getaccount?start=0&limit=500&network=mainnet&including_start=true&owner=8UAhRuUFCyFUHEPD7qvtj8Zy2HxF5HH5nb'
         airdropContent = requests.get(linkAirdrop)
         dfAirdrop = pd.read_json(airdropContent.text, typ='series')
         airdropDFI = float(dfAirdrop[0][:-4])
