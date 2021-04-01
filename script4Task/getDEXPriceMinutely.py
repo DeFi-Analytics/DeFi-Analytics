@@ -50,7 +50,7 @@ while True:
     dfLMPoolData.loc[6,'DFIPricesBittrex'] = dfBittrexTicker[dfBittrexTicker['symbol']=='DFI-USDT']['lastTradeRate'].values[0]
         
     dfOldLMPoolData = pd.read_csv(filepath,index_col=0)
-    dfLMPoolData = dfOldLMPoolData.append(dfLMPoolData)
+    dfLMPoolData = dfOldLMPoolData.append(dfLMPoolData, sort=False)
     dfLMPoolData = dfLMPoolData[-540:]
     dfLMPoolData.reset_index(inplace=True, drop=True)
         

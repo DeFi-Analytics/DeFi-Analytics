@@ -19,7 +19,8 @@ dfDEXVolume['Time'] = pd.Timestamp.now()
 
     
 dfOldDEXVolume = pd.read_csv(filepath,index_col=0)
-dfDEXVolume = dfOldDEXVolume.append(dfDEXVolume)
+dfDEXVolume = dfOldDEXVolume.append(dfDEXVolume, sort=False)
 dfDEXVolume.reset_index(inplace=True, drop=True)
     
 dfDEXVolume.to_csv(filepath)
+print('DEX volume data updated')

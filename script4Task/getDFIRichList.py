@@ -1,0 +1,49 @@
+# Script for getting the Richlist and saving the result into a csv-file
+import requests
+import ast
+
+import pandas as pd
+from datetime import datetime
+
+
+
+# get DFI-Richlist data
+link = "http://mainnet-api.defichain.io/api/DFI/mainnet/address/stats/rich-list?pageno=1&pagesize=200000"
+siteContent = requests.get(link)
+text2extract = siteContent.text.replace('null','None')
+apiContentAsDict=ast.literal_eval(text2extract)
+dfRichList = pd.DataFrame(apiContentAsDict['data'])
+
+
+# convert fi balance into dfi balance
+dfRichList.balance = dfRichList.balance/100000000
+
+# get list of masternodes
+try:
+    link = 'http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED'
+    siteContent = requests.get(link)
+    dfMNList = pd.read_json(siteContent.text).transpose() 
+    dfRichList['mnAddressAPI'] = dfRichList['address'].isin(dfMNList.ownerAuthAddress)
+except:
+    print('Error with API of masternode list')
+
+
+# get list of masternodes hosted by Cake
+try:
+    link = 'https://poolapi.cakedefi.com/nodes?order=status&orderBy=DESC'
+    siteContent = requests.get(link)
+    dfMNListCake = pd.read_json(siteContent.text)
+    dfRichList['mnAddressCakeAPI'] = dfRichList['address'].isin(dfMNListCake[dfMNListCake.coin=='DeFi'].address)
+except:
+    print('Error with API of Cake masternode list')
+
+# filename and add timestamp to it
+now = datetime.now()
+timestamp = now.strftime('%Y-%m-%d_%H-%M-%S')
+
+scriptPath = __file__
+path = scriptPath[:-29] + '/data/Richlist/'
+filepath = path + timestamp + '_Richlist.csv'
+
+# save data to csv-file
+dfRichList.to_csv(filepath, index=False)
