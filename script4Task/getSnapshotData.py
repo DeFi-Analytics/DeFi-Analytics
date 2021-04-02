@@ -93,7 +93,8 @@ while True:
             currDFI24hVol = DFIData['defichain']['usd_24h_vol']
             marketCapListCG = cg.get_coins_markets(vs_currency='usd', per_page=150)
             marketCapList = pd.DataFrame.from_dict(marketCapListCG)
-
+            if (len(marketCapList) == 0):
+                marketCapList = None
         except:
             currDFIPrice = np.NaN
             currDFI24hVol = np.NaN
@@ -102,7 +103,7 @@ while True:
 
         marketCap = currDFIPrice * circDFIValue
         # calculate marketcap rank
-        if (np.isnan(marketCap)) | (marketCapList is None) | (len(marketCapList) == 0) | (circDFIValue < 0):
+        if (np.isnan(marketCap)) | (marketCapList is None) | (circDFIValue < 0):
             marketCapRank = np.NaN
         else:
             marketCapRank = marketCapList[marketCapList.market_cap < marketCap].iloc[0].market_cap_rank
@@ -140,7 +141,6 @@ while True:
 
         currentBlock = apiOverviewAsDict['blockHeight']
         goalBlock = int(currentBlock + np.floor((reserveLM + airdropDFI) / 58))
-        print(str(np.floor((reserveLM + airdropDFI) / 58)))
     except:
         currentBlock = 0
         goalBlock = 0
