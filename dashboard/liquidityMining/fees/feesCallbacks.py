@@ -7,12 +7,14 @@ class feesCallbacksClass:
         @app.callback(Output('lmPaidFees', 'figure'),
                       [Input('feeRepresentation', 'value')])
         def updateTradingFeeGraphs(selectedRepresentation):
+            defichainAnalyticsModel.loadDailyTradingData()
             figFee = feesView.createFeesGraph(defichainAnalyticsModel.dailyData, selectedRepresentation, defichainAnalyticsModel.figBackgroundImage)
             return figFee
 
         @app.callback(Output('lmPaidCoinFees', 'figure'),
                       [Input('feeNativeCoin', 'value')])
         def updateTradingFeeCoinGraphs(selectedCoin):
+            defichainAnalyticsModel.loadDailyTradingData()
             figFee = feesView.createFeesCoinFigure(defichainAnalyticsModel.dailyData, selectedCoin, defichainAnalyticsModel.figBackgroundImage)
             return figFee
 

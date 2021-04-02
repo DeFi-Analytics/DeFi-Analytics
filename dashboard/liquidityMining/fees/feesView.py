@@ -22,7 +22,8 @@ class feesViewClass:
                                                                                                                  {'label': 'ETH', 'value': 'ETH'},
                                                                                                                  {'label': 'USDT', 'value': 'USDT'},
                                                                                                                  {'label': 'LTC', 'value': 'LTC'},
-                                                                                                                 {'label': 'DOGE', 'value': 'DOGE'}],
+                                                                                                                 {'label': 'DOGE', 'value': 'DOGE'},
+                                                                                                                 {'label': 'BCH', 'value': 'BCH'}],
                                                                                     value='BTC', style=dict(width='200px', verticalAlign="bottom")))])]),
                                           dcc.Graph(id='lmPaidCoinFees', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoFees")))]))]
@@ -59,6 +60,9 @@ class feesViewClass:
         trace_feeLTC = dict(type='scatter', name='LTC',
                             x=data.LTCpool_sum_inUSD.dropna().index, y=data.LTCpool_sum_inUSD.dropna() * 0.002,
                             mode='lines', line=dict(color='#ff2ebe'), hovertemplate=hoverTemplateRepresenation)
+        trace_feeBCH = dict(type='scatter', name='BCH',
+                            x=data.BCHpool_sum_inUSD.dropna().index, y=data.BCHpool_sum_inUSD.dropna() * 0.002,
+                            mode='lines', line=dict(color='#410eb2'), hovertemplate=hoverTemplateRepresenation)
 
         if representationStyle == 'stacked':
             trace_feeBTC.update(dict(fill='tozeroy', stackgroup='one', line_width=0))
@@ -66,20 +70,22 @@ class feesViewClass:
             trace_feeUSDT.update(dict(fill='tonexty', stackgroup='one', line_width=0))
             trace_feeDOGE.update(dict(fill='tonexty', stackgroup='one', line_width=0))
             trace_feeLTC.update(dict(fill='tonexty', stackgroup='one', line_width=0))
+            trace_feeBCH.update(dict(fill='tonexty', stackgroup='one', line_width=0))
         else:
             trace_feeBTC.update(dict(line_width=2))
             trace_feeETH.update(dict(line_width=2))
             trace_feeUSDT.update(dict(line_width=2))
             trace_feeDOGE.update(dict(line_width=2))
             trace_feeLTC.update(dict(line_width=2))
+            trace_feeBCH.update(dict(line_width=2))
 
             # overall TVL graph
         trace_feeOverall = dict(type='scatter', name='Overall', x=data[
                                       ['BTCpool_sum_inUSD', 'ETHpool_sum_inUSD', 'USDTpool_sum_inUSD',
-                                       'DOGEpool_sum_inUSD', 'LTCpool_sum_inUSD']].dropna(how='all').index,
+                                       'DOGEpool_sum_inUSD', 'LTCpool_sum_inUSD', 'BCHpool_sum_inUSD']].dropna(how='all').index,
                                 y=data[
                                       ['BTCpool_sum_inUSD', 'ETHpool_sum_inUSD', 'USDTpool_sum_inUSD',
-                                       'DOGEpool_sum_inUSD', 'LTCpool_sum_inUSD']].dropna(how='all').sum(axis=1) * 0.002,
+                                       'DOGEpool_sum_inUSD', 'LTCpool_sum_inUSD', 'BCHpool_sum_inUSD']].dropna(how='all').sum(axis=1) * 0.002,
                                 mode='lines', line=dict(color='#410eb2'), line_width=3,
                                 hovertemplate=hoverTemplateRepresenation)
 
@@ -88,6 +94,7 @@ class feesViewClass:
         figFee.add_trace(trace_feeUSDT, 1, 1)
         figFee.add_trace(trace_feeDOGE, 1, 1)
         figFee.add_trace(trace_feeLTC, 1, 1)
+        figFee.add_trace(trace_feeBCH, 1, 1)
 
         if representationStyle == 'stacked':
             figFee.add_trace(trace_feeOverall, 1, 1)
@@ -154,6 +161,8 @@ class feesViewClass:
             coinColor = '#c2a634'
         elif selectedCoin == 'LTC':
             coinColor = '#ff2ebe'
+        elif selectedCoin == 'BCH':
+            coinColor = '#410eb2'
 
         trace_DFIFee = dict(type='scatter', name='DFI', x=data[selectedCoin + 'pool_baseDFI'].dropna().index,
                             y=data[selectedCoin + 'pool_baseDFI'].dropna() * 0.002,

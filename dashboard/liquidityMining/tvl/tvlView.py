@@ -70,7 +70,8 @@ class tvlViewClass:
                              mode='lines', line=dict(color='#c2a634'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_TVLLTC = dict(type='scatter', name='LTC', x=data['LTC-DFI_'+columnName].dropna().index, y=data['LTC-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
-
+        trace_TVLBCH = dict(type='scatter', name='BCH', x=data['BCH-DFI_'+columnName].dropna().index, y=data['BCH-DFI_'+columnName].dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#410eb2'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         # overall TVL graph
         trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall.dropna().index, y=TVLOverall.dropna(),
                                 mode='lines', line=dict(color='#410eb2'), line_width=3, hovertemplate=hoverTemplateRepresenation)
@@ -80,6 +81,7 @@ class tvlViewClass:
         figTVL.add_trace(trace_TVLUSDT, 1, 1)
         figTVL.add_trace(trace_TVLDOGE, 1, 1)
         figTVL.add_trace(trace_TVLLTC, 1, 1)
+        figTVL.add_trace(trace_TVLBCH, 1, 1)
         figTVL.add_trace(trace_TVLOverall, 1, 1)
 
         figTVL.update_yaxes(title_text=yAxisLabel, tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
