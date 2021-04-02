@@ -5,7 +5,13 @@ import ast
 import pandas as pd
 from datetime import datetime
 
-
+# filename and add timestamp to it
+now = datetime.now()
+timestamp = now.strftime('%Y-%m-%d_%H-%M-%S')
+scriptPath = __file__
+path = scriptPath[:-29] + '/data/Richlist/'
+filepath = path + timestamp + '_Richlist.csv'
+filepathOldMNList = scriptPath[:-29] + '/data/currentMNList.csv'
 
 # get DFI-Richlist data
 link = "http://mainnet-api.defichain.io/api/DFI/mainnet/address/stats/rich-list?pageno=1&pagesize=200000"
@@ -25,6 +31,8 @@ try:
     dfMNList = pd.read_json(siteContent.text).transpose() 
     dfRichList['mnAddressAPI'] = dfRichList['address'].isin(dfMNList.ownerAuthAddress)
 except:
+    dfOldMNList = pd.read_csv(filepathOldMNList, index_col=0)
+    dfRichList['mnAddressAPI'] = dfRichList['address'].isin(dfOldMNList.ownerAuthAddress)
     print('Error with API of masternode list')
 
 
@@ -36,14 +44,6 @@ try:
     dfRichList['mnAddressCakeAPI'] = dfRichList['address'].isin(dfMNListCake[dfMNListCake.coin=='DeFi'].address)
 except:
     print('Error with API of Cake masternode list')
-
-# filename and add timestamp to it
-now = datetime.now()
-timestamp = now.strftime('%Y-%m-%d_%H-%M-%S')
-
-scriptPath = __file__
-path = scriptPath[:-29] + '/data/Richlist/'
-filepath = path + timestamp + '_Richlist.csv'
 
 # save data to csv-file
 dfRichList.to_csv(filepath, index=False)

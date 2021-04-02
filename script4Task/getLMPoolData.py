@@ -1,14 +1,12 @@
-import os
 import requests
 import pandas as pd
+import numpy as np
 from pycoingecko import CoinGeckoAPI
 
 
-scriptPath = os.path.abspath(os.getcwd())
-if scriptPath[0] == 'H':
-    scriptPath=scriptPath[:-14]
-path        = scriptPath + '/data/'
-filepath    = path + 'LMPoolData.csv'
+scriptPath = __file__
+path = scriptPath[:-28] + '/data/'
+filepath = path + 'LMPoolData.csv'
 
 requests.adapters.DEFAULT_RETRIES = 5
 
@@ -55,6 +53,7 @@ try:
     temp = pd.read_json(siteContent.text)
     BTCDFIaddresses = temp['balance'].count()
 except:
+    BTCDFIaddresses = np.nan
     print('Error with API of BTC/DFI Richlist')
     
 # ETH/DFI-Token on DefiChain
@@ -64,6 +63,7 @@ try:
     temp = pd.read_json(siteContent.text)
     ETHDFIaddresses = temp['balance'].count()
 except:
+    ETHDFIaddresses = np.nan
     print('Error with API of ETH/DFI Richlist')
     
 # USDT/DFI-Token on DefiChain
@@ -73,6 +73,7 @@ try:
     temp = pd.read_json(siteContent.text)
     USDTDFIaddresses = temp['balance'].count()
 except:
+    USDTDFIaddresses = np.nan
     print('Error with API of USDT/DFI Richlist')
     
 # DOGE/DFI-Token on DefiChain
@@ -82,6 +83,7 @@ try:
     temp = pd.read_json(siteContent.text)
     DOGEDFIaddresses = temp['balance'].count()
 except:
+    DOGEDFIaddresses = np.nan
     print('Error with API of DOGE/DFI Richlist')
     
 # LTC/DFI-Token on DefiChain
@@ -91,6 +93,7 @@ try:
     temp = pd.read_json(siteContent.text)
     LTCDFIaddresses = temp['balance'].count()
 except:
+    LTCDFIaddresses = np.nan
     print('Error with API of LTC/DFI Richlist')
 
 # BCH/DFI-Token on DefiChain
@@ -100,20 +103,21 @@ try:
     temp = pd.read_json(siteContent.text)
     BCHDFIaddresses = temp['balance'].count()
 except:
+    BCHDFIaddresses = np.nan
     print('Error with API of BCH/DFI Richlist')
     
 ####### add none when wrong dimension
 dfLMPoolData['numberAddresses'] = None
-dfLMPoolData.loc[4,'numberAddresses'] = ETHDFIaddresses
-dfLMPoolData.loc[5,'numberAddresses'] = BTCDFIaddresses
-dfLMPoolData.loc[6,'numberAddresses'] = USDTDFIaddresses
-dfLMPoolData.loc[8,'numberAddresses'] = DOGEDFIaddresses
-dfLMPoolData.loc[10,'numberAddresses'] = LTCDFIaddresses
-dfLMPoolData.loc[12,'numberAddresses'] = BCHDFIaddresses
+dfLMPoolData.loc[4, 'numberAddresses'] = ETHDFIaddresses
+dfLMPoolData.loc[5, 'numberAddresses'] = BTCDFIaddresses
+dfLMPoolData.loc[6, 'numberAddresses'] = USDTDFIaddresses
+dfLMPoolData.loc[8, 'numberAddresses'] = DOGEDFIaddresses
+dfLMPoolData.loc[10, 'numberAddresses'] = LTCDFIaddresses
+dfLMPoolData.loc[12, 'numberAddresses'] = BCHDFIaddresses
   
     
-dfOldLMPoolData = pd.read_csv(filepath,index_col=0)
-dfLMPoolData = dfOldLMPoolData.append(dfLMPoolData)
+dfOldLMPoolData = pd.read_csv(filepath, index_col=0)
+dfLMPoolData = dfOldLMPoolData.append(dfLMPoolData, sort=False)
 dfLMPoolData.reset_index(inplace=True, drop=True)
     
 dfLMPoolData.to_csv(filepath)

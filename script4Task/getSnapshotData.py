@@ -21,7 +21,7 @@ while True:
     # loading old snapshot data
     oldSnapshot = pd.read_csv(filepath, index_col=0)
 
-    if (now-pd.to_datetime(oldSnapshot['date'].values[0])) > timedelta(minutes=5):
+    if (now-pd.to_datetime(oldSnapshot['date'].values[0])) > timedelta(minutes=30):
         nowSnapshot = now
         # get DFI richlist data
         print('... getting Richlist')
