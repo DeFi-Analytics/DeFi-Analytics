@@ -3,14 +3,16 @@ import pandas as pd
 import numpy as np
 from pycoingecko import CoinGeckoAPI
 import time
+from datetime import datetime
+
 
 scriptPath = __file__
 path = scriptPath[:-35] + '/data/'
 filepath = path + 'LMPoolData_ShortTerm.csv'
 
 while True: 
-    print(pd.Timestamp.now())     
-    start_time = time.time()
+    start_time = pd.Timestamp.now()
+    print('Get data at '+str(start_time)+' ...')
     requests.adapters.DEFAULT_RETRIES = 5
     link='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
     siteContent = requests.get(link)
@@ -40,7 +42,7 @@ while True:
     dfLMPoolData.loc[8,'DFIPrices'] = dogeDFIPrice
     dfLMPoolData.loc[10,'DFIPrices'] = ltcDFIPrice
     dfLMPoolData.loc[12,'DFIPrices'] = bchDFIPrice
-    dfLMPoolData['Time'] = pd.Timestamp.now()
+    dfLMPoolData['Time'] = start_time
     
     # prices from Bittrex
     link='https://api.bittrex.com/v3/markets/tickers'
@@ -58,6 +60,7 @@ while True:
     dfLMPoolData.to_csv(filepath)
     
     # wait time before run again
-    waitTime = 60-(time.time() - start_time)       
-    waitTime = np.maximum(waitTime, 0)
+    nowTimestamp = datetime.now()
+    waitTime = 60-nowTimestamp.second
+    print('...finished. Timestamp: '+str(datetime.now())+'   wait-time:'+str(waitTime))
     time.sleep(waitTime)
