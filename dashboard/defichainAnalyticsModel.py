@@ -261,7 +261,7 @@ class defichainAnalyticsModelClass:
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.update_dexMinutely:
             minutelyDEXData = pd.read_csv(filePath, index_col=0)
-            minutelyDEXData['timeRounded'] = pd.to_datetime(minutelyDEXData.Time).dt.floor('min')
+            minutelyDEXData['timeRounded'] = pd.to_datetime(minutelyDEXData.Time).dt.floor('min') #.dt.strftime('%Y-%m-%d %H:%M')
             minutelyDEXData.set_index(['timeRounded'], inplace=True)
 
             for poolSymbol in minutelyDEXData.symbol.unique():
@@ -282,6 +282,7 @@ class defichainAnalyticsModelClass:
                 self.minutelyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
                 self.minutelyData = self.minutelyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
+            self.minutelyData.dropna(axis=0, how='all',inplace=True)
             self.update_dexMinutely = fileInfo.stat()
             print('>>>> Minutely DEX data loaded from csv-file <<<<')
 
