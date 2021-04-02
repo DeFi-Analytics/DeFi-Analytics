@@ -314,7 +314,7 @@ class defichainAnalyticsModelClass:
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.update_snapshotData:
             self.snapshotData = pd.read_csv(filePath, index_col=0)
-            meanBlockTime = self.dailyData['meanBlockTime'].dropna().iloc[-10:].mean()
+            meanBlockTime = self.dailyData['meanBlockTime'].dropna().iloc[-11:-1].mean()
             duration = timedelta(seconds=self.snapshotData['blocksLeft'].values[0]*meanBlockTime)
             self.snapshotData['duration'] = duration-timedelta(microseconds=duration.microseconds)          # remove microseconds
             self.snapshotData['etaEvent'] = datetime.utcnow()+self.snapshotData['duration']
