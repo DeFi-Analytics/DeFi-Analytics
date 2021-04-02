@@ -191,7 +191,7 @@ class defichainAnalyticsModelClass:
                 self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
                 self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
-            self.hourlyData['Date'] = pd.to_datetime(hourlyDEXData[hourlyDEXData.symbol=='BTC-DFI'].index).strftime('%Y-%m-%d')
+            self.hourlyData['Date'] = pd.to_datetime(self.hourlyData.index).strftime('%Y-%m-%d')
             self.updated_dexHourly = fileInfo.stat()
             print('>>>> Hourly DEX data loaded from csv-file <<<<')
 
