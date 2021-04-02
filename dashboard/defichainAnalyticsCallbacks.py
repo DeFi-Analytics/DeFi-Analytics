@@ -7,7 +7,8 @@ PFEIL_ZU = "fas fa-chevron-right mr-3"
 PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 
 class defichainAnalyticsCallbacksClass:
-    def __init__(self, generalController, blockchainController, dexController, liquidityMiningController, tokenController, communityController, aboutController):
+    def __init__(self, defichainAnalyticsModel, generalController, blockchainController, dexController, liquidityMiningController, tokenController, communityController, aboutController):
+        self.defichainAnalyticsModel = defichainAnalyticsModel
         self.generalController = generalController
         self.blockchainController = blockchainController
         self.dexController = dexController
@@ -179,7 +180,8 @@ class defichainAnalyticsCallbacksClass:
             return return_array
 
 
-        @app.callback(Output("page-content", "children"), [Input("url", "href")])
+        @app.callback([Output("page-content", "children"),
+                       Output("idVersion", "children")], [Input("url", "href")])
         def render_page_content(hrefPath):
             if hrefPath is not None:
                 completeURL = urlparse(hrefPath)
@@ -194,24 +196,26 @@ class defichainAnalyticsCallbacksClass:
                 selectedEntry = ''
 
             if urlPath in ["/", "/general"]:
-                return self.generalController.getContent(selectedEntry)
+                pageContent = self.generalController.getContent(selectedEntry)
             elif urlPath in ["/blockchain"]:
-                return self.blockchainController.getContent(selectedEntry)
+                pageContent = self.blockchainController.getContent(selectedEntry)
             elif urlPath in ["/dex"]:
-                return self.dexController.getContent(selectedEntry)
+                pageContent = self.dexController.getContent(selectedEntry)
             elif urlPath in ["/liquidityMining"]:
-                return self.liquidityMiningController.getContent(selectedEntry)
+                pageContent = self.liquidityMiningController.getContent(selectedEntry)
             elif urlPath in ["/token"]:
-                return self.tokenController.getContent(selectedEntry)
+                pageContent = self.tokenController.getContent(selectedEntry)
             elif urlPath in ["/community"]:
-                return self.communityController.getContent(selectedEntry)
+                pageContent = self.communityController.getContent(selectedEntry)
             elif urlPath in ['/about']:
-                return self.aboutController.getContent(selectedEntry)
+                pageContent = self.aboutController.getContent(selectedEntry)
             # If the user tries to reach a different page, return a 404 message
-            return dbc.Jumbotron(
-                [
-                    html.H1("404: Not found", className="text-danger"),
-                    html.Hr(),
-                    html.P(f"The pathname {urlPath} was not recognised..."),
-                ]
-            )
+            else:
+                pageContent = dbc.Jumbotron([html.H1("404: Not found", className="text-danger"),
+                                             html.Hr(),
+                                             html.P(f"The pathname {urlPath} was not recognised..."),])
+
+            versionContent = 'Version ' + self.defichainAnalyticsModel.changelogData.Version.values[0]
+
+            return pageContent, versionContent
+

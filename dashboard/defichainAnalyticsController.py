@@ -30,9 +30,9 @@ class defichainAnalyticsControllerClass:
         self.communityController = communityControllerClass(app, self.defichainAnalyticsModel)
         self.aboutController = aboutControllerClass(app, self.defichainAnalyticsModel)
 
-        self.defichainAnalyticsCallbacks = defichainAnalyticsCallbacksClass(self.generalController, self.blockchainController, self.dexController,
-                                                                            self.liquidityMiningController, self.tokenController, self.communityController,
-                                                                            self.aboutController)       # create callbacks on top level
+        self.defichainAnalyticsCallbacks = defichainAnalyticsCallbacksClass(self.defichainAnalyticsModel, self.generalController, self.blockchainController,
+                                                                            self.dexController, self.liquidityMiningController, self.tokenController,
+                                                                            self.communityController, self.aboutController)       # create callbacks on top level
         self.defichainAnalyticsCallbacks.register_callbacks(app)             #
 
         self.defichainAnalyticsView = defichainAnalyticsViewClass()                 # create main view of Dashboard

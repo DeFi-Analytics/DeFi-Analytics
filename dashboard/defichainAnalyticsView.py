@@ -213,10 +213,8 @@ class defichainAnalyticsViewClass:
 
                 ),
 
-                dbc.Col(html.Div(
-                    #reminder: if alt-attribute is deleted, firefox will not show the image!, alt="Defi-Logo"
-                         id='idLogoSidebar')
-                        ),
+                dbc.Col([html.Div(id='idLogoSidebar'),
+                         html.Div(id='idVersion')]),
 
                 dbc.Col(),
             ],

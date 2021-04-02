@@ -96,6 +96,14 @@ color: #000000;
         background-color: #000000;
     }
 
+    #idVersion{
+        width: 14rem;
+        text-align: center;
+        font-size: 0.75rem;
+        margin-bottom: 2rem;
+        color: #ff00af;
+    }
+
     .contentstyle {
         margin-left: 18rem;
         margin-right: 0rem;
@@ -168,6 +176,13 @@ color: #000000;
     #idLogoSidebar{
         content: url('logo-defi-analytics_LandscapePink.png');
         height: 35px;
+    }
+
+    #idVersion{
+        text-align: center;
+        font-size: 0.6rem;
+        margin-bottom: 2rem;
+        color: #ff00af
     }
 
     #menuResponsiveCollapse *:first-child {
