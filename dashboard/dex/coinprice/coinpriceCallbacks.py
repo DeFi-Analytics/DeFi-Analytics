@@ -6,7 +6,7 @@ class coinpriceCallbacksClass:
 
 
         @app.callback(Output('dexCoinpriceLongterm', 'figure'),
-                      [Input('dexCoinprice60s', 'n_intervals'),
+                      [Input('dexCoinprice600s', 'n_intervals'),
                        Input('dexCoinpriceCoin', 'value'),
                        Input('dexCoinpriceReference', 'value'), ])
         def updateHourlyCoinpriceGraph(nInt, selectedCoin, selectedReference):

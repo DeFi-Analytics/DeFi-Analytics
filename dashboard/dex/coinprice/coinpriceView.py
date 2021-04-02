@@ -29,7 +29,7 @@ class coinpriceViewClass:
                                                    dbc.Col(dcc.Graph(id='dexCoinpriceShortterm', config={'displayModeBar': False}), lg=5, xl=4)], no_gutters=True),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinprice")))])),
                    dcc.Interval(id='dexCoinprice60s', interval=60 * 1000, n_intervals=0),
-                   dcc.Interval(id='dexCoinprice1800s', interval=1800 * 1000, n_intervals=0),
+                   dcc.Interval(id='dexCoinprice600s', interval=600 * 1000, n_intervals=0),
                    ]
         return content
 
