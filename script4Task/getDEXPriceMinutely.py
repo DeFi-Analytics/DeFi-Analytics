@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+import numpy as np
 from pycoingecko import CoinGeckoAPI
 import time
 
@@ -58,4 +59,5 @@ while True:
     
     # wait time before run again
     waitTime = 60-(time.time() - start_time)       
+    waitTime = np.maximum(waitTime, 0)
     time.sleep(waitTime)
