@@ -32,18 +32,18 @@ class twitterViewClass:
         figTwitter.layout.annotations[1].font.size = 20
 
         # Tweets on Twitter
-        trace_overall = dict(type='scatter', name='all', x=data['overall_Activity'].dropna().index.values[1:], y=data['overall_Activity'].dropna().values[1:],
+        trace_overall = dict(type='scatter', name='all', x=data['overall_Activity'].dropna().index.values[:-1], y=data['overall_Activity'].dropna().values[:-1],
                              mode='lines', line=dict(color='#da3832'), line_width=2, hovertemplate='%{y:.0f}')
-        trace_defichain = dict(type='scatter', name='tagged with @defichain', x=data['defichain_Activity'].dropna().index.values[1:], y=data['defichain_Activity'].dropna().values[1:],
+        trace_defichain = dict(type='scatter', name='tagged with @defichain', x=data['defichain_Activity'].dropna().index.values[:-1], y=data['defichain_Activity'].dropna().values[:-1],
                                mode='lines', line=dict(color='#617dea'), line_width=2, hovertemplate='%{y:.0f}')
-        trace_dfi = dict(type='scatter', name='tagged with $DFI', x=data['dfi_Activity'].dropna().index.values[1:], y=data['dfi_Activity'].dropna().values[1:],
+        trace_dfi = dict(type='scatter', name='tagged with $DFI', x=data['dfi_Activity'].dropna().index.values[:-1], y=data['dfi_Activity'].dropna().values[:-1],
                          mode='lines', line=dict(color='#22b852'), line_width=2, hovertemplate='%{y:.0f}')
         figTwitter.add_trace(trace_overall, 1, 1)
         figTwitter.add_trace(trace_defichain, 1, 1)
         figTwitter.add_trace(trace_dfi, 1, 1)
 
         # Likes of Defichain-tweets
-        trace_likes = dict(type='scatter', name='Overall Likes', x=data['overall_Likes'].dropna().index.values[1:], y=data['overall_Likes'].dropna().values[1:],
+        trace_likes = dict(type='scatter', name='Overall Likes', x=data['overall_Likes'].dropna().index.values[:-1], y=data['overall_Likes'].dropna().values[:-1],
                            mode='lines', line=dict(color='#ff9800'), line_width=2, hovertemplate='%{y:.0f}')
         figTwitter.add_trace(trace_likes, 2, 1)
 
@@ -83,13 +83,13 @@ class twitterViewClass:
         figTwitter.layout.annotations[0].font.size = 20
 
         # Tweets on Twitter
-        trace_overall = dict(type='scatter', name='overall', x=data['overall_UniqueUserOverall'].dropna().index.values[1:], y=data['overall_UniqueUserOverall'].dropna().values[1:],
+        trace_overall = dict(type='scatter', name='overall', x=data['overall_UniqueUserOverall'].dropna().index.values[:-1], y=data['overall_UniqueUserOverall'].dropna().values[:-1],
                              mode='lines', line=dict(color='#410eb2'), line_width=2, hovertemplate='%{y:.0f}')
-        trace_tweet = dict(type='scatter', name='with Tweets', x=data['overall_UniqueUserTweet'].dropna().index.values[1:], y=data['overall_UniqueUserTweet'].dropna().values[1:],
+        trace_tweet = dict(type='scatter', name='with Tweets', x=data['overall_UniqueUserTweet'].dropna().index.values[:-1], y=data['overall_UniqueUserTweet'].dropna().values[:-1],
                            mode='lines', line=dict(color='#ff2ebe'), line_width=2, hovertemplate='%{y:.0f}', visible='legendonly')
-        trace_reply = dict(type='scatter', name='with Replies', x=data['overall_UniqueUserReply'].dropna().index.values[1:], y=data['overall_UniqueUserReply'].dropna().values[1:],
+        trace_reply = dict(type='scatter', name='with Replies', x=data['overall_UniqueUserReply'].dropna().index.values[:-1], y=data['overall_UniqueUserReply'].dropna().values[:-1],
                            mode='lines', line=dict(color='#00fffb'), line_width=2, hovertemplate='%{y:.0f}', visible='legendonly')
-        trace_retweet = dict(type='scatter', name='with Retweets', x=data['overall_UniqueUserRetweet'].dropna().index.values[1:], y=data['overall_UniqueUserRetweet'].dropna().values[1:],
+        trace_retweet = dict(type='scatter', name='with Retweets', x=data['overall_UniqueUserRetweet'].dropna().index.values[:-1], y=data['overall_UniqueUserRetweet'].dropna().values[:-1],
                              mode='lines', line=dict(color='#c2a634'), line_width=2, hovertemplate='%{y:.0f}', visible='legendonly')
         figTwitter.add_trace(trace_overall, 1, 1)
         figTwitter.add_trace(trace_tweet, 1, 1)
