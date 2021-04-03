@@ -88,28 +88,34 @@ class coinpriceViewClass:
         if selectedCoin == 'USDT':
             tickFormatYAxis = ",.2f"
             lineColor = '#22b852'
+            priceCurrency = 'USDT/DFI'
         elif selectedCoin == 'ETH':
             tickFormatYAxis = ",.5f"
             lineColor = '#617dea'
+            priceCurrency = 'ETH/DFI'
         elif selectedCoin == 'DOGE':
             tickFormatYAxis = ",.2f"
             lineColor = '#c2a634'
+            priceCurrency = 'DOGE/DFI'
         elif selectedCoin == 'LTC':
             tickFormatYAxis = ",.4f"
             lineColor = '#ff2ebe'
+            priceCurrency = 'LTC/DFI'
         elif selectedCoin == 'BCH':
             tickFormatYAxis = ",.4f"
             lineColor = '#410eb2'
+            priceCurrency = 'BCH/DFI'
         else:
             tickFormatYAxis = ",.7f"
             lineColor = '#da3832'
+            priceCurrency = 'BTC/DFI'
 
         trace_absPriceDEX = dict(type='scatter', name='DEX', x=data[selectedCoin+'-DFI_reserveA/reserveB'].loc[startIndex:].dropna().index, y=data[selectedCoin+'-DFI_reserveA/reserveB'].loc[startIndex:].dropna(),
-                                 mode='lines', line=dict(color=lineColor, dash='dash'), line_width=2, hovertemplate='%{y:.8f} BTC/DFI')
+                                 mode='lines', line=dict(color=lineColor, dash='dash'), line_width=2, hovertemplate='%{y:.8f} '+priceCurrency)
         trace_absPriceCG = dict(type='scatter', name='CoinGecko', x=data[selectedCoin+'-DFI_DFIPrices'].loc[startIndex:].dropna().index, y=data[selectedCoin+'-DFI_DFIPrices'].loc[startIndex:].dropna(),
-                                mode='lines', line=dict(color=lineColor, dash='dot'), line_width=2, hovertemplate='%{y:.8f} BTC/DFI')
+                                mode='lines', line=dict(color=lineColor, dash='dot'), line_width=2, hovertemplate='%{y:.8f} '+priceCurrency)
         trace_absPriceBittrex = dict(type='scatter', name='Bittrex', x=data[selectedCoin+'-DFI_DFIPricesBittrex'].loc[startIndex:].dropna().index, y=data[selectedCoin+'-DFI_DFIPricesBittrex'].loc[startIndex:].dropna(),
-                                     mode='lines', line=dict(color=lineColor, dash='dashdot'), line_width=2, hovertemplate='%{y:.8f} BTC/DFI')
+                                     mode='lines', line=dict(color=lineColor, dash='dashdot'), line_width=2, hovertemplate='%{y:.8f} '+priceCurrency)
 
         figPrice.add_trace(trace_absPriceDEX, 2, 1)
         figPrice.add_trace(trace_absPriceCG, 2, 1)
