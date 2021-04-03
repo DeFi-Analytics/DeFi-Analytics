@@ -61,7 +61,7 @@ class blockchainControllerClass:
         elif entry in ["daa"]:
             self.defichainAnalyticsModel.loadDAAData()
             pageContent = self.daaView.getDAAContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
-        elif entry in ["coin"]:
+        elif entry in ["coins"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadExtractedRichlistData()
             pageContent = self.coinView.getCoinContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)

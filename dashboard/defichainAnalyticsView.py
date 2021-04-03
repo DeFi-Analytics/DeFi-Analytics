@@ -59,10 +59,10 @@ class defichainAnalyticsViewClass:
                 [
                     dbc.NavLink("Addresses", href="/blockchain?entry=addresses", className="linkstyle", id="addresses"),
                     dbc.NavLink("DAA", href="/blockchain?entry=daa", className="linkstyle", id="daa"),
-                    dbc.NavLink("Coins", href="/blockchain?entry=coin", className="linkstyle", id="coins"),
-                    dbc.NavLink("Change Coins/Addresses", href="/blockchain?entry=changeCoinAdresses", className="linkstyle", id="change"),
+                    dbc.NavLink("Coins", href="/blockchain?entry=coins", className="linkstyle", id="coins"),
+                    dbc.NavLink("Change Coins/Addresses", href="/blockchain?entry=changeCoinAdresses", className="linkstyle", id="changeCoinAdresses"),
                     dbc.NavLink("Coins/Addresses", href="/blockchain?entry=coinsAddresses", className="linkstyle", id="coinsAddresses"),
-                    dbc.NavLink("Block Time", href="/blockchain?entry=blocktime", className="linkstyle", id="blockTime"),
+                    dbc.NavLink("Block Time", href="/blockchain?entry=blocktime", className="linkstyle", id="blocktime"),
                     dbc.NavLink("Transactions", href="/blockchain?entry=transactions", className="linkstyle", id="transactions")
                 ],
                 id="submenu-blockchain-collapse",
@@ -88,7 +88,7 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Coinprices", href="/dex?entry=coinprices", className="linkstyle", id="coinPrices"),
+                    dbc.NavLink("Coinprices", href="/dex?entry=coinPrices", className="linkstyle", id="coinPrices"),
                     dbc.NavLink("Volume", href="/dex?entry=volume", className="linkstyle", id="volume"),
                 ],
                 id="submenu-dex-collapse",
