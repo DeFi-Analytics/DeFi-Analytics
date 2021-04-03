@@ -214,7 +214,7 @@ class defichainAnalyticsViewClass:
                 ),
 
                 dbc.Col([html.Div(id='idLogoSidebar'),
-                         html.Div(id='idVersion')]),
+                         html.A(id='idVersion',href="/about?entry=changelog")]),
 
                 dbc.Col(),
             ],
