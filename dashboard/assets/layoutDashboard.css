@@ -32,11 +32,7 @@ body {
     background-color: #fe00ae;
 }
 
-.refLinkMarquee{
-    margin-left: 18rem;
-    margin-right: 0rem;
-    padding: 0rem 1rem 0rem 1rem;
-    }
+
 
 /* change color of all links */
 a:link{
@@ -57,12 +53,22 @@ a:hover{
     .card-body{
         padding: 3rem 4rem 1.25rem 4rem;
     }
+    .refLinkMarquee{
+        margin-left: 18rem;
+        margin-right: 0rem;
+        padding: 0rem 1rem 0rem 1rem;
+    }
 }
 
 /*for small screens*/
 @media only screen and (max-width: 768px) {
     .card-body{
         padding: 1.0rem;
+    }
+    .refLinkMarquee{
+        margin-left: 0 rem;
+        margin-right: 0rem;
+        padding: 0rem 1rem 0rem 1rem;
     }
 }
 
