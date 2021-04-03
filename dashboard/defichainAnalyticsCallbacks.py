@@ -215,6 +215,8 @@ class defichainAnalyticsCallbacksClass:
                                              html.Hr(),
                                              html.P(f"The pathname {urlPath} was not recognised..."),])
 
+            # check changelog data and update version information
+            self.defichainAnalyticsModel.loadChangelogData()
             versionContent = 'Version ' + self.defichainAnalyticsModel.changelogData.Version.values[0]
 
             return pageContent, versionContent
