@@ -35,51 +35,51 @@ class blocktimeViewClass:
         figBlockTime.layout.annotations[1].font.size = 20
 
         trace_meanTime = dict(type='scatter', name='Mean Time',
-                              x=data['meanBlockTime'].dropna().index.values[1:],
-                              y=data['meanBlockTime'].dropna().values[1:],
+                              x=data['meanBlockTime'].dropna().index.values[:-1],
+                              y=data['meanBlockTime'].dropna().values[:-1],
                               mode='lines', line=dict(color='#da3832'), line_width=3, hovertemplate='%{y:.2f}s')
         figBlockTime.add_trace(trace_meanTime, 1, 1)
 
         trace_Min = dict(type='scatter', name='Mininum',
-                         x=data['MinBlockTime'].dropna().index.values[1:],
-                         y=data['MinBlockTime'].dropna().values[1:],
+                         x=data['MinBlockTime'].dropna().index.values[:-1],
+                         y=data['MinBlockTime'].dropna().values[:-1],
                          mode='lines', line=dict(color='#90d1e5'), line_width=0, hovertemplate='%{y:.0f}s',
                          showlegend=False)
         trace_10Perc = dict(type='scatter', name='10% quantile',
-                            x=data['10PercentBlockTime'].dropna().index.values[1:],
-                            y=data['10PercentBlockTime'].dropna().values[1:],
+                            x=data['10PercentBlockTime'].dropna().index.values[:-1],
+                            y=data['10PercentBlockTime'].dropna().values[:-1],
                             mode='lines', line=dict(color='#90d1e5'), line_width=2, hovertemplate='%{y:.0f}s')
         trace_4Fill10 = dict(type='scatter', name='4Filling',
-                             x=data['30PercentBlockTime'].dropna().index.values[1:],
-                             y=data['30PercentBlockTime'].dropna().values[1:],
+                             x=data['30PercentBlockTime'].dropna().index.values[:-1],
+                             y=data['30PercentBlockTime'].dropna().values[:-1],
                              fill='tonexty', fillcolor='rgba(144, 209, 229, 0.5)',
                              mode='lines', line=dict(color='#90d1e5'), line_width=0, hoverinfo='none', showlegend=False)
         trace_30Perc = dict(type='scatter', name='30% quantile',
-                            x=data['30PercentBlockTime'].dropna().index.values[1:],
-                            y=data['30PercentBlockTime'].dropna().values[1:], fill='tonexty',
+                            x=data['30PercentBlockTime'].dropna().index.values[:-1],
+                            y=data['30PercentBlockTime'].dropna().values[:-1], fill='tonexty',
                             mode='lines', line=dict(color='#3fbadf'), line_width=2, hovertemplate='%{y:.0f}s')
         trace_4Fill30 = dict(type='scatter', name='4Filling',
-                             x=data['medianBlockTime'].dropna().index.values[1:],
-                             y=data['medianBlockTime'].dropna().values[1:],
+                             x=data['medianBlockTime'].dropna().index.values[:-1],
+                             y=data['medianBlockTime'].dropna().values[:-1],
                              fill='tonexty', fillcolor='rgba(63, 186, 223, 0.5)',
                              mode='lines', line=dict(color='#3fbadf'), line_width=0, hoverinfo='none', showlegend=False)
         trace_Median = dict(type='scatter', name='Median',
-                            x=data['medianBlockTime'].dropna().index.values[1:],
-                            y=data['medianBlockTime'].dropna().values[1:],
+                            x=data['medianBlockTime'].dropna().index.values[:-1],
+                            y=data['medianBlockTime'].dropna().values[:-1],
                             mode='lines', line=dict(color='#7f50ff'), line_width=4, hovertemplate='%{y:.0f}s')
         trace_70Perc = dict(type='scatter', name='70% quantile',
-                            x=data['70PercentBlockTime'].dropna().index.values[1:],
-                            y=data['70PercentBlockTime'].dropna().values[1:],
+                            x=data['70PercentBlockTime'].dropna().index.values[:-1],
+                            y=data['70PercentBlockTime'].dropna().values[:-1],
                             fill='tonexty', fillcolor='rgba(63, 186, 223, 0.5)',
                             mode='lines', line=dict(color='#3fbadf'), line_width=2, hovertemplate='%{y:.0f}s')
         trace_90Perc = dict(type='scatter', name='90% quantile',
-                            x=data['90PercentBlockTime'].dropna().index.values[1:],
-                            y=data['90PercentBlockTime'].dropna().values[1:],
+                            x=data['90PercentBlockTime'].dropna().index.values[:-1],
+                            y=data['90PercentBlockTime'].dropna().values[:-1],
                             fill='tonexty', fillcolor='rgba(144, 209, 229, 0.5)',
                             mode='lines', line=dict(color='#90d1e5'), line_width=2, hovertemplate='%{y:.0f}s')
         trace_Max = dict(type='scatter', name='Maximum',
-                         x=data['MaxBlockTime'].dropna().index.values[1:],
-                         y=data['MaxBlockTime'].dropna().values[1:],
+                         x=data['MaxBlockTime'].dropna().index.values[:-1],
+                         y=data['MaxBlockTime'].dropna().values[:-1],
                          mode='lines', line=dict(color='#90d1e5'), line_width=0, hovertemplate='%{y:.0f}s',
                          showlegend=False)
 

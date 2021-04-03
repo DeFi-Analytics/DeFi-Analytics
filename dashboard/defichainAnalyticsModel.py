@@ -50,6 +50,7 @@ class defichainAnalyticsModelClass:
         self.loadDAAData()
         self.loadTwitterData()
 
+
     def loadExtractedRichlistData(self):
         filePath = self.dataPath + 'extractedDFIdata.csv'
         fileInfo = pathlib.Path(filePath)
