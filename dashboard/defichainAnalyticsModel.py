@@ -50,6 +50,7 @@ class defichainAnalyticsModelClass:
         self.loadDAAData()
         self.loadTwitterData()
 
+
     def loadExtractedRichlistData(self):
         filePath = self.dataPath + 'extractedDFIdata.csv'
         fileInfo = pathlib.Path(filePath)
@@ -288,26 +289,26 @@ class defichainAnalyticsModelClass:
 
     #### NO TIMESERIES ####
     def loadNoTimeseriesData(self):
-        self.loadLastRichlist()
+        # self.loadLastRichlist()
         self.loadSnapshotData()
         self.loadChangelogData()
 
-    def loadLastRichlist(self):
-        filePath = self.dataPath + 'Richlist/'
-        listCSVFiles = glob.glob(filePath + "*_01-*.csv")  # get all csv-files generated at night
-
-        newestDate = self.dailyData['nbMnId'].dropna().index.max()  # find newest date in extracted Data
-        file2Load = [x for x in listCSVFiles if re.search(newestDate, x)]  # find corresponding csv-file of richlist
-
-        fname = pathlib.Path(file2Load[0])
-        if fname.stat() != self.updated_LastRichlist:
-            self.lastRichlist = pd.read_csv(file2Load[0])  # load richlist
-
-            # date for information/explanation
-            self.lastRichlist['date'] = pd.to_datetime(newestDate)
-
-            self.updated_LastRichlist = fname.stat()
-            print('>>>>>>>>>>>>> Richlist ', file2Load[0], ' loaded <<<<<<<<<<<<<')
+    # def loadLastRichlist(self):
+    #     filePath = self.dataPath + 'Richlist/'
+    #     listCSVFiles = glob.glob(filePath + "*_01-*.csv")  # get all csv-files generated at night
+    #
+    #     newestDate = self.dailyData['nbMnId'].dropna().index.max()  # find newest date in extracted Data
+    #     file2Load = [x for x in listCSVFiles if re.search(newestDate, x)]  # find corresponding csv-file of richlist
+    #
+    #     fname = pathlib.Path(file2Load[0])
+    #     if fname.stat() != self.updated_LastRichlist:
+    #         self.lastRichlist = pd.read_csv(file2Load[0])  # load richlist
+    #
+    #         # date for information/explanation
+    #         self.lastRichlist['date'] = pd.to_datetime(newestDate)
+    #
+    #         self.updated_LastRichlist = fname.stat()
+    #         print('>>>>>>>>>>>>> Richlist ', file2Load[0], ' loaded <<<<<<<<<<<<<')
 
     def loadSnapshotData(self):
         filePath = self.dataPath + 'snapshotData.csv'
