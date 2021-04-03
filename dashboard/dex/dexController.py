@@ -22,7 +22,7 @@ class dexControllerClass:
         if entry in ["", "volume"]:
             self.defichainAnalyticsModel.loadDEXVolume()
             pageContent = self.volumeView.getVolumeContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
-        elif entry in ["coinprices"]:
+        elif entry in ["coinPrices"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             pageContent = self.coinpriceView.getCoinpriceContent()
 

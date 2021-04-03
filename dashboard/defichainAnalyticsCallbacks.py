@@ -25,9 +25,9 @@ class defichainAnalyticsCallbacksClass:
                                            Input('addresses', 'n_clicks_timestamp'),
                                            Input('daa', 'n_clicks_timestamp'),
                                            Input('coins', 'n_clicks_timestamp'),
-                                           Input('change', 'n_clicks_timestamp'),
+                                           Input('changeCoinAdresses', 'n_clicks_timestamp'),
                                            Input('coinsAddresses', 'n_clicks_timestamp'),
-                                           Input('blockTime', 'n_clicks_timestamp'),
+                                           Input('blocktime', 'n_clicks_timestamp'),
                                            Input('transactions', 'n_clicks_timestamp'),
                                            Input('coinPrices', 'n_clicks_timestamp'),
                                            Input('volume', 'n_clicks_timestamp'),
@@ -36,7 +36,11 @@ class defichainAnalyticsCallbacksClass:
                                            # Input('coinsLocked', 'n_clicks_timestamp'),
                                            Input('fees', 'n_clicks_timestamp'),
                                            Input('cryptosDAT', 'n_clicks_timestamp'),
-                                           Input('twitter', 'n_clicks_timestamp')]
+                                           Input('twitter', 'n_clicks_timestamp'),
+                                           Input('changelog', 'n_clicks_timestamp'),
+                                           Input('cakereview', 'n_clicks_timestamp'),
+                                           Input('imprint', 'n_clicks_timestamp')]
+
         sidebar_toggle_menu_button_states = [State("menuResponsiveCollapse", "is_open")]
         # this function is used to toggle the is_open property of each Collapse of the menu_button
         @app.callback(
@@ -51,92 +55,133 @@ class defichainAnalyticsCallbacksClass:
             return args[-1]
 
         # this function is used to toggle the is_open property of each Collapse
-        def toggle_collapse(n, is_open):
-            # only if clicked, change arrow (first load, does not change the arrow)
-            if n:
-                if is_open:
-                    # if menu is open (and will close), close the arrow
-                    className = PFEIL_ZU
+        def toggle_collapse(n, pathname, is_open, menu_name):
+            if pathname is not None:
+                # only if clicked, change arrow (first load, does not change the arrow)
+                if n:
+                    if is_open:
+                        # if menu is open (and will close), close the arrow
+                        className = PFEIL_ZU
+                        return True, className
+                    else:
+                        # if menu is closed (and will open), open the arrow
+                        className = PFEIL_OFFEN
+                        return True, className
+                    # toggle is_open and return with arrow
+
+                #if no click happened, check if urlpath and menu_name are equal.
+                if pathname==menu_name:
+                    #if equal, open menu
+                    return True, PFEIL_OFFEN
                 else:
-                    # if menu is closed (and will open), open the arrow
-                    className = PFEIL_OFFEN
-                # toggle is_open and return with arrow
-                return not is_open, className
-            # if it is initial, just give a closed arrow
-            return is_open, PFEIL_ZU
+                    #if not equal, check if we are in general menu callback
+                    if (menu_name == '/general'):
+                        #if in general menu callback, check if path is empty
+                        if pathname!='/':
+                            #if path empty => close general_menu
+                            return False, PFEIL_ZU
+                        #else open the general menu
+                        else:
+                            return True, PFEIL_OFFEN
+                    else:
+                        #if not in general menu callback, just close the menu
+                        return False, PFEIL_ZU
+
+
+
 
         # toggle general menu
         @app.callback([Output("submenu-general-collapse", "is_open"), Output("submenu-general-arrow", "className")],
-                      [Input("submenu-general", "n_clicks")], [State("submenu-general-collapse", "is_open")])
-        def toggleGeneralMenu(n, isOpen):
-            return toggle_collapse(n, isOpen)
+                      [Input("submenu-general", "n_clicks"), Input("url", "pathname")], [State("submenu-general-collapse", "is_open")])
+        def toggleGeneralMenu(n, pathname, isOpen):
+            return toggle_collapse(n, pathname, isOpen, '/general')
 
         # toggle blockchain menu
         @app.callback([Output("submenu-blockchain-collapse", "is_open"),Output("submenu-blockchain-arrow", "className")],
-                      [Input("submenu-blockchain", "n_clicks")], [State("submenu-blockchain-collapse", "is_open")])
-        def toggleBlockchainMenu(n,isOpen):
-            return toggle_collapse(n,isOpen)
+                      [Input("submenu-blockchain", "n_clicks"), Input("url", "pathname")], [State("submenu-blockchain-collapse", "is_open")])
+        def toggleBlockchainMenu(n,pathname, isOpen):
+            return toggle_collapse(n,pathname, isOpen, '/blockchain')
 
         # toggle dex menu
         @app.callback(
             [Output("submenu-dex-collapse", "is_open"), Output("submenu-dex-arrow", "className")],
-            [Input("submenu-dex", "n_clicks")], [State("submenu-dex-collapse", "is_open")])
-        def toggleDEXMenu(n, isOpen):
-            return toggle_collapse(n, isOpen)
+            [Input("submenu-dex", "n_clicks"), Input("url", "pathname")], [State("submenu-dex-collapse", "is_open")])
+        def toggleDEXMenu(n,pathname, isOpen):
+            return toggle_collapse(n,pathname, isOpen, '/dex')
 
         # toggle liquidityMining menu
         @app.callback([Output("submenu-liquidityMining-collapse", "is_open"), Output("submenu-liquidityMining-arrow", "className")],
-                      [Input("submenu-liquidityMining", "n_clicks")], [State("submenu-liquidityMining-collapse", "is_open")])
-        def toggleLiquidityMiningMenu(n, isOpen):
-            return toggle_collapse(n, isOpen)
+                      [Input("submenu-liquidityMining", "n_clicks"), Input("url", "pathname")], [State("submenu-liquidityMining-collapse", "is_open")])
+        def toggleLiquidityMiningMenu(n,pathname, isOpen):
+            return toggle_collapse(n, pathname,isOpen, '/liquidityMining')
 
         # toggle token menu
         @app.callback(
             [Output("submenu-token-collapse", "is_open"), Output("submenu-token-arrow", "className")],
-            [Input("submenu-token", "n_clicks")], [State("submenu-token-collapse", "is_open")])
-        def toggleTokenMenu(n, isOpen):
-            return toggle_collapse(n, isOpen)
+            [Input("submenu-token", "n_clicks"), Input("url", "pathname")], [State("submenu-token-collapse", "is_open")])
+        def toggleTokenMenu(n,pathname, isOpen):
+            return toggle_collapse(n,pathname, isOpen, '/token')
 
         # toggle community menu
         @app.callback([Output("submenu-community-collapse", "is_open"), Output("submenu-community-arrow", "className")],
-                      [Input("submenu-community", "n_clicks")], [State("submenu-community-collapse", "is_open")])
-        def toggleCommunityMenu(n, isOpen):
-            return toggle_collapse(n, isOpen)
+                      [Input("submenu-community", "n_clicks"), Input("url", "pathname")], [State("submenu-community-collapse", "is_open")])
+        def toggleCommunityMenu(n,pathname, isOpen):
+            return toggle_collapse(n,pathname, isOpen, '/community')
 
         # toggle about menu
         @app.callback([Output("submenu-about-collapse", "is_open"), Output("submenu-about-arrow", "className")],
-                      [Input("submenu-about", "n_clicks")], [State("submenu-about-collapse", "is_open")])
-        def toggleCommunityMenu(n, isOpen):
-            return toggle_collapse(n, isOpen)
+                      [Input("submenu-about", "n_clicks"), Input("url", "pathname")], [State("submenu-about-collapse", "is_open")])
+        def toggleCommunityMenu(n, pathname, isOpen):
+            return toggle_collapse(n, pathname, isOpen, '/about')
 
         #define callback sidebar_link_state input array
-        sidebar_active_link_array_input = [Input('overview', 'n_clicks_timestamp'),
-                                           Input('addresses', 'n_clicks_timestamp'),
-                                           Input('daa', 'n_clicks_timestamp'),
-                                           Input('coins', 'n_clicks_timestamp'),
-                                           Input('change', 'n_clicks_timestamp'),
-                                           Input('coinsAddresses', 'n_clicks_timestamp'),
-                                           Input('blockTime', 'n_clicks_timestamp'),
-                                           Input('transactions', 'n_clicks_timestamp'),
-                                           Input('coinPrices', 'n_clicks_timestamp'),
-                                           Input('volume', 'n_clicks_timestamp'),
-                                           Input('liquidityToken', 'n_clicks_timestamp'),
-                                           Input('tvl', 'n_clicks_timestamp'),
-                                           #Input('coinsLocked', 'n_clicks_timestamp'),
-                                           Input('fees', 'n_clicks_timestamp'),
-                                           Input('cryptosDAT', 'n_clicks_timestamp'),
-                                           Input('twitter', 'n_clicks_timestamp'),
-                                           Input('changelog', 'n_clicks_timestamp'),
-                                           Input('cakereview', 'n_clicks_timestamp'),
-                                           Input('imprint', 'n_clicks_timestamp'),]
+        # sidebar_active_link_array_input = [Input('overview', 'n_clicks_timestamp'),
+        #                                    Input('addresses', 'n_clicks_timestamp'),
+        #                                    Input('daa', 'n_clicks_timestamp'),
+        #                                    Input('coins', 'n_clicks_timestamp'),
+        #                                    Input('change', 'n_clicks_timestamp'),
+        #                                    Input('coinsAddresses', 'n_clicks_timestamp'),
+        #                                    Input('blockTime', 'n_clicks_timestamp'),
+        #                                    Input('transactions', 'n_clicks_timestamp'),
+        #                                    Input('coinPrices', 'n_clicks_timestamp'),
+        #                                    Input('volume', 'n_clicks_timestamp'),
+        #                                    Input('liquidityToken', 'n_clicks_timestamp'),
+        #                                    Input('tvl', 'n_clicks_timestamp'),
+        #                                    #Input('coinsLocked', 'n_clicks_timestamp'),
+        #                                    Input('fees', 'n_clicks_timestamp'),
+        #                                    Input('cryptosDAT', 'n_clicks_timestamp'),
+        #                                    Input('twitter', 'n_clicks_timestamp'),
+        #                                    Input('changelog', 'n_clicks_timestamp'),
+        #                                    Input('cakereview', 'n_clicks_timestamp'),
+        #                                    Input('imprint', 'n_clicks_timestamp')]
+
+        sidebar_link_name_array = ['overview',
+                                   'addresses',
+                                   'daa',
+                                   'coins',
+                                   'changeCoinAdresses',
+                                   'coinsAddresses',
+                                   'blocktime',
+                                   'transactions',
+                                   'coinPrices',
+                                   'volume',
+                                   'liquidityToken',
+                                   'tvl',
+                                   # 'coinsLocked',
+                                   'fees',
+                                   'cryptosDAT',
+                                   'twitter',
+                                   'changelog',
+                                   'cakereview',
+                                   'imprint']
         # define callback sidebar_link_state output array
         sidebar_active_link_array_output = [Output('overview', 'className'),
                                             Output('addresses', 'className'),
                                             Output('daa', 'className'),
                                             Output('coins', 'className'),
-                                            Output('change', 'className'),
+                                            Output('changeCoinAdresses', 'className'),
                                             Output('coinsAddresses', 'className'),
-                                            Output('blockTime', 'className'),
+                                            Output('blocktime', 'className'),
                                             Output('transactions', 'className'),
                                             Output('coinPrices', 'className'),
                                             Output('volume', 'className'),
@@ -151,35 +196,40 @@ class defichainAnalyticsCallbacksClass:
                                             Output('imprint', 'className')
                                             ]
 
-        # set active links of sidebar, when clicked
+        # set active links of sidebar, when url changes
         @app.callback(sidebar_active_link_array_output,
-                      sidebar_active_link_array_input)
-        def sidebar_link_state(*args):
-            #change None-values to 0 to be able to compare with timestamp
-            timestamp_array = []
-            for item in args:
-                if item is None:
-                    timestamp_array.append(0)
+                      [Input("url", "href")])
+        def sidebar_link_state(hrefPath):
+            return_array = []
+            #parse url
+            if hrefPath is not None:
+                completeURL = urlparse(hrefPath)
+                URLqueryEntries = parse_qs(completeURL.query)
+                urlPath = completeURL.path
+                if 'entry' in URLqueryEntries:
+                    selectedEntry = URLqueryEntries['entry'][0]
                 else:
-                    timestamp_array.append(item)
-
-            #fill return array with style information
-            active_link = max(timestamp_array)
-
-            return_array =[]
-            for item in timestamp_array:
-                if active_link == 0:
-                    #this is necessary for the first pageload without any clicks
-                    return_array.append('sidebarLinkstyle')
-                else:
-                    if item == active_link:
-                        return_array.append('sidebarActivelink')
+                    #if it is the initial access to the main html and no path is given, the overview shall be selected
+                    if urlPath != '':
+                        selectedEntry = 'overview'
                     else:
-                        return_array.append('sidebarLinkstyle')
+                        selectedEntry = ''
+            else:
+                selectedEntry = ''
+
+            #for each check of the link_name_array
+            for item in sidebar_link_name_array:
+                if(item ==selectedEntry):
+                    #add a activeLink classname to the return array if the item equals the selectedEntry
+                    return_array.append('sidebarActivelink')
+                else:
+                    #add a normal linkstyle if the item is not equally
+                    return_array.append('sidebarLinkstyle')
 
             return return_array
 
 
+        # callback, listening on URL and returns the URL-related content and idVersion
         @app.callback([Output("page-content", "children"),
                        Output("idVersion", "children")], [Input("url", "href")])
         def render_page_content(hrefPath):
