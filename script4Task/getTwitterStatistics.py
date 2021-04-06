@@ -16,7 +16,7 @@ filenames = ['TwitterData_overall', 'TwitterData_defichain', 'TwitterData_dfi', 
 
 for i in range(len(search_words)):
     date_since = "2020-09-01"
-    tweets = tw.Cursor(api.search, q=search_words[i], result_type='recent', since=date_since).items(10)
+    tweets = tw.Cursor(api.search, q=search_words[i], result_type='recent', since=date_since).items(1000)
 
     json_data = [r._json for r in tweets]   # extract result as json-structure
     temp_df = pd.json_normalize(json_data)  # map json to dataframe
