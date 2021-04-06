@@ -145,7 +145,8 @@ class defichainAnalyticsCallbacksClass:
             Input("submenu-token", "n_clicks_timestamp"),
             Input("submenu-community", "n_clicks_timestamp"),
             Input("submenu-about", "n_clicks_timestamp"),
-            Input("url", "pathname")
+            Input("url", "pathname"),
+            Input("hiddenDivTimestampsMenuClicked", "children")
         ]
         sidebar_menu_Status_Array=[
             State("submenu-general-collapse", "is_open"),
@@ -170,46 +171,36 @@ class defichainAnalyticsCallbacksClass:
             Output("submenu-liquidityMining-arrow", "className"),
             Output("submenu-token-arrow", "className"),
             Output("submenu-community-arrow", "className"),
-            Output("submenu-about-arrow", "className")
+            Output("submenu-about-arrow", "className"),
+            Output("hiddenDivTimestampsMenuClicked", "children")
         ]
 
         @app.callback(sidebar_menu_Output_Array, sidebar_subMenu_Input_Array, sidebar_menu_Status_Array)
         def toggle_collapse(*inArray):
-            timestamp_array = []
-            urlPath = ""
-            n_clicked = False
             urlPath=inArray[7]
-            timestamp_array=inArray[0:7]
-            n_clicked = any(inArray[0:7])
-            timestamp_array = [0 if entry is None else entry for entry in timestamp_array]
+            strTimestampFromDiv=inArray[8]
 
-            status_Array = inArray[8:]
+            # new timestamps
+            timestamp_array=inArray[0:7]
+            timestamp_array = [0 if entry is None else entry for entry in timestamp_array]
+            strTimestampForDiv = ' '.join(str(entry) for entry in timestamp_array)
+
+            # old timestamps
+            timestamp_oldArrayString = strTimestampFromDiv.split()                      # generate list of strings from string
+            timestamp_oldArray = [int(entry) for entry in timestamp_oldArrayString]     # convert string entries to int entries
+
+            n_clicked = not(timestamp_oldArray == timestamp_array)                      # compare old and new timestamp list, true if different (clicked)
+
+            status_Array = inArray[9:]
             status_Array = [False if entry is None else entry for entry in status_Array]
 
-
-
-            #if there had been a click-event
+           #if there had been a click-event
             if(n_clicked):
                 outArray = status_Array
                 outArray[timestamp_array.index(max(timestamp_array))] = not outArray[timestamp_array.index(max(timestamp_array))]
                 outArrowArray = [PFEIL_OFFEN if entry else PFEIL_ZU for entry in outArray]
-                sidebar_menu_Output_Array=outArray+outArrowArray
-            #     #get the clicked submenu
-            #     currentlyClickedSubmenu_index = sidebar_subMenu_Input_Array.index(max(timestamp_array))
-            #     for item in sidebar_menu_Status_Array:
-            #         if(item.index == currentlyClickedSubmenu_index):
-            #             sidebar_menu_Output_Array.append(not item)
-            #             if(item):
-            #                 sidebar_menu_Output_Array.append(PFEIL_ZU)
-            #             else:
-            #                 sidebar_menu_Output_Array.append(PFEIL_OFFEN)
-            #         else:
-            #             sidebar_menu_Output_Array.append(item)
-            #             if (item):
-            #                 sidebar_menu_Output_Array.append(PFEIL_OFFEN)
-            #             else:
-            #                 sidebar_menu_Output_Array.append(PFEIL_ZU)
-            # #if there has been an URL event
+                sidebar_menu_Output_Array=outArray+outArrowArray+[strTimestampForDiv]
+
             else:
                 sidebar_menu_Output_Array = [False,
                                              False,
@@ -224,8 +215,8 @@ class defichainAnalyticsCallbacksClass:
                                              PFEIL_ZU,
                                              PFEIL_ZU,
                                              PFEIL_ZU,
-                                             PFEIL_ZU
-                                             ]
+                                             PFEIL_ZU,
+                                             strTimestampForDiv]
                 if urlPath in ['/', '/general']:
                     sidebar_menu_Output_Array[0] = True
                     sidebar_menu_Output_Array[7] = PFEIL_OFFEN

@@ -244,5 +244,8 @@ class defichainAnalyticsViewClass:
             id="sidebar",
         )
 
-        MainWindow = dcc.Loading([html.Div(id="page-content", className="contentstyle"),refLink], type="default")
+        MainWindow = dcc.Loading([html.Div(id="page-content", className="contentstyle"),
+                                  refLink,
+                                  html.Div(id='hiddenDivTimestampsMenuClicked', children='0 0 0 0 0 0 0', style={'display':'none'})],
+                                 type="default")
         self.layout = html.Div([dcc.Location(id="url"), sidebar, MainWindow])
