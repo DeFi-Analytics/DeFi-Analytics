@@ -169,7 +169,7 @@ class defichainAnalyticsModelClass:
             hourlyDEXData.set_index(['timeRounded'], inplace=True)
             hourlyDEXData['reserveA_DFI'] = hourlyDEXData['reserveA'] / hourlyDEXData['DFIPrices']
 
-            for poolSymbol in hourlyDEXData.symbol.unique():
+            for poolSymbol in hourlyDEXData.symbol.dropna().unique():
                 df2Add = hourlyDEXData[hourlyDEXData.symbol == poolSymbol]
                 df2Add = df2Add.drop(columns=['Time', 'symbol'])
 
