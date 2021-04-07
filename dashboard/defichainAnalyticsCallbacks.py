@@ -190,6 +190,7 @@ class defichainAnalyticsCallbacksClass:
             timestamp_oldArray = [int(entry) for entry in timestamp_oldArrayString]     # convert string entries to int entries
 
             n_clicked = not(timestamp_oldArray == timestamp_array)                      # compare old and new timestamp list, true if different (clicked)
+            urlLoadPage = not any(timestamp_oldArray)                                   # check if all old timestamp entries are 0 => page initially loaded
 
             status_Array = inArray[9:]
             status_Array = [False if entry is None else entry for entry in status_Array]
@@ -201,7 +202,7 @@ class defichainAnalyticsCallbacksClass:
                 outArrowArray = [PFEIL_OFFEN if entry else PFEIL_ZU for entry in outArray]
                 sidebar_menu_Output_Array=outArray+outArrowArray+[strTimestampForDiv]
 
-            else:
+            elif (urlLoadPage):
                 sidebar_menu_Output_Array = [False,
                                              False,
                                              False,
@@ -238,6 +239,10 @@ class defichainAnalyticsCallbacksClass:
                 elif urlPath in ['/about']:
                     sidebar_menu_Output_Array[6] = True
                     sidebar_menu_Output_Array[13] = PFEIL_OFFEN
+            else:
+                outArray = status_Array
+                outArrowArray = [PFEIL_OFFEN if entry else PFEIL_ZU for entry in outArray]
+                sidebar_menu_Output_Array = outArray+outArrowArray+[strTimestampForDiv]
 
             return sidebar_menu_Output_Array
 
