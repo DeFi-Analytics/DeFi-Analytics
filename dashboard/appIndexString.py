@@ -9,6 +9,13 @@ class appIndexStringClass:
             <head> 
                 {%metas%}
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta property="og:image" content="https://www.cakedefi-review.com/static/images/logo-defi-analytics_blackBackground.png">
+                <meta name="description" content="Keys and figures about DefiChain. Tracking and analyzing blockchain data for more insights.">
+                <title>DefiChain Analytics Dashboard</title>
+                <meta name="twitter:card" content="summary_large_image">
+                <meta name="twitter:title" content="DefiChain Analytics Dashboard">
+                <meta name="twitter:description" content="Keys and figures about DefiChain. Tracking and analyzing blockchain data for more insights.">
+                <meta name="twitter:image" content="https://www.cakedefi-review.com/static/images/logo-defi-analytics_blackBackground.png">
                 {%favicon%}
                 {%css%}
             </head>
