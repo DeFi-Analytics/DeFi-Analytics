@@ -18,12 +18,14 @@ class changelogViewClass:
                      {"name": 'Version', "id": 'Version'},
                      {"name": 'Changes', "id": 'Changes'}],
             data=data.to_dict('records'),
-            style_table={
-                    'padding':'20px'},
+            # style_table={
+            #        'padding':'20px'},
             style_cell_conditional=[
                     {'if': {'column_id': 'Version'}, 'width': '5%'},
                     {'if': {'column_id': 'Changes'}, 'width': '85%'}],
             style_data={
+                'font-size': '14px',
+                'font-family': 'monospace',
                 'width': '100px',
                 'maxWidth': '100px',
                 'minWidth': '100px',
