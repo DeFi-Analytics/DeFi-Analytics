@@ -7,6 +7,14 @@ class appIndexStringClass:
         <!DOCTYPE html>
         <html>
             <head> 
+                <script async src="https://www.googletagmanager.com/gtag/js?id=UA-194128823-1"></script>
+                <script>
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                
+                  gtag('config', 'UA-194128823-1');
+                </script>
                 {%metas%}
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <meta property="og:image" content="https://www.cakedefi-review.com/static/images/logo-defi-analytics_blackBackground.png">
