@@ -15,13 +15,13 @@ class aboutControllerClass:
 
     def getContent(self, entry):
         pageContent = None
-        if entry in ['', "imprint"]:
-            pageContent = self.imprintView.getImprintContent()
+
+        if entry in ['', 'changelog']:
+            pageContent = self.changelogView.getChangelogContent(self.defichainAnalyticsModel.changelogData)
         elif entry in ['cakereview']:
             pageContent = self.cakereviewView.getCakereviewContent()
-        elif entry in ['changelog']:
-            pageContent = self.changelogView.getChangelogContent(self.defichainAnalyticsModel.changelogData)
-
+        elif entry in ["imprint"]:
+            pageContent = self.imprintView.getImprintContent()
 
 
         return pageContent
