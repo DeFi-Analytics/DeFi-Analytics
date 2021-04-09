@@ -16,7 +16,7 @@ class imprintViewClass:
                                   'Oeschelbronner Weg 4', html.Br(),
                                   '75446 Wiernsheim' , html.Br(),
                                   'Germany', html.Br()]),
-                          html.P(['Telegram: ', html.A('https://t.me/DanielZirkel', href='https://t.me/DanielZirkel', target='_blank'), html.Br(),
+                          html.P(['Telegram: ', html.A('https://t.me/DanielZirkel', href='https://t.me/DanielZirkel', target='_blank', className='defiLink'), html.Br(),
                                   'e-mail: cakereviewdashboard@gmail.com']),
                           html.P(['Responsible for the contents in the sense of § 5 TMG § 18 Abs. 2 MStV:',html.Br(),
                                   'Daniel Zirkel']),

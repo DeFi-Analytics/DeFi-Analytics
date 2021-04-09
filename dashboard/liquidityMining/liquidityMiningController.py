@@ -25,12 +25,12 @@ class liquidityMiningControllerClass:
 
     def getContent(self, entry):
         pageContent = None
-        if entry in ["fees"]:
-            self.defichainAnalyticsModel.loadDailyTradingData()
-            pageContent = self.feesView.getFeesContent(self.defichainAnalyticsModel.dailyData)
-        elif entry in ["tvl"]:
+        if entry in ["", "tvl"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             pageContent = self.tvlView.getTVLContent(self.defichainAnalyticsModel.hourlyData)
+        elif entry in ["fees"]:
+            self.defichainAnalyticsModel.loadDailyTradingData()
+            pageContent = self.feesView.getFeesContent(self.defichainAnalyticsModel.dailyData)
         elif entry in ["liquidityToken"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             pageContent = self.liquidityTokenView.getLiquidityTokenContent(self.defichainAnalyticsModel.hourlyData)

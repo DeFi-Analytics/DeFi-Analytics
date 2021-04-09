@@ -19,11 +19,12 @@ class dexControllerClass:
 
     def getContent(self,entry):
         pageContent = None
-        if entry in ["", "volume"]:
-            self.defichainAnalyticsModel.loadDEXVolume()
-            pageContent = self.volumeView.getVolumeContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
-        elif entry in ["coinPrices"]:
+        if entry in ["", "coinPrices"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             pageContent = self.coinpriceView.getCoinpriceContent()
+        elif entry in ["volume"]:
+            self.defichainAnalyticsModel.loadDEXVolume()
+            pageContent = self.volumeView.getVolumeContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
+
 
         return pageContent

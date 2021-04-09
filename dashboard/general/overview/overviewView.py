@@ -80,8 +80,8 @@ class overviewViewClass:
             ]),
             html.P(['MN: Masternodes', html.Br(),
                     'Defichain Richlist and Coingecko: last update ', pd.to_datetime(data['date'].values[0]).strftime("%Y-%m-%d %H:%M"), html.Br(),
-                    html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank'), html.Br(),
-                    html.A('https://www.coingecko.com/en/coins/defichain', href='https://www.coingecko.com/en/coins/defichain', target='_blank')
+                    html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank', className='defiLink'), html.Br(),
+                    html.A('https://www.coingecko.com/en/coins/defichain', href='https://www.coingecko.com/en/coins/defichain', target='_blank', className='defiLink')
                     ], style={'fontSize': '0.65rem', 'padding-top': '20px'})]
         return htmlContent
 
@@ -129,9 +129,8 @@ class overviewViewClass:
                                ' DFI amount.', html.Br(),
                             'For identification of the masternodes the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
                             html.Br(),
-                            html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED',
-                                   href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED',
-                                   target='_blank'),], style={'text-align': 'justify'}),
+                            html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')],
+                               style={'text-align': 'justify'}),
                         html.P([html.B('Hint:'),' The presented diagrams are interactive.'
                                        ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                         style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})]

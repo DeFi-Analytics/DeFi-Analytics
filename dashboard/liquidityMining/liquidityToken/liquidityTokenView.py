@@ -108,7 +108,7 @@ class liquidityTokenViewClass:
     def getLTExplanation():
         liquidityTokenExplanation = [html.P(['As a liquidity provider you are getting liquidity token, which can be seen in the wallet. These tokens are your part of the corresponding pool. ',
                                        'Removing liquidity will swap these tokens back to the original pool pair tokens. More information regarding LT can be found on ',
-                                       html.A('Reddit',href='https://www.reddit.com/r/defiblockchain/comments/kfm6zw/liquidity_token_in_a_nutshell/',target='_blank'),'.'],style={'text-align': 'justify'}),
+                                       html.A('Reddit',href='https://www.reddit.com/r/defiblockchain/comments/kfm6zw/liquidity_token_in_a_nutshell/', target='_blank', className='defiLink'),'.'],style={'text-align': 'justify'}),
                                html.P(['While the TVL also depends on the current price, the number of liquidity token (first graph) represents the actual pool size. ',
                                        ' The ratio of your LT to the total number defines the reward part you are getting.'],style={'text-align': 'justify'}),
                                html.P(['Changing the number of liquidity token is only possible by adding or removing liquidity to the pool. The second graph calculates the '

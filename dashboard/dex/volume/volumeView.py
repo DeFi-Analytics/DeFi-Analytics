@@ -87,7 +87,7 @@ class volumeViewClass:
     @staticmethod
     def getDEXVolExplanation():
         coinDEXVolCardExplanation = [html.P(['The ',
-                                             html.A('DEX-API',href='https://api.defichain.io/v1/listswaps?network=mainnet',target='_blank'),
+                                             html.A('DEX-API',href='https://api.defichain.io/v1/listswaps?network=mainnet',target='_blank', className='defiLink'),
                                              ' is used to read out the 24 hour trading volume in USD. The values are given for each trading pool and for each coin.']),
                                              html.P(['In this first version the trading volume for each pool and the overall sum in USD is represented.']),
                                              html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'

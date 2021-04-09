@@ -18,7 +18,7 @@ class cakereviewViewClass:
         encoded_image = base64.b64encode(open(image_filename, 'rb').read()).decode('ascii')
 
         contentCakereview = [html.H4("Cakedefi-Review"),
-                             html.Div([html.P(['The origin DefiChain-Analytics was ', html.A('https://www.cakedefi-review.com/', href='https://www.cakedefi-review.com/', target='_blank'),
+                             html.Div([html.P(['The origin DefiChain-Analytics was ', html.A('https://www.cakedefi-review.com/', href='https://www.cakedefi-review.com/', target='_blank', className='defiLink'),
                                                ', which will continue to exists. But in future only with content regarding CakeDeFi.',]),
                                        html.A(html.Img(src='data:image/png;base64,{}'.format(encoded_image), style={'display': 'block', 'max-width': '100%', 'height': 'auto'}), href='https://www.cakedefi-review.com/', target='_blank'),])]
         return contentCakereview

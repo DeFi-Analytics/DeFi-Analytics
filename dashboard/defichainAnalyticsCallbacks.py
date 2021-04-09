@@ -54,88 +54,7 @@ class defichainAnalyticsCallbacksClass:
                 return not args[-1]
             return args[-1]
 
-        # # this function is used to toggle the is_open property of each Collapse
-        # def toggle_collapse(n, pathname, is_open, menu_name):
-        #     if pathname is not None:
-        #         # only if clicked, change arrow (first load, does not change the arrow)
-        #         if n:
-        #             #check if we are in the correct callback
-        #             print(pathname,' ',menu_name)
-        #             # if pathname==menu_name:
-        #             if is_open:
-        #                     # if menu is open (and will close), close the arrow
-        #                     className = PFEIL_ZU
-        #                     return False, className
-        #             else:
-        #                     # if menu is closed (and will open), open the arrow
-        #                     className = PFEIL_OFFEN
-        #                     return True, className
-        #
-        #
-        #         #if no click happened, check if urlpath and menu_name are equal.
-        #         if pathname==menu_name:
-        #             #if equal, open menu
-        #             return True, PFEIL_OFFEN
-        #         else:
-        #             #if not equal, check if we are in general menu callback
-        #             if (menu_name == '/general'):
-        #                 #if in general menu callback, check if path is empty
-        #                 if pathname!='/':
-        #                     #if path empty => close general_menu
-        #                     return False, PFEIL_ZU
-        #                 #else open the general menu
-        #                 else:
-        #                     return True, PFEIL_OFFEN
-        #             else:
-        #                 #if not in general menu callback, just close the menu
-        #                 return False, PFEIL_ZU
-        #
 
-
-
-        # # toggle general menu
-        # @app.callback([Output("submenu-general-collapse", "is_open"), Output("submenu-general-arrow", "className")],
-        #               [Input("submenu-general", "n_clicks"), Input("url", "pathname")], [State("submenu-general-collapse", "is_open")])
-        # def toggleGeneralMenu(n, pathname, isOpen):
-        #     return toggle_collapse(n, pathname, isOpen, '/general')
-        #
-        # # toggle blockchain menu
-        # @app.callback([Output("submenu-blockchain-collapse", "is_open"),Output("submenu-blockchain-arrow", "className")],
-        #               [Input("submenu-blockchain", "n_clicks"), Input("url", "pathname")], [State("submenu-blockchain-collapse", "is_open")])
-        # def toggleBlockchainMenu(n,pathname, isOpen):
-        #     return toggle_collapse(n,pathname, isOpen, '/blockchain')
-        #
-        # # toggle dex menu
-        # @app.callback(
-        #     [Output("submenu-dex-collapse", "is_open"), Output("submenu-dex-arrow", "className")],
-        #     [Input("submenu-dex", "n_clicks"), Input("url", "pathname")], [State("submenu-dex-collapse", "is_open")])
-        # def toggleDEXMenu(n,pathname, isOpen):
-        #     return toggle_collapse(n,pathname, isOpen, '/dex')
-        #
-        # # toggle liquidityMining menu
-        # @app.callback([Output("submenu-liquidityMining-collapse", "is_open"), Output("submenu-liquidityMining-arrow", "className")],
-        #               [Input("submenu-liquidityMining", "n_clicks"), Input("url", "pathname")], [State("submenu-liquidityMining-collapse", "is_open")])
-        # def toggleLiquidityMiningMenu(n,pathname, isOpen):
-        #     return toggle_collapse(n, pathname,isOpen, '/liquidityMining')
-        #
-        # # toggle token menu
-        # @app.callback(
-        #     [Output("submenu-token-collapse", "is_open"), Output("submenu-token-arrow", "className")],
-        #     [Input("submenu-token", "n_clicks"), Input("url", "pathname")], [State("submenu-token-collapse", "is_open")])
-        # def toggleTokenMenu(n,pathname, isOpen):
-        #     return toggle_collapse(n,pathname, isOpen, '/token')
-        #
-        # # toggle community menu
-        # @app.callback([Output("submenu-community-collapse", "is_open"), Output("submenu-community-arrow", "className")],
-        #               [Input("submenu-community", "n_clicks"), Input("url", "pathname")], [State("submenu-community-collapse", "is_open")])
-        # def toggleCommunityMenu(n,pathname, isOpen):
-        #     return toggle_collapse(n,pathname, isOpen, '/community')
-        #
-        # # toggle about menu
-        # @app.callback([Output("submenu-about-collapse", "is_open"), Output("submenu-about-arrow", "className")],
-        #               [Input("submenu-about", "n_clicks"), Input("url", "pathname")], [State("submenu-about-collapse", "is_open")])
-        # def toggleCommunityMenu(n, pathname, isOpen):
-        #     return toggle_collapse(n, pathname, isOpen, '/about')
 
         sidebar_subMenu_Input_Array=[
             Input("submenu-general", "n_clicks_timestamp"),
@@ -301,8 +220,20 @@ class defichainAnalyticsCallbacksClass:
                     selectedEntry = URLqueryEntries['entry'][0]
                 else:
                     #if it is the initial access to the main html and no path is given, the overview shall be selected
-                    if urlPath != '':
+                    if urlPath in ['/','/general']:
                         selectedEntry = 'overview'
+                    elif urlPath == '/blockchain':
+                        selectedEntry = 'addresses'
+                    elif urlPath == '/dex':
+                        selectedEntry = 'coinPrices'
+                    elif urlPath == '/liquidityMining':
+                        selectedEntry = 'tvl'
+                    elif urlPath == '/token':
+                        selectedEntry = 'cryptosDAT'
+                    elif urlPath == '/community':
+                        selectedEntry = 'twitter'
+                    elif urlPath == '/about':
+                        selectedEntry = 'changelog'
                     else:
                         selectedEntry = ''
             else:

@@ -126,7 +126,7 @@ class tvlViewClass:
     def getTVLExplanation():
         coinTVLCardExplanation = [html.P(['The total value locked is a key figure, that describes the Fiat value (here in Dollar) stored in the DEX.'],style={'text-align': 'justify'}),
                                   html.P(['The purple line represents the overall value of the DefiChain-DEX and the single pool-pairs are represented as stacked areas.',html.Br(),
-                                       ' All values are calculated with the help of the DEX-API (',html.A('API-Link',href='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false',target='_blank'),
+                                       ' All values are calculated with the help of the DEX-API (', html.A('API-Link',href='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false', target='_blank', className='defiLink'),
                                        ') and the Coingecko price feed. So, the TVL can be different if you use a single Exchange for the DFI-price.'],style={'text-align': 'justify'}),
                                   html.P(['Normally the TVL is shown in USD. But in this presentation the value can be influenced by new invested capital and by the coinprices. With beginning of Liquidity Mining we see a big price increase for DFI. ',
                                        'So, maybe the reprensentation in BTC or DFI is also interesting for giving some information of the TVL.'],style={'text-align': 'justify'}),

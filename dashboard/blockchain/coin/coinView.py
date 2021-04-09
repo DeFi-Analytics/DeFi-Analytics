@@ -124,8 +124,8 @@ class coinViewClass:
     @staticmethod
     def getCoinExplanation():
         coinCardExplanation = [html.P(['For tracking the amount of DFI and their distribution a snapshot of the DeFiChain richlist is made once a day (in the night).', html.Br(),
-                                       html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list',
-                                              target='_blank')], style={'text-align': 'justify'}),
+                                       html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank', className='defiLink')],
+                                      style={'text-align': 'justify'}),
 
                                html.P('The first diagram shows the absolute number of coins and their allocation.', style={'text-align': 'justify'}),
                                html.P([ 'The second diagram uses the same data base, but is a relative representation. Due to the fact that the DefiChain foundation no '

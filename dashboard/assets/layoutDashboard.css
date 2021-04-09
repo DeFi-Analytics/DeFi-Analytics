@@ -35,13 +35,13 @@ body {
 
 
 /* change color of all links */
-a:link{
+a.defiLink:link{
     color: #ff00af
 }
-a:visited{
+a.defiLink:visited{
     color: #ff00af
 }
-a:hover{
+a.defiLink:hover{
     color:#ff00af;
     text-decoration: underlined;
 }

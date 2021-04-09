@@ -99,18 +99,14 @@ class addressesViewClass:
         addressCardExplanation = [html.P([
                                             'For tracking the number of addresses a snapshot of the DeFiChain richlist is made once a day (in the night).',
                                              html.Br(),
-                                             html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list',
-                                                    href='http://explorer.defichain.io/#/DFI/mainnet/rich-list',
-                                                    target='_blank')]),
+                                             html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank', className='defiLink')]),
                                   html.P(
                                             'The first diagram shows the overall number of addresses with a DFI amount greater zero.'),
                                   html.P([
                                              'The second diagram shows the number of masternodes and all other addresses. For identification of the masternodes '
                                             'the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
                                             html.Br(),
-                                            html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED',
-                                             href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED',
-                                             target='_blank'),
+                                            html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink'),
                                  ], style={'text-align': 'justify'}),
                                   html.P([
                                              'The last graphic shows the genesis masternode number. The DefiChain started with 3 genesis masternodes, which do not need'

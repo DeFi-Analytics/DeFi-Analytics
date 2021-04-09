@@ -113,8 +113,8 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Liquidity Token", href="/liquidityMining?entry=liquidityToken", className="linkstyle", id="liquidityToken"),
                     dbc.NavLink("TVL", href="/liquidityMining?entry=tvl", className="linkstyle", id="tvl"),
+                    dbc.NavLink("Liquidity Token", href="/liquidityMining?entry=liquidityToken", className="linkstyle", id="liquidityToken"),
                     #dbc.NavLink("Coins locked", href="/liquidityMining?entry=coinsLocked", className="linkstyle", id="coinsLocked"),
                     dbc.NavLink("Fees", href="/liquidityMining?entry=fees", className="linkstyle", id="fees")
                 ],
@@ -214,7 +214,7 @@ class defichainAnalyticsViewClass:
                 ),
 
                 dbc.Col([html.Div(id='idLogoSidebar'),
-                         html.A(id='idVersion',href="/about?entry=changelog")]),
+                         html.A(id='idVersion',href="/about?entry=changelog", className='defiLink')]),
 
                 dbc.Col(),
             ],
@@ -223,11 +223,11 @@ class defichainAnalyticsViewClass:
         )
 
         refLink = html.Div(html.Marquee(['Special ',
-                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank'),
+                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
                       ' offer: Sign-up Bonus of $20 in DFI (after deposit of $50). You and me get $10 additional in DFI if you use my ',
-                      html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank'),
+                      html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
                       '. Cake is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet. ',
-                      html.A('Offer', href='https://app.cakedefi.com/?ref=476728', target='_blank'),
+                      html.A('Offer', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
                       ' Condition: DFI are staking for at least 180 days and generate revenue of ~37% APY.']), className='refLinkMarquee')
 
         sidebar = html.Div(

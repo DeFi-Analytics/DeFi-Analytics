@@ -60,12 +60,12 @@ class coinsAddressesViewClass:
     @staticmethod
     def getCoinAddressExplanation(data):
         coinAddressCardExplanation = [html.P(['For distribution visualization of DFI-deposits per address a snapshot of the Richlist is used as a base.', html.Br(),
-                               html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank')], style={'text-align': 'justify'}),
+                               html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank', className='defiLink')], style={'text-align': 'justify'}),
                                html.P('From this snapshop all individual addresses are extracted. This means, that the following categories are not displayed here:', style={'text-align': 'justify'}),
                                html.Ul([html.Li('Foundation coins'),
                                         html.Li('Community fund coins')]),
                                html.P('You can select a specific range of your interest and the complete histogram is recalculated.', style={'text-align': 'justify'}),
                                html.P(['Defichain Richlist: last update ', data['date'].dt.strftime("%Y-%m-%d").values[0], ' 01:00' , html.Br(),
-                                        html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank')],
+                                        html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank', className='defiLink')],
                                         style={'fontSize': '0.65rem', 'padding-top': '20px'})]
         return coinAddressCardExplanation
