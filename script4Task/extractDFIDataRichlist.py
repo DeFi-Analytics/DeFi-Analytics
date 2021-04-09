@@ -15,7 +15,7 @@ listCSVFiles = glob.glob(pathRichlist+"*_01-*.csv")
 foundRichlistFiles = [richlistDate for richlistDate in listCSVFiles]
 
 
-colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI', 'mnDFI', 'otherDFI', 'foundationDFI', 'nbMnGenesisId', 'mnGenesisDFI']
+colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI', 'mnDFI', 'otherDFI', 'foundationDFI', 'nbMnGenesisId', 'mnGenesisDFI','nbMnCakeId' ,'mnCakeDFI']
 
 dfDFIData = pd.read_csv(filepath)
 
@@ -36,15 +36,18 @@ for richlistFile in foundRichlistFiles:
 
         condMNGenesis = (rawRichlist.address == mnGenesis1) | (rawRichlist.address == mnGenesis2) | (rawRichlist.address == mnGenesis3)
         condMN = rawRichlist.mnAddressAPI
+        condMNCake = rawRichlist.mnAddressCakeAPI
         condPrivateAddress = (~condMN) & (rawRichlist.address != addFund) & (rawRichlist.address != addFoundation) & (rawRichlist.address != addFoundationAirdrop)
 
         # get balances of mn and private wallets
         balanceMN = rawRichlist[condMN].balance
+        balanceMNCake = rawRichlist[condMNCake].balance
         balanceMNGenesis = rawRichlist[condMNGenesis].balance
         balancePrivat = rawRichlist[condPrivateAddress].balance
 
         #calc data for Dashboard
         nbMnId = balanceMN.size
+        nbMnCakeId = balanceMNCake.size
         nbMnGenesisId = balanceMNGenesis.size
         nbOtherId = balancePrivat.size
         if addFund in rawRichlist.values:
@@ -53,6 +56,7 @@ for richlistFile in foundRichlistFiles:
             fundDFIValue = np.NaN
 
         mnDFI = balanceMN.sum()
+        mnCakeDFI = balanceMNCake.sum()
         mnGenesisDFI = balanceMNGenesis.sum()
         otherDFI = balancePrivat.sum()
 
@@ -65,7 +69,7 @@ for richlistFile in foundRichlistFiles:
             foundationDFIValue = foundationDFIValue+rawRichlist[rawRichlist.address == addFoundationAirdrop].balance.values[0]
 
 
-        listDFI2Add = [currDate, nbMnId, nbOtherId, fundDFIValue, mnDFI, otherDFI, foundationDFIValue, nbMnGenesisId, mnGenesisDFI]
+        listDFI2Add = [currDate, nbMnId, nbOtherId, fundDFIValue, mnDFI, otherDFI, foundationDFIValue, nbMnGenesisId, mnGenesisDFI, nbMnCakeId, mnCakeDFI]
         seriesDFI2Add = pd.Series(listDFI2Add, index=dfDFIData.columns)
 
         dfDFIData = dfDFIData.append(seriesDFI2Add, ignore_index=True, sort=False)
