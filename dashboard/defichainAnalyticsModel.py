@@ -240,25 +240,25 @@ class defichainAnalyticsModelClass:
         print('>>>> Start update token data ... <<<<')
         filePath = self.dataPath + 'TokenData.csv'
         fileInfo = pathlib.Path(filePath)
-        # if fileInfo.stat() != self.updated_tokenCryptos:
-        tokenData = pd.read_csv(filePath, index_col=0)
-        tokenData['timeRounded'] = pd.to_datetime(tokenData.Time).dt.floor('H')
-        tokenData.set_index(['timeRounded'], inplace=True)
+        if fileInfo.stat() != self.updated_tokenCryptos:
+            tokenData = pd.read_csv(filePath, index_col=0)
+            tokenData['timeRounded'] = pd.to_datetime(tokenData.Time).dt.floor('H')
+            tokenData.set_index(['timeRounded'], inplace=True)
 
-        for coinSymbol in tokenData['symbol'].unique():
-            df2Add = tokenData[tokenData['symbol']==coinSymbol][['Burned', 'minted', 'Collateral']]
-            df2Add['tokenDefiChain'] = df2Add['minted'] - df2Add['Burned'].fillna(0)
-            df2Add['diffToken'] = df2Add['Collateral']-df2Add['minted']+df2Add['Burned'].fillna(0)
+            for coinSymbol in tokenData['symbol'].unique():
+                df2Add = tokenData[tokenData['symbol']==coinSymbol][['Burned', 'minted', 'Collateral']]
+                df2Add['tokenDefiChain'] = df2Add['minted'] - df2Add['Burned'].fillna(0)
+                df2Add['diffToken'] = df2Add['Collateral']-df2Add['minted']+df2Add['Burned'].fillna(0)
 
-            # add prefix to column names for pool identification
-            colNamesOrig = df2Add.columns.astype(str)
-            colNamesNew = coinSymbol + '_' + colNamesOrig
-            df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+                # add prefix to column names for pool identification
+                colNamesOrig = df2Add.columns.astype(str)
+                colNamesNew = coinSymbol + '_' + colNamesOrig
+                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
 
-            # delete existing information and add new one
-            ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
-            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
-            self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+                # delete existing information and add new one
+                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
+                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
             self.updated_tokenCryptos = fileInfo.stat()
             print('######' + str(self.hourlyData.shape))
