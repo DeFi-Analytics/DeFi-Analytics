@@ -19,7 +19,7 @@ class liquidityTokenViewClass:
                                             {'label':'DOGE','value':'DOGE'},
                                             {'label':'LTC','value':'LTC'},
                                             {'label':'BCH','value':'BCH'}],
-                                            value='BTC', style=dict(width='200px',verticalAlign="bottom")))])]),
+                                            value='BTC', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
                             dbc.Col(dcc.Graph(id = 'liquidityTokenGraph', config={'displayModeBar': False})),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoLT")))]))]
         return content

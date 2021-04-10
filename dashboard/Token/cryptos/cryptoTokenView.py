@@ -12,14 +12,13 @@ class crpytoTokenViewClass:
                               dbc.ModalBody(self.getTokenExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoToken", className="ml-auto"))], id="modalToken", size='xl'),
                    dbc.Card(dbc.CardBody([html.Td('Select a wrapped token to have a look at: '),
-                                         html.Td(dcc.Dropdown(id='tokenCryptosCoin',options=[
-                                          {'label': 'BTC', 'value': 'BTC'},
-                                          {'label': 'ETH', 'value': 'ETH'},
-                                          {'label': 'USDT', 'value': 'USDT'},
-                                          {'label': 'DOGE', 'value': 'DOGE'},
-                                          {'label': 'LTC', 'value': 'LTC'},
-                                          {'label': 'BCH', 'value': 'BCH'}],
-                                            value='BTC', style=dict(width='200px', verticalAlign="bottom"))),
+                                         html.Td(dcc.Dropdown(id='tokenCryptosCoin',options=[{'label': 'BTC', 'value': 'BTC'},
+                                                                                             {'label': 'ETH', 'value': 'ETH'},
+                                                                                             {'label': 'USDT', 'value': 'USDT'},
+                                                                                             {'label': 'DOGE', 'value': 'DOGE'},
+                                                                                             {'label': 'LTC', 'value': 'LTC'},
+                                                                                             {'label': 'BCH', 'value': 'BCH'}],
+                                                              value='BTC', clearable=False, style=dict(width='200px', verticalAlign="bottom"))),
                    dbc.Col(dcc.Graph(id='tokenCryptosGraph', config={'displayModeBar': False})),
                    dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoToken")))]))]
         return content

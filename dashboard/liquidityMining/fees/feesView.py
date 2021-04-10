@@ -12,10 +12,9 @@ class feesViewClass:
                               dbc.ModalBody(self.getFeesExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoFees", className="ml-auto"))], id="modalFees", size='xl'),
                    dbc.Card(dbc.CardBody([html.Table([html.Tr([html.Td('Select representation style for fee graphic: '),
-                                          html.Td(dcc.Dropdown(id='feeRepresentation', options=[
-                                            {'label': 'stacked area curves', 'value': 'stacked'},
-                                            {'label': 'individual line curves', 'value': 'individual'}],
-                                            value='stacked', style=dict(width='200px', verticalAlign="bottom")))])]),
+                                          html.Td(dcc.Dropdown(id='feeRepresentation', options=[{'label': 'stacked area curves', 'value': 'stacked'},
+                                                                                                {'label': 'individual line curves', 'value': 'individual'}],
+                                                               value='stacked', clearable=False, style=dict(width='200px', verticalAlign="bottom")))])]),
                                           dcc.Graph(id='lmPaidFees', config={'displayModeBar': False}),
                                           html.Table([html.Tr([html.Td('Select pool for showing paid fees as native token: '),
                                                                html.Td(dcc.Dropdown(id='feeNativeCoin', options=[{'label': 'BTC', 'value': 'BTC'},
@@ -24,7 +23,7 @@ class feesViewClass:
                                                                                                                  {'label': 'LTC', 'value': 'LTC'},
                                                                                                                  {'label': 'DOGE', 'value': 'DOGE'},
                                                                                                                  {'label': 'BCH', 'value': 'BCH'}],
-                                                                                    value='BTC', style=dict(width='200px', verticalAlign="bottom")))])]),
+                                                                                    value='BTC', clearable=False, style=dict(width='200px', verticalAlign="bottom")))])]),
                                           dcc.Graph(id='lmPaidCoinFees', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoFees")))]))]
         return content

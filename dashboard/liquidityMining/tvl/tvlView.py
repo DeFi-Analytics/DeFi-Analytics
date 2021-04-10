@@ -16,7 +16,7 @@ class tvlViewClass:
                                           html.Td(dcc.Dropdown(id='defiTVLCurrency',options=[{'label': 'USD', 'value': 'USD'},
                                                                                              {'label': 'BTC', 'value': 'BTC'},
                                                                                              {'label': 'DFI', 'value': 'DFI'}],
-                                            value='USD', style=dict(width='200px',verticalAlign="bottom")))])]),
+                                                               value='USD', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
                                           dcc.Graph(id = 'dexTVL', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTVL")))]))]
         return content
