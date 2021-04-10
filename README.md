@@ -3,7 +3,7 @@
 This will be the new Dashboard with keys and figures about DefiChain. Till now, it is included and mixed with Cake-related topics under:
 https://www.cakedefi-review.com/DefiChain
 
-First release of new Dashboard will be announced on Telegram and Twitter.
+First release of new [Dashboard](https://www.defichain-analytics.com/) will be announced on Telegram and Twitter.
 <!--
 **DeFi-Analytics/DeFi-Analytics** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
