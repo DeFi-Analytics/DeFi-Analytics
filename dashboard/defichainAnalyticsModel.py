@@ -8,6 +8,8 @@ import pandas as pd
 
 from datetime import datetime, timedelta
 
+# https://www.pythonanywhere.com/forums/topic/29390/        for measuring the RAM usage on pythonanywhere
+
 class defichainAnalyticsModelClass:
     def __init__(self):
         workDir = os.path.abspath(os.getcwd())
@@ -96,6 +98,7 @@ class defichainAnalyticsModelClass:
             print('>>>> Richlist data loaded from csv-file <<<<')
 
     def loadDailyTradingData(self):
+        print('>>>> Start update trading data ...  <<<<')
         filePath = self.dataPath + 'dailyTradingResultsDEX.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_tradingData:
@@ -109,6 +112,7 @@ class defichainAnalyticsModelClass:
             print('>>>> Trading data loaded from csv-file <<<<')
 
     def loadDailyBlocktimeData(self):
+        print('>>>> Start update blocktime data ... <<<<')
         filePath = self.dataPath + 'BlockListStatistics.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_blocktime:
@@ -123,6 +127,7 @@ class defichainAnalyticsModelClass:
             print('>>>> Blocktime data loaded from csv-file <<<<')
 
     def loadDAAData(self):
+        print('>>>> Start update DAA data ... <<<<')
         filePath = self.dataPath + 'analyzedDataDAA.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_daa:
@@ -138,6 +143,7 @@ class defichainAnalyticsModelClass:
             print('>>>> DAA data loaded from csv-file <<<<')
 
     def loadTwitterData(self):
+        print('>>>> Start update twitter data ... <<<<')
         filePath = self.dataPath + 'analyzedTwitterData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_twitterData:
@@ -161,6 +167,7 @@ class defichainAnalyticsModelClass:
 
 
     def loadHourlyDEXdata(self):
+        print('>>>> Start update hourly DEX data ... <<<<')
         filePath = self.dataPath + 'LMPoolData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_dexHourly:
@@ -194,12 +201,14 @@ class defichainAnalyticsModelClass:
 
             self.hourlyData['Date'] = pd.to_datetime(self.hourlyData.index).strftime('%Y-%m-%d')
             self.updated_dexHourly = fileInfo.stat()
+            print('######' + str(self.hourlyData.shape))
             print('>>>> Hourly DEX data loaded from csv-file <<<<')
 
     def loadDEXVolume(self):
+        print('>>>> Start update DEX volume data ... <<<<')
         filePath = self.dataPath + 'DEXVolumeData.csv'
         fileInfo = pathlib.Path(filePath)
-        if fileInfo.stat() != self.updated_tokenCryptos:
+        if fileInfo.stat() != self.updated_dexVolume:
             volumeData = pd.read_csv(filePath, index_col=0)
             volumeData['timeRounded'] = pd.to_datetime(volumeData.Time).dt.floor('H')
             volumeData.set_index(['timeRounded'], inplace=True)
@@ -223,33 +232,36 @@ class defichainAnalyticsModelClass:
                 self.hourlyData['VolTotal'] = self.hourlyData['VolTotal'] + self.hourlyData[poolSymbol+'_'+'VolTotal'].fillna(0)
 
             self.updated_dexVolume = fileInfo.stat()
+            print('######' + str(self.hourlyData.shape))
             print('>>>> DEX volume data loaded from csv-file <<<<')
 
 
     def loadTokenCrypto(self):
+        print('>>>> Start update token data ... <<<<')
         filePath = self.dataPath + 'TokenData.csv'
         fileInfo = pathlib.Path(filePath)
-        if fileInfo.stat() != self.updated_tokenCryptos:
-            tokenData = pd.read_csv(filePath, index_col=0)
-            tokenData['timeRounded'] = pd.to_datetime(tokenData.Time).dt.floor('H')
-            tokenData.set_index(['timeRounded'], inplace=True)
+        # if fileInfo.stat() != self.updated_tokenCryptos:
+        tokenData = pd.read_csv(filePath, index_col=0)
+        tokenData['timeRounded'] = pd.to_datetime(tokenData.Time).dt.floor('H')
+        tokenData.set_index(['timeRounded'], inplace=True)
 
-            for coinSymbol in tokenData['symbol'].unique():
-                df2Add = tokenData[tokenData['symbol']==coinSymbol][['Burned', 'minted', 'Collateral']]
-                df2Add['tokenDefiChain'] = df2Add['minted'] - df2Add['Burned'].fillna(0)
-                df2Add['diffToken'] = df2Add['Collateral']-df2Add['minted']+df2Add['Burned'].fillna(0)
+        for coinSymbol in tokenData['symbol'].unique():
+            df2Add = tokenData[tokenData['symbol']==coinSymbol][['Burned', 'minted', 'Collateral']]
+            df2Add['tokenDefiChain'] = df2Add['minted'] - df2Add['Burned'].fillna(0)
+            df2Add['diffToken'] = df2Add['Collateral']-df2Add['minted']+df2Add['Burned'].fillna(0)
 
-                # add prefix to column names for pool identification
-                colNamesOrig = df2Add.columns.astype(str)
-                colNamesNew = coinSymbol + '_' + colNamesOrig
-                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+            # add prefix to column names for pool identification
+            colNamesOrig = df2Add.columns.astype(str)
+            colNamesNew = coinSymbol + '_' + colNamesOrig
+            df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
 
-                # delete existing information and add new one
-                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
-                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
-                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
             self.updated_tokenCryptos = fileInfo.stat()
+            print('######' + str(self.hourlyData.shape))
             print('>>>> DAT Cryptos data loaded from csv-file <<<<')
 
 
@@ -285,6 +297,7 @@ class defichainAnalyticsModelClass:
 
             self.minutelyData.dropna(axis=0, how='all',inplace=True)
             self.update_dexMinutely = fileInfo.stat()
+            print('######' + str(self.minutelyData.shape))
             print('>>>> Minutely DEX data loaded from csv-file <<<<')
 
     #### NO TIMESERIES ####
@@ -320,6 +333,7 @@ class defichainAnalyticsModelClass:
             self.snapshotData['duration'] = duration-timedelta(microseconds=duration.microseconds)          # remove microseconds
             self.snapshotData['etaEvent'] = datetime.utcnow()+self.snapshotData['duration']
             self.update_snapshotData = fileInfo.stat()
+            print('######' + str(self.snapshotData.shape))
             print('>>>>>>>>>>>>> Snapshot data loaded <<<<<<<<<<<<<')
 
     def loadChangelogData(self):
