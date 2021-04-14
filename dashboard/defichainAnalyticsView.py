@@ -58,7 +58,7 @@ class defichainAnalyticsViewClass:
             dbc.Collapse(
                 [
                     dbc.NavLink("Addresses", href="/blockchain?entry=addresses", className="linkstyle", id="addresses"),
-                    dbc.NavLink("DAA", href="/blockchain?entry=daa", className="linkstyle", id="daa"),
+                    dbc.NavLink("Daily Active Addresses", href="/blockchain?entry=daa", className="linkstyle", id="daa"),
                     dbc.NavLink("Coins", href="/blockchain?entry=coins", className="linkstyle", id="coins"),
                     dbc.NavLink("Change Coins/Addresses", href="/blockchain?entry=changeCoinAdresses", className="linkstyle", id="changeCoinAdresses"),
                     dbc.NavLink("Coins/Addresses", href="/blockchain?entry=coinsAddresses", className="linkstyle", id="coinsAddresses"),
@@ -198,7 +198,7 @@ class defichainAnalyticsViewClass:
                     dbc.NavLink("CakeDefi-Review", href="/about?entry=cakereview", className="linkstyle", id="cakereview"),
                     dbc.NavLink("Imprint", href="/about?entry=imprint", className="linkstyle", id="imprint")
                 ],
-                id="submenu-about-collapse",
+                id="submenu-about-collapse"
             ),
         ]
 
