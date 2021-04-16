@@ -11,8 +11,9 @@ class crpytoTokenViewClass:
         content = [dbc.Modal([dbc.ModalHeader("Info DeFi Asset Token (DAT)"),
                               dbc.ModalBody(self.getTokenExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoToken", className="ml-auto"))], id="modalToken", size='xl'),
-                   dbc.Card(dbc.CardBody([html.Td('Select a wrapped token to have a look at: '),
-                                         html.Td(dcc.Dropdown(id='tokenCryptosCoin',options=[{'label': 'BTC', 'value': 'BTC'},
+                   dbc.Card(dbc.CardBody([html.H4(['Wrapped token on DefiChain']),
+                                          html.Td('Select a wrapped token to have a look at: '),
+                                          html.Td(dcc.Dropdown(id='tokenCryptosCoin',options=[{'label': 'BTC', 'value': 'BTC'},
                                                                                              {'label': 'ETH', 'value': 'ETH'},
                                                                                              {'label': 'USDT', 'value': 'USDT'},
                                                                                              {'label': 'DOGE', 'value': 'DOGE'},
@@ -95,7 +96,7 @@ class crpytoTokenViewClass:
         figTokenData.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.785, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
         figTokenData.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.21, sizex=0.45, sizey=0.45, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figTokenData.update_layout(height=755,
+        figTokenData.update_layout(height=715,
                                    margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                    hovermode='x unified',
                                    hoverlabel=dict(font_color="#6c757d"),

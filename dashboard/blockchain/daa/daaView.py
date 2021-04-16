@@ -16,7 +16,8 @@ class daaViewClass:
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoDAA", className="ml-auto"))],
                                     id="modalDAA", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createDAAFig(data, bgImage), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([html.H4(['Daily active addresses (DAA)']),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDAAFig(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoDAA")))
                                           ]))]
         return content
@@ -29,12 +30,8 @@ class daaViewClass:
             row_width=[1],  # from bottom to top
             specs=[[{}]],
             shared_xaxes=True,
-            subplot_titles=(['Daily active addresses']))
-        figDAA.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
-        figDAA.layout.annotations[0].font.size = 20
-        figDAA.layout.annotations[0].yref = 'paper'
-        figDAA.layout.annotations[0].yanchor = 'bottom'
-        figDAA.layout.annotations[0].y = 1.05
+            subplot_titles=([]))
+
 
         lastValidDate = datetime.strptime(data['countAddresses'].dropna().index.values[-2], '%Y-%m-%d')
         date6MonthsBack = lastValidDate - dateutil.relativedelta.relativedelta(months=6)
@@ -64,7 +61,7 @@ class daaViewClass:
         # add background picture
         figDAA.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figDAA.update_layout(height=790,
+        figDAA.update_layout(height=750,
                              margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d",

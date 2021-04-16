@@ -12,7 +12,8 @@ class volumeViewClass:
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoVolume", className="ml-auto"))],
                                     id="modalVolume", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createDEXVolumeGraph(data, bgImage), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([html.H4(['Trading volumne (24hr) on DEX']),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDEXVolumeGraph(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoVolume")))
                                           ]))]
         return content
@@ -25,14 +26,8 @@ class volumeViewClass:
             row_width=[1],  # from bottom to top
             specs=[[{}]],
             shared_xaxes=True,
-            subplot_titles=(['Trading volume on DEX']))
-        figDEXVol.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
-        figDEXVol.layout.annotations[0].font.size = 20
-        figDEXVol.layout.annotations[0].yref = 'paper'
-        figDEXVol.layout.annotations[0].yanchor = 'bottom'
-        figDEXVol.layout.annotations[0].y = 1.05
-        figDEXVol.layout.annotations[0].xref = 'paper'
-        figDEXVol.layout.annotations[0].x = 0.5
+            subplot_titles=([]))
+
 
         hoverTemplateRepresenation = '$%{y:,.0f}'
 
@@ -68,8 +63,8 @@ class volumeViewClass:
         # add background picture
         figDEXVol.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figDEXVol.update_layout(height=790,
-                                margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figDEXVol.update_layout(height=750,
+                                margin={"t": 30, "l": 0, "b": 0, 'r': 0},
                                 hovermode='x unified',
                                 hoverlabel=dict(font_color="#6c757d"),
                                 legend=dict(orientation="h",

@@ -12,7 +12,8 @@ class tvlViewClass:
         content = [dbc.Modal([dbc.ModalHeader("Info Total Value Locked (TVL)"),
                               dbc.ModalBody(self.getTVLExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoTVL", className="ml-auto"))], id="modalTVL", size='xl'),
-                   dbc.Card(dbc.CardBody([html.Table([html.Tr([html.Td('Select currency for TVL representation:'),
+                   dbc.Card(dbc.CardBody([html.H4(['Total value locked (TVL)']),
+                                          html.Table([html.Tr([html.Td('Select currency for TVL representation:'),
                                           html.Td(dcc.Dropdown(id='defiTVLCurrency',options=[{'label': 'USD', 'value': 'USD'},
                                                                                              {'label': 'BTC', 'value': 'BTC'},
                                                                                              {'label': 'DFI', 'value': 'DFI'}],
@@ -53,12 +54,7 @@ class tvlViewClass:
             row_width=[1],  # from bottom to top
             specs=[[{}]],
             shared_xaxes=True,
-            subplot_titles=(['Total value locked (TVL)']))
-        figTVL.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
-        figTVL.layout.annotations[0].font.size = 20
-        figTVL.layout.annotations[0].yref = 'paper'
-        figTVL.layout.annotations[0].yanchor = 'bottom'
-        figTVL.layout.annotations[0].y = 1.05
+            subplot_titles=([]))
 
         # single TVL graphs
         trace_TVLBTC = dict(type='scatter', name='BTC', x=data['BTC-DFI_'+columnName].dropna().index, y=data['BTC-DFI_'+columnName].dropna(), stackgroup='one',
@@ -106,7 +102,7 @@ class tvlViewClass:
         # add background picture
         figTVL.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.25))
 
-        figTVL.update_layout(height=755,
+        figTVL.update_layout(height=715,
                              margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),

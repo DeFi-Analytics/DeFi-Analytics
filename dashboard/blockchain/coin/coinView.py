@@ -13,7 +13,8 @@ class coinViewClass:
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoCoin", className="ml-auto"))],
                                     id="modalCoin", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createCoinFigure(data, bgImage), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([html.H4(['Coin distribution and development']),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createCoinFigure(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoin")))
                                           ]))]
         return content
@@ -105,7 +106,7 @@ class coinViewClass:
         figDFI.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.79, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
         figDFI.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.22, sizex=0.45, sizey=0.45, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figDFI.update_layout(height=790,
+        figDFI.update_layout(height=750,
                              margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),

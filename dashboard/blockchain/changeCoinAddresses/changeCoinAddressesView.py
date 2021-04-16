@@ -13,7 +13,8 @@ class changeCoinAddressesViewClass:
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoChangeCoinAddresses", className="ml-auto"))],
                                     id="modalChangeCoinAddresses", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createCoinChangeAddressesFigure(data, bgImage), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([html.H4(['Change of coins and addresses numbers on a daily base']),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createCoinChangeAddressesFigure(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoChangeCoinAddresses")))
                                           ]))]
         return content
@@ -100,7 +101,7 @@ class changeCoinAddressesViewClass:
         figChange.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.79, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
         figChange.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.22, sizex=0.45, sizey=0.45, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figChange.update_layout(height=790,
+        figChange.update_layout(height=750,
                                 margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                 hovermode='x unified',
                                 hoverlabel=dict(font_color="#6c757d"),

@@ -12,7 +12,8 @@ class transactionsViewClass:
                               dbc.ModalBody(self.getTxOverviewExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoTransactions", className="ml-auto"))],
                                     id="modalTransactions", size='xl'),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.getTransactionsFigure(data, bgImage), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([html.H4(['Transactions on a daily base']),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.getTransactionsFigure(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTransactions")))
                                           ]))]
         return content
@@ -63,7 +64,7 @@ class transactionsViewClass:
         figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.87, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
         figTxOverview.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.3, sizex=0.4, sizey=0.4, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figTxOverview.update_layout(height=790,
+        figTxOverview.update_layout(height=750,
                                     margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                     hovermode='x unified',
                                     hoverlabel=dict(font_color="#6c757d"),

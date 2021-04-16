@@ -11,7 +11,8 @@ class twitterViewClass:
         content = [dbc.Modal([dbc.ModalHeader("Info Twitter Activity"),
                               dbc.ModalBody(self.getTwitterExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoTwitter", className="ml-auto"))], id="modalTwitter", size='xl'),
-                   dbc.Card(dbc.CardBody([dcc.Graph(figure=self.createTweetLikeGraph(data, bgImage), id='socialmediaTwitterTweetGraph', config={'displayModeBar': False}),
+                   dbc.Card(dbc.CardBody([html.H4(['Twitter statistics']),
+                                          dcc.Graph(figure=self.createTweetLikeGraph(data, bgImage), id='socialmediaTwitterTweetGraph', config={'displayModeBar': False}),
                                           dcc.Graph(figure=self.createTwitterUniqueUserGraph(data, bgImage), id='socialmediaTwitterUserGraph',config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTwitter")))]))]
         return content

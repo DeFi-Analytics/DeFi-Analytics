@@ -13,7 +13,8 @@ class blocktimeViewClass:
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoBlocktime", className="ml-auto"))],
                                     id="modalBlocktime", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([dbc.Row(dbc.Col(dcc.Graph(figure=self.createBlocktimeFigure(data, bgImage), config={'displayModeBar': False}))),
+                   dbc.Card(dbc.CardBody([html.H4(['Block time analysis on a daily base']),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createBlocktimeFigure(data, bgImage), config={'displayModeBar': False}))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoBlocktime")))
                                           ]))]
         return content
@@ -30,9 +31,9 @@ class blocktimeViewClass:
             shared_xaxes=True,
             subplot_titles=(['Mean Block time', 'Block time distribution']))
         figBlockTime.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
-        figBlockTime.layout.annotations[0].font.size = 20
+        figBlockTime.layout.annotations[0].font.size = 18
         figBlockTime.layout.annotations[1].font.color = '#6c757d'
-        figBlockTime.layout.annotations[1].font.size = 20
+        figBlockTime.layout.annotations[1].font.size = 18
 
         trace_meanTime = dict(type='scatter', name='Mean Time',
                               x=data['meanBlockTime'].dropna().index.values[:-1],
@@ -105,7 +106,7 @@ class blocktimeViewClass:
         figBlockTime.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.87, sizex=0.3, sizey=0.3,  xanchor="center", yanchor="middle", opacity=0.2))
         figBlockTime.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.3, sizex=0.5, sizey=0.5, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figBlockTime.update_layout(height=790,
+        figBlockTime.update_layout(height=750,
                                    margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                    hovermode='x unified',
                                    hoverlabel=dict(font_color="#6c757d"),

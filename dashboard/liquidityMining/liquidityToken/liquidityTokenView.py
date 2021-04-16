@@ -11,8 +11,9 @@ class liquidityTokenViewClass:
         content = [dbc.Modal([dbc.ModalHeader("Info Liquidity Token (LT)"),
                               dbc.ModalBody(self.getLTExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoLT", className="ml-auto"))], id="modalLT", size='xl'),
-                   dbc.Card(dbc.CardBody([html.Table([html.Tr([html.Td('Select pool for plotting liquidity token data:'),
-                                           html.Td(dcc.Dropdown(id='LTSelection',options=[
+                   dbc.Card(dbc.CardBody([html.H4(['Liquidity Token']),
+                                          html.Table([html.Tr([html.Td('Select pool for plotting liquidity token data:'),
+                                          html.Td(dcc.Dropdown(id='LTSelection',options=[
                                             {'label':'BTC','value':'BTC'},
                                             {'label':'ETH','value':'ETH'},
                                             {'label':'USDT','value':'USDT'},
@@ -86,7 +87,7 @@ class liquidityTokenViewClass:
         figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.46, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
         figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.13, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
 
-        figLiquidityToken.update_layout(height=755,
+        figLiquidityToken.update_layout(height=715,
                                         margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                         hovermode='x unified',
                                         hoverlabel=dict(font_color="#6c757d",

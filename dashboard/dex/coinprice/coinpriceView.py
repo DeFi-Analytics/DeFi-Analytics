@@ -13,7 +13,8 @@ class coinpriceViewClass:
         content = [dbc.Modal([dbc.ModalHeader("Info DEX Coinprice"),
                               dbc.ModalBody(self.getCoinPriceExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoCoinprice", className="ml-auto"))], id="modalCoinprice", size='xl'),
-                   dbc.Card(dbc.CardBody([html.Table([html.Tr([html.Td('Select price feed reference for deviation calculation:'),
+                   dbc.Card(dbc.CardBody([html.H4(['Coinprices on DEX and other exchanges']),
+                                          html.Table([html.Tr([html.Td('Select price feed reference for deviation calculation:'),
                                           html.Td(dcc.Dropdown(id='dexCoinpriceReference', options=[{'label': 'Coingecko', 'value': 'Coingecko'},
                                                                                                  {'label': 'Bittrex', 'value': 'Bittrex'}],
                                                                value='Coingecko', clearable=False, style=dict(width='200px', verticalAlign="bottom")))]),
@@ -136,7 +137,7 @@ class coinpriceViewClass:
         figPrice.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.832, sizex=bgimageSize, sizey=bgimageSize,  xanchor="center", yanchor="middle", opacity=0.25))
         figPrice.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.26, sizex=bgimageSize, sizey=bgimageSize, xanchor="center", yanchor="middle", opacity=0.25))
 
-        figPrice.update_layout(height=715,
+        figPrice.update_layout(height=675,
                                        margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                        hovermode='x unified',
                                        hoverlabel=dict(font_color="#6c757d"),
