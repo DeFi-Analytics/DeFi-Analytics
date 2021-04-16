@@ -19,7 +19,8 @@ from .blocktime.blocktimeCallbacks import blocktimeCallbacksClass
 from .transactions.transactionsView import transactionsViewClass
 from .transactions.transactionsCallback import transactionsCallbacksClass
 
-
+from .masternodes.masternodesView import masternodesViewClass
+from .masternodes.masternodesCallbacks import masternodesCallbacksClass
 
 class blockchainControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -28,6 +29,10 @@ class blockchainControllerClass:
         # initialize addresses classes
         self.addressesView = addressesViewClass()
         self.addressesCallbacks = addressesCallbacksClass(app)       # create callbacks on top level
+
+        # initialize masternode number
+        self.masternodesView = masternodesViewClass()
+        self.masternodesCallbacks = masternodesCallbacksClass(self.defichainAnalyticsModel, self.masternodesView, app)
 
         # initialize daa classes
         self.daaView = daaViewClass()
@@ -58,6 +63,9 @@ class blockchainControllerClass:
         if entry in ["", "addresses"]:
             self.defichainAnalyticsModel.loadExtractedRichlistData()
             pageContent = self.addressesView.getAddressContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
+        elif entry in ['mn']:
+            self.defichainAnalyticsModel.loadExtractedRichlistData()
+            pageContent = self.masternodesView.getMasternodesContent()
         elif entry in ["daa"]:
             self.defichainAnalyticsModel.loadDAAData()
             pageContent = self.daaView.getDAAContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
@@ -66,6 +74,7 @@ class blockchainControllerClass:
             self.defichainAnalyticsModel.loadExtractedRichlistData()
             pageContent = self.coinView.getCoinContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["changeCoinAdresses"]:
+            self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadExtractedRichlistData()
             pageContent = self.changeCoinAddressesView.getChangeCoinsAddressesContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["coinsAddresses"]:

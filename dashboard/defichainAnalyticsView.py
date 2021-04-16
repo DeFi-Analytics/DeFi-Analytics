@@ -58,6 +58,7 @@ class defichainAnalyticsViewClass:
             dbc.Collapse(
                 [
                     dbc.NavLink("Addresses", href="/blockchain?entry=addresses", className="linkstyle", id="addresses"),
+                    dbc.NavLink("Masternodes", href="/blockchain?entry=mn", className="linkstyle", id="mn"),
                     dbc.NavLink("Daily Active Addresses", href="/blockchain?entry=daa", className="linkstyle", id="daa"),
                     dbc.NavLink("Coins", href="/blockchain?entry=coins", className="linkstyle", id="coins"),
                     dbc.NavLink("Change Coins/Addresses", href="/blockchain?entry=changeCoinAdresses", className="linkstyle", id="changeCoinAdresses"),

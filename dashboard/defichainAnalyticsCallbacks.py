@@ -167,6 +167,7 @@ class defichainAnalyticsCallbacksClass:
 
         sidebar_link_name_array = ['overview',
                                    'addresses',
+                                   'mn',
                                    'daa',
                                    'coins',
                                    'changeCoinAdresses',
@@ -187,6 +188,7 @@ class defichainAnalyticsCallbacksClass:
         # define callback sidebar_link_state output array
         sidebar_active_link_array_output = [Output('overview', 'className'),
                                             Output('addresses', 'className'),
+                                            Output('mn', 'className'),
                                             Output('daa', 'className'),
                                             Output('coins', 'className'),
                                             Output('changeCoinAdresses', 'className'),
