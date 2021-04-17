@@ -20,26 +20,27 @@ class defichainAnalyticsCallbacksClass:
     def register_callbacks(self, app):
 
         #define the inputs for the menu_button handler
-        sidebar_toggle_menu_button_inputs = [     Input("sidebarResponsiveExpandButton", 'n_clicks_timestamp'),
-                                           Input('overview', 'n_clicks_timestamp'),
-                                           Input('addresses', 'n_clicks_timestamp'),
-                                           Input('daa', 'n_clicks_timestamp'),
-                                           Input('coins', 'n_clicks_timestamp'),
-                                           Input('changeCoinAdresses', 'n_clicks_timestamp'),
-                                           Input('coinsAddresses', 'n_clicks_timestamp'),
-                                           Input('blocktime', 'n_clicks_timestamp'),
-                                           Input('transactions', 'n_clicks_timestamp'),
-                                           Input('coinPrices', 'n_clicks_timestamp'),
-                                           Input('volume', 'n_clicks_timestamp'),
-                                           Input('liquidityToken', 'n_clicks_timestamp'),
-                                           Input('tvl', 'n_clicks_timestamp'),
-                                           # Input('coinsLocked', 'n_clicks_timestamp'),
-                                           Input('fees', 'n_clicks_timestamp'),
-                                           Input('cryptosDAT', 'n_clicks_timestamp'),
-                                           Input('twitter', 'n_clicks_timestamp'),
-                                           Input('changelog', 'n_clicks_timestamp'),
-                                           Input('cakereview', 'n_clicks_timestamp'),
-                                           Input('imprint', 'n_clicks_timestamp')]
+        sidebar_toggle_menu_button_inputs = [Input("sidebarResponsiveExpandButton", 'n_clicks_timestamp'),
+                                             Input('overview', 'n_clicks_timestamp'),
+                                             Input('addresses', 'n_clicks_timestamp'),
+                                             Input('mn', 'n_clicks_timestamp'),
+                                             Input('daa', 'n_clicks_timestamp'),
+                                             Input('coins', 'n_clicks_timestamp'),
+                                             Input('changeCoinAdresses', 'n_clicks_timestamp'),
+                                             Input('coinsAddresses', 'n_clicks_timestamp'),
+                                             Input('blocktime', 'n_clicks_timestamp'),
+                                             Input('transactions', 'n_clicks_timestamp'),
+                                             Input('coinPrices', 'n_clicks_timestamp'),
+                                             Input('volume', 'n_clicks_timestamp'),
+                                             Input('liquidityToken', 'n_clicks_timestamp'),
+                                             Input('tvl', 'n_clicks_timestamp'),
+                                             # Input('coinsLocked', 'n_clicks_timestamp'),
+                                             Input('fees', 'n_clicks_timestamp'),
+                                             Input('cryptosDAT', 'n_clicks_timestamp'),
+                                             Input('twitter', 'n_clicks_timestamp'),
+                                             Input('changelog', 'n_clicks_timestamp'),
+                                             Input('cakereview', 'n_clicks_timestamp'),
+                                             Input('imprint', 'n_clicks_timestamp')]
 
         sidebar_toggle_menu_button_states = [State("menuResponsiveCollapse", "is_open")]
         # this function is used to toggle the is_open property of each Collapse of the menu_button
