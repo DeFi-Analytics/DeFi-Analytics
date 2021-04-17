@@ -59,6 +59,11 @@ color: #000000;
 .submenu_linkstyle{
     cursor: pointer;
     margin-left: 0.1rem;
+    color: #ffffff;
+}
+
+.submenu_linkstyle:hover{
+    color: #ff00af;
 }
 
 .sidebarActivelink{
