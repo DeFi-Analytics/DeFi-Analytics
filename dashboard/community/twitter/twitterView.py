@@ -26,7 +26,7 @@ class twitterViewClass:
             specs=[[{}],
                    [{}]],
             shared_xaxes=True,
-            subplot_titles=(['DefiChain Twitter activity (tweets, retweets, replies)', 'Likes for DefiChain-Tweets']))
+            subplot_titles=(['DefiChain Twitter activity', 'Likes for DefiChain-Tweets']))
         figTwitter.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figTwitter.layout.annotations[0].font.size = 20
         figTwitter.layout.annotations[1].font.color = '#6c757d'
@@ -79,7 +79,7 @@ class twitterViewClass:
             row_width=[1],  # from bottom to top
             specs=[[{}]],
             shared_xaxes=True,
-            subplot_titles=(['Number of unique users with DefiChain related activities']))
+            subplot_titles=(['Unique users with DefiChain-Tweets']))
         figTwitter.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figTwitter.layout.annotations[0].font.size = 20
 

@@ -77,7 +77,6 @@ class overviewViewClass:
                 html.Tr(
                     [html.Td('corresponding rank'),
                      html.Td("{:,.0f}".format(data['marketCapRank'].values[0]))]),
-                html.Tr(html.Td(html.Br())),
 
             ]),
             html.P(['MN: Masternodes', html.Br(),
@@ -100,20 +99,21 @@ class overviewViewClass:
 
         figDFIPie.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.75, sizey=0.75,  xanchor="center", yanchor="middle", opacity=0.25))
 
-        figDFIPie.update_layout(height=630,
-                                margin={"t": 40, "l": 20, "b": 20},
+        figDFIPie.update_layout(height=750,
+                                margin={"t": 40, "l": 20, "b": 20, "r": 20},
                                 hovermode='x unified',
                                 # hoverlabel=dict( font_color="#aaaaaa"),
                                 legend=dict(yanchor="top",
-                                            y=0.5,
-                                            xanchor="left",
-                                            x=1.1),
+                                            y=-0.1,
+                                            xanchor="center",
+                                            x=0.5,
+                                            orientation="h",),
                                 )
         figDFIPie.layout.plot_bgcolor = '#ffffff'  # background plotting area
         figDFIPie.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area
         figDFIPie.layout.legend.font.color = '#6c757d'  # font color legend
 
-        dfiGraph = [html.H4('DFI distribution'), dcc.Graph(figure=figDFIPie, config={'displayModeBar': False})]
+        dfiGraph = [html.H4('DFI distribution'), dcc.Graph(figure=figDFIPie, config={'displayModeBar': False}, id='pieChartDFI')]
         return dfiGraph
 
     @staticmethod

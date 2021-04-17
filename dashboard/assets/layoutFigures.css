@@ -1,29 +1,67 @@
-/* Format title of graphic */
-.gtitle {font-size: 18px !important;}
-/* Format title of subplots */
-.annotation-text{font-size: 18px !important;
-                 margin-bottom: 200px}
+@media only screen and (min-width: 768px) {
+    /* Format title of graphic */
+    .gtitle {font-size: 18px !important;}
+    /* Format title of subplots */
+    .annotation-text{font-size: 18px !important;
+                     margin-bottom: 200px}
+    /* Format legend */
+    .legendtext {font-size: 14px !important;}
+    /* Format 3 x-axis */
+    .xtick text{font-size: 12px !important;}
+    .x2tick text{font-size: 12px !important;}
+    .x3tick text{font-size: 12px !important;}
+    .xtitle {font-size: 14px !important;}
+    .x2title {font-size: 14px !important;}
+    .x3title {font-size: 14px !important;}
 
-/* Format legend */
-.legendtext {font-size: 14px !important;}
+    /* Format 4 y-axis */
+    .ytick text{font-size: 12px !important;}
+    .y2tick text{font-size: 12px !important;}
+    .y3tick text{font-size: 12px !important;}
+    .y4tick text{font-size: 12px !important;}
+    .ytitle {font-size: 14px !important;}
+    .y2title {font-size: 14px !important;}
+    .y3title {font-size: 14px !important;}
+    .y4title {font-size: 14px !important;}
 
-/* Format 3 x-axis */
-.xtick text{font-size: 12px !important;}
-.x2tick text{font-size: 12px !important;}
-.x3tick text{font-size: 12px !important;}
-.xtitle {font-size: 14px !important;}
-.x2title {font-size: 14px !important;}
-.x3title {font-size: 14px !important;}
+    /* Font Size Pie Chart */
+    .slicetext {font-size: 16px !important;}
 
-/* Format 4 y-axis */
-.ytick text{font-size: 12px !important;}
-.y2tick text{font-size: 12px !important;}
-.y3tick text{font-size: 12px !important;}
-.y4tick text{font-size: 12px !important;}
-.ytitle {font-size: 14px !important;}
-.y2title {font-size: 14px !important;}
-.y3title {font-size: 14px !important;}
-.y4title {font-size: 14px !important;}
+    #pieChartDFI {
+        height: 750px;
+    }
+}
 
-/* Font Size Pie Chart */
-.slicetext {font-size: 16px !important;}
+@media only screen and (max-width: 768px) {
+    /* Format title of graphic */
+    .gtitle {font-size: 14px !important;}
+    /* Format title of subplots */
+    .annotation-text{font-size: 14px !important;
+                     margin-bottom: 200px}
+    /* Format 3 x-axis */
+    .xtick text{font-size: 10px !important;}
+    .x2tick text{font-size: 10px !important;}
+    .x3tick text{font-size: 10px !important;}
+    .xtitle {font-size: 12px !important;}
+    .x2title {font-size: 12px !important;}
+    .x3title {font-size: 12px !important;}
+
+    /* Format 4 y-axis */
+    .ytick text{font-size: 10px !important;}
+    .y2tick text{font-size: 10px !important;}
+    .y3tick text{font-size: 10px !important;}
+    .y4tick text{font-size: 10px !important;}
+    .ytitle {font-size: 12px !important;}
+    .y2title {font-size: 12px !important;}
+    .y3title {font-size: 12px !important;}
+    .y4title {font-size: 12px !important;}
+
+    /* Font Size Pie Chart */
+    .slicetext {font-size: 12px !important;}
+
+    #pieChartDFI {
+        height: 500px;
+    }
+}
+
+
