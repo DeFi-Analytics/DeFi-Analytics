@@ -56,6 +56,8 @@ class overviewViewClass:
                          html.Td("{:,.0f} DFI".format(data['lmDFI'].values[0]))]),
                 html.Tr([html.Td('DFI Token'),
                          html.Td("{:,.0f} DFI".format(data['tokenDFI'].values[0]))]),
+                html.Tr([html.Td('ERC20 Collateral'),
+                         html.Td("{:,.0f} DFI".format(data['erc20DFI'].values[0]))]),
 
                 html.Tr(html.Td(html.Br())),
                 html.Tr(
@@ -89,9 +91,9 @@ class overviewViewClass:
     def createPieChartDFI(data,  bgImage):
         figDFIPie = go.Figure()
 
-        labelList = ['Masternodes', 'Community fund', 'Foundation', 'Other', 'Liquidity Pool', 'DFI token']
-        valueList = [data['mnDFI'].values[0], data['fundDFI'].values[0], data['foundationDFI'].values[0], data['otherDFI'].values[0], data['lmDFI'].values[0], data['tokenDFI'].values[0]]
-        colorList = ['#da3832', '#ff9800', '#22b852', '#410eb2', '#ff2ebe', '#00fffb']
+        labelList = ['Masternodes', 'Community fund', 'Foundation', 'Other', 'Liquidity Pool', 'DFI token', 'ERC20 Collateral']
+        valueList = [data['mnDFI'].values[0], data['fundDFI'].values[0], data['foundationDFI'].values[0], data['otherDFI'].values[0], data['lmDFI'].values[0], data['tokenDFI'].values[0], data['erc20DFI'].values[0]]
+        colorList = ['#da3832', '#ff9800', '#22b852', '#410eb2', '#ff2ebe', '#00fffb','#808000']
         trace_pieDFI = dict(type='pie', name='', labels=labelList, values=valueList, marker=dict(colors=colorList), opacity=1,
                             textposition='inside', textfont_size=16, hovertemplate='%{label}: <br> %{value:,.0f}')
         figDFIPie.add_trace(trace_pieDFI)
