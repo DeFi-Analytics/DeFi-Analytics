@@ -3,7 +3,7 @@ from dash.dependencies import Input, Output, State
 
 class masternodesCallbacksClass:
     def __init__(self, defichainAnalyticsModel, mnView, app):
-        @app.callback(Output('masternodesGraphic', 'figure'),
+        @app.callback(Output('figureMasternodes', 'figure'),
                       [Input('mnRepresentation', 'value')])
         def updateTVLGraphs(selectedRepresentation):
             figMN = mnView.createMasternodesGraph(defichainAnalyticsModel.dailyData, selectedRepresentation, defichainAnalyticsModel.figBackgroundImage)

@@ -12,8 +12,8 @@ class twitterViewClass:
                               dbc.ModalBody(self.getTwitterExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoTwitter", className="ml-auto"))], id="modalTwitter", size='xl'),
                    dbc.Card(dbc.CardBody([html.H4(['Twitter statistics']),
-                                          dcc.Graph(figure=self.createTweetLikeGraph(data, bgImage), id='socialmediaTwitterTweetGraph', config={'displayModeBar': False}),
-                                          dcc.Graph(figure=self.createTwitterUniqueUserGraph(data, bgImage), id='socialmediaTwitterUserGraph',config={'displayModeBar': False}),
+                                          dcc.Graph(figure=self.createTweetLikeGraph(data, bgImage), id='figureTwitterTweet', config={'displayModeBar': False}),
+                                          dcc.Graph(figure=self.createTwitterUniqueUserGraph(data, bgImage), id='figureTwitterUser',config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTwitter")))]))]
         return content
 
@@ -56,8 +56,7 @@ class twitterViewClass:
         figTwitter.update_yaxes(title_text='# likes / day', tickformat=",.2f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)  # ,range=[-200000, 1000000]
         figTwitter.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figTwitter.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
-        figTwitter.update_layout(height=680,
-                                 margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figTwitter.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                  hovermode='x unified',
                                  hoverlabel=dict(font_color="#6c757d"),
                                  legend=dict(orientation="h",

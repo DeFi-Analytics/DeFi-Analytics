@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output, State
 class tvlCallbacksClass:
     def __init__(self, defichainAnalyticsModel, tvlView, app):
 
-        @app.callback(Output('dexTVL', 'figure'),
+        @app.callback(Output('figureTVL', 'figure'),
                       [Input('defiTVLCurrency', 'value')])
         def updateTVLGraphs(selectedRepresentation):
             figFee = tvlView.createTVLGraph(defichainAnalyticsModel.hourlyData, selectedRepresentation, defichainAnalyticsModel.figBackgroundImage)

@@ -16,7 +16,7 @@ class feesViewClass:
                                           html.Td(dcc.Dropdown(id='feeRepresentation', options=[{'label': 'stacked area curves', 'value': 'stacked'},
                                                                                                 {'label': 'individual line curves', 'value': 'individual'}],
                                                                value='stacked', clearable=False, style=dict(width='200px', verticalAlign="bottom")))])]),
-                                          dcc.Graph(id='lmPaidFees', config={'displayModeBar': False}),
+                                          dcc.Graph(id='figureLMPaidFees', config={'displayModeBar': False}),
                                           html.Table([html.Tr([html.Td('Select pool for showing paid fees as native token: '),
                                                                html.Td(dcc.Dropdown(id='feeNativeCoin', options=[{'label': 'BTC', 'value': 'BTC'},
                                                                                                                  {'label': 'ETH', 'value': 'ETH'},
@@ -25,7 +25,7 @@ class feesViewClass:
                                                                                                                  {'label': 'DOGE', 'value': 'DOGE'},
                                                                                                                  {'label': 'BCH', 'value': 'BCH'}],
                                                                                     value='BTC', clearable=False, style=dict(width='200px', verticalAlign="bottom")))])]),
-                                          dcc.Graph(id='lmPaidCoinFees', config={'displayModeBar': False}),
+                                          dcc.Graph(id='figureLMPaidCoinFees', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoFees")))]))]
         return content
 
@@ -119,8 +119,7 @@ class feesViewClass:
         # add background picture
         figFee.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.5, sizey=0.5,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figFee.update_layout(height=600,
-                             margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figFee.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",
@@ -188,8 +187,7 @@ class feesViewClass:
         figFeeCoins.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.78, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
         figFeeCoins.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.22, sizex=0.4, sizey=0.4,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figFeeCoins.update_layout(height=680,
-                                  margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figFeeCoins.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                   hovermode='x unified',
                                   hoverlabel=dict(font_color="#6c757d"),
                                   legend=dict(orientation="h",

@@ -18,7 +18,7 @@ class addressesViewClass:
                                     id="modalAddresses", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
                    dbc.Card(dbc.CardBody([html.H4(['Addresses holding DFI']),
-                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createAddressesFigure(data, bgImage), config={'displayModeBar': False}))),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createAddressesFigure(data, bgImage), config={'displayModeBar': False}, id='figureAddressesDFI'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoAddresses")))
                                           ]))]
         return content
@@ -73,8 +73,7 @@ class addressesViewClass:
         figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.35, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
 
 
-        figAddress.update_layout(height=750,
-                                 margin={"t": 20, "l": 0, "b": 0, "r": 0},
+        figAddress.update_layout(margin={"t": 20, "l": 0, "b": 0, "r": 0},
                                  barmode='stack',
                                  hovermode='x unified',
                                  hoverlabel=dict(font_color="#6c757d"),

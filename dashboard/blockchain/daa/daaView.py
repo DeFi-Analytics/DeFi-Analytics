@@ -17,7 +17,7 @@ class daaViewClass:
                                     id="modalDAA", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
                    dbc.Card(dbc.CardBody([html.H4(['Daily active addresses (DAA)']),
-                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDAAFig(data, bgImage), config={'displayModeBar': False}))),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDAAFig(data, bgImage), config={'displayModeBar': False}, id='figureDAA'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoDAA")))
                                           ]))]
         return content
@@ -38,7 +38,7 @@ class daaViewClass:
 
         trace_DAA = dict(type='scatter', name='DAA',
                          x=data['countAddresses'].dropna().index.values[:-1], y=data['countAddresses'].dropna().values[:-1],
-                         mode='lines', line=dict(color='#22b852'), line_width=2, hovertemplate='%{y:.0f}')
+                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:.0f}')
         figDAA.add_trace(trace_DAA, 1, 1)
 
         figDAA.update_yaxes(title_text='number addresses involved in transactions', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1,
@@ -61,8 +61,7 @@ class daaViewClass:
         # add background picture
         figDAA.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figDAA.update_layout(height=750,
-                             margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figDAA.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d",
                                              bgcolor='#ffffff', ),

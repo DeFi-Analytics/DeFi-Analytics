@@ -13,7 +13,7 @@ class volumeViewClass:
                                     id="modalVolume", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
                    dbc.Card(dbc.CardBody([html.H4(['Trading volumne (24hr) on DEX']),
-                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDEXVolumeGraph(data, bgImage), config={'displayModeBar': False}))),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDEXVolumeGraph(data, bgImage), config={'displayModeBar': False}, id='figureVolume24hr'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoVolume")))
                                           ]))]
         return content
@@ -63,8 +63,7 @@ class volumeViewClass:
         # add background picture
         figDEXVol.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figDEXVol.update_layout(height=750,
-                                margin={"t": 30, "l": 0, "b": 0, 'r': 0},
+        figDEXVol.update_layout(margin={"t": 30, "l": 0, "b": 0, 'r': 0},
                                 hovermode='x unified',
                                 hoverlabel=dict(font_color="#6c757d"),
                                 legend=dict(orientation="h",

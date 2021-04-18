@@ -14,7 +14,7 @@ class coinsAddressesCallbacksClass:
         @app.callback(
             [Output('minDFIValueInput', 'value'),
              Output('maxDFIValueInput', 'value'),
-             Output('figCoinsAddresses', 'figure')],
+             Output('figureCoinsAddresses', 'figure')],
             [Input('DFIAddSlider', 'value')])
         def updateMaxDFIInput(value):
             figDFIDist = coinsAddressesView.getCoinAddressFigure(defichainAnalyticsModel.lastRichlist, value[0], value[1], defichainAnalyticsModel.figBackgroundImage)

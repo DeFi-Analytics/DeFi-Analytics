@@ -9,16 +9,16 @@ import dateutil.relativedelta
 class masternodesViewClass:
 
     def getMasternodesContent(self):
-        content = [dbc.Modal([dbc.ModalHeader("Info Number active masternodes"),
+        content = [dbc.Modal([dbc.ModalHeader("Info Number enabled masternodes"),
                               dbc.ModalBody(self.getMasternodesExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoMN", className="ml-auto"))], id="modalMN", size='xl'),
 
-                   dbc.Card(dbc.CardBody([html.H4(['Number active masternodes']),
+                   dbc.Card(dbc.CardBody([html.H4(['Number enabled masternodes']),
                                           html.Table([html.Tr([html.Td('Select representation:'),
                                                                html.Td(dcc.Dropdown(id='mnRepresentation', options=[{'label': 'absolute', 'value': 'absolute'},
                                                                                                                    {'label': 'relative', 'value': 'relative'}],
                                                                                     value='absolute', clearable=False, style=dict(width='200px', verticalAlign="bottom")))])]),
-                                          dcc.Graph(id='masternodesGraphic', config={'displayModeBar': False}),
+                                          dcc.Graph(id='figureMasternodes', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoMN")))]))]
         return content
 
@@ -37,7 +37,7 @@ class masternodesViewClass:
             sigNameMNCake = 'nbMnCakeIdRelative'
             sigNameMNOther = 'nbMNOtherRelative'
             hoverTemplateRepresenation = '%{y:,.3f}%'
-            yLabelText = 'Part of active masternodes in %'
+            yLabelText = 'Part of enabled masternodes in %'
             yTickRepresentation = ",.2f"
         else:
             sigNameMNCake = 'nbMnCakeId'
@@ -82,8 +82,7 @@ class masternodesViewClass:
         # add background picture
         figMN.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.25))
 
-        figMN.update_layout(height=715,
-                             margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figMN.update_layout( margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",
@@ -103,7 +102,7 @@ class masternodesViewClass:
     @staticmethod
     def getMasternodesExplanation():
         masternodesCardExplanation = [
-            html.P(['This graphic shows the number of active masternodes on a daily base. I think the most people are interested in the non-Cake hosted ones on defichain. So, '
+            html.P(['This graphic shows the number of enabled masternodes on a daily base. I think the most people are interested in the non-Cake hosted ones on defichain. So, '
                     'in the standard configuration the cake and overall graphs are hidden. Just click on the according legend entry to make them visible.', html.Br(),
                     'Beside the absolute number representation the relative parts could be more of interest. They could be interpreted as a measure of decentralization.'], style={'text-align': 'justify'}),
             html.P(['A list of all masternodes can be get with a full-node and the command line interface. This is routed to an API by Bernd Mack and used here.', html.Br(),

@@ -20,7 +20,7 @@ class crpytoTokenViewClass:
                                                                                              {'label': 'LTC', 'value': 'LTC'},
                                                                                              {'label': 'BCH', 'value': 'BCH'}],
                                                               value='BTC', clearable=False, style=dict(width='200px', verticalAlign="bottom"))),
-                   dbc.Col(dcc.Graph(id='tokenCryptosGraph', config={'displayModeBar': False})),
+                   dbc.Col(dcc.Graph(id='figureTokenCryptos', config={'displayModeBar': False})),
                    dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoToken")))]))]
         return content
 
@@ -96,8 +96,7 @@ class crpytoTokenViewClass:
         figTokenData.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.785, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
         figTokenData.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.21, sizex=0.45, sizey=0.45, xanchor="center", yanchor="middle", opacity=0.2))
 
-        figTokenData.update_layout(height=715,
-                                   margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figTokenData.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                    hovermode='x unified',
                                    hoverlabel=dict(font_color="#6c757d"),
                                    legend=dict(orientation="h",

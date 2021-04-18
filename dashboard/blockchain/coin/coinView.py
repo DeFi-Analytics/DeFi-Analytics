@@ -14,7 +14,7 @@ class coinViewClass:
                                     id="modalCoin", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
                    dbc.Card(dbc.CardBody([html.H4(['Coin distribution and development']),
-                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createCoinFigure(data, bgImage), config={'displayModeBar': False}))),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createCoinFigure(data, bgImage), config={'displayModeBar': False}, id='figureCoin'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoin")))
                                           ]))]
         return content

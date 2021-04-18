@@ -17,8 +17,8 @@ class tvlViewClass:
                                           html.Td(dcc.Dropdown(id='defiTVLCurrency',options=[{'label': 'USD', 'value': 'USD'},
                                                                                              {'label': 'BTC', 'value': 'BTC'},
                                                                                              {'label': 'DFI', 'value': 'DFI'}],
-                                                               value='USD', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
-                                          dcc.Graph(id = 'dexTVL', config={'displayModeBar': False}),
+                                                               value='USD', clearable=False, style=dict(width='150px',verticalAlign="bottom")))])]),
+                                          dcc.Graph(id = 'figureTVL', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTVL")))]))]
         return content
 
@@ -102,8 +102,7 @@ class tvlViewClass:
         # add background picture
         figTVL.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.25))
 
-        figTVL.update_layout(height=715,
-                             margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figTVL.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",

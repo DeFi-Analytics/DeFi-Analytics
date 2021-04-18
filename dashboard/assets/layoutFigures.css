@@ -27,9 +27,25 @@
     /* Font Size Pie Chart */
     .slicetext {font-size: 16px !important;}
 
-    #pieChartDFI {
-        height: 750px;
-    }
+    #figurePieChartDFI {height: 750px;}
+    #figureAddressesDFI {height: 750px;}
+    #figureMasternodes {height: 715px}
+    #figureDAA {height: 750px}
+    #figureCoin {height: 750px}
+    #figureChangeCoin {height: 750px}
+    #figureCoinsAddresses {height: 600px}
+    #figureBlocktime {height: 750px}
+    #figureTransactions {height: 750px}
+    #figureCoinpriceLongterm {height: 675px}
+    #figureCoinpriceShortterm {height: 675px}
+    #figureVolume24hr {height: 750px}
+    #figureTVL {height: 715px}
+    #figureLiquidityToken {height: 715px}
+    #figureLMPaidFees {height: 600px}
+    #figureLMPaidCoinFees {height: 680px}
+    #figureTokenCryptos {height: 715px}
+    #figureTwitterTweet {height: 680px}
+    #figureTwitterUser {height: 350px}
 }
 
 @media only screen and (max-width: 768px) {
@@ -59,9 +75,49 @@
     /* Font Size Pie Chart */
     .slicetext {font-size: 12px !important;}
 
-    #pieChartDFI {
-        height: 500px;
-    }
+    @media (orientation: portrait) {
+        #figurePieChartDFI {height: 500px;}
+        #figureAddressesDFI {height: 600px;}
+        #figureMasternodes {height: 600px}
+        #figureDAA {height: 600px}
+        #figureCoin {height: 600px}
+        #figureChangeCoin {height: 600px}
+        #figureCoinsAddresses {height: 600px}
+        #figureBlocktime {height: 600px}
+        #figureTransactions {height: 600px}
+        #figureCoinpriceLongterm {height: 600px}
+        #figureCoinpriceShortterm {height: 600px}
+        #figureVolume24hr {height: 600px}
+        #figureTVL {height: 600px}
+        #figureLiquidityToken {height: 600px}
+        #figureLMPaidFees {height: 600px}
+        #figureLMPaidCoinFees {height: 600px}
+        #figureTokenCryptos {height: 600px}
+        #figureTwitterTweet {height: 600px}
+        #figureTwitterUser {height: 300px}
+        }
+
+    @media (orientation: landscape) {
+        #figurePieChartDFI {height: 330px;}
+        #figureAddressesDFI {height: 330px;}
+        #figureMasternodes {height: 330px}
+        #figureDAA {height: 330px}
+        #figureCoin {height: 330px}
+        #figureChangeCoin {height: 330px}
+        #figureCoinsAddresses {height: 330px}
+        #figureBlocktime {height: 330px}
+        #figureTransactions {height: 330px}
+        #figureCoinpriceLongterm {height: 330px}
+        #figureCoinpriceShortterm {height: 330px}
+        #figureVolume24hr {height: 330px}
+        #figureTVL {height: 330px}
+        #figureLiquidityToken {height: 330px}
+        #figureLMPaidFees {height: 330px}
+        #figureLMPaidCoinFees {height: 330px}
+        #figureTokenCryptos {height: 330px}
+        #figureTwitterTweet {height: 330px}
+        #figureTwitterUser {height: 165px}
+        }
 }
 
 

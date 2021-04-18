@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output, State
 class cryptoTokenCallbacksClass:
     def __init__(self, defichainAnalyticsModel, cryptoTokenView, app):
 
-        @app.callback(Output('tokenCryptosGraph', 'figure'),
+        @app.callback(Output('figureTokenCryptos', 'figure'),
                       [Input('tokenCryptosCoin', 'value')])
         def updateTVLGraphs(selectedCoin):
             figFee = cryptoTokenView.createTokenGraph(defichainAnalyticsModel.hourlyData, selectedCoin, defichainAnalyticsModel.figBackgroundImage)

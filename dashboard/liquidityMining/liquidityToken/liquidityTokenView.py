@@ -21,7 +21,7 @@ class liquidityTokenViewClass:
                                             {'label':'LTC','value':'LTC'},
                                             {'label':'BCH','value':'BCH'}],
                                             value='BTC', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
-                            dbc.Col(dcc.Graph(id = 'liquidityTokenGraph', config={'displayModeBar': False})),
+                            dbc.Col(dcc.Graph(id = 'figureLiquidityToken', config={'displayModeBar': False})),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoLT")))]))]
         return content
 
@@ -87,8 +87,7 @@ class liquidityTokenViewClass:
         figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.46, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
         figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.13, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
 
-        figLiquidityToken.update_layout(height=715,
-                                        margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figLiquidityToken.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                         hovermode='x unified',
                                         hoverlabel=dict(font_color="#6c757d",
                                                         bgcolor='#ffffff', ),

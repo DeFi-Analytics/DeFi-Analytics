@@ -5,7 +5,7 @@ class coinpriceCallbacksClass:
     def __init__(self, defichainAnalyticsModel, coinpriceView, app):
 
 
-        @app.callback(Output('dexCoinpriceLongterm', 'figure'),
+        @app.callback(Output('figureCoinpriceLongterm', 'figure'),
                       [Input('dexCoinprice600s', 'n_intervals'),
                        Input('dexCoinpriceCoin', 'value'),
                        Input('dexCoinpriceReference', 'value'), ])
@@ -14,7 +14,7 @@ class coinpriceCallbacksClass:
             figHourlyGraph = coinpriceView.createPriceGraph(defichainAnalyticsModel.hourlyData, selectedCoin, selectedReference, 'Long', defichainAnalyticsModel.figBackgroundImage)
             return figHourlyGraph
 
-        @app.callback(Output('dexCoinpriceShortterm', 'figure'),
+        @app.callback(Output('figureCoinpriceShortterm', 'figure'),
                       [Input('dexCoinprice60s', 'n_intervals'),
                        Input('dexCoinpriceCoin', 'value'),
                        Input('dexCoinpriceReference', 'value'), ])
