@@ -1,6 +1,6 @@
-# github access token: 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
 from github import Github
 from datetime import datetime
+from githubSettings import authGithubToken
 
 import pandas as pd
 
@@ -10,7 +10,7 @@ path = scriptPath[:-37] + '/data/'
 filepath = path + 'dataPortfolioDownloads.csv'
 
 # get github repo access
-G = Github("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") # Put your GitHub token here
+G = Github(authGithubToken) # Put your GitHub token here
 repo = G.get_repo("DeFi-PortfolioManagement/defi-portfolio")
 
 # get all downloads
