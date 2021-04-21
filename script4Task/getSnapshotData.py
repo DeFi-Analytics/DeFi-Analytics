@@ -40,6 +40,7 @@ while True:
         addFoundation = 'dJEbxbfufyPF14SC93yxiquECEfq4YSd9L'
         addFund = 'dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc'
         addERC20 = 'dZFYejknFdHMHNfHMNQAtwihzvq7DkzV49'
+        addBurn = '8defichainBurnAddressXXXXXXXdRQkSm'
 
         # condition for mn-addresses and private wallets
         try:
@@ -54,7 +55,8 @@ while True:
             dfOldMNList = pd.read_csv(filepathMNList, index_col=0) # load available MN-List from the past
             condMN = (dfRichList['address'].isin(dfOldMNList.ownerAuthAddress)) & (dfRichList['address'].notnull())
 
-        condPrivateAddress = (~condMN) & (dfRichList.address != addFund) & (dfRichList.address != addFoundation) & (dfRichList.address != addERC20)
+        condPrivateAddress = (~condMN) & (dfRichList.address != addFund) & (dfRichList.address != addFoundation) & (dfRichList.address != addERC20) \
+                                & (dfRichList.address != addBurn)
 
         # calc DFI Coin amounts
         nbMnId = dfRichList[condMN].balance.size
@@ -68,6 +70,11 @@ while True:
             erc20DFIValue = dfRichList[dfRichList.address == addERC20].balance.values[0]
         else:
             erc20DFIValue = 0
+
+        if addBurn in dfRichList.values:
+            burnedDFIValue = dfRichList[dfRichList.address == addBurn].balance.values[0]
+        else:
+            burnedDFIValue = 0
 
         if addFoundation in dfRichList.values:
             foundationDFIValue = dfRichList[dfRichList.address==addFoundation].balance.values[0]
@@ -88,8 +95,9 @@ while True:
         tokenDFIValue = dfDFIToken.balance.sum()
 
         # calculated statistical data
-        totalDFI = mnDFIValue+otherDFIValue+foundationDFIValue+fundDFIValue+lmDFIValue+tokenDFIValue+erc20DFIValue
-        circDFIValue = mnDFIValue+otherDFIValue+lmDFIValue+tokenDFIValue+erc20DFIValue
+        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue
+        totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue
+
         maxDFIValue = 1200000000
 
         # get data from coingecko
@@ -127,6 +135,7 @@ while True:
         lmDFIValue = oldSnapshot['lmDFI'].values[0]
         tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
         erc20DFIValue = oldSnapshot['erc20DFI'].values[0]
+        burnedDFIValue = oldSnapshot['burnedDFI'].values[0]
         circDFIValue = oldSnapshot['circDFI'].values[0]
         totalDFI = oldSnapshot['totalDFI'].values[0]
         maxDFIValue = oldSnapshot['maxDFI'].values[0]
@@ -160,8 +169,10 @@ while True:
 
     print('... saving data')
     # convert single data to pandas series
-    colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'circDFI', 'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft']
-    listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, circDFIValue, totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft]
+    colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'burnedDFI', 'circDFI',
+                'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft']
+    listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, burnedDFIValue, circDFIValue,
+                totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft]
     seriesData = pd.Series(listData, index = colNames)
 
     data2Save = pd.DataFrame(columns=colNames)

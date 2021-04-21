@@ -35,7 +35,6 @@ class overviewViewClass:
             html.Br(),
             html.H4('DFI statistics'),
             html.Table([
-                html.Tr(html.Td(html.Br())),
                 html.Tr([html.Td('Price'),
                          html.Td("${:,.4f}".format(data['DFIprice'].values[0]))]),
                 html.Tr(
@@ -64,6 +63,9 @@ class overviewViewClass:
                     [html.Td('Circulating supply'),
                      html.Td("{:,.0f} DFI".format(data['circDFI'].values[0]))]),
                 html.Tr(
+                    [html.Td('Burned DFI'),
+                     html.Td("{:,.0f} DFI".format(data['burnedDFI'].values[0]))]),
+                html.Tr(
                     [html.Td('Total supply'),
                      html.Td("{:,.0f} DFI".format(data['totalDFI'].values[0]))]),
                 html.Tr(
@@ -90,9 +92,10 @@ class overviewViewClass:
     def createPieChartDFI(data,  bgImage):
         figDFIPie = go.Figure()
 
-        labelList = ['Masternodes', 'Community fund', 'Foundation', 'Other', 'Liquidity Pool', 'DFI token', 'ERC20 Collateral']
-        valueList = [data['mnDFI'].values[0], data['fundDFI'].values[0], data['foundationDFI'].values[0], data['otherDFI'].values[0], data['lmDFI'].values[0], data['tokenDFI'].values[0], data['erc20DFI'].values[0]]
-        colorList = ['#da3832', '#ff9800', '#22b852', '#410eb2', '#ff2ebe', '#00fffb','#808000']
+        labelList = ['Masternodes', 'Community fund', 'Foundation', 'Other', 'Liquidity Pool', 'DFI token', 'ERC20 Collateral', 'Burned DFI']
+        valueList = [data['mnDFI'].values[0], data['fundDFI'].values[0], data['foundationDFI'].values[0], data['otherDFI'].values[0], data['lmDFI'].values[0],
+                     data['tokenDFI'].values[0], data['erc20DFI'].values[0], data['burnedDFI'].values[0]]
+        colorList = ['#da3832', '#ff9800', '#22b852', '#410eb2', '#ff2ebe', '#00fffb', '#808000', '#5d5d5d']
         trace_pieDFI = dict(type='pie', name='', labels=labelList, values=valueList, marker=dict(colors=colorList), opacity=1,
                             textposition='inside', textfont_size=16, hovertemplate='%{label}: <br> %{value:,.0f}')
         figDFIPie.add_trace(trace_pieDFI)
