@@ -36,7 +36,7 @@ for richlistFile in foundRichlistFiles:
 
         condMNGenesis = (rawRichlist.address == mnGenesis1) | (rawRichlist.address == mnGenesis2) | (rawRichlist.address == mnGenesis3)
         condMN = rawRichlist.mnAddressAPI
-        condMNCake = rawRichlist.mnAddressCakeAPI
+        condMNCake = rawRichlist.mnAddressCakeAPI & rawRichlist.mnAddressAPI
         condPrivateAddress = (~condMN) & (rawRichlist.address != addFund) & (rawRichlist.address != addFoundation) & (rawRichlist.address != addFoundationAirdrop)
 
         # get balances of mn and private wallets
