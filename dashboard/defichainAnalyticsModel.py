@@ -34,6 +34,7 @@ class defichainAnalyticsModelClass:
         self.updated_dexVolume = None
         self.updated_tokenCryptos = None
         self.updated_twitterData = None
+        self.updated_twitterFollower = None
         self.update_snapshotData = None
         self.update_changelogData = None
 
@@ -51,7 +52,7 @@ class defichainAnalyticsModelClass:
         self.loadDailyBlocktimeData()
         self.loadDAAData()
         self.loadTwitterData()
-
+        self.loadTwitterFollowerData()
 
     def loadExtractedRichlistData(self):
         filePath = self.dataPath + 'extractedDFIdata.csv'
@@ -162,6 +163,24 @@ class defichainAnalyticsModelClass:
 
             self.updated_twitterData = fileInfo.stat()
             print('>>>> Twitter data loaded from csv-file <<<<')
+
+    def loadTwitterFollowerData(self):
+        print('>>>> Start update twitter follower data ... <<<<')
+        filePath = self.dataPath + 'TwitterData_follower.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_twitterFollower:
+            twitterFollowData = pd.read_csv(filePath, index_col=0)
+            twitterFollowData.set_index('Date',inplace=True)
+            columns2update = ['Follower', 'followedToday', 'unfollowedToday']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(twitterFollowData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_twitterFollower = fileInfo.stat()
+            print('>>>> Twitter data loaded from csv-file <<<<')
+
 
     #### HOURLY DATA ####
     def loadHourlyData(self):

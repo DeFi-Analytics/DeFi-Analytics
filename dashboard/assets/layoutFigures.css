@@ -46,6 +46,7 @@
     #figureTokenCryptos {height: 715px}
     #figureTwitterTweet {height: 680px}
     #figureTwitterUser {height: 350px}
+    #figureTwitterFollower {height: 715px}
 }
 
 @media only screen and (max-width: 768px) {
@@ -95,6 +96,7 @@
         #figureTokenCryptos {height: 600px}
         #figureTwitterTweet {height: 600px}
         #figureTwitterUser {height: 300px}
+        #figureTwitterFollower {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -117,6 +119,7 @@
         #figureTokenCryptos {height: 330px}
         #figureTwitterTweet {height: 330px}
         #figureTwitterUser {height: 165px}
+        #figureTwitterFollower {height: 330px}
         }
 }
 

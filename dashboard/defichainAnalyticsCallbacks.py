@@ -38,6 +38,7 @@ class defichainAnalyticsCallbacksClass:
                                              Input('fees', 'n_clicks_timestamp'),
                                              Input('cryptosDAT', 'n_clicks_timestamp'),
                                              Input('twitter', 'n_clicks_timestamp'),
+                                             Input('follower', 'n_clicks_timestamp'),
                                              Input('changelog', 'n_clicks_timestamp'),
                                              Input('cakereview', 'n_clicks_timestamp'),
                                              Input('imprint', 'n_clicks_timestamp')]
@@ -183,6 +184,7 @@ class defichainAnalyticsCallbacksClass:
                                    'fees',
                                    'cryptosDAT',
                                    'twitter',
+                                   'follower',
                                    'changelog',
                                    'cakereview',
                                    'imprint']
@@ -204,6 +206,7 @@ class defichainAnalyticsCallbacksClass:
                                             Output('fees', 'className'),
                                             Output('cryptosDAT', 'className'),
                                             Output('twitter', 'className'),
+                                            Output('follower', 'className'),
                                             Output('changelog', 'className'),
                                             Output('cakereview', 'className'),
                                             Output('imprint', 'className')

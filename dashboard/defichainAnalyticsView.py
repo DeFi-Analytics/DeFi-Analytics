@@ -168,8 +168,8 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Twitter", href="/community?entry=twitter", className="linkstyle",
-                                id="twitter")
+                    dbc.NavLink("Twitter", href="/community?entry=twitter", className="linkstyle", id="twitter"),
+                    dbc.NavLink("Twitter Follower", href="/community?entry=follower", className="linkstyle", id="follower")
                 ],
                 id="submenu-community-collapse",
             ),
