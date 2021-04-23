@@ -15,9 +15,9 @@ class coinsAddressesViewClass:
                    dbc.Card(dbc.CardBody([html.H4(['Distribution of coins to addresses']),
                                           dbc.Row(dbc.Col([dcc.Graph(config={'displayModeBar': False}, id='figureCoinsAddresses'),
                                                        html.Div(['Select DFI-range of interest.'], style={'margin-top': 10, 'margin-left': 20}),
-                                                       html.Div(['Minimum: ', dcc.Input(id="minDFIValueInput", type="number", debounce=True, value=0, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 20}),
-                                                       html.Div(['Maximum: ', dcc.Input(id="maxDFIValueInput", type="number", debounce=True, value=4000000, min=0, max=4000000, step=100, )], style={'margin-top': 5, 'margin-left': 20}),
-                                                       html.Div(dcc.RangeSlider(id='DFIAddSlider', min=0, max=4000000, step=100, value=[0, 4000000]), style={'margin-left': 20, 'margin-right': 20, 'margin-top': 10, }), html.Div(id='DFIAddSliderOutput')
+                                                       html.Div(['Minimum: ', dcc.Input(id="minDFIValueInput", debounce=True, value=0, min=0, max=4000000)], style={'margin-top': 5, 'margin-left': 20}),
+                                                       html.Div(['Maximum: ', dcc.Input(id="maxDFIValueInput", debounce=True, value=100000, min=0, max=4000000)], style={'margin-top': 5, 'margin-left': 20}),
+                                                       html.Div(dcc.RangeSlider(id='DFIAddSlider', min=0, max=4000000, step=100, value=[0, 100000]), style={'margin-left': 20, 'margin-right': 20, 'margin-top': 10, }), html.Div(id='DFIAddSliderOutput')
                                                        ])),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinsAddresses")))]))]
         return content

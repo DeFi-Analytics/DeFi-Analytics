@@ -17,8 +17,14 @@ class coinsAddressesCallbacksClass:
              Output('figureCoinsAddresses', 'figure')],
             [Input('DFIAddSlider', 'value')])
         def updateMaxDFIInput(value):
-            figDFIDist = coinsAddressesView.getCoinAddressFigure(defichainAnalyticsModel.lastRichlist, value[0], value[1], defichainAnalyticsModel.figBackgroundImage)
-            return value[0], value[1], figDFIDist
+            try:
+                minDFI = float(value[0])
+                maxDFI = float(value[1])
+            except:
+                minDFI = 0
+                maxDFI = 100000
+            figDFIDist = coinsAddressesView.getCoinAddressFigure(defichainAnalyticsModel.lastRichlist, minDFI, maxDFI, defichainAnalyticsModel.figBackgroundImage)
+            return minDFI, maxDFI, figDFIDist
 
         @app.callback(
             Output("modalCoinsAddresses", "is_open"),
