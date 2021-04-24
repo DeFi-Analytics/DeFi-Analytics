@@ -20,65 +20,55 @@ class overviewViewClass:
     @staticmethod
     def createStatisticsDFI(data):
         htmlContent = [
-            # html.H4(['Countdown 1st ',html.I('"Halving"')]),
-            html.H4(['Countdown ', html.I('Reduction of Liquidity Mining rewards')]),
-            html.Table([
-                html.Tr(html.Td(html.Br())),
-                html.Tr([html.Td('Blocks left:'),
-                         html.Td(id='dfiCountdownBlocks', style={'color': '#ff00af', 'padding-left': '10px'})]),
-                html.Tr(
-                    [html.Td('Estimated duration:'),
-                     html.Td(id='dfiCountdownDuration', style={'color': '#ff00af', 'padding-left': '10px'})]),
-                html.Tr(
-                    [html.Td('Estimated time (UTC):'),
-                     html.Td(id='dfiCountdownTime', style={'color': '#ff00af', 'padding-left': '10px'})])]),
-            html.Br(),
             html.H4('DFI statistics'),
             html.Table([
+                html.Tr(html.Td(html.Br())),
                 html.Tr([html.Td('Price'),
-                         html.Td("${:,.4f}".format(data['DFIprice'].values[0]))]),
+                         html.Td("${:,.4f}".format(data['DFIprice'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('24h-volume'),
-                     html.Td("${:,.0f}".format(data['tradingVolume'].values[0]))]),
+                     html.Td("${:,.0f}".format(data['tradingVolume'].values[0]), style={'text-align': 'right'})]),
 
                 html.Tr(html.Td(html.Br())),
+                html.Tr([html.Td('Other addresses'),
+                         html.Td("{:,.0f} DFI".format(data['otherDFI'].values[0]), style={'text-align': 'right'})]),
+                html.Tr([html.Td('Masternodes'),
+                         html.Td("{:,.0f} DFI".format(data['mnDFI'].values[0]), style={'text-align': 'right'})]),
+                html.Tr([html.Td('Liquidity Pool'),
+                         html.Td("{:,.0f} DFI".format(data['lmDFI'].values[0]), style={'text-align': 'right'})]),
+                html.Tr([html.Td('DFI Token'),
+                         html.Td("{:,.0f} DFI".format(data['tokenDFI'].values[0]), style={'text-align': 'right'})]),
+                html.Tr([html.Td('ERC20 Collateral'),
+                         html.Td("{:,.0f} DFI".format(data['erc20DFI'].values[0]), style={'text-align': 'right'})]),
+                html.Tr(
+                    [html.Td('Circulating supply', style={'font-weight': 'bold'}),
+                     html.Td("{:,.0f} DFI".format(data['circDFI'].values[0]), style={'text-align': 'right', 'font-weight': 'bold'})]),
+                html.Tr(html.Td(html.Br())),
+
                 html.Tr(
                     [html.Td('Community Fund'),
-                     html.Td("{:,.0f} DFI".format(data['fundDFI'].values[0]))]),
-                html.Tr([html.Td('Other addresses'),
-                         html.Td("{:,.0f} DFI".format(data['otherDFI'].values[0]))]),
-                html.Tr([html.Td('Masternodes'),
-                         html.Td("{:,.0f} DFI".format(data['mnDFI'].values[0]))]),
+                     html.Td("{:,.0f} DFI".format(data['fundDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr([html.Td('Foundation'),
-                         html.Td("{:,.0f} DFI".format(data['foundationDFI'].values[0]))]),
-                html.Tr([html.Td('Liquidity Pool'),
-                         html.Td("{:,.0f} DFI".format(data['lmDFI'].values[0]))]),
-                html.Tr([html.Td('DFI Token'),
-                         html.Td("{:,.0f} DFI".format(data['tokenDFI'].values[0]))]),
-                html.Tr([html.Td('ERC20 Collateral'),
-                         html.Td("{:,.0f} DFI".format(data['erc20DFI'].values[0]))]),
-
-                html.Tr(html.Td(html.Br())),
-                html.Tr(
-                    [html.Td('Circulating supply'),
-                     html.Td("{:,.0f} DFI".format(data['circDFI'].values[0]))]),
+                         html.Td("{:,.0f} DFI".format(data['foundationDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('Burned DFI'),
-                     html.Td("{:,.0f} DFI".format(data['burnedDFI'].values[0]))]),
+                     html.Td("{:,.0f} DFI".format(data['burnedDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
-                    [html.Td('Total supply'),
-                     html.Td("{:,.0f} DFI".format(data['totalDFI'].values[0]))]),
+                    [html.Td('Total supply', style={'font-weight': 'bold'}),
+                     html.Td("{:,.0f} DFI".format(data['totalDFI'].values[0]), style={'text-align': 'right', 'font-weight': 'bold'})]),
+                html.Tr(html.Td(html.Br())),
+
                 html.Tr(
-                    [html.Td('Max supply'),
-                     html.Td("{:,.0f} DFI".format(data['maxDFI'].values[0]))]),
+                    [html.Td('Max supply', style={'font-weight': 'bold'}),
+                     html.Td("{:,.0f} DFI".format(data['maxDFI'].values[0]), style={'text-align': 'right', 'font-weight': 'bold'})]),
 
                 html.Tr(html.Td(html.Br())),
                 html.Tr(
                     [html.Td('Market-Cap'),
-                     html.Td("${:,.0f}".format(data['marketCap'].values[0]))]),
+                     html.Td("${:,.0f}".format(data['marketCap'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('corresponding rank'),
-                     html.Td("{:,.0f}".format(data['marketCapRank'].values[0]))]),
+                     html.Td("{:,.0f}".format(data['marketCapRank'].values[0]), style={'text-align': 'right'})]),
 
             ]),
             html.P(['MN: Masternodes', html.Br(),
