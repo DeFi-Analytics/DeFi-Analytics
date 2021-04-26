@@ -37,6 +37,7 @@ class defichainAnalyticsModelClass:
         self.updated_twitterFollower = None
         self.update_snapshotData = None
         self.update_changelogData = None
+        self.update_incomeVisits = None
 
         # background image for figures
         with open(workDir + "/assets/logo-defi-analytics_LandscapeGrey.png", "rb") as image_file:
@@ -53,6 +54,7 @@ class defichainAnalyticsModelClass:
         self.loadDAAData()
         self.loadTwitterData()
         self.loadTwitterFollowerData()
+        self.loadIncomeVisitsData()
 
     def loadExtractedRichlistData(self):
         filePath = self.dataPath + 'extractedDFIdata.csv'
@@ -180,6 +182,24 @@ class defichainAnalyticsModelClass:
 
             self.updated_twitterFollower = fileInfo.stat()
             print('>>>> Twitter data loaded from csv-file <<<<')
+
+    def loadIncomeVisitsData(self):
+        print('>>>> Start update income visits data ... <<<<')
+        filePath = self.dataPath + 'dataVisitsIncome.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_incomeVisits:
+            incomeVisitsData = pd.read_csv(filePath, index_col=0)
+            incomeVisitsData.rename(columns={'0': 'incomeVisits'}, inplace=True)
+            incomeVisitsData.set_index(incomeVisitsData.index.str[:10], inplace=True)   # just use date information without hh:mm
+            columns2update = ['incomeVisits']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(incomeVisitsData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.update_incomeVisits = fileInfo.stat()
+            print('>>>> Income visits data loaded from csv-file <<<<')
 
 
     #### HOURLY DATA ####
