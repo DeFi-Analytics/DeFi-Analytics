@@ -111,18 +111,18 @@ class overviewViewClass:
     @staticmethod
     def getOverviewExplanation():
         overviewCardExplanation = [
-                       html.P(['Here a countdown to an important DefiChain event and some basic statistics are shown. Different sources are used to retrieve this data:',
-                               html.Ul([html.Li('DefiChain Block-API'),
-                                        html.Li('DefiChain block statistics (see tab Block Time)'),
+                       html.P(['This overview page gives some information about DFI and the current distribution. Therefore several APIs are used:',
+                               html.Ul([html.Li('DefiChain Richlist-API'),
                                         html.Li('Coingecko-API'),
-                                        html.Li('DefiChain Richlist-API')])],
+                                        html.Li('DefiChain DEX-API'),
+                                        html.Li('Masternode-API from Bernd')])],
                                style={'text-align': 'justify'}),
-                        html.P(['The countdown is calculated by using the mean block time over the last 10 days, the current block from DefiChain-API and the defined goal block ',
-                                'of the event.']),
-                        html.P(['Both the Community Fund and the DefiChain Foundation have a unique address, which is used to determine the corresponding'
-                               ' DFI amount.', html.Br(),
-                            'For identification of the masternodes the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
-                            html.Br(),
+                        html.P(['Currently there are 4 addresses holding special categories of DFI:', html.Br(),
+                                html.Ul([html.Li('Foundation coins: dJEbxbfufyPF14SC93yxiquECEfq4YSd9L'),
+                                         html.Li('Community Fund: dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc'),
+                                         html.Li('Collateral for ERC20-Token: dZFYejknFdHMHNfHMNQAtwihzvq7DkzV49'),
+                                         html.Li('Burned coins/token: 8defichainBurnAddressXXXXXXXdRQkSm')]),
+                                'All these addresses are represented in the Richlist with their DFI holdings. For identification of the masternodes the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
                             html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')],
                                style={'text-align': 'justify'}),
                         html.P([html.B('Hint:'),' The presented diagrams are interactive.'
