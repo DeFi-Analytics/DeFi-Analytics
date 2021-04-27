@@ -91,10 +91,10 @@ color: #000000;
     }
 
     #idLogoSidebar{
-        background-image: url("logo-defi-analytics.png");
+        background-image: url("analyticsPortraitTransparency.png");
         background-size: cover;
         width: 14rem;
-        height: 11rem;
+        height: 14rem;
         padding-top: 0;
         padding-right: 0;
         padding-bottom: 0;
@@ -179,8 +179,8 @@ color: #000000;
     }
 
     #idLogoSidebar{
-        content: url('logo-defi-analytics_LandscapePink.png');
-        height: 35px;
+        content: url('analyticsLandscapeTransparency.png');
+        height: 45px;
     }
 
     #idVersion{
