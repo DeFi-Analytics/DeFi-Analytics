@@ -170,7 +170,8 @@ class defichainAnalyticsViewClass:
                 [
                     dbc.NavLink("Twitter", href="/community?entry=twitter", className="linkstyle", id="twitter"),
                     dbc.NavLink("Twitter Follower", href="/community?entry=follower", className="linkstyle", id="follower"),
-                    dbc.NavLink("Project: DefiChain-Income", href="/community?entry=income", className="linkstyle", id="income")
+                    dbc.NavLink("Project: DefiChain-Income", href="/community?entry=income", className="linkstyle", id="income"),
+                    dbc.NavLink("Project: Portfolio App", href="/community?entry=portfolio", className="linkstyle", id="portfolio")
                 ],
                 id="submenu-community-collapse",
             ),

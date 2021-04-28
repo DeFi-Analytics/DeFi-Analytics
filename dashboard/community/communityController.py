@@ -6,6 +6,8 @@ from .follower.followerCallbacks import followerCallbacksClass
 
 from .income.incomeView import incomeViewClass
 
+from .portfolio.portfolioView import portfolioViewClass
+
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -19,8 +21,11 @@ class communityControllerClass:
         self.followerView = followerViewClass()
         self.followerCallbacks = followerCallbacksClass(self.defichainAnalyticsModel, self.followerView, app)       # create callbacks on top level
 
-        # initialize visits incom classes
+        # initialize visits income classes
         self.incomeView = incomeViewClass()
+
+        # initialize portfolio downloads classes
+        self.portfolioView = portfolioViewClass()
 
     def getContent(self, entry):
         pageContent = None
@@ -33,5 +38,8 @@ class communityControllerClass:
         elif entry in ["income"]:
             self.defichainAnalyticsModel.loadIncomeVisitsData()
             pageContent = self.incomeView.getIncomeContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
+        elif entry in ["portfolio"]:
+            self.defichainAnalyticsModel.loadPortfolioDownloads()
+            pageContent = self.portfolioView.getPortfolioContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent

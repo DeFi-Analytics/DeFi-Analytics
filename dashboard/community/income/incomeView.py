@@ -3,8 +3,7 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 
 from plotly.subplots import make_subplots
-from datetime import datetime, timedelta
-import dateutil.relativedelta
+
 
 class incomeViewClass:
 

@@ -48,6 +48,7 @@
     #figureTwitterUser {height: 350px}
     #figureTwitterFollower {height: 715px}
     #figureVisitsIncome {height: 680px}
+    #figurePortfolioDownloads {height: 680px}
 }
 
 @media only screen and (max-width: 768px) {
@@ -99,6 +100,7 @@
         #figureTwitterUser {height: 300px}
         #figureTwitterFollower {height: 600px}
         #figureVisitsIncome {height: 600px}
+        #figurePortfolioDownloads {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -123,6 +125,7 @@
         #figureTwitterUser {height: 165px}
         #figureTwitterFollower {height: 330px}
         #figureVisitsIncome {height: 330px}
+        #figurePortfolioDownloads {height: 330px}
         }
 }
 

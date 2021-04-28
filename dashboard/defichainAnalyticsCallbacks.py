@@ -40,6 +40,7 @@ class defichainAnalyticsCallbacksClass:
                                              Input('twitter', 'n_clicks_timestamp'),
                                              Input('follower', 'n_clicks_timestamp'),
                                              Input('income', 'n_clicks_timestamp'),
+                                             Input('portfolio', 'n_clicks_timestamp'),
                                              Input('changelog', 'n_clicks_timestamp'),
                                              Input('cakereview', 'n_clicks_timestamp'),
                                              Input('imprint', 'n_clicks_timestamp')]
@@ -187,6 +188,7 @@ class defichainAnalyticsCallbacksClass:
                                    'twitter',
                                    'follower',
                                    'income',
+                                   'portfolio',
                                    'changelog',
                                    'cakereview',
                                    'imprint']
@@ -210,6 +212,7 @@ class defichainAnalyticsCallbacksClass:
                                             Output('twitter', 'className'),
                                             Output('follower', 'className'),
                                             Output('income', 'className'),
+                                            Output('portfolio', 'className'),
                                             Output('changelog', 'className'),
                                             Output('cakereview', 'className'),
                                             Output('imprint', 'className')

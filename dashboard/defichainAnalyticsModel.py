@@ -38,6 +38,7 @@ class defichainAnalyticsModelClass:
         self.update_snapshotData = None
         self.update_changelogData = None
         self.update_incomeVisits = None
+        self.update_portfolioDownloads = None
 
         # background image for figures
         with open(workDir + "/assets/analyticsLandscapeGrey2.png", "rb") as image_file:
@@ -55,6 +56,7 @@ class defichainAnalyticsModelClass:
         self.loadTwitterData()
         self.loadTwitterFollowerData()
         self.loadIncomeVisitsData()
+        self.loadPortfolioDownloads()
 
     def loadExtractedRichlistData(self):
         filePath = self.dataPath + 'extractedDFIdata.csv'
@@ -200,6 +202,28 @@ class defichainAnalyticsModelClass:
 
             self.update_incomeVisits = fileInfo.stat()
             print('>>>> Income visits data loaded from csv-file <<<<')
+
+    def loadPortfolioDownloads(self):
+        print('>>>> Start update portfolio downloads data ... <<<<')
+        filePath = self.dataPath + 'dataPortfolioDownloads.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_portfolioDownloads:
+            portfolioRawData = pd.read_csv(filePath)
+
+            columns2update = ['PortfolioWindows', 'PortfolioMac', 'PortfolioLinux']
+            dfPortfolioData = pd.DataFrame(index=portfolioRawData['DateCaptured'].unique(), columns=columns2update)
+
+            dfPortfolioData['PortfolioWindows'] = portfolioRawData.groupby(portfolioRawData.DateCaptured).Windows.sum()
+            dfPortfolioData['PortfolioMac'] = portfolioRawData.groupby(portfolioRawData.DateCaptured).Mac.sum()
+            dfPortfolioData['PortfolioLinux'] = portfolioRawData.groupby(portfolioRawData.DateCaptured).Linux.sum()
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(dfPortfolioData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.update_portfolioDownloads = fileInfo.stat()
+            print('>>>> Portfolio downloads data loaded from csv-file <<<<')
 
 
     #### HOURLY DATA ####
