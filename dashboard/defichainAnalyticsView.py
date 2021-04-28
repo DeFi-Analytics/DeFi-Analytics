@@ -225,13 +225,16 @@ class defichainAnalyticsViewClass:
             className="headerStyle",
         )
 
-        refLink = html.Div(html.Marquee(['Special ',
+        refLink = html.Div(html.Marquee([
+                      'You want to stake DFI, but don\'t have the needed 20,000 DFI as a collateral? Then try out the Staking-Service of ',
+                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
+                      '. With the auto-invest functionality of the rewards you can reach >90% APY. Current special ',
                       html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
                       ' offer: Sign-up Bonus of $20 in DFI (after deposit of $50). You and me get $10 additional in DFI if you use my ',
                       html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
                       '. Cake is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet. ',
                       html.A('Offer', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' Condition: DFI are staking for at least 180 days and generate revenue of ~37% APY.']), className='refLinkMarquee')
+                      ' Condition: DFI are staking for at least 180 days and generate revenue of <90>% APY.']), className='refLinkMarquee')
 
         sidebar = html.Div(
             [
