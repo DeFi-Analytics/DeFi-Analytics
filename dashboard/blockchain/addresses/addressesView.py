@@ -26,51 +26,33 @@ class addressesViewClass:
     @staticmethod
     def createAddressesFigure(data, bgImage):
         figAddress = make_subplots(
-            rows=3, cols=1,
+            rows=1, cols=1,
             vertical_spacing=0.15,
-            row_width=[0.10, 0.35, 0.55],  # from bottom to top
-            specs=[[{}],
-                   [{}],
-                   [{}]],
+            row_width=[1],  # from bottom to top
+            specs=[[{}]],
             shared_xaxes=True,
             subplot_titles=([]))
 
         # generate over addresses
         trace_AllAddresses = dict(type='scatter', name='Overall', x=data['nbOverall'].dropna().index, y=data['nbOverall'].dropna(),
-                                  mode='lines', line=dict(color='#8097ee'), line_width=3, marker_size=8,
-                                  hovertemplate='%{y:.f}')
-        figAddress.add_trace(trace_AllAddresses, 1, 1)
-        figAddress.update_yaxes(title_text='Addresses', tickformat=".f", gridcolor='#6c757d', color='#6c757d',
-                                zerolinecolor='#6c757d', row=1, col=1)
+                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.f}')
 
         # generate specific addresses
-        trace_mnAddresses = dict(type='scatter', name='Full Masternodes',x=data['nbMnGenesisId'].dropna().index, y=(data['nbMnId'] - data['nbMnGenesisId']).dropna(),
-                                 mode='lines', line=dict(color='#da3832'), line_width=3, marker_size=8,
-                                 hovertemplate='%{y:.f}')
-        figAddress.add_trace(trace_mnAddresses, 2, 1)
+        trace_mnAddresses = dict(type='scatter', name='Masternodes',x=data['nbMnGenesisId'].dropna().index, y=(data['nbMnId'] - data['nbMnGenesisId']).dropna(),
+                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:.f}', fill='tozeroy')
 
-        trace_otherAddresses = dict(type='scatter', name='Other', x=data['nbOtherId'].dropna().index, y=data['nbOtherId'].dropna(),
-                                    mode='lines', line=dict(color='#7f50ff'), line_width=3, marker_size=8,
-                                    hovertemplate='%{y:.f}')
-        figAddress.add_trace(trace_otherAddresses, 2, 1)
-        figAddress.update_yaxes(title_text='Addresses', tickformat=".f", gridcolor='#6c757d', color='#6c757d',
-                                zerolinecolor='#6c757d', row=2, col=1)
+        trace_otherAddresses = dict(type='scatter', name='Non-Masternodes', x=data['nbOtherId'].dropna().index, y=data['nbOtherId'].dropna(),
+                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:.f}', fill='tonexty')
 
-        # generate genesis masternodes
-        trace_mnGenesisAddresses = dict(type='scatter', name='Genesis Masternodes', x=data['nbMnGenesisId'].dropna().index, y=data['nbMnGenesisId'].dropna(),
-                                        mode='lines', line=dict(color='#ff00af'), line_width=3, marker_size=8,
-                                        hovertemplate='%{y:.f}')
-        figAddress.add_trace(trace_mnGenesisAddresses, 3, 1)
-        figAddress.update_yaxes(title_text='Addresses', tickformat=".f", gridcolor='#6c757d', color='#6c757d',
-                                zerolinecolor='#6c757d', row=3, col=1)
+        figAddress.add_trace(trace_mnAddresses, 1, 1)
+        figAddress.add_trace(trace_otherAddresses, 1, 1)
+        figAddress.add_trace(trace_AllAddresses, 1, 1)
 
-        figAddress.update_xaxes(color='#6c757d', gridcolor='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
-        figAddress.update_xaxes(color='#6c757d', gridcolor='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
-        figAddress.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=3,
-                                col=1)
+        figAddress.update_yaxes(title_text='Addresses', tickformat=".f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        figAddress.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=1, col=1)
 
-        figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.81, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
-        figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.35, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
+        figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
+
 
 
         figAddress.update_layout(margin={"t": 20, "l": 0, "b": 0, "r": 0},
