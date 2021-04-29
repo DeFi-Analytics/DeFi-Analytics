@@ -72,23 +72,14 @@ class addressesViewClass:
 
     @staticmethod
     def getAddressExplanation():
-        addressCardExplanation = [html.P([
-                                            'For tracking the number of addresses a snapshot of the DeFiChain richlist is made once a day (in the night).',
+        addressCardExplanation = [html.P(['For tracking the number of addresses a snapshot of the DeFiChain richlist is made once a day (in the night).',
                                              html.Br(),
                                              html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank', className='defiLink')]),
-                                  html.P(
-                                            'The first diagram shows the overall number of addresses with a DFI amount greater zero.'),
-                                  html.P([
-                                             'The second diagram shows the number of masternodes and all other addresses. For identification of the masternodes '
-                                            'the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
+
+                                  html.P(['For identification of the masternodes the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
                                             html.Br(),
                                             html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink'),
                                  ], style={'text-align': 'justify'}),
-                                  html.P([
-                                             'The last graphic shows the genesis masternode number. The DefiChain started with 3 genesis masternodes, which do not need'
-                                             ' the the amount of 1 million DFI. Sometimes a genesis node is not represented in the snapshot, because on the corresponding address there are no DFI.'
-                                             ' In this case the masternode is not listed on the Richlist.'],
-                                         style={'text-align': 'justify'}),
                                   html.P([html.B('Hint:'),
                                           ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                           ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
