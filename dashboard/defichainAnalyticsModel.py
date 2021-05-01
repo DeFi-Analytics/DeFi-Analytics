@@ -82,10 +82,10 @@ class defichainAnalyticsModelClass:
             lmCoins['overall'] = lmCoins['BTC_pool'] + lmCoins['ETH_pool'] + lmCoins['USDT_pool'] + lmCoins['DOGE_pool'].fillna(0) + lmCoins['LTC_pool'].fillna(0)
             self.dailyData['lmDFI'] = lmCoins['overall']
 
-            # total amount of addresses and DFI
+            # sum of addresses and DFI
             self.dailyData['nbOverall'] = self.dailyData['nbMnId'] + self.dailyData['nbOtherId']
-            self.dailyData['totalDFI'] = self.dailyData['fundDFI'] + self.dailyData['mnDFI'] + self.dailyData['otherDFI'] + \
-                                       self.dailyData['foundationDFI'].fillna(0) + self.dailyData['lmDFI'].fillna(0)
+            self.dailyData['circDFI'] = self.dailyData['mnDFI'] + self.dailyData['otherDFI'] + self.dailyData['tokenDFI'].fillna(0) + self.dailyData['lmDFI'].fillna(0) + self.dailyData['erc20DFI'].fillna(0)
+            self.dailyData['totalDFI'] = self.dailyData['circDFI'] + self.dailyData['fundDFI'] + self.dailyData['foundationDFI'].fillna(0) + self.dailyData['burnedDFI'].fillna(0)
 
             # calculate daily change in addresses and DFI amount
             self.dailyData['diffDate'] = pd.to_datetime(self.dailyData.index).to_series().diff().values

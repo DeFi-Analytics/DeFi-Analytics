@@ -15,7 +15,7 @@ listCSVFiles = glob.glob(pathRichlist+"*_01-*.csv")
 foundRichlistFiles = [richlistDate for richlistDate in listCSVFiles]
 
 
-colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI', 'mnDFI', 'otherDFI', 'foundationDFI', 'nbMnGenesisId', 'mnGenesisDFI', 'nbMnCakeId','mnCakeDFI', 'erc20DFI', 'burnedDFI', 'tokenDFI']
+colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI', 'mnDFI', 'otherDFI', 'foundationDFI', 'nbMnGenesisId', 'mnGenesisDFI', 'nbMnCakeId', 'mnCakeDFI', 'erc20DFI', 'burnedDFI', 'tokenDFI']
 
 dfDFIData = pd.read_csv(filepath)
 

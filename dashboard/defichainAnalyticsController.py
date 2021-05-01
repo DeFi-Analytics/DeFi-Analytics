@@ -17,9 +17,11 @@ class defichainAnalyticsControllerClass:
     def __init__(self):
         # initialize model and first load of all data
         self.defichainAnalyticsModel = defichainAnalyticsModelClass()
-        self.defichainAnalyticsModel.loadDailyData()
-        self.defichainAnalyticsModel.loadHourlyData()
         self.defichainAnalyticsModel.loadMinutelyData()
+        self.defichainAnalyticsModel.loadHourlyData()
+        self.defichainAnalyticsModel.loadDailyData()
+
+
         self.defichainAnalyticsModel.loadNoTimeseriesData()
 
         self.generalController = generalControllerClass(app, self.defichainAnalyticsModel)
