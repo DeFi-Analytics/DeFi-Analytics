@@ -24,6 +24,18 @@ dfRichList = pd.DataFrame(apiContentAsDict['data'])
 # convert fi balance into dfi balance
 dfRichList.balance = dfRichList.balance/100000000
 
+# get DFI token amount and add to richlist as own entry
+try:
+    link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
+    siteContent = requests.get(link)
+    temp = pd.read_json(siteContent.text)
+
+    seriesDFI2Add = pd.Series(['DFITokenOnDefiChain', temp.balance.sum()], index=['address', 'balance'])
+    dfRichList = dfRichList.append(seriesDFI2Add, ignore_index=True, sort=False)
+except:
+    print('Error with API for DFI token data')
+
+
 # get list of masternodes
 try:
     link = 'http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED'

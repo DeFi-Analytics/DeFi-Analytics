@@ -15,7 +15,7 @@ listCSVFiles = glob.glob(pathRichlist+"*_01-*.csv")
 foundRichlistFiles = [richlistDate for richlistDate in listCSVFiles]
 
 
-colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI', 'mnDFI', 'otherDFI', 'foundationDFI', 'nbMnGenesisId', 'mnGenesisDFI','nbMnCakeId' ,'mnCakeDFI']
+colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI', 'mnDFI', 'otherDFI', 'foundationDFI', 'nbMnGenesisId', 'mnGenesisDFI', 'nbMnCakeId','mnCakeDFI', 'erc20DFI', 'burnedDFI', 'tokenDFI']
 
 dfDFIData = pd.read_csv(filepath)
 
@@ -29,15 +29,26 @@ for richlistFile in foundRichlistFiles:
         addFoundation = 'dJEbxbfufyPF14SC93yxiquECEfq4YSd9L'
         addFoundationAirdrop = 'dMysnhSbg8VbJJjdj273bNQi6i69z4WL6Z'
         addFund = 'dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc'
-        addUnknown = 'dESMvgak9hSnyjdax5TABavnCyhn2nQ1iE'
+
+        addERC20 = 'dZFYejknFdHMHNfHMNQAtwihzvq7DkzV49'
+        addBurned = '8defichainBurnAddressXXXXXXXdRQkSm'
+
+        addDFIToken = 'DFITokenOnDefiChain'     # this amount was captured via token richlist, it is not included in the DFI Richlist
+
         mnGenesis1 = '8KRsoeCRKHUFFmAGGJbRBAgraXiUPUVuXn'
         mnGenesis2 = '8RPZm7SVUNhGN1RgGY3R92rvRkZBwETrCX'
         mnGenesis3 = '8PuErAcazqccCVzRcc8vJ3wFaZGm4vFbLe'
 
         condMNGenesis = (rawRichlist.address == mnGenesis1) | (rawRichlist.address == mnGenesis2) | (rawRichlist.address == mnGenesis3)
         condMN = rawRichlist.mnAddressAPI
-        condMNCake = rawRichlist.mnAddressCakeAPI & rawRichlist.mnAddressAPI
-        condPrivateAddress = (~condMN) & (rawRichlist.address != addFund) & (rawRichlist.address != addFoundation) & (rawRichlist.address != addFoundationAirdrop)
+
+        if 'mnAddressCakeAPI' in rawRichlist.columns:
+            condMNCake = rawRichlist.mnAddressCakeAPI & rawRichlist.mnAddressAPI
+        else:
+            condMNCake = rawRichlist.mnAddressAPI & False
+
+        condPrivateAddress = (~condMN) & (rawRichlist.address != addFund) & (rawRichlist.address != addFoundation) & (rawRichlist.address != addFoundationAirdrop) \
+                             & (rawRichlist.address != addERC20) & (rawRichlist.address != addBurned)
 
         # get balances of mn and private wallets
         balanceMN = rawRichlist[condMN].balance
@@ -45,21 +56,18 @@ for richlistFile in foundRichlistFiles:
         balanceMNGenesis = rawRichlist[condMNGenesis].balance
         balancePrivat = rawRichlist[condPrivateAddress].balance
 
-        #calc data for Dashboard
+
+        # calc addcress number for Dashboard
         nbMnId = balanceMN.size
         nbMnCakeId = balanceMNCake.size
         nbMnGenesisId = balanceMNGenesis.size
         nbOtherId = balancePrivat.size
-        if addFund in rawRichlist.values:
-            fundDFIValue = rawRichlist[rawRichlist.address == addFund].balance.values[0]
-        else:
-            fundDFIValue = np.NaN
 
+        # calc DFI amount on address category
         mnDFI = balanceMN.sum()
         mnCakeDFI = balanceMNCake.sum()
         mnGenesisDFI = balanceMNGenesis.sum()
         otherDFI = balancePrivat.sum()
-
         if addFoundation in rawRichlist.values:
             foundationDFIValue = rawRichlist[rawRichlist.address == addFoundation].balance.values[0]
         else:
@@ -68,8 +76,28 @@ for richlistFile in foundRichlistFiles:
         if addFoundationAirdrop in rawRichlist.values: # add amount of DFI airdrop
             foundationDFIValue = foundationDFIValue+rawRichlist[rawRichlist.address == addFoundationAirdrop].balance.values[0]
 
+        if addFund in rawRichlist.values:
+            fundDFIValue = rawRichlist[rawRichlist.address == addFund].balance.values[0]
+        else:
+            fundDFIValue = np.NaN
 
-        listDFI2Add = [currDate, nbMnId, nbOtherId, fundDFIValue, mnDFI, otherDFI, foundationDFIValue, nbMnGenesisId, mnGenesisDFI, nbMnCakeId, mnCakeDFI]
+        if addERC20 in rawRichlist.values:
+            erc20DFIValue = rawRichlist[rawRichlist.address == addERC20].balance.values[0]
+        else:
+            erc20DFIValue = 0
+
+        if addBurned in rawRichlist.values:
+            burnedDFIValue = rawRichlist[rawRichlist.address == addBurned].balance.values[0]
+        else:
+            burnedDFIValue = 0
+
+        if addDFIToken in rawRichlist.values:
+            tokenDFIValue = rawRichlist[rawRichlist.address == addDFIToken].balance.values[0]
+        else:
+            tokenDFIValue = 0
+
+        # generate Series to be add to existing dataframe
+        listDFI2Add = [currDate, nbMnId, nbOtherId, fundDFIValue, mnDFI, otherDFI, foundationDFIValue, nbMnGenesisId, mnGenesisDFI, nbMnCakeId, mnCakeDFI, erc20DFIValue, burnedDFIValue, tokenDFIValue]
         seriesDFI2Add = pd.Series(listDFI2Add, index=dfDFIData.columns)
 
         dfDFIData = dfDFIData.append(seriesDFI2Add, ignore_index=True, sort=False)
