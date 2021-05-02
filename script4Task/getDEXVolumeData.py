@@ -1,7 +1,7 @@
-import os
 import requests
 import pandas as pd
 
+from pycoingecko import CoinGeckoAPI
 
 scriptPath = __file__
 path = scriptPath[:-32] + '/data/'
@@ -16,7 +16,15 @@ dfDEXVolume.rename(columns={"index":"pool"},inplace=True)
 dfDEXVolume.drop(['base_symbol', 'quote_symbol','base_id','quote_id'], axis=1,inplace=True)
 dfDEXVolume['Time'] = pd.Timestamp.now()
 
+try:
+    cg = CoinGeckoAPI()
+    DFIData = cg.get_price(ids='defichain', vs_currencies='usd', include_24hr_vol='true')
+    cgDFI24hVol = DFIData['defichain']['usd_24h_vol']
+except:
+    cgDFI24hVol = None
+    print('############# Coingecko-API not reached #############')
 
+dfDEXVolume['coingeckoVolume'] = cgDFI24hVol
     
 dfOldDEXVolume = pd.read_csv(filepath,index_col=0)
 dfDEXVolume = dfOldDEXVolume.append(dfDEXVolume, sort=False)
