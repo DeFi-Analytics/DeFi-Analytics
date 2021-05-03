@@ -40,7 +40,7 @@ class blockchainControllerClass:
 
         # initialize coin classes
         self.coinView = coinViewClass()
-        self.coinCallbacks = coinCallbacksClass(app)
+        self.coinCallbacks = coinCallbacksClass(self.defichainAnalyticsModel, self.coinView, app)
 
         # initialize change classes
         self.changeCoinAddressesView = changeCoinAddressesViewClass()

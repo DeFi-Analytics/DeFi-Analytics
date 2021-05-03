@@ -2,7 +2,13 @@ from dash.dependencies import Input, Output, State
 
 
 class coinCallbacksClass:
-    def __init__(self, app):
+    def __init__(self, defichainAnalyticsModel, coinView, app):
+
+        @app.callback(Output('figureCoin', 'figure'),
+                      [Input('coinsSelectionGraphic', 'value')])
+        def updateTVLGraphs(selectedRepresentation):
+            figCoin = coinView.createCoinFigure(defichainAnalyticsModel.dailyData, selectedRepresentation, defichainAnalyticsModel.figBackgroundImage)
+            return figCoin
 
         @app.callback(
             Output("modalCoin", "is_open"),
