@@ -216,7 +216,7 @@ class defichainAnalyticsViewClass:
 
                 ),
 
-                dbc.Col([html.Div(id='idLogoSidebar'),
+                dbc.Col([html.A(html.Div(id='idLogoSidebar'), href='https://www.defichain-analytics.com/', className='defiLink'),
                          html.A(id='idVersion',href="/about?entry=changelog", className='defiLink')]),
 
                 dbc.Col(),
