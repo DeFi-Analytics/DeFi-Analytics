@@ -47,14 +47,14 @@ for richlistFile in foundRichlistFiles:
         else:
             condMNCake = rawRichlist.mnAddressAPI & False
 
-        condPrivateAddress = (~condMN) & (rawRichlist.address != addFund) & (rawRichlist.address != addFoundation) & (rawRichlist.address != addFoundationAirdrop) \
-                             & (rawRichlist.address != addERC20) & (rawRichlist.address != addBurned)
+        condOtherAddress = (~condMN) & (rawRichlist.address != addFund) & (rawRichlist.address != addFoundation) & (rawRichlist.address != addFoundationAirdrop) \
+                             & (rawRichlist.address != addERC20) & (rawRichlist.address != addBurned) & (rawRichlist.address != addDFIToken)
 
         # get balances of mn and private wallets
         balanceMN = rawRichlist[condMN].balance
         balanceMNCake = rawRichlist[condMNCake].balance
         balanceMNGenesis = rawRichlist[condMNGenesis].balance
-        balancePrivat = rawRichlist[condPrivateAddress].balance
+        balancePrivat = rawRichlist[condOtherAddress].balance
 
 
         # calc addcress number for Dashboard
