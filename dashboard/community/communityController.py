@@ -8,6 +8,8 @@ from .income.incomeView import incomeViewClass
 
 from .portfolio.portfolioView import portfolioViewClass
 
+from .promo.promoView import promoViewClass
+
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -27,6 +29,9 @@ class communityControllerClass:
         # initialize portfolio downloads classes
         self.portfolioView = portfolioViewClass()
 
+        # initialize defichain promo classes
+        self.promoView = promoViewClass()
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "twitter"]:
@@ -41,5 +46,8 @@ class communityControllerClass:
         elif entry in ["portfolio"]:
             self.defichainAnalyticsModel.loadPortfolioDownloads()
             pageContent = self.portfolioView.getPortfolioContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
+        elif entry in ["promo"]:
+            self.defichainAnalyticsModel.loadPromoDatabase()
+            pageContent = self.promoView.getPromoContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent

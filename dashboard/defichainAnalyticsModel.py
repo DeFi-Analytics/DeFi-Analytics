@@ -39,6 +39,7 @@ class defichainAnalyticsModelClass:
         self.update_changelogData = None
         self.update_incomeVisits = None
         self.update_portfolioDownloads = None
+        self.update_promoDatabase = None
 
         # background image for figures
         with open(workDir + "/assets/analyticsLandscapeGrey2.png", "rb") as image_file:
@@ -57,6 +58,7 @@ class defichainAnalyticsModelClass:
         self.loadTwitterFollowerData()
         self.loadIncomeVisitsData()
         self.loadPortfolioDownloads()
+        self.loadPromoDatabase()
 
     def loadExtractedRichlistData(self):
         filePath = self.dataPath + 'extractedDFIdata.csv'
@@ -225,6 +227,22 @@ class defichainAnalyticsModelClass:
             self.update_portfolioDownloads = fileInfo.stat()
             print('>>>> Portfolio downloads data loaded from csv-file <<<<')
 
+    def loadPromoDatabase(self):
+        print('>>>> Start update DefiChain promo database ... <<<<')
+        filePath = self.dataPath + 'defichainPromoData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_promoDatabase:
+            promoRawData = pd.read_csv(filePath, index_col=0)
+
+            columns2update = ['postActive', 'mediaActive']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(promoRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.update_promoDatabase = fileInfo.stat()
+            print('>>>> Portfolio downloads data loaded from csv-file <<<<')
 
     #### HOURLY DATA ####
     def loadHourlyData(self):
