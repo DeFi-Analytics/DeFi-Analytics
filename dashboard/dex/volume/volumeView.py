@@ -12,7 +12,7 @@ class volumeViewClass:
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoVolume", className="ml-auto"))],
                                     id="modalVolume", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
-                   dbc.Card(dbc.CardBody([html.H4(['Trading volumne (24hr) on DEX']),
+                   dbc.Card(dbc.CardBody([html.H4(['Trading volume (24hr) on DEX']),
                                           dbc.Row(dbc.Col(dcc.Graph(figure=self.createDEXVolumeGraph(data, bgImage), config={'displayModeBar': False}, id='figureVolume24hr'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoVolume")))
                                           ]))]
