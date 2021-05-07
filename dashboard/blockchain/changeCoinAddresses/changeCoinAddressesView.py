@@ -1,6 +1,7 @@
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
+from datetime import datetime
 
 from plotly.subplots import make_subplots
 
@@ -83,8 +84,10 @@ class changeCoinAddressesViewClass:
                                col=1)  # ,range=[-50, 200]
         figChange.update_yaxes(title_text='Daily DFI-change ', tickformat=",.f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2,
                                col=1)  # ,range=[-200000, 1000000]
+
         figChange.update_xaxes(gridcolor='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
-        figChange.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
+        figChange.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
+                               range=[datetime.strptime(data['otherDFI'].dropna().index.values[0], '%Y-%m-%d'), datetime.strptime(data['otherDFI'].dropna().index.values[-1], '%Y-%m-%d')], row=2, col=1)
 
         figChange.update_layout(xaxis=dict(
             rangeselector=dict(
@@ -96,6 +99,7 @@ class changeCoinAddressesViewClass:
                               dict(step="all")])),
             rangeslider=dict(visible=False),
             type="date"))
+
 
         # add background picture
         figChange.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.79, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
