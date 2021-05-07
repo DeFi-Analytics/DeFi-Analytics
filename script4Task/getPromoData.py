@@ -20,12 +20,19 @@ link='https://api.defichain-promo.com/v1/media'
 siteContent = requests.get(link)
 dataMediaAPI = json.loads(siteContent.text)
 
+# API request for incentive data
+link='https://api.defichain-promo.com/v1/incentive'
+siteContent = requests.get(link)
+dataIncentiveAPI = json.loads(siteContent.text)
+
 dateTimeObj = datetime.now()
 strTimestamp = dateTimeObj.strftime("%Y-%m-%d")
 
-colNames = ['postActive', 'postsDeclined', 'postsWaiting', 'mediaActive', 'mediaDeclined', 'mediaWaiting']
-currentData = [dataPostsAPI['data']['active']['count'], dataPostsAPI['data']['declined']['count'], dataPostsAPI['data']['waiting']['count'], \
-               dataMediaAPI['data']['active']['count'], dataMediaAPI['data']['declined']['count'], dataMediaAPI['data']['waiting']['count']]
+colNames = ['postActive', 'postsDeclined', 'postsWaiting', 'mediaActive', 'mediaDeclined', 'mediaWaiting', 'incentiveUsers', 'incentivePointsToday', 'incentivePointsCurrentRound', 'incentivePointsOverall']
+currentData = [dataPostsAPI['data']['active']['count'], dataPostsAPI['data']['declined']['count'], dataPostsAPI['data']['waiting']['count'],\
+               dataMediaAPI['data']['active']['count'], dataMediaAPI['data']['declined']['count'], dataMediaAPI['data']['waiting']['count'],\
+               dataIncentiveAPI['data']['users']['count'], dataIncentiveAPI['data']['points']['today'], dataIncentiveAPI['data']['points']['currentRound'],\
+               dataIncentiveAPI['data']['points']['overall']]
 
 
 # load existing data and add new row
@@ -35,8 +42,8 @@ dfPromoData = pd.read_csv(filepath, index_col=0)
 # get remaining time for frozen DFI
 newData = pd.Series(index=colNames, data=currentData)
 newData.name = strTimestamp
-#dfiFreezeRemaining = dfiFreezeRemaining.append(newData)    # needed for first time without old data
-dfPromoData.loc[strTimestamp] = newData.values
+dfPromoData = dfPromoData.append(newData)
+#dfPromoData.loc[strTimestamp] = newData.values
 
 # writing file
 dfPromoData.to_csv(filepath)
