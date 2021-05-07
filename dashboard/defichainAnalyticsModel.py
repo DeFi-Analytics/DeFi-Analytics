@@ -316,6 +316,7 @@ class defichainAnalyticsModelClass:
             for poolSymbol in volumeData['base_name'].unique():
                 self.hourlyData['VolTotal'] = self.hourlyData['VolTotal'] + self.hourlyData[poolSymbol+'_'+'VolTotal'].fillna(0)
 
+            self.hourlyData['VolTotalCoingecko'] = volumeData[volumeData['base_name']=='BTC']['coingeckoVolume']
             self.updated_dexVolume = fileInfo.stat()
             print('######' + str(self.hourlyData.shape))
             print('>>>> DEX volume data loaded from csv-file <<<<')
