@@ -38,4 +38,4 @@ dfMNMonitor = dfMNMonitor.append(newData)
 
 # writing file
 dfMNMonitor.to_csv(filepath)
-print('Defichain Promo data saved')
+print('Data Masternode Monitor saved')
