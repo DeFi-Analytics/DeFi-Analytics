@@ -1,6 +1,7 @@
 
 @media only screen and (min-width: 850px) {
     #coinsSelectionGraphic {width: 300px}
+    #promoSelectGraph {width: 300px}
 }
 
 @media only screen and (max-width: 850px) {
@@ -8,9 +9,11 @@
 
     @media (orientation: portrait) {
         #coinsSelectionGraphic {width: 180px}
+        #promoSelectGraph {width: 180px}
         }
 
     @media (orientation: landscape) {
         #coinsSelectionGraphic {width: 260px}
+        #promoSelectGraph {width: 260px}
         }
 }

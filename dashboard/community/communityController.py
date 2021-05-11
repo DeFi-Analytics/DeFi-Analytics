@@ -9,6 +9,7 @@ from .income.incomeView import incomeViewClass
 from .portfolio.portfolioView import portfolioViewClass
 
 from .promo.promoView import promoViewClass
+from .promo.promoCallbacks import promoCallbacksClass
 
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -31,6 +32,7 @@ class communityControllerClass:
 
         # initialize defichain promo classes
         self.promoView = promoViewClass()
+        self.promoCallbacks = promoCallbacksClass(self.defichainAnalyticsModel, self.promoView, app)
 
     def getContent(self, entry):
         pageContent = None

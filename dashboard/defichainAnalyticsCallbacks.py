@@ -41,6 +41,7 @@ class defichainAnalyticsCallbacksClass:
                                              Input('follower', 'n_clicks_timestamp'),
                                              Input('income', 'n_clicks_timestamp'),
                                              Input('portfolio', 'n_clicks_timestamp'),
+                                             Input('promo', 'n_clicks_timestamp'),
                                              Input('changelog', 'n_clicks_timestamp'),
                                              Input('cakereview', 'n_clicks_timestamp'),
                                              Input('imprint', 'n_clicks_timestamp')]
@@ -189,6 +190,7 @@ class defichainAnalyticsCallbacksClass:
                                    'follower',
                                    'income',
                                    'portfolio',
+                                   'promo',
                                    'changelog',
                                    'cakereview',
                                    'imprint']
@@ -213,6 +215,7 @@ class defichainAnalyticsCallbacksClass:
                                             Output('follower', 'className'),
                                             Output('income', 'className'),
                                             Output('portfolio', 'className'),
+                                            Output('promo', 'className'),
                                             Output('changelog', 'className'),
                                             Output('cakereview', 'className'),
                                             Output('imprint', 'className')
