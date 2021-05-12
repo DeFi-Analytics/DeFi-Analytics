@@ -238,7 +238,7 @@ class defichainAnalyticsViewClass:
                       html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
                       '. Cake is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet. ',
                       html.A('Offer', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' Condition: DFI are staking for at least 180 days and generate revenue of <90>% APY.']), className='refLinkMarquee')
+                      ' Condition: DFI are staking for at least 180 days and generate revenue of >90% APY.']), className='refLinkMarquee')
 
         sidebar = html.Div(
             [
