@@ -75,6 +75,19 @@ color: #000000;
     color: #ffffff;
 }
 
+
+#idLogoDonate:hover{
+background-image: url("donateWhiteSidebar.png");
+}
+
+#idLogoDonate:focus:hover{
+background-image: url("donateWhiteSidebar.png");
+}
+
+#idLogoDonate:visited:hover{
+background-image: url("donateWhiteSidebar.png");
+}
+
 /*for big screens*/
 @media only screen and (min-width: 768px) {
     .sidebarLinkstyle{
@@ -95,6 +108,17 @@ color: #000000;
         background-size: cover;
         width: 14rem;
         height: 14rem;
+        padding-top: 0;
+        padding-right: 0;
+        padding-bottom: 0;
+        background-color: #000000;
+    }
+
+    #idLogoDonate{
+        background-image: url("donateSidebar.png");
+        background-size: cover;
+        width: 7.95rem;
+        height: 2.5rem;
         padding-top: 0;
         padding-right: 0;
         padding-bottom: 0;
@@ -181,6 +205,11 @@ color: #000000;
     #idLogoSidebar{
         content: url('analyticsLandscapeTransparency.png');
         height: 45px;
+    }
+
+    #idLogoDonate{
+        content: url('donateSidebar.png');
+        height: 30px;
     }
 
     #idVersion{

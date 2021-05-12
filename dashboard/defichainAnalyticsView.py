@@ -199,6 +199,7 @@ class defichainAnalyticsViewClass:
             dbc.Collapse(
                 [
                     dbc.NavLink("Changelog", href="/about?entry=changelog", className="linkstyle", id="changelog"),
+                    dbc.NavLink("Donation", href="/about?entry=donate", className="linkstyle", id="donate"),
                     dbc.NavLink("CakeDefi-Review", href="/about?entry=cakereview", className="linkstyle", id="cakereview"),
                     dbc.NavLink("Imprint", href="/about?entry=imprint", className="linkstyle", id="imprint")
                 ],
@@ -226,6 +227,8 @@ class defichainAnalyticsViewClass:
             className="headerStyle",
         )
 
+        sidebar_footer = dbc.Row([html.A(html.Div(id='idLogoDonate'), href='/about?entry=donate')], justify="center", align="center", style={'margin-top': '40px'})
+
         refLink = html.Div(html.Marquee([
                       'You want to stake DFI, but don\'t have the needed 20,000 DFI as a collateral? Then try out the Staking-Service of ',
                       html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
@@ -241,11 +244,10 @@ class defichainAnalyticsViewClass:
             [
                 sidebar_header,
 
-                dbc.Collapse(
-                    html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token + submenu_community + submenu_about,
-                            vertical=True, id='navbar-container'), className="scrollbar_sidemenu"),
-                    id="menuResponsiveCollapse", className="menu_collapse")
-
+                dbc.Collapse([html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token + submenu_community + submenu_about,
+                              vertical=True, id='navbar-container'), className="scrollbar_sidemenu"),
+                             sidebar_footer],
+                    id="menuResponsiveCollapse", className="menu_collapse"),
             ],
             className="sidebarstyle",
             id="sidebar",

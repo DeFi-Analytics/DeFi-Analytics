@@ -43,6 +43,7 @@ class defichainAnalyticsCallbacksClass:
                                              Input('portfolio', 'n_clicks_timestamp'),
                                              Input('promo', 'n_clicks_timestamp'),
                                              Input('changelog', 'n_clicks_timestamp'),
+                                             Input('donate', 'n_clicks_timestamp'),
                                              Input('cakereview', 'n_clicks_timestamp'),
                                              Input('imprint', 'n_clicks_timestamp')]
 
@@ -192,6 +193,7 @@ class defichainAnalyticsCallbacksClass:
                                    'portfolio',
                                    'promo',
                                    'changelog',
+                                   'donate',
                                    'cakereview',
                                    'imprint']
         # define callback sidebar_link_state output array
@@ -217,6 +219,7 @@ class defichainAnalyticsCallbacksClass:
                                             Output('portfolio', 'className'),
                                             Output('promo', 'className'),
                                             Output('changelog', 'className'),
+                                            Output('donate', 'className'),
                                             Output('cakereview', 'className'),
                                             Output('imprint', 'className')
                                             ]
