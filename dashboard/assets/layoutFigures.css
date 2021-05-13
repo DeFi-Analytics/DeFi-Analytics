@@ -50,6 +50,7 @@
     #figureVisitsIncome {height: 680px}
     #figurePortfolioDownloads {height: 680px}
     #figurePromoDatabase {height: 640px}
+    #figureMarketcap {height: 715px}
 }
 
 @media only screen and (max-width: 768px) {
@@ -103,6 +104,7 @@
         #figureVisitsIncome {height: 600px}
         #figurePortfolioDownloads {height: 600px}
         #figurePromoDatabase {height: 600px}
+        #figureMarketcap {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -129,6 +131,7 @@
         #figureVisitsIncome {height: 330px}
         #figurePortfolioDownloads {height: 330px}
         #figurePromoDatabase {height: 330px}
+        #figureMarketcap {height: 330px}
         }
 }
 

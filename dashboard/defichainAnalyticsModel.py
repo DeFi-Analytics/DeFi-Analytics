@@ -50,8 +50,8 @@ class defichainAnalyticsModelClass:
     def loadDailyData(self):
         self.loadHourlyDEXdata()
         self.loadDEXVolume()
-        self.loadExtractedRichlistData()
         self.loadDailyTradingData()
+        self.loadExtractedRichlistData()
         self.loadDailyBlocktimeData()
         self.loadDAAData()
         self.loadTwitterData()
@@ -88,6 +88,10 @@ class defichainAnalyticsModelClass:
             self.dailyData['nbOverall'] = self.dailyData['nbMnId'] + self.dailyData['nbOtherId']
             self.dailyData['circDFI'] = self.dailyData['mnDFI'] + self.dailyData['otherDFI'] + self.dailyData['tokenDFI'].fillna(0) + self.dailyData['lmDFI'].fillna(0) + self.dailyData['erc20DFI'].fillna(0)
             self.dailyData['totalDFI'] = self.dailyData['circDFI'] + self.dailyData['fundDFI'] + self.dailyData['foundationDFI'].fillna(0) + self.dailyData['burnedDFI'].fillna(0)
+
+            # calc market cap data in USD and BTC
+            self.dailyData['marketCapUSD'] = self.dailyData['circDFI']*self.dailyData['DFIPriceUSD']
+            self.dailyData['marketCapBTC'] = self.dailyData['marketCapUSD'] / self.dailyData['BTCPriceUSD']
 
             # calculate daily change in addresses and DFI amount
             self.dailyData['diffDate'] = pd.to_datetime(self.dailyData.index).to_series().diff().values

@@ -30,8 +30,8 @@ class defichainAnalyticsViewClass:
             # we use the Collapse component to hide and reveal the navigation links
             dbc.Collapse(
                 [
-                    dbc.NavLink("Overview", href="/general?entry=overview", className="linkstyle",
-                                id="overview")
+                    dbc.NavLink("Overview", href="/general?entry=overview", className="linkstyle", id="overview"),
+                    dbc.NavLink("Market Cap", href="/general?entry=marketcap", className="linkstyle", id="marketcap"),
                 ],
                 id="submenu-general-collapse",
             ),

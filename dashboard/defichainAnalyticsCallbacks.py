@@ -22,6 +22,7 @@ class defichainAnalyticsCallbacksClass:
         #define the inputs for the menu_button handler
         sidebar_toggle_menu_button_inputs = [Input("sidebarResponsiveExpandButton", 'n_clicks_timestamp'),
                                              Input('overview', 'n_clicks_timestamp'),
+                                             Input('marketcap', 'n_clicks_timestamp'),
                                              Input('addresses', 'n_clicks_timestamp'),
                                              Input('mn', 'n_clicks_timestamp'),
                                              Input('daa', 'n_clicks_timestamp'),
@@ -172,6 +173,7 @@ class defichainAnalyticsCallbacksClass:
             return sidebar_menu_Output_Array
 
         sidebar_link_name_array = ['overview',
+                                   'marketcap',
                                    'addresses',
                                    'mn',
                                    'daa',
@@ -198,6 +200,7 @@ class defichainAnalyticsCallbacksClass:
                                    'imprint']
         # define callback sidebar_link_state output array
         sidebar_active_link_array_output = [Output('overview', 'className'),
+                                            Output('marketcap', 'className'),
                                             Output('addresses', 'className'),
                                             Output('mn', 'className'),
                                             Output('daa', 'className'),
