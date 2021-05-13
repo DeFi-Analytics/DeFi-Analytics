@@ -65,7 +65,7 @@ class masternodesViewClass:
         figMN.update_yaxes(title_text=yLabelText, tickformat=yTickRepresentation, gridcolor='#6c757d', color='#6c757d',
                             zerolinecolor='#6c757d', row=1, col=1)
         figMN.update_xaxes(title_text="Date", gridcolor='#6c757d', showticklabels=True, color='#6c757d', zerolinecolor='#6c757d',
-                            range=[date2MonthsBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
+                            range=[date2MonthsBack.strftime('%Y-%m-%d'), lastValidDate], row=1, col=1)
 
         # Add range slider
         figMN.update_layout(xaxis=dict(
