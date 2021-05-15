@@ -61,6 +61,7 @@ class defichainAnalyticsModelClass:
         self.loadPromoDatabase()
 
     def loadExtractedRichlistData(self):
+        print('>>>> Start update extracted richlist data ...  <<<<')
         filePath = self.dataPath + 'extractedDFIdata.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_extractedRichlist:
