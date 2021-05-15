@@ -44,8 +44,8 @@ while True:
 
         # condition for mn-addresses and private wallets
         try:
-            print('... getting MN-List')
-            link = 'http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED'
+            print('... getting MN-List from mydeficha.in API')
+            link = 'http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED'
             siteContent = requests.get(link)
             dfMNList = pd.read_json(siteContent.text).transpose()
             dfMNList.to_csv(filepathMNList, index=True)

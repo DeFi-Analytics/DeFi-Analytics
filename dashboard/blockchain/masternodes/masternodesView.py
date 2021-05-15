@@ -106,7 +106,7 @@ class masternodesViewClass:
                     'in the standard configuration the cake and overall graphs are hidden. Just click on the according legend entry to make them visible.', html.Br(),
                     'Beside the absolute number representation the relative parts could be more of interest. They could be interpreted as a measure of decentralization.'], style={'text-align': 'justify'}),
             html.P(['A list of all masternodes can be get with a full-node and the command line interface. This is routed to an API by Bernd Mack and used here.', html.Br(),
-                html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')]),
+                html.A('http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', href='http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')]),
             html.P(['The second data source is a cake API giving me the addresses of masternodes hosted on their side.', html.Br(),
                          html.A('https://poolapi.cakedefi.com/nodes?order=status&orderBy=DESC', href='https://poolapi.cakedefi.com/nodes?order=status&orderBy=DESC', target='_blank', className='defiLink')]),
             html.P([html.B('Hint:'), ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
