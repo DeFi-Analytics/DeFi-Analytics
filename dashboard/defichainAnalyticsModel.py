@@ -298,7 +298,6 @@ class defichainAnalyticsModelClass:
 
             self.hourlyData['Date'] = pd.to_datetime(self.hourlyData.index).strftime('%Y-%m-%d')
             self.updated_dexHourly = fileInfo.stat()
-            print('######' + str(self.hourlyData.shape))
             print('>>>> Hourly DEX data loaded from csv-file <<<<')
 
     def loadDEXVolume(self):
@@ -330,7 +329,6 @@ class defichainAnalyticsModelClass:
 
             self.hourlyData['VolTotalCoingecko'] = volumeData[volumeData['base_name']=='BTC']['coingeckoVolume']
             self.updated_dexVolume = fileInfo.stat()
-            print('######' + str(self.hourlyData.shape))
             print('>>>> DEX volume data loaded from csv-file <<<<')
 
 
@@ -359,7 +357,6 @@ class defichainAnalyticsModelClass:
                 self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
             self.updated_tokenCryptos = fileInfo.stat()
-            print('######' + str(self.hourlyData.shape))
             print('>>>> DAT Cryptos data loaded from csv-file <<<<')
 
 
@@ -395,7 +392,6 @@ class defichainAnalyticsModelClass:
 
             self.minutelyData.dropna(axis=0, how='all',inplace=True)
             self.update_dexMinutely = fileInfo.stat()
-            print('######' + str(self.minutelyData.shape))
             print('>>>> Minutely DEX data loaded from csv-file <<<<')
 
     #### NO TIMESERIES ####
@@ -431,7 +427,6 @@ class defichainAnalyticsModelClass:
             self.snapshotData['duration'] = duration-timedelta(microseconds=duration.microseconds)          # remove microseconds
             self.snapshotData['etaEvent'] = datetime.utcnow()+self.snapshotData['duration']
             self.update_snapshotData = fileInfo.stat()
-            print('######' + str(self.snapshotData.shape))
             print('>>>>>>>>>>>>> Snapshot data loaded <<<<<<<<<<<<<')
 
     def loadChangelogData(self):
