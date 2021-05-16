@@ -91,6 +91,7 @@ class defichainAnalyticsModelClass:
             self.dailyData['totalDFI'] = self.dailyData['circDFI'] + self.dailyData['fundDFI'] + self.dailyData['foundationDFI'].fillna(0) + self.dailyData['burnedDFI'].fillna(0)
 
             # calc market cap data in USD and BTC
+            print('>>>>>>>> Update market cap in loadExtractedRichlistData...  <<<<<<<<')
             self.dailyData['marketCapUSD'] = self.dailyData['circDFI']*self.dailyData['DFIPriceUSD']
             self.dailyData['marketCapBTC'] = self.dailyData['marketCapUSD'] / self.dailyData['BTCPriceUSD']
 
@@ -123,6 +124,12 @@ class defichainAnalyticsModelClass:
             ind2Delete = self.dailyData.columns.intersection(dailyTradingResults.columns)                               # check if columns exist
             self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete existing columns to add new ones
             self.dailyData = self.dailyData.merge(dailyTradingResults, how='outer', left_index=True, right_index=True)    # add new columns to daily table
+
+            # calc market cap data in USD and BTC (same as in loadExtractedRichlistData to get updated price information
+            if 'circDFI' in self.dailyData.columns:
+                print('>>>>>>>> Update market cap in loadDailyTradingData...  <<<<<<<<')
+                self.dailyData['marketCapUSD'] = self.dailyData['circDFI']*self.dailyData['DFIPriceUSD']
+                self.dailyData['marketCapBTC'] = self.dailyData['marketCapUSD'] / self.dailyData['BTCPriceUSD']
 
             self.updated_tradingData = fileInfo.stat()
             print('>>>> Trading data loaded from csv-file <<<<')

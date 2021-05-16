@@ -43,7 +43,6 @@ class marketcapViewClass:
             columnName = 'marketCapUSD'
             yAxisLabel = 'Market Cap in $'
             hoverTemplateRepresenation = '$%{y:,.0f}'
-        print(data[columnName].dropna().tail())
         lastValidDate = datetime.strptime(data[columnName].dropna().index.values[-1], '%Y-%m-%d')
         date2MonthsBack = lastValidDate - dateutil.relativedelta.relativedelta(months=2)
 
