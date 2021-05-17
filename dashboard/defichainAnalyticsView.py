@@ -1,16 +1,24 @@
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+import pandas as pd
 
-import os
-import base64
 
 PFEIL_ZU = "fas fa-chevron-right mr-3"
 PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 
 class defichainAnalyticsViewClass:
-    def __init__(self):
+    def trackVisit(self):
+        scriptPath = __file__
+        path = scriptPath[:-36] + '/data/'
+        filepath = path + 'rawDataUserVisit.csv'
 
+        start_time = pd.Timestamp.now()
+        dfUSer = pd.DataFrame(data=[start_time], columns=['TimeStamp'])
+        dfUSer.to_csv(filepath, mode='a', header=False)
+        print('##################### '+str(start_time))
+
+    def getDashboardLayout(self):
         submenu_general = [
             html.Li(
                 # use Row and Col components to position the chevrons
@@ -219,7 +227,7 @@ class defichainAnalyticsViewClass:
                 ),
 
                 dbc.Col([html.A(html.Div(id='idLogoSidebar'), href='https://www.defichain-analytics.com/', className='defiLink'),
-                         html.A(id='idVersion',href="/about?entry=changelog", className='defiLink')]),
+                         dbc.NavLink(id='idVersion',href="/about?entry=changelog", className='defiLink')]),
 
                 dbc.Col(),
             ],
@@ -227,7 +235,7 @@ class defichainAnalyticsViewClass:
             className="headerStyle",
         )
 
-        sidebar_footer = dbc.Row([html.A(html.Div(id='idLogoDonate'), href='/about?entry=donate')], justify="center", align="center", style={'margin-top': '40px'})
+        sidebar_footer = dbc.Row([dbc.NavLink(html.Div(id='idLogoDonate'), href='/about?entry=donate')], justify="center", align="center", style={'margin-top': '40px'})
 
         refLink = html.Div(html.Marquee([
                       'You want to stake DFI, but don\'t have the needed 20,000 DFI as a collateral? Then try out the Staking-Service of ',
@@ -257,4 +265,7 @@ class defichainAnalyticsViewClass:
                                   refLink,
                                   html.Div(id='hiddenDivTimestampsMenuClicked', children='0 0 0 0 0 0 0', style={'display':'none'})],
                                  type="default")
+        self.trackVisit()
         self.layout = html.Div([dcc.Location(id="url"), sidebar, MainWindow])
+
+        return self.layout
