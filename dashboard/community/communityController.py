@@ -11,6 +11,8 @@ from .portfolio.portfolioView import portfolioViewClass
 from .promo.promoView import promoViewClass
 from .promo.promoCallbacks import promoCallbacksClass
 
+from .mnMonitor.mnMonitorView import mnMonitorViewClass
+
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -34,6 +36,9 @@ class communityControllerClass:
         self.promoView = promoViewClass()
         self.promoCallbacks = promoCallbacksClass(self.defichainAnalyticsModel, self.promoView, app)
 
+        # initialize MN monitor classes
+        self.mnMonitorView = mnMonitorViewClass()
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "twitter"]:
@@ -51,5 +56,8 @@ class communityControllerClass:
         elif entry in ["promo"]:
             self.defichainAnalyticsModel.loadPromoDatabase()
             pageContent = self.promoView.getPromoContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
+        elif entry in ["mnmonitor"]:
+            self.defichainAnalyticsModel.loadMNMonitorDatabase()
+            pageContent = self.mnMonitorView.getmnMonitorContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent

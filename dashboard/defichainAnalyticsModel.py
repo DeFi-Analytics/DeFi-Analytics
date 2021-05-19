@@ -59,6 +59,7 @@ class defichainAnalyticsModelClass:
         self.loadIncomeVisitsData()
         self.loadPortfolioDownloads()
         self.loadPromoDatabase()
+        self.loadMNMonitorDatabase()
 
     def loadExtractedRichlistData(self):
         filePath = self.dataPath + 'extractedDFIdata.csv'
@@ -246,7 +247,24 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(promoRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_promoDatabase = fileInfo.stat()
-            print('>>>> Portfolio downloads data loaded from csv-file <<<<')
+            print('>>>> DefiChain promo database loaded from csv-file <<<<')
+
+    def loadMNMonitorDatabase(self):
+        print('>>>> Start update masternode monitor database ... <<<<')
+        filePath = self.dataPath + 'masternodeMonitorData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_promoDatabase:
+            monitorRawData = pd.read_csv(filePath, index_col=0)
+
+            columns2update = ['nbMasternodes', 'nbAccounts']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(monitorRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.update_promoDatabase = fileInfo.stat()
+            print('>>>> MN Monitor database loaded from csv-file <<<<')
 
     #### HOURLY DATA ####
     def loadHourlyData(self):
