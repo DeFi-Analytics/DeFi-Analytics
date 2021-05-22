@@ -75,7 +75,7 @@ class promoViewClass:
             subplot_titles=([]))
 
         trace_incentivePoints = dict(type='scatter', name='Daily overall incentive points', x=data['incentivePointsToday'].dropna().index, y=data['incentivePointsToday'].dropna(),
-                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.f}')
+                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.0f}')
 
         figPromoIncentive.add_trace(trace_incentivePoints, 1, 1)
 
