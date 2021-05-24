@@ -15,7 +15,8 @@ listCSVFiles = glob.glob(pathRichlist+"*_01-*.csv")
 foundRichlistFiles = [richlistDate for richlistDate in listCSVFiles]
 
 
-colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI', 'mnDFI', 'otherDFI', 'foundationDFI', 'nbMnGenesisId', 'mnGenesisDFI', 'nbMnCakeId', 'mnCakeDFI', 'erc20DFI', 'burnedDFI', 'tokenDFI']
+colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI', 'mnDFI', 'otherDFI', 'foundationDFI', 'nbMnGenesisId', 'mnGenesisDFI', 'nbMnCakeId', 'mnCakeDFI', 'erc20DFI',
+            'burnedDFI', 'tokenDFI', 'nbMydefichainId', 'mnMydefichainDFI']
 
 dfDFIData = pd.read_csv(filepath)
 
@@ -47,12 +48,24 @@ for richlistFile in foundRichlistFiles:
         else:
             condMNCake = rawRichlist.mnAddressAPI & False
 
+        # get MN of mydefichain via excel sheet (will be replaced after API is available)
+        filepathMydefichain = path + 'mydefichainOperatornodes.xlsx'
+        dfMydefichainData = pd.read_excel(filepathMydefichain, sheet_name='listmasternodes')
+        dfMydefichainData = dfMydefichainData[dfMydefichainData['Spalte1'] == 'mydefichain']
+        rawRichlist['mnAddressMyDefichain'] = rawRichlist['address'].isin(dfMydefichainData['Value.ownerAuthAddress'])
+
+        if 'mnAddressCakeAPI' in rawRichlist.columns:
+            condMNMydefichain = rawRichlist.mnAddressMyDefichain & rawRichlist.mnAddressAPI
+        else:
+            condMNMydefichain = rawRichlist.mnAddressAPI & False
+
         condOtherAddress = (~condMN) & (rawRichlist.address != addFund) & (rawRichlist.address != addFoundation) & (rawRichlist.address != addFoundationAirdrop) \
                              & (rawRichlist.address != addERC20) & (rawRichlist.address != addBurned) & (rawRichlist.address != addDFIToken)
 
         # get balances of mn and private wallets
         balanceMN = rawRichlist[condMN].balance
         balanceMNCake = rawRichlist[condMNCake].balance
+        balanceMNMydefichain = rawRichlist[condMNMydefichain].balance
         balanceMNGenesis = rawRichlist[condMNGenesis].balance
         balancePrivat = rawRichlist[condOtherAddress].balance
 
@@ -60,12 +73,14 @@ for richlistFile in foundRichlistFiles:
         # calc addcress number for Dashboard
         nbMnId = balanceMN.size
         nbMnCakeId = balanceMNCake.size
+        nbMnMydefichainId = balanceMNMydefichain.size
         nbMnGenesisId = balanceMNGenesis.size
         nbOtherId = balancePrivat.size
 
         # calc DFI amount on address category
         mnDFI = balanceMN.sum()
         mnCakeDFI = balanceMNCake.sum()
+        mnMydefichainDFI = balanceMNMydefichain.sum()
         mnGenesisDFI = balanceMNGenesis.sum()
         otherDFI = balancePrivat.sum()
         if addFoundation in rawRichlist.values:
@@ -97,7 +112,8 @@ for richlistFile in foundRichlistFiles:
             tokenDFIValue = 0
 
         # generate Series to be add to existing dataframe
-        listDFI2Add = [currDate, nbMnId, nbOtherId, fundDFIValue, mnDFI, otherDFI, foundationDFIValue, nbMnGenesisId, mnGenesisDFI, nbMnCakeId, mnCakeDFI, erc20DFIValue, burnedDFIValue, tokenDFIValue]
+        listDFI2Add = [currDate, nbMnId, nbOtherId, fundDFIValue, mnDFI, otherDFI, foundationDFIValue, nbMnGenesisId, mnGenesisDFI, nbMnCakeId, mnCakeDFI, erc20DFIValue,
+                       burnedDFIValue, tokenDFIValue, nbMnMydefichainId, mnMydefichainDFI]
         seriesDFI2Add = pd.Series(listDFI2Add, index=dfDFIData.columns)
 
         dfDFIData = dfDFIData.append(seriesDFI2Add, ignore_index=True, sort=False)

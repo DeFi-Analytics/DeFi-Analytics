@@ -71,9 +71,11 @@ class defichainAnalyticsModelClass:
             self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete existing columns to add new ones
             self.dailyData = self.dailyData.merge(extractedRichlist, how='outer', left_index=True, right_index=True)      # add new columns to daily table
 
-            self.dailyData['nbMNOther'] = self.dailyData['nbMnId']-self.dailyData['nbMnCakeId']
+            self.dailyData['nbMNOther'] = self.dailyData['nbMnId']-self.dailyData['nbMnCakeId']-self.dailyData['nbMydefichainId']
             self.dailyData['nbMnCakeIdRelative'] = self.dailyData['nbMnCakeId']/self.dailyData['nbMnId']*100
             self.dailyData['nbMNOtherRelative'] = self.dailyData['nbMNOther'] / self.dailyData['nbMnId'] * 100
+            self.dailyData['nbMydefichainRelative'] = self.dailyData['nbMydefichainId'] / self.dailyData['nbMnId'] * 100
+
 
             # extracting DFI in Liquidity-Mining
             lmCoins = pd.DataFrame(index=self.dailyData.index)
