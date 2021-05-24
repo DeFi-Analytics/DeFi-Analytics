@@ -172,7 +172,8 @@ class defichainAnalyticsViewClass:
                     dbc.NavLink("Twitter Follower", href="/community?entry=follower", className="linkstyle", id="follower"),
                     dbc.NavLink("Project: DefiChain-Income", href="/community?entry=income", className="linkstyle", id="income"),
                     dbc.NavLink("Project: Portfolio App", href="/community?entry=portfolio", className="linkstyle", id="portfolio"),
-                    dbc.NavLink("Project: Defichain-Promo", href="/community?entry=promo", className="linkstyle", id="promo")
+                    dbc.NavLink("Project: Defichain-Promo", href="/community?entry=promo", className="linkstyle", id="promo"),
+                    dbc.NavLink("Project: Masternode Monitor", href="/community?entry=mnmonitor", className="linkstyle", id="mnmonitor")
                 ],
                 id="submenu-community-collapse",
             ),

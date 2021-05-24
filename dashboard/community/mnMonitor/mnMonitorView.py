@@ -9,7 +9,10 @@ class mnMonitorViewClass:
 
     def getmnMonitorContent(self, data, bgImage):
         content = [dbc.Card(dbc.CardBody([html.H4(['Community Project: Masternode Monitor']),
-                                          html.P(['...',
+                                          html.P(['Defichain has a great community. More and more persons create their own projects to help others and bring value into the ecosystem.',html.Br(),
+                                                  'Masternode Monitor is an application for tracking the minting activities of your DeFiChain masternodes. This helps you getting an overview '
+                                                  'of how they perform and keep track of their activities in the past. It uses public APIs with your collateral address. The privacy is ensured, because data '
+                                                  'is only stored im browser',
                                                   html.Br(),
                                                   'You want to know more? Have a look on: ',
                                                   html.A('https://www.defichain-masternode-monitor.com/', href='https://www.defichain-masternode-monitor.com/', target='_blank', className='defiLink')],
