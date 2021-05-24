@@ -36,12 +36,14 @@ class masternodesViewClass:
         if selectRepresentation == 'relative':
             sigNameMNCake = 'nbMnCakeIdRelative'
             sigNameMNOther = 'nbMNOtherRelative'
+            sigNameMydefichain = 'nbMydefichainRelative'
             hoverTemplateRepresenation = '%{y:,.3f}%'
             yLabelText = 'Part of enabled masternodes in %'
             yTickRepresentation = ",.2f"
         else:
             sigNameMNCake = 'nbMnCakeId'
             sigNameMNOther = 'nbMNOther'
+            sigNameMydefichain = 'nbMydefichainId'
             hoverTemplateRepresenation = '%{y:,.0f}'
             yTickRepresentation = ",.0f"
             yLabelText = 'Number of masternodes'
@@ -50,6 +52,8 @@ class masternodesViewClass:
             # single MN graphs
         trace_MNCake = dict(type='scatter', name='Cake', x=data[sigNameMNCake].dropna().index, y=data[sigNameMNCake].dropna(),
                             stackgroup='one', mode='lines', line=dict(color='#5b10ff'), line_width=0, hovertemplate=hoverTemplateRepresenation, visible='legendonly', fill='tozeroy')
+        trace_MNMydefichain = dict(type='scatter', name='MyDefichain', x=data[sigNameMydefichain].dropna().index, y=data[sigNameMydefichain].dropna(),
+                             stackgroup='one', mode='lines', line=dict(color='#ff9800'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_MNOther = dict(type='scatter', name='Other', x=data[sigNameMNOther].dropna().index, y=data[sigNameMNOther].dropna(),
                              stackgroup='one', mode='lines', line=dict(color='#22b852'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
@@ -58,6 +62,7 @@ class masternodesViewClass:
                                 mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate=hoverTemplateRepresenation, visible='legendonly')
 
         figMN.add_trace(trace_MNCake, 1, 1)
+        figMN.add_trace(trace_MNMydefichain, 1, 1)
         figMN.add_trace(trace_MNOther, 1, 1)
         if selectRepresentation == 'absolute':
             figMN.add_trace(trace_MNOverall, 1, 1)
@@ -106,7 +111,7 @@ class masternodesViewClass:
                     'in the standard configuration the cake and overall graphs are hidden. Just click on the according legend entry to make them visible.', html.Br(),
                     'Beside the absolute number representation the relative parts could be more of interest. They could be interpreted as a measure of decentralization.'], style={'text-align': 'justify'}),
             html.P(['A list of all masternodes can be get with a full-node and the command line interface. This is routed to an API by Bernd Mack and used here.', html.Br(),
-                html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')]),
+                html.A('http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', href='http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')]),
             html.P(['The second data source is a cake API giving me the addresses of masternodes hosted on their side.', html.Br(),
                          html.A('https://poolapi.cakedefi.com/nodes?order=status&orderBy=DESC', href='https://poolapi.cakedefi.com/nodes?order=status&orderBy=DESC', target='_blank', className='defiLink')]),
             html.P([html.B('Hint:'), ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'

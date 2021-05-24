@@ -43,12 +43,11 @@ class marketcapViewClass:
             columnName = 'marketCapUSD'
             yAxisLabel = 'Market Cap in $'
             hoverTemplateRepresenation = '$%{y:,.0f}'
-
-        lastValidDate = datetime.strptime(data[columnName].dropna().index.values[-2], '%Y-%m-%d')
+        lastValidDate = datetime.strptime(data[columnName].dropna().index.values[-1], '%Y-%m-%d')
         date2MonthsBack = lastValidDate - dateutil.relativedelta.relativedelta(months=2)
 
-        trace_marketcap = dict(type='scatter', name='DAA',
-                         x=data[columnName].dropna().index.values[:-1], y=data[columnName].dropna().values[:-1],
+        trace_marketcap = dict(type='scatter', name='Market Cap',
+                         x=data[columnName].dropna().index.values, y=data[columnName].dropna().values,
                          mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate=hoverTemplateRepresenation)
         figMarketcap.add_trace(trace_marketcap, 1, 1)
 

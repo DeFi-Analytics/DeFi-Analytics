@@ -112,15 +112,15 @@ class coinpriceViewClass:
             priceCurrency = 'BTC/DFI'
 
         trace_absPriceDEX = dict(type='scatter', name='DEX', x=data[selectedCoin+'-DFI_reserveA/reserveB'].loc[startIndex:].dropna().index, y=data[selectedCoin+'-DFI_reserveA/reserveB'].loc[startIndex:].dropna(),
-                                 mode='lines', line=dict(color=lineColor, dash='dash'), line_width=2, hovertemplate='%{y:.8f} '+priceCurrency)
+                                 mode='lines', line=dict(color=lineColor), line_width=3, hovertemplate='%{y:.8f} '+priceCurrency)
         trace_absPriceCG = dict(type='scatter', name='CoinGecko', x=data[selectedCoin+'-DFI_DFIPrices'].loc[startIndex:].dropna().index, y=data[selectedCoin+'-DFI_DFIPrices'].loc[startIndex:].dropna(),
-                                mode='lines', line=dict(color=lineColor, dash='dot'), line_width=2, hovertemplate='%{y:.8f} '+priceCurrency)
+                                mode='lines', line=dict(color='#000000'), line_width=2, hovertemplate='%{y:.8f} '+priceCurrency)
         trace_absPriceBittrex = dict(type='scatter', name='Bittrex', x=data[selectedCoin+'-DFI_DFIPricesBittrex'].loc[startIndex:].dropna().index, y=data[selectedCoin+'-DFI_DFIPricesBittrex'].loc[startIndex:].dropna(),
-                                     mode='lines', line=dict(color=lineColor, dash='dashdot'), line_width=2, hovertemplate='%{y:.8f} '+priceCurrency)
+                                     mode='lines', line=dict(color='#7f7f7f'), line_width=2, hovertemplate='%{y:.8f} '+priceCurrency)
 
-        figPrice.add_trace(trace_absPriceDEX, 2, 1)
         figPrice.add_trace(trace_absPriceCG, 2, 1)
         figPrice.add_trace(trace_absPriceBittrex, 2, 1)
+        figPrice.add_trace(trace_absPriceDEX, 2, 1)
 
         figPrice.update_yaxes(title_text='Rel. price deviation', tickformat=",.1f", gridcolor='#6c757d', color='#6c757d',
                                       zerolinecolor='#6c757d', row=1, col=1)

@@ -62,6 +62,7 @@ class defichainAnalyticsModelClass:
         self.loadMNMonitorDatabase()
 
     def loadExtractedRichlistData(self):
+        print('>>>> Start update extracted richlist data ...  <<<<')
         filePath = self.dataPath + 'extractedDFIdata.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_extractedRichlist:
@@ -71,9 +72,11 @@ class defichainAnalyticsModelClass:
             self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete existing columns to add new ones
             self.dailyData = self.dailyData.merge(extractedRichlist, how='outer', left_index=True, right_index=True)      # add new columns to daily table
 
-            self.dailyData['nbMNOther'] = self.dailyData['nbMnId']-self.dailyData['nbMnCakeId']
+            self.dailyData['nbMNOther'] = self.dailyData['nbMnId']-self.dailyData['nbMnCakeId']-self.dailyData['nbMydefichainId']
             self.dailyData['nbMnCakeIdRelative'] = self.dailyData['nbMnCakeId']/self.dailyData['nbMnId']*100
             self.dailyData['nbMNOtherRelative'] = self.dailyData['nbMNOther'] / self.dailyData['nbMnId'] * 100
+            self.dailyData['nbMydefichainRelative'] = self.dailyData['nbMydefichainId'] / self.dailyData['nbMnId'] * 100
+
 
             # extracting DFI in Liquidity-Mining
             lmCoins = pd.DataFrame(index=self.dailyData.index)
@@ -91,6 +94,7 @@ class defichainAnalyticsModelClass:
             self.dailyData['totalDFI'] = self.dailyData['circDFI'] + self.dailyData['fundDFI'] + self.dailyData['foundationDFI'].fillna(0) + self.dailyData['burnedDFI'].fillna(0)
 
             # calc market cap data in USD and BTC
+            print('>>>>>>>> Update market cap in loadExtractedRichlistData...  <<<<<<<<')
             self.dailyData['marketCapUSD'] = self.dailyData['circDFI']*self.dailyData['DFIPriceUSD']
             self.dailyData['marketCapBTC'] = self.dailyData['marketCapUSD'] / self.dailyData['BTCPriceUSD']
 
@@ -123,6 +127,12 @@ class defichainAnalyticsModelClass:
             ind2Delete = self.dailyData.columns.intersection(dailyTradingResults.columns)                               # check if columns exist
             self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete existing columns to add new ones
             self.dailyData = self.dailyData.merge(dailyTradingResults, how='outer', left_index=True, right_index=True)    # add new columns to daily table
+
+            # calc market cap data in USD and BTC (same as in loadExtractedRichlistData to get updated price information
+            if 'circDFI' in self.dailyData.columns:
+                print('>>>>>>>> Update market cap in loadDailyTradingData...  <<<<<<<<')
+                self.dailyData['marketCapUSD'] = self.dailyData['circDFI']*self.dailyData['DFIPriceUSD']
+                self.dailyData['marketCapBTC'] = self.dailyData['marketCapUSD'] / self.dailyData['BTCPriceUSD']
 
             self.updated_tradingData = fileInfo.stat()
             print('>>>> Trading data loaded from csv-file <<<<')
@@ -308,7 +318,6 @@ class defichainAnalyticsModelClass:
 
             self.hourlyData['Date'] = pd.to_datetime(self.hourlyData.index).strftime('%Y-%m-%d')
             self.updated_dexHourly = fileInfo.stat()
-            print('######' + str(self.hourlyData.shape))
             print('>>>> Hourly DEX data loaded from csv-file <<<<')
 
     def loadDEXVolume(self):
@@ -340,7 +349,6 @@ class defichainAnalyticsModelClass:
 
             self.hourlyData['VolTotalCoingecko'] = volumeData[volumeData['base_name']=='BTC']['coingeckoVolume']
             self.updated_dexVolume = fileInfo.stat()
-            print('######' + str(self.hourlyData.shape))
             print('>>>> DEX volume data loaded from csv-file <<<<')
 
 
@@ -369,7 +377,6 @@ class defichainAnalyticsModelClass:
                 self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
             self.updated_tokenCryptos = fileInfo.stat()
-            print('######' + str(self.hourlyData.shape))
             print('>>>> DAT Cryptos data loaded from csv-file <<<<')
 
 
@@ -405,7 +412,6 @@ class defichainAnalyticsModelClass:
 
             self.minutelyData.dropna(axis=0, how='all',inplace=True)
             self.update_dexMinutely = fileInfo.stat()
-            print('######' + str(self.minutelyData.shape))
             print('>>>> Minutely DEX data loaded from csv-file <<<<')
 
     #### NO TIMESERIES ####
@@ -441,7 +447,6 @@ class defichainAnalyticsModelClass:
             self.snapshotData['duration'] = duration-timedelta(microseconds=duration.microseconds)          # remove microseconds
             self.snapshotData['etaEvent'] = datetime.utcnow()+self.snapshotData['duration']
             self.update_snapshotData = fileInfo.stat()
-            print('######' + str(self.snapshotData.shape))
             print('>>>>>>>>>>>>> Snapshot data loaded <<<<<<<<<<<<<')
 
     def loadChangelogData(self):

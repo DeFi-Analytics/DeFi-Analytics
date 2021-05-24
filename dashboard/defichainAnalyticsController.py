@@ -38,7 +38,8 @@ class defichainAnalyticsControllerClass:
         self.defichainAnalyticsCallbacks.register_callbacks(app)             #
 
         self.defichainAnalyticsView = defichainAnalyticsViewClass()                 # create main view of Dashboard
-        app.layout = self.defichainAnalyticsView.layout
+
+        app.layout = self.defichainAnalyticsView.getDashboardLayout
 
     def getApp(self):
         return app

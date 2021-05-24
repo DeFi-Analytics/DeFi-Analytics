@@ -123,7 +123,7 @@ class overviewViewClass:
                                          html.Li('Collateral for ERC20-Token: dZFYejknFdHMHNfHMNQAtwihzvq7DkzV49'),
                                          html.Li('Burned coins/token: 8defichainBurnAddressXXXXXXXdRQkSm')]),
                                 'All these addresses are represented in the Richlist with their DFI holdings. For identification of the masternodes the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
-                            html.A('http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', href='http://defichain-node.de/api/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')],
+                            html.A('http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', href='http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')],
                                style={'text-align': 'justify'}),
                         html.P([html.B('Hint:'),' The presented diagrams are interactive.'
                                        ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
