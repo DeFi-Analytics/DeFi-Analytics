@@ -4,6 +4,8 @@ from .twitter.twitterCallbacks import twitterCallbacksClass
 from .follower.followerView import followerViewClass
 from .follower.followerCallbacks import followerCallbacksClass
 
+from .analytics.analyticsView import analyticsViewClass
+
 from .income.incomeView import incomeViewClass
 
 from .portfolio.portfolioView import portfolioViewClass
@@ -18,13 +20,16 @@ class communityControllerClass:
         self.defichainAnalyticsModel = defichainAnalyticsModel
         self.app = app
 
-        # initialize volume classes
+        # initialize twitter classes
         self.twitterView = twitterViewClass()
         self.twitterCallbacks = twitterCallbacksClass(app)       # create callbacks on top level
 
-        # initialize volume classes
+        # initialize twitter follower classes
         self.followerView = followerViewClass()
         self.followerCallbacks = followerCallbacksClass(self.defichainAnalyticsModel, self.followerView, app)       # create callbacks on top level
+
+        # initialize visits analytics classes
+        self.analyticsView = analyticsViewClass()
 
         # initialize visits income classes
         self.incomeView = incomeViewClass()
@@ -39,6 +44,7 @@ class communityControllerClass:
         # initialize MN monitor classes
         self.mnMonitorView = mnMonitorViewClass()
 
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "twitter"]:
@@ -47,6 +53,9 @@ class communityControllerClass:
         elif entry in ["follower"]:
             self.defichainAnalyticsModel.loadTwitterFollowerData()
             pageContent = self.followerView.getTwitterFollowerContent()
+        elif entry in ["analytics"]:
+            self.defichainAnalyticsModel.loadAnalyticsVisitsData()
+            pageContent = self.analyticsView.getAnalyticsContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["income"]:
             self.defichainAnalyticsModel.loadIncomeVisitsData()
             pageContent = self.incomeView.getIncomeContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)

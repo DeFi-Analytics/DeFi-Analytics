@@ -40,6 +40,7 @@ class defichainAnalyticsModelClass:
         self.update_incomeVisits = None
         self.update_portfolioDownloads = None
         self.update_promoDatabase = None
+        self.update_analyticsVisits = None
 
         # background image for figures
         with open(workDir + "/assets/analyticsLandscapeGrey2.png", "rb") as image_file:
@@ -60,6 +61,7 @@ class defichainAnalyticsModelClass:
         self.loadPortfolioDownloads()
         self.loadPromoDatabase()
         self.loadMNMonitorDatabase()
+        self.loadAnalyticsVisitsData()
 
     def loadExtractedRichlistData(self):
         print('>>>> Start update extracted richlist data ...  <<<<')
@@ -275,6 +277,27 @@ class defichainAnalyticsModelClass:
 
             self.update_promoDatabase = fileInfo.stat()
             print('>>>> MN Monitor database loaded from csv-file <<<<')
+
+    def loadAnalyticsVisitsData(self):
+        print('>>>> Start update raw data analytics visits ... <<<<')
+        filePath = self.dataPath + 'rawDataUserVisit.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_analyticsVisits:
+            analyticsRawVisitsData = pd.read_csv(filePath, index_col=0)
+            analyticsRawVisitsData['visitDate'] = pd.to_datetime(analyticsRawVisitsData.visitTimestamp).dt.date
+
+            analyticsVisitData = analyticsRawVisitsData.groupby('visitDate').count()
+            analyticsVisitData.rename(columns={'visitTimestamp': 'analyticsVisits'}, inplace=True)
+            columns2update = ['analyticsVisits']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(analyticsVisitData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.update_analyticsVisits = fileInfo.stat()
+            print('>>>> Analytics visits data loaded from csv-file <<<<')
+
 
     #### HOURLY DATA ####
     def loadHourlyData(self):
