@@ -10,8 +10,10 @@ class followerCallbacksClass:
             figFollower = None
             if selectedGraph == 'nbAbsolute':
                 figFollower = followerView.createFollowerGraph(defichainAnalyticsModel.dailyData, defichainAnalyticsModel.figBackgroundImage)
-            elif selectedGraph == 'dailyDiff':
-                figFollower = followerView.createDiffFollowerGraph(defichainAnalyticsModel.dailyData, defichainAnalyticsModel.figBackgroundImage)
+            elif selectedGraph == 'absDailyDiff':
+                figFollower = followerView.createDiffFollowerGraph(defichainAnalyticsModel.dailyData, defichainAnalyticsModel.figBackgroundImage, 'absolute')
+            elif selectedGraph == 'relDailyDiff':
+                figFollower = followerView.createDiffFollowerGraph(defichainAnalyticsModel.dailyData, defichainAnalyticsModel.figBackgroundImage, 'relative')
             return figFollower
 
         @app.callback(

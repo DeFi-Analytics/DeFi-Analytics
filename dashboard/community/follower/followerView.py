@@ -16,7 +16,8 @@ class followerViewClass:
                                           html.Table([html.Tr([html.Td('Select follower graph:'),
                                                                html.Td(dcc.Dropdown(id='communityFollowerSelection',
                                                                                     options=[{'label': 'Absolute number', 'value': 'nbAbsolute'},
-                                                                                             {'label': 'Daily difference of Followers', 'value': 'dailyDiff'}],
+                                                                                             {'label': 'Abs. daily diff of Followers', 'value': 'absDailyDiff'},
+                                                                                             {'label': 'Rel. daily diff of Followers', 'value': 'relDailyDiff'}],
                                                                                     value='nbAbsolute', clearable=False, style=dict(width='235px', verticalAlign="bottom")))])]),
                                           dcc.Graph(id='figureTwitterFollower', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTwitterFollower")))]))]
@@ -34,7 +35,7 @@ class followerViewClass:
             subplot_titles=([]))
 
         lastValidDate = datetime.strptime(data['Follower'].dropna().index.values[-1], '%Y-%m-%d')
-        date2MonthsBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
+        date30DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
 
         trace_Follower = dict(type='scatter', name='followers', x=data['Follower'].dropna().index, y=data['Follower'].dropna(),
                                 mode='lines', line=dict(color='#ff2ebe'), line_width=3, hovertemplate='%{y:,.0f}')
@@ -44,7 +45,7 @@ class followerViewClass:
         figTwitterFollower.update_yaxes(title_text='Number of DefiChain-Followers', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
                             zerolinecolor='#6c757d', row=1, col=1)
         figTwitterFollower.update_xaxes(title_text="Date", gridcolor='#6c757d', showticklabels=True, color='#6c757d', zerolinecolor='#6c757d',
-                            row=1, col=1)       # select 14 days range: range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate]
+                            row=1, col=1)       # select 14 days range: range=[date30DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate]
 
         # Add range slider
         figTwitterFollower.update_layout(xaxis=dict(
@@ -78,7 +79,7 @@ class followerViewClass:
         return figTwitterFollower
 
     @staticmethod
-    def createDiffFollowerGraph(data, bgImage):
+    def createDiffFollowerGraph(data, bgImage, representation):
         figTwitterFollowerChange = make_subplots(
             rows=1, cols=1,
             vertical_spacing=0,
@@ -87,25 +88,36 @@ class followerViewClass:
             shared_xaxes=True,
             subplot_titles=([]))
 
+        if representation == 'relative':
+            denominator = data['Follower']/100
+            formatHover = '%{y:,.2f}%'
+            yAxisLabel = 'Relative change DefiChain-Followers'
+            yAxisTick = ",.1f"
+        else:
+            denominator = 1
+            formatHover = '%{y:,.0f}'
+            yAxisLabel = 'Absolute change DefiChain-Followers'
+            yAxisTick = ",.0f"
+
         lastValidDate = datetime.strptime(data['Follower'].dropna().index.values[-1], '%Y-%m-%d')
-        date2MonthsBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
+        date30DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
 
         trace_diff = dict(type='scatter', name='Daily change', x=(data['followedToday']-data['unfollowedToday']).dropna().index,
-                          y=(data['followedToday']-data['unfollowedToday']).dropna(),
-                          mode='lines', line=dict(color='#ff2ebe'), line_width=3, hovertemplate='%{y:,.0f}')
-        trace_followed = dict(type='scatter', name='New followers', x=data['followedToday'].dropna().index, y=data['followedToday'].dropna(),
-                          mode='lines', line=dict(color='#90dba8'), line_width=3, hovertemplate='%{y:,.0f}', fill='tozeroy')
-        trace_unfollowed = dict(type='scatter', name='Gone followers', x=data['unfollowedToday'].dropna().index, y=-data['unfollowedToday'].dropna(),
-                          mode='lines', line=dict(color='#ec9b98'), line_width=3, hovertemplate='%{y:,.0f}', fill='tozeroy')
+                          y=((data['followedToday']-data['unfollowedToday'])/denominator).dropna(),
+                          mode='lines', line=dict(color='#ff2ebe'), line_width=3, hovertemplate=formatHover)
+        trace_followed = dict(type='scatter', name='New followers', x=data['followedToday'].dropna().index, y=(data['followedToday']/denominator).dropna(),
+                          mode='lines', line=dict(color='#90dba8'), line_width=3, hovertemplate=formatHover, fill='tozeroy')
+        trace_unfollowed = dict(type='scatter', name='Gone followers', x=data['unfollowedToday'].dropna().index, y=(-data['unfollowedToday']/denominator).dropna(),
+                          mode='lines', line=dict(color='#ec9b98'), line_width=3, hovertemplate=formatHover, fill='tozeroy')
 
         figTwitterFollowerChange.add_trace(trace_followed, 1, 1)
         figTwitterFollowerChange.add_trace(trace_unfollowed, 1, 1)
         figTwitterFollowerChange.add_trace(trace_diff, 1, 1)
 
-        figTwitterFollowerChange.update_yaxes(title_text='Change DefiChain-Followers', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
+        figTwitterFollowerChange.update_yaxes(title_text=yAxisLabel, tickformat=yAxisTick, gridcolor='#6c757d', color='#6c757d',
                             zerolinecolor='#6c757d', row=1, col=1)
         figTwitterFollowerChange.update_xaxes(title_text="Date", gridcolor='#6c757d', showticklabels=True, color='#6c757d', zerolinecolor='#6c757d',
-                            row=1, col=1)       # select 14 days range: range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate]
+                            row=1, col=1)       # select 14 days range: range=[date30DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate]
 
         # Add range slider
         figTwitterFollowerChange.update_layout(xaxis=dict(
@@ -143,7 +155,8 @@ class followerViewClass:
         twitterFollowerExplanation = [html.P(['One social media platform to reach more people is Twitter. Especially the bigger coins have a hugh community, spreading news and information about their project. ',
                                        'Here I want to track the DefiChain follower number.'],style={'text-align': 'justify'}),
                                html.P(['In addition to the pure representation of the absolute number, the daily rate of change is also evaluated. Therefore the list of all follower ID is saved '
-                                       'for the next day. A comparison of the list data delivers the new followers and the gone ones. The difference is the daily change rate of DefiChain followers.'],style={'text-align': 'justify'}),
+                                       'for the next day. A comparison of the list data delivers the new followers and the gone ones. The difference is the daily change rate of DefiChain followers. '
+                                       'This difference can be shown as an asbolute number oder in relation to the existing follower number. With growing followers the last one can be used to compare different time ranges. '],style={'text-align': 'justify'}),
                                html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                        ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                         style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})
