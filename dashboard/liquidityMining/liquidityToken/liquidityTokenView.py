@@ -3,7 +3,8 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 
 from plotly.subplots import make_subplots
-
+from datetime import datetime
+import dateutil.relativedelta
 
 class liquidityTokenViewClass:
 
@@ -56,6 +57,9 @@ class liquidityTokenViewClass:
         else:
             lineColor = '#da3832'
 
+        lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
+        date30DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
+
         trace_LiquidityToken = dict(type='scatter', name='Liquidity Token', x=data[selectedCoin + '-DFI_totalLiquidity'].dropna().index,
                                     y=data[selectedCoin + '-DFI_totalLiquidity'].dropna(),
                                     mode='lines', line=dict(color=lineColor), line_width=2, hovertemplate='%{y:,.1f} ' + selectedCoin + '-DFI')
@@ -78,9 +82,23 @@ class liquidityTokenViewClass:
         figLiquidityToken.update_yaxes(title_text='Number', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
                                        zerolinecolor='#6c757d', row=3, col=1)
 
-        figLiquidityToken.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        figLiquidityToken.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
+                                       range=[date30DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
         figLiquidityToken.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
         figLiquidityToken.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=3, col=1)
+
+        # Add range slider
+        figLiquidityToken.update_layout(xaxis=dict(
+            rangeselector=dict(
+                buttons=list([dict(count=14, label="14d", step="day", stepmode="backward"),
+                              dict(count=30, label="30d", step="day", stepmode="backward"),
+                              dict(count=2, label="2m", step="month", stepmode="backward"),
+                              dict(count=6, label="6m", step="month", stepmode="backward"),
+                              dict(count=1, label="YTD", step="year", stepmode="todate"),
+                              dict(count=1, label="1y", step="year", stepmode="backward"),
+                              dict(step="all")])),
+            rangeslider=dict(visible=False),
+            type="date"))
 
         # add background picture
         figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.85, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
