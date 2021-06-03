@@ -86,7 +86,7 @@ for richlistFile in foundRichlistFiles:
         if addFoundation in rawRichlist.values:
             foundationDFIValue = rawRichlist[rawRichlist.address == addFoundation].balance.values[0]
         else:
-            foundationDFIValue = np.NaN
+            foundationDFIValue = 0
 
         if addFoundationAirdrop in rawRichlist.values: # add amount of DFI airdrop
             foundationDFIValue = foundationDFIValue+rawRichlist[rawRichlist.address == addFoundationAirdrop].balance.values[0]
