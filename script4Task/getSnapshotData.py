@@ -76,11 +76,6 @@ while True:
         else:
             burnedDFIValue = 0
 
-        if addFoundation in dfRichList.values:
-            foundationDFIValue = dfRichList[dfRichList.address==addFoundation].balance.values[0]
-        else: # at the beginning there was no foundation address, should not be needed any longer
-            foundationDFIValue = np.NaN
-
 
         # get DFI from LiquidityMining and DFI-Token
         print('... getting LM and token data')
@@ -92,7 +87,14 @@ while True:
         link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
         siteContent = requests.get(link)
         dfDFIToken = pd.read_json(siteContent.text)
-        tokenDFIValue = dfDFIToken.balance.sum()
+        tokenDFIValue = dfDFIToken[dfDFIToken.address != addFoundation].balance.sum()
+
+        if addFoundation in dfRichList.values:
+            foundationDFIValue = dfRichList[dfRichList.address==addFoundation].balance.values[0]
+        elif addFoundation in dfDFIToken.values:
+            foundationDFIValue = dfDFIToken[dfDFIToken.address == addFoundation].balance.values[0]
+        else: # at the beginning there was no foundation address, should not be needed any longer
+            foundationDFIValue = 0
 
         # calculated statistical data
         circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue
