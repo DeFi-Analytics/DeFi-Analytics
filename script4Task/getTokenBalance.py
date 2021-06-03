@@ -18,7 +18,7 @@ dfTokenData = dfTokenData[['symbol','minted','creationTx','creationHeight','coll
 dfTokenData['Time'] = pd.Timestamp.now()
     
 # burned token on defichain
-link='https://api.defichain.io/v1/getaccount?start=0&limit=500&network=mainnet&including_start=true&owner=8defichainDSTBurnAddressXXXXaCAuTq'
+link='https://api.defichain.io/v1/getaccount?start=0&limit=500&network=mainnet&including_start=true&owner=8defichainBurnAddressXXXXXXXdRQkSm'
 siteContent = requests.get(link)
 dfTempData = pd.read_json(siteContent.text)
 dfBurnedTokenData = pd.DataFrame(dfTempData[0].str.split('@',1).tolist(),columns = ['amount','coin'])
