@@ -3,7 +3,8 @@ import glob
 import numpy as np
 import pandas as pd
 
-from datetime import datetime
+import requests
+import json
 
 
 scriptPath = __file__
@@ -101,10 +102,30 @@ for richlistFile in foundRichlistFiles:
         else:
             erc20DFIValue = 0
 
-        if addBurned in rawRichlist.values:
-            burnedDFIValue = rawRichlist[rawRichlist.address == addBurned].balance.values[0]
+        # get all burned DFI
+        linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
+        siteContent = requests.get(linkBurninfo)
+        if siteContent.status_code==200:
+            tempData = pd.read_json(siteContent.text).transpose()
+            burnedDFIFees = tempData.iloc[2, 0]
         else:
-            burnedDFIValue = 0
+            burnedDFIFees = np.NaN
+
+        linkBurnRewards = 'https://api.defichain.io/v1/stats?network=mainnet&pretty'
+        siteContent = requests.get(linkBurnRewards)
+        if siteContent.status_code==200:
+            tempData = json.loads(siteContent.text)
+            burnedDFIRewards = tempData['listCommunities']['Burnt']
+        else:
+            burnedDFIRewards = np.NaN
+
+        if addBurned in rawRichlist.values:
+            burnedDFICoins = rawRichlist[rawRichlist.address == addBurned].balance.values[0]
+        else:
+            burnedDFICoins = 0
+
+        burnedDFIValue = burnedDFICoins + burnedDFIFees + burnedDFIRewards
+
 
         if addDFIToken in rawRichlist.values:
             tokenDFIValue = rawRichlist[rawRichlist.address == addDFIToken].balance.values[0]

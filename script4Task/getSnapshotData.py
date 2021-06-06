@@ -75,13 +75,19 @@ while True:
         # get all burned DFI
         linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
         siteContent = requests.get(linkBurninfo)
-        tempData = pd.read_json(siteContent.text).transpose()
-        burnedDFIFees = tempData.iloc[2, 0]
+        if siteContent.status_code==200:
+            tempData = pd.read_json(siteContent.text).transpose()
+            burnedDFIFees = tempData.iloc[2, 0]
+        else:
+            burnedDFIFees = np.NaN
 
         linkBurnRewards = 'https://api.defichain.io/v1/stats?network=mainnet&pretty'
         siteContent = requests.get(linkBurnRewards)
-        tempData = json.loads(siteContent.text)
-        burnedDFIRewards = tempData['listCommunities']['Burnt']
+        if siteContent.status_code==200:
+            tempData = json.loads(siteContent.text)
+            burnedDFIRewards = tempData['listCommunities']['Burnt']
+        else:
+            burnedDFIRewards = np.NaN
 
         if addBurn in dfRichList.values:
             burnedDFICoins = dfRichList[dfRichList.address == addBurn].balance.values[0]
