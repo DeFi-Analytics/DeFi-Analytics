@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import requests
 import ast
 import time
+import json
 
 scriptPath = __file__
 path = scriptPath[:-31] + '/data/'
@@ -71,11 +72,23 @@ while True:
         else:
             erc20DFIValue = 0
 
-        if addBurn in dfRichList.values:
-            burnedDFIValue = dfRichList[dfRichList.address == addBurn].balance.values[0]
-        else:
-            burnedDFIValue = 0
+        # get all burned DFI
+        linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
+        siteContent = requests.get(linkBurninfo)
+        tempData = pd.read_json(siteContent.text).transpose()
+        burnedDFIFees = tempData.iloc[2, 0]
 
+        linkBurnRewards = 'https://api.defichain.io/v1/stats?network=mainnet&pretty'
+        siteContent = requests.get(linkBurnRewards)
+        tempData = json.loads(siteContent.text)
+        burnedDFIRewards = tempData['listCommunities']['Burnt']
+
+        if addBurn in dfRichList.values:
+            burnedDFICoins = dfRichList[dfRichList.address == addBurn].balance.values[0]
+        else:
+            burnedDFICoins = 0
+
+        burnedDFIValue = burnedDFICoins + burnedDFIFees + burnedDFIRewards
 
         # get DFI from LiquidityMining and DFI-Token
         print('... getting LM and token data')
@@ -86,8 +99,11 @@ while True:
 
         link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
         siteContent = requests.get(link)
-        dfDFIToken = pd.read_json(siteContent.text)
-        tokenDFIValue = dfDFIToken[dfDFIToken.address != addFoundation].balance.sum()
+        if siteContent.status_code != 502:
+            dfDFIToken = pd.read_json(siteContent.text)
+            tokenDFIValue = dfDFIToken[dfDFIToken.address != addFoundation].balance.sum()
+        else:
+            tokenDFIValue = np.NaN
 
         if addFoundation in dfRichList.values:
             foundationDFIValue = dfRichList[dfRichList.address==addFoundation].balance.values[0]
