@@ -100,12 +100,15 @@ while True:
         print('... getting LM and token data')
         link='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
         siteContent = requests.get(link)
-        dfLMPoolData = pd.read_json(siteContent.text).transpose()
-        lmDFIValue = dfLMPoolData.reserveB.astype('float').sum()
+        if siteContent.status_code == 200:
+            dfLMPoolData = pd.read_json(siteContent.text).transpose()
+            lmDFIValue = dfLMPoolData.reserveB.astype('float').sum()
+        else:
+            lmDFIValue = np.NaN
 
         link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
         siteContent = requests.get(link)
-        if siteContent.status_code != 502:
+        if siteContent.status_code == 200:
             dfDFIToken = pd.read_json(siteContent.text)
             tokenDFIValue = dfDFIToken[dfDFIToken.address != addFoundation].balance.sum()
         else:
