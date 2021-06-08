@@ -124,7 +124,7 @@ for richlistFile in foundRichlistFiles:
         else:
             burnedDFICoins = 0
 
-        burnedDFIValue = burnedDFICoins + burnedDFIFees + burnedDFIRewards
+        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards)
 
 
         if addDFIToken in rawRichlist.values:

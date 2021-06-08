@@ -94,7 +94,7 @@ while True:
         else:
             burnedDFICoins = 0
 
-        burnedDFIValue = burnedDFICoins + burnedDFIFees + burnedDFIRewards
+        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards)
 
         # get DFI from LiquidityMining and DFI-Token
         print('... getting LM and token data')
@@ -116,8 +116,6 @@ while True:
 
         if addFoundation in dfRichList.values:
             foundationDFIValue = dfRichList[dfRichList.address==addFoundation].balance.values[0]
-        elif addFoundation in dfDFIToken.values:
-            foundationDFIValue = dfDFIToken[dfDFIToken.address == addFoundation].balance.values[0]
         else: # at the beginning there was no foundation address, should not be needed any longer
             foundationDFIValue = 0
 
