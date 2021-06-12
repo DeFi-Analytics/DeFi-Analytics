@@ -289,6 +289,7 @@ class defichainAnalyticsModelClass:
             analyticsVisitData = analyticsRawVisitsData.groupby('visitDate').count()
             analyticsVisitData.rename(columns={'visitTimestamp': 'analyticsVisits'}, inplace=True)
             columns2update = ['analyticsVisits']
+            analyticsVisitData.index = analyticsVisitData.index.map(str)    # change index from dt to str format
 
             # delete existing information and add new one
             ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
