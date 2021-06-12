@@ -25,7 +25,7 @@ class blocktimeViewClass:
         figBlockTime = make_subplots(
             rows=2, cols=1,
             vertical_spacing=0.15,
-            row_width=[0.7, 0.3],  # from bottom to top
+            row_width=[0.6, 0.4],  # from bottom to top
             specs=[[{}],
                    [{}]],
             shared_xaxes=True,
@@ -95,7 +95,7 @@ class blocktimeViewClass:
         figBlockTime.add_trace(trace_Max, 2, 1)
 
         figBlockTime.update_yaxes(title_text='Time in s', tickformat=",.2f", gridcolor='#6c757d', color='#6c757d',
-                                  zerolinecolor='#6c757d', range=[30, 45], row=1, col=1)  # ,range=[-50, 200]
+                                  zerolinecolor='#6c757d', range=[20, 45], row=1, col=1)  # ,range=[-50, 200]
         figBlockTime.update_yaxes(title_text='Time in s', tickformat=",.2f", gridcolor='#6c757d', color='#6c757d',
                                   zerolinecolor='#6c757d', range=[0, 100], row=2, col=1)  # ,range=[-200000, 1000000]
         figBlockTime.update_xaxes(gridcolor='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
