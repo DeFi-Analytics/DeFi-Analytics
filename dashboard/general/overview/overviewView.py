@@ -121,7 +121,11 @@ class overviewViewClass:
                                 html.Ul([html.Li('Foundation coins: dJEbxbfufyPF14SC93yxiquECEfq4YSd9L'),
                                          html.Li('Community Fund: dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc'),
                                          html.Li('Collateral for ERC20-Token: dZFYejknFdHMHNfHMNQAtwihzvq7DkzV49'),
-                                         html.Li('Burned coins/token: 8defichainBurnAddressXXXXXXXdRQkSm')]),
+                                         html.Li(['Burned coins/token:',
+                                                          html.Ul([html.Li('Manual burned coins/token on address 8defichainBurnAddressXXXXXXXdRQkSm'),
+                                                          html.Li(['Burned fees getting from command getburninfo on API ',html.A('http://api.mydeficha.in/v1/getburninfo/', href='http://api.mydeficha.in/v1/getburninfo/', target='_blank', className='defiLink')]),
+                                                          html.Li(['Burned unused block rewards under listCommunities from API ',html.A('https://api.defichain.io/v1/stats?network=mainnet&pretty', href='https://api.defichain.io/v1/stats?network=mainnet&pretty', target='_blank', className='defiLink')])
+                                                          ])])]),
                                 'All these addresses are represented in the Richlist with their DFI holdings. For identification of the masternodes the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
                             html.A('http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', href='http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')],
                                style={'text-align': 'justify'}),

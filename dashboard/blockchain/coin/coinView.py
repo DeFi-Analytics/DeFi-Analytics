@@ -38,7 +38,10 @@ class coinViewClass:
 
         tempData = data.loc[:, ['otherDFI', 'mnDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'fundDFI', 'foundationDFI', 'burnedDFI', 'circDFI', 'totalDFI']]
         tempData.index = pd.to_datetime(tempData.index)
+        tempData.sort_index(inplace=True)
         tempData.interpolate(method='pad', inplace=True)
+
+
         hoverRepresentation = '%{y:,.0f}'
         if selection == 'relativeCirc':
             tempData = tempData.divide(tempData['circDFI'], axis=0)*100

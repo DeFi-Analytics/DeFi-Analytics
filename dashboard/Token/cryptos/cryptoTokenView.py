@@ -120,8 +120,8 @@ class crpytoTokenViewClass:
                                        'In this graphic I am tracking and comparing these amounts. ',
                                        'The easy check is to look on the upper graphic, which must not have negative values.'],style={'text-align': 'justify'}),
                                html.P(['The burning address on DefiChain is',html.Br(),
-                                       html.B('8defichainDSTBurnAddressXXXXaCAuTq'),html.Br(),
-                                       'Here you can see all burned tokens with the DEX-Explorer (',html.A('Link',href='https://dex.defichain.com/mainnet/address/8defichainDSTBurnAddressXXXXaCAuTq',target='_blank', className='defiLink'),')'],style={'text-align': 'justify'}),
+                                       html.B('8defichainBurnAddressXXXXXXXdRQkSm'),html.Br(),
+                                       'Here you can see all burned tokens with the DEX-Explorer (',html.A('Link',href='https://dex.defichain.com/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm',target='_blank', className='defiLink'),')'],style={'text-align': 'justify'}),
 
                                html.P(['The Bitcoin address holding the real BTC for the DefiChain-BTC is',html.Br(),
                                        html.B('38pZuWUti3vSQuvuFYs8Lwbyje8cmaGhrT'),html.Br(),
