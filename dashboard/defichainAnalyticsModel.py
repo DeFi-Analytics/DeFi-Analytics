@@ -251,7 +251,7 @@ class defichainAnalyticsModelClass:
         if fileInfo.stat() != self.update_promoDatabase:
             promoRawData = pd.read_csv(filePath, index_col=0)
 
-            columns2update = ['postActive', 'mediaActive', 'incentivePointsToday']
+            columns2update = ['postActive', 'mediaActive', 'incentivePointsToday', 'incentiveUsers']
 
             # delete existing information and add new one
             ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist

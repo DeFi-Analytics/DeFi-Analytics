@@ -18,7 +18,8 @@ class promoViewClass:
                                                  style={'text-align': 'justify'}),
                                           html.Table([html.Tr([html.Td('Select graph for evaluation:'),
                                           html.Td(dcc.Dropdown(id='promoSelectGraph', options=[{'label': 'Daily incentive points', 'value': 'incentivePoints'},
-                                                                                              {'label': 'Database posts/media', 'value': 'database'}],
+                                                                                               {'label': 'Incentive program users', 'value': 'incentiveUsers'},
+                                                                                               {'label': 'Database posts/media', 'value': 'database'}],
                                                                value='incentivePoints', clearable=False, style=dict(verticalAlign="bottom")))])]),
                                           dcc.Graph(id='figurePromoDatabase', config={'displayModeBar': False})]))]
         return content
@@ -102,3 +103,43 @@ class promoViewClass:
         figPromoIncentive.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area
         figPromoIncentive.layout.legend.font.color = '#6c757d'  # font color legend
         return figPromoIncentive
+
+
+    @staticmethod
+    def createPromoUsersFigure(data, bgImage):
+        figPromoUser = make_subplots(
+            rows=1, cols=1,
+            vertical_spacing=0.15,
+            row_width=[1],  # from bottom to top
+            specs=[[{}]],
+            shared_xaxes=True,
+            subplot_titles=([]))
+
+        trace_incentivePoints = dict(type='scatter', name='Defichain Promo users', x=data['incentiveUsers'].dropna().index, y=data['incentiveUsers'].dropna(),
+                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.0f}')
+
+        figPromoUser.add_trace(trace_incentivePoints, 1, 1)
+
+
+
+        figPromoUser.update_yaxes(title_text='Number incentive program users', tickformat=".f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        figPromoUser.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=1, col=1)
+
+        figPromoUser.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
+
+
+
+        figPromoUser.update_layout(margin={"t": 20, "l": 0, "b": 0, "r": 0},
+                                 barmode='stack',
+                                 hovermode='x unified',
+                                 hoverlabel=dict(font_color="#6c757d", bgcolor='#ffffff'),
+                                 legend=dict(orientation="h",
+                                             yanchor="top",
+                                             y=-0.12,
+                                             xanchor="right",
+                                             x=1),
+                                 )
+        figPromoUser.layout.plot_bgcolor = '#ffffff'  # background plotting area
+        figPromoUser.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area
+        figPromoUser.layout.legend.font.color = '#6c757d'  # font color legend
+        return figPromoUser

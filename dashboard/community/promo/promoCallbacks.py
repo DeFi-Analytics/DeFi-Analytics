@@ -9,6 +9,8 @@ class promoCallbacksClass:
         def selectGraph(selectedRepresentation):
             if selectedRepresentation == 'database':
                 figPromo = promoView.createPromoDatabaseFigure(defichainAnalyticsModel.dailyData, defichainAnalyticsModel.figBackgroundImage)
+            elif selectedRepresentation == 'incentiveUsers':
+                figPromo = promoView.createPromoUsersFigure(defichainAnalyticsModel.dailyData, defichainAnalyticsModel.figBackgroundImage)
             else:
                 figPromo = promoView.createPromoIncentiveFigure(defichainAnalyticsModel.dailyData, defichainAnalyticsModel.figBackgroundImage)
             return figPromo
