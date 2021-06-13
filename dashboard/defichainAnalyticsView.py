@@ -99,6 +99,7 @@ class defichainAnalyticsViewClass:
                 [
                     dbc.NavLink("Coinprices", href="/dex?entry=coinPrices", className="linkstyle", id="coinPrices"),
                     dbc.NavLink("Volume", href="/dex?entry=volume", className="linkstyle", id="volume"),
+                    dbc.NavLink("Price Stability", href="/dex?entry=stability", className="linkstyle", id="stability"),
                 ],
                 id="submenu-dex-collapse",
             ),

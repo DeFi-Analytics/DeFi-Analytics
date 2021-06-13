@@ -20,20 +20,21 @@ class stabilityCallbacksClass:
                        Input('stabilityPoolSelection', 'value')])
         def updateFigStabilityDFI(ratioChangeInput, selectedPool):
             figStabilityDFI, nbDFIneeded = stabilityView.createStabilityDFIGraph(defichainAnalyticsModel.hourlyData, defichainAnalyticsModel.figBackgroundImage, selectedPool, ratioChangeInput)
-            return figStabilityDFI, "{:,.0f}".format(nbDFIneeded)
+            return figStabilityDFI, "{:,.0f}DFI".format(nbDFIneeded)
 
+        @app.callback([Output('figureStabilityPrice', 'figure'),
+                       Output('stabilityChangeDFIOutput', 'children')],
+                      [Input('stabilityChangeDFIInput', 'value'),
+                       Input('stabilityPoolSelection', 'value')])
+        def updateFigStabilityDFI(DFIChangeInput, selectedPool):
+            figStabilityDFI, nbDFIneeded = stabilityView.createDFIRatioGraph(defichainAnalyticsModel.hourlyData, defichainAnalyticsModel.figBackgroundImage, selectedPool, DFIChangeInput)
+            return figStabilityDFI, "{:,.2f}%".format(nbDFIneeded)
 
-        # @app.callback(Output('figureTVL', 'figure'),
-        #               [Input('defiTVLCurrency', 'value')])
-        # def updateTVLGraphs(selectedRepresentation):
-        #     figFee = tvlView.createTVLGraph(defichainAnalyticsModel.hourlyData, selectedRepresentation, defichainAnalyticsModel.figBackgroundImage)
-        #     return figFee
-
-        # @app.callback(
-        #     Output("modalTVL", "is_open"),
-        #     [Input("openInfoTVL", "n_clicks"), Input("closeInfoTVL", "n_clicks")],
-        #     [State("modalTVL", "is_open")],)
-        # def toggle_modal(n1, n2, is_open):
-        #     if n1 or n2:
-        #         return not is_open
-        #     return is_open
+        @app.callback(
+            Output("modalStability", "is_open"),
+            [Input("openInfoStability", "n_clicks"), Input("closeInfoStability", "n_clicks")],
+            [State("modalStability", "is_open")],)
+        def toggle_modal(n1, n2, is_open):
+            if n1 or n2:
+                return not is_open
+            return is_open
