@@ -34,6 +34,7 @@
     #figureCoin {height: 715px}
     #figureChangeCoin {height: 750px}
     #figureCoinsAddresses {height: 600px}
+    #figureBlocks {height: 750px}
     #figureBlocktime {height: 750px}
     #figureTransactions {height: 750px}
     #figureCoinpriceLongterm {height: 675px}
@@ -91,6 +92,7 @@
         #figureCoin {height: 600px}
         #figureChangeCoin {height: 600px}
         #figureCoinsAddresses {height: 600px}
+        #figureBlocks {height: 600px}
         #figureBlocktime {height: 600px}
         #figureTransactions {height: 600px}
         #figureCoinpriceLongterm {height: 600px}
@@ -121,6 +123,7 @@
         #figureCoin {height: 330px}
         #figureChangeCoin {height: 330px}
         #figureCoinsAddresses {height: 330px}
+        #figureBlocks {height: 330px}
         #figureBlocktime {height: 330px}
         #figureTransactions {height: 330px}
         #figureCoinpriceLongterm {height: 330px}

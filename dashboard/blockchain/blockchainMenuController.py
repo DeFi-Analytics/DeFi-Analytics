@@ -13,6 +13,8 @@ from .changeCoinAddresses.changeCoinAddressesCallbacks import changeCoinAddresse
 from .coinsAddresses.coinsAddressesView import coinsAddressesViewClass
 from .coinsAddresses.coinsAddressesCallbacks import coinsAddressesCallbacksClass
 
+from .blocks.blocksView import blocksViewClass
+
 from .blocktime.blocktimeView import blocktimeViewClass
 from .blocktime.blocktimeCallbacks import blocktimeCallbacksClass
 
@@ -50,6 +52,9 @@ class blockchainControllerClass:
         self.coinsAddressesView = coinsAddressesViewClass()
         self.coinsAddressesCallbacks = coinsAddressesCallbacksClass(self.defichainAnalyticsModel, self.coinsAddressesView, app)
 
+        # initialize blocks per day
+        self.blocksView = blocksViewClass()
+
         # initialize blocktime classes
         self.blocktimeView = blocktimeViewClass()
         self.blocktimeCallbacks = blocktimeCallbacksClass(app)
@@ -80,6 +85,9 @@ class blockchainControllerClass:
         elif entry in ["coinsAddresses"]:
             self.defichainAnalyticsModel.loadLastRichlist()
             pageContent = self.coinsAddressesView.getCoinsAddressesContent(self.defichainAnalyticsModel.lastRichlist)
+        elif entry in ["blocks"]:
+            self.defichainAnalyticsModel.loadDailyBlocktimeData()
+            pageContent = self.blocksView.getBlocksContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["blocktime"]:
             self.defichainAnalyticsModel.loadDailyBlocktimeData()
             pageContent = self.blocktimeView.getBlocktimeContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)

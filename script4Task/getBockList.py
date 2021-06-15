@@ -25,6 +25,7 @@ dfBlockList.sort_index(ascending=False, inplace=True)
 
 ## Generate Block-Statistics
 dfBlockStatistic = pd.DataFrame(index = dfBlockList['DateFormatted'].unique(), columns=[])
+dfBlockStatistic['nbBlocks'] = dfBlockList.groupby(dfBlockList['DateFormatted'])['hash'].count()
 dfBlockStatistic['txCount'] = dfBlockList.groupby(dfBlockList['DateFormatted']).transactionCount.sum()
 dfBlockStatistic['txWOreward'] = dfBlockList.groupby(dfBlockList['DateFormatted']).transactionCountWOReward.sum()
 
