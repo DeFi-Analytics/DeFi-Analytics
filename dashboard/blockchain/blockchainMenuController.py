@@ -14,6 +14,7 @@ from .coinsAddresses.coinsAddressesView import coinsAddressesViewClass
 from .coinsAddresses.coinsAddressesCallbacks import coinsAddressesCallbacksClass
 
 from .blocks.blocksView import blocksViewClass
+from .blocks.blocksCallbacks import blocksCallbacksClass
 
 from .blocktime.blocktimeView import blocktimeViewClass
 from .blocktime.blocktimeCallbacks import blocktimeCallbacksClass
@@ -54,6 +55,7 @@ class blockchainControllerClass:
 
         # initialize blocks per day
         self.blocksView = blocksViewClass()
+        self.blocksCallbacks = blocksCallbacksClass(app)
 
         # initialize blocktime classes
         self.blocktimeView = blocktimeViewClass()

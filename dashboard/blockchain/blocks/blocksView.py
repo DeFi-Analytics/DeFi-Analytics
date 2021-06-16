@@ -79,9 +79,12 @@ class blocksViewClass:
 
     @staticmethod
     def getBlocksExplanation():
-        blocksCardExplanation = [html.P(['...'],style={'text-align': 'justify'}),
-                               html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
-                                       ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
-                                        style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})
-                               ]
+        blocksCardExplanation = [html.P(['This evaluation shows the number of minted blocks per day. With an mean block time of 30s round about 2900 blocks should be found per day. '
+                                         'Due to statistical uncertainties this number will vary a little bit.'],
+                                             style={'text-align': 'justify'}),
+                                      html.P([html.B('Hint:'),
+                                              ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
+                                              ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
+                                             style={'text-align': 'justify', 'fontSize': '0.7rem',
+                                                    'color': '#6c757d'})]
         return blocksCardExplanation
