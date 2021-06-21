@@ -19,6 +19,15 @@ class overviewViewClass:
 
     @staticmethod
     def createStatisticsDFI(data):
+        if data.loc[0, 'bCorrectValues']:
+            hintAfterNumber =''
+            hintText =''
+            fontColor = '#000000'
+        else:
+            hintAfterNumber = ' *)'
+            hintText = '*) Hint: The marked values are not completely correct calculated due to missing DFI-values (e.g. not reachable APIs). Except the rank, all values are greater than shown (rank must be equal or smaller).'
+            fontColor = '#aeaeae'
+
         htmlContent = [
             html.H4('DFI statistics'),
             html.Table([
@@ -42,7 +51,7 @@ class overviewViewClass:
                          html.Td("{:,.0f} DFI".format(data['erc20DFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('Circulating supply', style={'font-weight': 'bold'}),
-                     html.Td("{:,.0f} DFI".format(data['circDFI'].values[0]), style={'text-align': 'right', 'font-weight': 'bold'})]),
+                     html.Td(["{:,.0f} DFI".format(data['circDFI'].values[0])+hintAfterNumber], style={'text-align': 'right', 'font-weight': 'bold', 'color': fontColor})]),
                 html.Tr(html.Td(html.Br())),
 
                 html.Tr(
@@ -55,7 +64,7 @@ class overviewViewClass:
                      html.Td("{:,.0f} DFI".format(data['burnedDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('Total supply', style={'font-weight': 'bold'}),
-                     html.Td("{:,.0f} DFI".format(data['totalDFI'].values[0]), style={'text-align': 'right', 'font-weight': 'bold'})]),
+                     html.Td(["{:,.0f} DFI".format(data['totalDFI'].values[0])+hintAfterNumber], style={'text-align': 'right', 'font-weight': 'bold', 'color': fontColor})]),
                 html.Tr(html.Td(html.Br())),
 
                 html.Tr(
@@ -65,12 +74,13 @@ class overviewViewClass:
                 html.Tr(html.Td(html.Br())),
                 html.Tr(
                     [html.Td('Market-Cap'),
-                     html.Td("${:,.0f}".format(data['marketCap'].values[0]), style={'text-align': 'right'})]),
+                     html.Td(["${:,.0f}".format(data['marketCap'].values[0])+hintAfterNumber], style={'text-align': 'right', 'color': fontColor})]),
                 html.Tr(
                     [html.Td('corresponding rank'),
-                     html.Td("{:,.0f}".format(data['marketCapRank'].values[0]), style={'text-align': 'right'})]),
+                     html.Td(["{:,.0f}".format(data['marketCapRank'].values[0])+hintAfterNumber], style={'text-align': 'right', 'color': fontColor})]),
 
             ]),
+            html.P(hintText, style={'fontSize': '0.8rem', 'color': '#da3732', 'padding-top': '20px', 'font-weight': 'bold'}),
             html.P(['MN: Masternodes', html.Br(),
                     'Defichain Richlist and Coingecko: last update ', pd.to_datetime(data['date'].values[0]).strftime("%Y-%m-%d %H:%M"), html.Br(),
                     html.A('http://explorer.defichain.io/#/DFI/mainnet/rich-list', href='http://explorer.defichain.io/#/DFI/mainnet/rich-list', target='_blank', className='defiLink'), html.Br(),

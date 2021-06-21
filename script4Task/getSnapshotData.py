@@ -25,6 +25,7 @@ while True:
     # Some data is only updated every 30 minutes
     if (now-pd.to_datetime(oldSnapshot['date'].values[0])) > timedelta(minutes=30):
         nowSnapshot = now
+        bCorrectValues = True
 
         # get DFI richlist data
         print('... getting Richlist')
@@ -120,7 +121,12 @@ while True:
             foundationDFIValue = 0
 
         # calculated statistical data
-        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue
+        if np.isnan(tokenDFIValue):
+            tokenDFIValue2Calc = 0
+            bCorrectValues = False
+
+
+        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue2Calc + erc20DFIValue
         totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue
 
         maxDFIValue = 1200000000
@@ -179,9 +185,9 @@ while True:
     print('... saving data')
     # convert single data to pandas series
     colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'burnedDFI', 'circDFI',
-                'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft']
+                'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft', 'bCorrectValues']
     listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, burnedDFIValue, circDFIValue,
-                totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft]
+                totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft, bCorrectValues]
     seriesData = pd.Series(listData, index = colNames)
 
     data2Save = pd.DataFrame(columns=colNames)

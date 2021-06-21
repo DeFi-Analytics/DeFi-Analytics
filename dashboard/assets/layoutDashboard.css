@@ -9,6 +9,10 @@ body {
   background-color: #d6d6d6;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    color: #ff00af
+}
+
 .card {
   position: relative;
   display: -webkit-box;
@@ -32,7 +36,7 @@ body {
     background-color: #fe00ae;
 }
 
-
+d
 
 /* change color of all links */
 a.defiLink:link{

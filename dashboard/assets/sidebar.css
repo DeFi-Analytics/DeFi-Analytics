@@ -8,10 +8,6 @@
   display: table;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: #ff00af
-}
-
 /*define the linkstyle of submenu inactive links*/
 .sidebarLinkstyle:link{
 color: #a6a4a4
