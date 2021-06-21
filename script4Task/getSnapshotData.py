@@ -171,24 +171,8 @@ while True:
 
     # countdown block data data
     print('... getting block data for countdown')
-    try:
-        linkOverview = "https://api.defichain.io/v1/stats?"
-        overviewContent = requests.get(linkOverview)
-        apiOverviewAsDict = ast.literal_eval(overviewContent.text)
-        reserveLM = float(apiOverviewAsDict['listCommunities']['IncentiveFunding'])
-
-        linkAirdrop = 'https://api.defichain.io/v1/getaccount?start=0&limit=500&network=mainnet&including_start=true&owner=8UAhRuUFCyFUHEPD7qvtj8Zy2HxF5HH5nb'
-        airdropContent = requests.get(linkAirdrop)
-        dfAirdrop = pd.read_json(airdropContent.text, typ='series')
-        airdropDFI = float(dfAirdrop[0][:-4])
-
-        currentBlock = apiOverviewAsDict['blockHeight']
-        goalBlock = int(currentBlock + np.floor((reserveLM + airdropDFI) / 58))
-    except:
-        currentBlock = 0
-        goalBlock = 0
-        print('############# Error getting current block #############')
-    blocksLeft = goalBlock - currentBlock
+    # at the moment no countdown implemented
+    blocksLeft = 0
 
 
 
@@ -208,7 +192,7 @@ while True:
     duration = datetime.now()-now
     print('Data updated. Routine duration: '+str(duration))
     print('  ')
-    time.sleep(120-duration.seconds)
+    time.sleep(120-np.minimum(duration.seconds, 120))   # avoid negative numbers for sleep
 
 print('Script finished')
 
