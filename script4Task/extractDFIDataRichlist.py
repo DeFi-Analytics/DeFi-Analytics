@@ -107,7 +107,7 @@ for richlistFile in foundRichlistFiles:
         siteContent = requests.get(linkBurninfo)
         if siteContent.status_code==200:
             tempData = pd.read_json(siteContent.text).transpose()
-            burnedDFIFees = tempData.iloc[2, 0]
+            burnedDFIFees = tempData.loc['feeburn', 0]
         else:
             burnedDFIFees = np.NaN
 
