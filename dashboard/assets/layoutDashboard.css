@@ -10,7 +10,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #ff00af
+    color: #ff00af;
 }
 
 .card {
@@ -35,8 +35,6 @@ h1, h2, h3, h4, h5, h6 {
 .btn.btn-secondary{
     background-color: #fe00ae;
 }
-
-d
 
 /* change color of all links */
 a.defiLink:link{
