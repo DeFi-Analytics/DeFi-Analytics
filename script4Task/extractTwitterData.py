@@ -15,7 +15,7 @@ dfAnalyzedData = pd.DataFrame(index=dfRawData['date'].unique())
 
 
 # files to be evaluated
-filenames = ['defichain', 'dfi', 'overall']
+filenames = ['defichain', 'dfi', 'overall']         # overall must be the last entry to get correct unique users numbers
 
 for twitterSearch in filenames:
     filepath = path +'TwitterData_'+twitterSearch+'.csv'

@@ -13,6 +13,7 @@ api = tw.API(auth, wait_on_rate_limit=True)
 search_words = ['(%24DFI%20OR%20%40defichain%20OR%20defichain)%20-dEarn%20-dEarnFinance%20-defiqa3', '%40defichain','-dEarn%20-dEarnFinance%20-defiqa3%20(%23%24DFI)', '-defiqa3%20%23DFI', '%23NativeDeFi']
 filenames = ['TwitterData_overall', 'TwitterData_defichain', 'TwitterData_dfi', 'TwitterData_hashtagDFI', 'TwitterData_nativeDefi']
 
+filenamesLastweek = ['TwitterDataLastWeek_overall', 'TwitterDataDataLastWeek_defichain', 'TwitterDataDataLastWeek_dfi', 'TwitterDataDataLastWeek_hashtagDFI', 'TwitterDataDataLastWeek_nativeDefi']
 
 for i in range(len(search_words)):
     date_since = "2020-09-01"
@@ -33,8 +34,7 @@ for i in range(len(search_words)):
     dfOldData = dfOldData[~dfOldData.id.isin(dfTwitter.id)]
 
     dfTwitter = dfTwitter.append(dfOldData, ignore_index=True)
-    temp = pd.to_datetime(dfTwitter.created_at)
-    temp.dt.normalize().unique()
+
 
     dfTwitter.to_csv(filepath)
     print(filepath+' updated')
