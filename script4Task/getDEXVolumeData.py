@@ -7,7 +7,7 @@ scriptPath = __file__
 path = scriptPath[:-32] + '/data/'
 filepath = path + 'DEXVolumeData.csv'
 
-
+# DEX 24hr trading volume
 link='https://api.defichain.io/v1/listswaps?network=mainnet'
 siteContent = requests.get(link)
 dfDEXVolume = pd.read_json(siteContent.text).transpose()
@@ -16,6 +16,7 @@ dfDEXVolume.rename(columns={"index":"pool"},inplace=True)
 dfDEXVolume.drop(['base_symbol', 'quote_symbol','base_id','quote_id'], axis=1,inplace=True)
 dfDEXVolume['Time'] = pd.Timestamp.now()
 
+# Coingecko 24hr trading volume
 try:
     cg = CoinGeckoAPI()
     DFIData = cg.get_price(ids='defichain', vs_currencies='usd', include_24hr_vol='true')
