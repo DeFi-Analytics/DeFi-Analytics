@@ -41,6 +41,7 @@ class defichainAnalyticsModelClass:
         self.update_portfolioDownloads = None
         self.update_promoDatabase = None
         self.update_analyticsVisits = None
+        self.updated_hourlyDEXTrades = None
 
         # background image for figures
         with open(workDir + "/assets/analyticsLandscapeGrey2.png", "rb") as image_file:
@@ -305,6 +306,7 @@ class defichainAnalyticsModelClass:
         self.loadHourlyDEXdata()
         self.loadDEXVolume()
         self.loadTokenCrypto()
+        self.loadHourlyDEXTrades()
 
 
     def loadHourlyDEXdata(self):
@@ -375,6 +377,30 @@ class defichainAnalyticsModelClass:
             self.updated_dexVolume = fileInfo.stat()
             print('>>>> DEX volume data loaded from csv-file <<<<')
 
+    def loadHourlyDEXTrades(self):
+        print('>>>> Start update hourly DEX trade data ... <<<<')
+        filePath = self.dataPath + 'hourlyDEXTrades.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_hourlyDEXTrades:
+            hourlyTrades = pd.read_csv(filePath, index_col=0)
+            hourlyTrades.fillna(0, inplace=True)
+            hourlyTrades.index = pd.to_datetime(hourlyTrades.index).tz_localize(None)
+
+            columns2update = []
+            currName = ['BTC', 'ETH', 'USDT', 'DOGE', 'LTC', 'BCH', 'DFI']
+            for ind in range(6):
+                hourlyTrades['volume'+currName[ind]+'buyDFI'] = hourlyTrades[currName[ind]+'pool_base'+currName[ind]] * hourlyTrades[currName[ind]+'-USD']
+                hourlyTrades['volume'+currName[ind]+'sellDFI'] = hourlyTrades[currName[ind]+'pool_quote'+currName[ind]] * hourlyTrades[currName[ind]+'-USD']
+                columns2update.append('volume'+currName[ind]+'buyDFI')
+                columns2update.append('volume'+currName[ind]+'sellDFI')
+
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(hourlyTrades[columns2update], how='outer', left_index=True, right_index=True)                                                                   # delete existing columns to add new ones
+
+
+            self.updated_hourlyDEXTrades = fileInfo.stat()
+            print('>>>> DEX volume data loaded from csv-file <<<<')
 
     def loadTokenCrypto(self):
         print('>>>> Start update token data ... <<<<')
