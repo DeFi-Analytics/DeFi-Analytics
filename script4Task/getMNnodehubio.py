@@ -7,7 +7,7 @@ from datetime import datetime
 # generate filepath relative to script location
 scriptPath = __file__
 path = scriptPath[:-30] + '/data/'
-filepath = path + 'mnGetnodeio.csv'
+filepath = path + 'mnNodehub.csv'
 
 
 # API request masternode number
@@ -26,4 +26,4 @@ dfMNgetnodeio = pd.read_csv(filepath, index_col=0)
 dfMNgetnodeio = dfMNgetnodeio.append(dfDFI)
 dfMNgetnodeio.to_csv(filepath)
 
-print('Data getnodeio saved')
+print('Data nodehub.io saved')
