@@ -1,7 +1,7 @@
 from dash.dependencies import Input, Output, State
 
 
-class volumeCallbacksClass:
+class volume24hrCallbacksClass:
     def __init__(self, app):
 
         @app.callback(

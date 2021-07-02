@@ -7,21 +7,21 @@ from datetime import datetime
 import dateutil.relativedelta
 
 
-class volumeViewClass:
-    def getVolumeContent(self, data, bgImage):
+class volume24hrViewClass:
+    def getVolume24hrContent(self, data, bgImage):
         content = [dbc.Modal([dbc.ModalHeader("Info 24hr DEX volume"),
                               dbc.ModalBody(self.getDEXVolExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoVolume", className="ml-auto"))],
                                     id="modalVolume", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
                    dbc.Card(dbc.CardBody([html.H4(['Trading volume (24hr) on DEX']),
-                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDEXVolumeGraph(data, bgImage), config={'displayModeBar': False}, id='figureVolume24hr'))),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDEXVolume24hrGraph(data, bgImage), config={'displayModeBar': False}, id='figureVolume24hr'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoVolume")))
                                           ]))]
         return content
 
     @staticmethod
-    def createDEXVolumeGraph(data, bgImage):
+    def createDEXVolume24hrGraph(data, bgImage):
         figDEXVol = make_subplots(
             rows=1, cols=1,
             vertical_spacing=0,
