@@ -391,8 +391,13 @@ class defichainAnalyticsModelClass:
             for ind in range(6):
                 hourlyTrades['volume'+currName[ind]+'buyDFI'] = hourlyTrades[currName[ind]+'pool_base'+currName[ind]] * hourlyTrades[currName[ind]+'-USD']
                 hourlyTrades['volume'+currName[ind]+'sellDFI'] = hourlyTrades[currName[ind]+'pool_quote'+currName[ind]] * hourlyTrades[currName[ind]+'-USD']
-                columns2update.append('volume'+currName[ind]+'buyDFI')
-                columns2update.append('volume'+currName[ind]+'sellDFI')
+                columns2update.extend(['volume'+currName[ind]+'buyDFI', 'volume'+currName[ind]+'sellDFI'])
+
+            hourlyTrades['volumeOverallbuyDFI'] = hourlyTrades['volumeBTCbuyDFI']+hourlyTrades['volumeETHbuyDFI']+hourlyTrades['volumeUSDTbuyDFI'] + \
+                                                    hourlyTrades['volumeDOGEbuyDFI']+hourlyTrades['volumeLTCbuyDFI']+hourlyTrades['volumeBCHbuyDFI']
+            hourlyTrades['volumeOverallsellDFI'] = hourlyTrades['volumeBTCsellDFI']+hourlyTrades['volumeETHsellDFI']+hourlyTrades['volumeUSDTsellDFI'] + \
+                                                    hourlyTrades['volumeDOGEsellDFI']+hourlyTrades['volumeLTCsellDFI']+hourlyTrades['volumeBCHsellDFI']
+            columns2update.extend(['volumeOverallbuyDFI', 'volumeOverallsellDFI'])
 
             ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
             self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
