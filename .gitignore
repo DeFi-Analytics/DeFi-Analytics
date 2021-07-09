@@ -1,4 +1,6 @@
 .idea
 __pycache__
-script4Task/github*
-*doubleEntry*
+/data/TokenData_doubleEntry.csv
+.gitignore
+/script4Task/githubSettings.py
+/data/rawDataUserVisit.csv
