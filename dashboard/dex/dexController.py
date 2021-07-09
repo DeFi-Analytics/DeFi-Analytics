@@ -1,6 +1,8 @@
 from .volume24hr .volumeView24hr import volume24hrViewClass
 from .volume24hr.volume24hrCallbacks import volume24hrCallbacksClass
 
+from .volume.volumeView import volumeViewClass
+
 from .coinprice.coinpriceView import coinpriceViewClass
 from .coinprice.coinpriceCallbacks import coinpriceCallbacksClass
 
@@ -16,6 +18,10 @@ class dexControllerClass:
         self.volume24hrView = volume24hrViewClass()
         self.volume24hrCallbacks = volume24hrCallbacksClass(app)       # create callbacks on top level
 
+        # initialize volume classes
+        self.volumeView = volumeViewClass()
+        # self.volume24hrCallbacks = volume24hrCallbacksClass(app)
+
         # initialize coinprice classes
         self.coinpriceView = coinpriceViewClass()
         self.coinpriceCallbacks = coinpriceCallbacksClass(self.defichainAnalyticsModel, self.coinpriceView, app)      # create callbacks on top level
@@ -29,6 +35,9 @@ class dexControllerClass:
         if entry in ["", "coinPrices"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             pageContent = self.coinpriceView.getCoinpriceContent()
+        elif entry in ["volume"]:
+            self.defichainAnalyticsModel.loadHourlyDEXTrades()
+            pageContent = self.volumeView.getVolumeContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["24hrVolume"]:
             self.defichainAnalyticsModel.loadDEXVolume()
             pageContent = self.volume24hrView.getVolume24hrContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
