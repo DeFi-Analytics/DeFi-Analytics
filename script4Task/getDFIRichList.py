@@ -1,6 +1,7 @@
 # Script for getting the Richlist and saving the result into a csv-file
 import requests
 import ast
+import time
 
 import pandas as pd
 from datetime import datetime
@@ -13,13 +14,22 @@ path = scriptPath[:-29] + '/data/Richlist/'
 filepath = path + timestamp + '_Richlist.csv'
 filepathOldMNList = scriptPath[:-29] + '/data/currentMNList.csv'
 
-# get DFI-Richlist data
-link = "http://mainnet-api.defichain.io/api/DFI/mainnet/address/stats/rich-list?pageno=1&pagesize=200000"
-siteContent = requests.get(link)
-text2extract = siteContent.text.replace('null','None')
-apiContentAsDict=ast.literal_eval(text2extract)
-dfRichList = pd.DataFrame(apiContentAsDict['data'])
+print('Start script ...')
 
+bGetRichlist = True
+
+while bGetRichlist:
+    # get DFI-Richlist data
+    link = "http://mainnet-api.defichain.io/api/DFI/mainnet/address/stats/rich-list?pageno=1&pagesize=200000"
+    siteContent = requests.get(link)
+    if siteContent.status_code == 200:
+        text2extract = siteContent.text.replace('null','None')
+        apiContentAsDict=ast.literal_eval(text2extract)
+        dfRichList = pd.DataFrame(apiContentAsDict['data'])
+        bGetRichlist = False
+    else:
+        print('Error with API for complete Richlist')
+        time.sleep(300)
 
 # convert fi balance into dfi balance
 dfRichList.balance = dfRichList.balance/100000000
@@ -32,6 +42,7 @@ try:
 
     seriesDFI2Add = pd.Series(['DFITokenOnDefiChain', temp.balance.sum()], index=['address', 'balance'])
     dfRichList = dfRichList.append(seriesDFI2Add, ignore_index=True, sort=False)
+    print('Finished getting DFI Token data')
 except:
     print('Error with API for DFI token data')
 
@@ -42,6 +53,7 @@ try:
     siteContent = requests.get(link)
     dfMNList = pd.read_json(siteContent.text).transpose() 
     dfRichList['mnAddressAPI'] = dfRichList['address'].isin(dfMNList.ownerAuthAddress)
+    print('Finished getting masternode list')
 except:
     dfOldMNList = pd.read_csv(filepathOldMNList, index_col=0)
     dfRichList['mnAddressAPI'] = dfRichList['address'].isin(dfOldMNList.ownerAuthAddress)
@@ -54,8 +66,10 @@ try:
     siteContent = requests.get(link)
     dfMNListCake = pd.read_json(siteContent.text)
     dfRichList['mnAddressCakeAPI'] = dfRichList['address'].isin(dfMNListCake[dfMNListCake.coin=='DeFi'].address)
+    print('Finished getting Cake masternode list')
 except:
     print('Error with API of Cake masternode list')
 
 # save data to csv-file
 dfRichList.to_csv(filepath, index=False)
+print('... Richlist saved')
