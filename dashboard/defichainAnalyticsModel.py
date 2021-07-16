@@ -399,7 +399,7 @@ class defichainAnalyticsModelClass:
                                                     hourlyTrades['volumeDOGEsellDFI']+hourlyTrades['volumeLTCsellDFI']+hourlyTrades['volumeBCHsellDFI']
             columns2update.extend(['volumeOverallbuyDFI', 'volumeOverallsellDFI'])
 
-            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist
             self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
             self.hourlyData = self.hourlyData.merge(hourlyTrades[columns2update], how='outer', left_index=True, right_index=True)                                                                   # delete existing columns to add new ones
 

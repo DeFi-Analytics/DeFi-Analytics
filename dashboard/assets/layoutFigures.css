@@ -40,6 +40,7 @@
     #figureCoinpriceLongterm {height: 675px}
     #figureCoinpriceShortterm {height: 675px}
     #figureVolume24hr {height: 750px}
+    #figureVolume {height: 690px}
     #figureStabilityDFI {height: 480px}
     #figureStabilityPrice {height: 480px}
     #figureTVL {height: 715px}
@@ -98,6 +99,7 @@
         #figureCoinpriceLongterm {height: 600px}
         #figureCoinpriceShortterm {height: 600px}
         #figureVolume24hr {height: 600px}
+        #figureVolume {height: 600px}
         #figureStabilityDFI {height: 480px}
         #figureStabilityPrice {height: 480px}
         #figureTVL {height: 600px}
@@ -129,6 +131,7 @@
         #figureCoinpriceLongterm {height: 330px}
         #figureCoinpriceShortterm {height: 330px}
         #figureVolume24hr {height: 330px}
+        #figureVolume {height: 300px}
         #figureStabilityDFI {height: 330px}
         #figureStabilityPrice {height: 330px}
         #figureTVL {height: 330px}

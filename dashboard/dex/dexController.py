@@ -2,6 +2,7 @@ from .volume24hr .volumeView24hr import volume24hrViewClass
 from .volume24hr.volume24hrCallbacks import volume24hrCallbacksClass
 
 from .volume.volumeView import volumeViewClass
+from .volume.volumeCallbacks import volumeCallbacksClass
 
 from .coinprice.coinpriceView import coinpriceViewClass
 from .coinprice.coinpriceCallbacks import coinpriceCallbacksClass
@@ -20,7 +21,7 @@ class dexControllerClass:
 
         # initialize volume classes
         self.volumeView = volumeViewClass()
-        # self.volume24hrCallbacks = volume24hrCallbacksClass(app)
+        self.volumeCallbacks = volumeCallbacksClass(self.defichainAnalyticsModel, self.volumeView, app)
 
         # initialize coinprice classes
         self.coinpriceView = coinpriceViewClass()

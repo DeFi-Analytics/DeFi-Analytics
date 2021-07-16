@@ -11,12 +11,12 @@ class volume24hrViewClass:
     def getVolume24hrContent(self, data, bgImage):
         content = [dbc.Modal([dbc.ModalHeader("Info 24hr DEX volume"),
                               dbc.ModalBody(self.getDEXVolExplanation()),
-                              dbc.ModalFooter(dbc.Button("close", id="closeInfoVolume", className="ml-auto"))],
-                                    id="modalVolume", size='xl'),
+                              dbc.ModalFooter(dbc.Button("close", id="closeInfoVolume24hr", className="ml-auto"))],
+                                    id="modalVolume24hr", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
                    dbc.Card(dbc.CardBody([html.H4(['Trading volume (24hr) on DEX']),
                                           dbc.Row(dbc.Col(dcc.Graph(figure=self.createDEXVolume24hrGraph(data, bgImage), config={'displayModeBar': False}, id='figureVolume24hr'))),
-                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoVolume")))
+                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoVolume24hr")))
                                           ]))]
         return content
 

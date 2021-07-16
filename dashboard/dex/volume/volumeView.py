@@ -6,6 +6,8 @@ from plotly.subplots import make_subplots
 from datetime import datetime
 import dateutil.relativedelta
 
+import pandas as pd
+
 
 class volumeViewClass:
     def getVolumeContent(self, data, bgImage):
@@ -15,14 +17,22 @@ class volumeViewClass:
                                     id="modalVolume", size='xl'),
                    html.Div(id='hidden', style = {'display':'none'}),
                    dbc.Card(dbc.CardBody([html.H4(['Trading volume on DEX']),
-                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDEXVolumeGraph(data, bgImage, 'hourly'), config={'displayModeBar': False}, id='figureVolume'))),
+                                          html.Table([html.Tr([html.Td('Select time base for representation:'),
+                                                               html.Td(dcc.Dropdown(id='dexVolumeSelection',
+                                                                                    options=[{'label': 'Hourly volume', 'value': 'H'},
+                                                                                             {'label': 'Daily volume', 'value': 'D'},
+                                                                                             {'label': 'Weekly volume', 'value': 'W'}],
+                                                                                    value='H', clearable=False, style=dict(width='235px', verticalAlign="bottom")))])]),
+                                                      dbc.FormGroup([dbc.Checkbox(id="dexVolumeAlldata", className="form-check-input", checked=False),
+                                                                     dbc.Label("Show all data (could need some time)", html_for="dexVolumeAlldata",className="form-check-label")], check=True),
+                                          dbc.Row(dbc.Col(dcc.Graph(config={'displayModeBar': False}, id='figureVolume'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoVolume")))
                                           ]))]
         return content
 
 
     @staticmethod
-    def createDEXVolumeGraph(data, bgImage, representation):
+    def createDEXVolumeGraph(data, bgImage, representation, allData):
         figDEXvolume = make_subplots(
             rows=1, cols=1,
             vertical_spacing=0,
@@ -34,33 +44,50 @@ class volumeViewClass:
         formatHover = '%{y:,.0f}'
         yAxisLabel = 'Traded DFI volume'
         yAxisTick = ",.0f"
-        lastValidDate = datetime.utcfromtimestamp(data.index.values[-1].tolist() / 1e9)
-        date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
-
         lastValidDate = datetime.utcfromtimestamp(data['volumeOverallbuyDFI'].dropna().index.values[-1].tolist() / 1e9)
-        date30DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
 
-        trace_diff = dict(type='scatter', name='Difference', x=(data['volumeOverallbuyDFI' ] -data['volumeOverallsellDFI']).dropna().index,
-                          y=(data['volumeOverallbuyDFI' ] -data['volumeOverallsellDFI']).dropna(),
+        if (representation=='H') & (~allData):
+            maxRangeIndex = 14*24
+            dateGoBack = lastValidDate - dateutil.relativedelta.relativedelta(hours=48)
+        elif (representation=='D') & (~allData):
+            maxRangeIndex = 180*24
+            dateGoBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
+        else:
+            maxRangeIndex = data['volumeOverallbuyDFI'].dropna().size
+            dateGoBack = lastValidDate - dateutil.relativedelta.relativedelta(months=6)
+
+
+
+
+        trace_diff = dict(type='scatter', name='Difference',
+                          x=(data['volumeOverallbuyDFI' ] -data['volumeOverallsellDFI']).dropna().iloc[-maxRangeIndex:].groupby(pd.Grouper(freq=representation)).sum().index,
+                          y=(data['volumeOverallbuyDFI' ] -data['volumeOverallsellDFI']).dropna().iloc[-maxRangeIndex:].groupby(pd.Grouper(freq=representation)).sum(),
                           mode='lines', line=dict(color='#ff2ebe'), line_width=3, hovertemplate=formatHover)
-        trace_followed = dict(type='scatter', name='Bought DFI', x=data['volumeOverallbuyDFI'].dropna().index, y=(data['volumeOverallbuyDFI']).dropna(),
+        trace_bought = dict(type='scatter', name='Bought DFI',
+                            x=data['volumeOverallbuyDFI'].dropna().iloc[-maxRangeIndex:].groupby(pd.Grouper(freq=representation)).sum().index,
+                            y=(data['volumeOverallbuyDFI']).dropna().iloc[-maxRangeIndex:].groupby(pd.Grouper(freq=representation)).sum(),
                               mode='lines', line=dict(color='#90dba8'), line_width=3, hovertemplate=formatHover, fill='tozeroy')
-        trace_unfollowed = dict(type='scatter', name='Sold DFI', x=data['volumeOverallsellDFI'].dropna().index, y=(-data['volumeOverallsellDFI']).dropna(),
+        trace_sold = dict(type='scatter', name='Sold DFI',
+                          x=data['volumeOverallsellDFI'].dropna().iloc[-maxRangeIndex:].groupby(pd.Grouper(freq=representation)).sum().index,
+                          y=(-data['volumeOverallsellDFI']).dropna().iloc[-maxRangeIndex:].groupby(pd.Grouper(freq=representation)).sum(),
                                 mode='lines', line=dict(color='#ec9b98'), line_width=3, hovertemplate=formatHover, fill='tozeroy')
 
-        figDEXvolume.add_trace(trace_followed, 1, 1)
-        figDEXvolume.add_trace(trace_unfollowed, 1, 1)
+        figDEXvolume.add_trace(trace_bought, 1, 1)
+        figDEXvolume.add_trace(trace_sold, 1, 1)
         figDEXvolume.add_trace(trace_diff, 1, 1)
 
         figDEXvolume.update_yaxes(title_text=yAxisLabel, tickformat=yAxisTick, gridcolor='#6c757d', color='#6c757d',
                                               zerolinecolor='#6c757d', row=1, col=1)
         figDEXvolume.update_xaxes(title_text="Date", gridcolor='#6c757d', showticklabels=True, color='#6c757d', zerolinecolor='#6c757d',
-                                              row=1, col=1)       # select 14 days range: range=[date30DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate]
+                                  range=[dateGoBack, lastValidDate], row=1, col=1)       # select 14 days range: range=[date30DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate]
 
         # Add range slider
-        figDEXvolume.update_layout(xaxis=dict(
+        figDEXvolume.update_layout(barmode='stack',
+            xaxis=dict(
             rangeselector=dict(
-                buttons=list([dict(count=14, label="14d", step="day", stepmode="backward"),
+                buttons=list([dict(count=2, label="2d", step="day", stepmode="backward"),
+                              dict(count=7, label="7d", step="day", stepmode="backward"),
+                              dict(count=14, label="14d", step="day", stepmode="backward"),
                               dict(count=30, label="30d", step="day", stepmode="backward"),
                               dict(count=2, label="2m", step="month", stepmode="backward"),
                               dict(count=6, label="6m", step="month", stepmode="backward"),
