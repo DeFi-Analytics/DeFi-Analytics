@@ -102,8 +102,8 @@ class volume24hrViewClass:
     def getDEXVolExplanation():
         coinDEXVolCardExplanation = [html.P(['The ',
                                              html.A('DEX-API',href='https://api.defichain.io/v1/listswaps?network=mainnet',target='_blank', className='defiLink'),
-                                             ' is used to read out the 24 hour trading volume in USD. The values are given for each trading pool and for each coin.']),
-                                             html.P(['In this first version the trading volume for each pool and the overall sum in USD is represented.']),
+                                             ' is used to read out the moving 24 hour trading volume in USD. The values are given for each trading pool and for each coin.',html.Br(),
+                                             'Also the 24hr trading volume from the Coingecko is shown to compare the DEX with the centralized exchanges volume.']),
                                              html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                                    ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                                     style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'}) ]

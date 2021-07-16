@@ -41,8 +41,8 @@ class volumeViewClass:
             shared_xaxes=True,
             subplot_titles=([]))
 
-        formatHover = '%{y:,.0f}'
-        yAxisLabel = 'Traded DFI volume'
+        formatHover = '$%{y:,.0f}'
+        yAxisLabel = 'Traded DFI volume in USD'
         yAxisTick = ",.0f"
         lastValidDate = datetime.utcfromtimestamp(data['volumeOverallbuyDFI'].dropna().index.values[-1].tolist() / 1e9)
 
@@ -118,7 +118,10 @@ class volumeViewClass:
 
     @staticmethod
     def getVolumeExplanation():
-        DEXVolumeCardExplanation = [html.P(['...']),
+        DEXVolumeCardExplanation = [html.P(['In this graphic all DEX trades are read out, summed up on an hourly base and multiplied with the DFI price in USD. Over all pools you can see how many DFI are bought, '
+                                            'sold and the difference (in USD). The user can also choose if the values should aggregated again to a daily or weekly base.']),
+                                    html.P(['In the standard representation not all data is shown for hourly and daily time base to keep the performance. If you are interested in all values, just activate the corresponding '
+                                            'checkbox.']),
                                      html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                                    ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                                     style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'}) ]
