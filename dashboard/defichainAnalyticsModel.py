@@ -94,7 +94,7 @@ class defichainAnalyticsModelClass:
             # sum of addresses and DFI
             self.dailyData['nbOverall'] = self.dailyData['nbMnId'] + self.dailyData['nbOtherId']
             self.dailyData['circDFI'] = self.dailyData['mnDFI'] + self.dailyData['otherDFI'] + self.dailyData['tokenDFI'].fillna(0) + self.dailyData['lmDFI'].fillna(0) + self.dailyData['erc20DFI'].fillna(0)
-            self.dailyData['totalDFI'] = self.dailyData['circDFI'] + self.dailyData['fundDFI'] + self.dailyData['foundationDFI'].fillna(0) + self.dailyData['burnedDFI'].fillna(0)
+            self.dailyData['totalDFI'] = self.dailyData['circDFI'] + self.dailyData['fundDFI'] + self.dailyData['foundationDFI'].fillna(0) + self.dailyData['burnedDFI'].fillna(method="ffill")
 
             # calc market cap data in USD and BTC
             print('>>>>>>>> Update market cap in loadExtractedRichlistData...  <<<<<<<<')
