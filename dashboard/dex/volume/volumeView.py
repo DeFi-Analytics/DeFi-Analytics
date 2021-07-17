@@ -22,7 +22,7 @@ class volumeViewClass:
                                                                                     options=[{'label': 'Hourly volume', 'value': 'H'},
                                                                                              {'label': 'Daily volume', 'value': 'D'},
                                                                                              {'label': 'Weekly volume', 'value': 'W'}],
-                                                                                    value='H', clearable=False, style=dict(width='235px', verticalAlign="bottom")))])]),
+                                                                                    value='H', clearable=False, style=dict(width='180px', verticalAlign="bottom")))])]),
                                                       dbc.FormGroup([dbc.Checkbox(id="dexVolumeAlldata", className="form-check-input", checked=False),
                                                                      dbc.Label("Show all data (could need some time)", html_for="dexVolumeAlldata",className="form-check-label")], check=True),
                                           dbc.Row(dbc.Col(dcc.Graph(config={'displayModeBar': False}, id='figureVolume'))),
