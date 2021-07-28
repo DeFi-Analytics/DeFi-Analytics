@@ -79,21 +79,12 @@ while True:
         if siteContent.status_code==200:
             tempData = pd.read_json(siteContent.text).transpose()
             burnedDFIFees = tempData.loc['feeburn', 0]
+            burnedDFIRewards = tempData.loc['emissionburn',0]
+            burnedDFICoins = tempData.loc['amount',0]
         else:
             burnedDFIFees = np.NaN
-
-        linkBurnRewards = 'https://api.defichain.io/v1/stats?network=mainnet&pretty'
-        siteContent = requests.get(linkBurnRewards)
-        if siteContent.status_code==200:
-            tempData = json.loads(siteContent.text)
-            burnedDFIRewards = tempData['listCommunities']['Burnt']
-        else:
             burnedDFIRewards = np.NaN
-
-        if addBurn in dfRichList.values:
-            burnedDFICoins = dfRichList[dfRichList.address == addBurn].balance.values[0]
-        else:
-            burnedDFICoins = 0
+            burnedDFICoins = np.NaN
 
         burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards)
 
