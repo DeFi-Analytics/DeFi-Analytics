@@ -17,7 +17,7 @@ foundRichlistFiles = [richlistDate for richlistDate in listCSVFiles]
 
 
 colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI', 'mnDFI', 'otherDFI', 'foundationDFI', 'nbMnGenesisId', 'mnGenesisDFI', 'nbMnCakeId', 'mnCakeDFI', 'erc20DFI',
-            'burnedDFI', 'tokenDFI', 'nbMydefichainId', 'mnMydefichainDFI']
+            'burnedDFI', 'tokenDFI', 'nbMydefichainId', 'mnMydefichainDFI', 'nbMNlocked5', 'nbMNlocked10']
 
 dfDFIData = pd.read_csv(filepath)
 
@@ -77,6 +77,8 @@ for richlistFile in foundRichlistFiles:
         nbMnMydefichainId = balanceMNMydefichain.size
         nbMnGenesisId = balanceMNGenesis.size
         nbOtherId = balancePrivat.size
+        nbMNlocked5 = rawRichlist[rawRichlist.timelock == '5 years'].shape[0]
+        nbMNlocked10 = rawRichlist[rawRichlist.timelock == '10 years'].shape[0]
 
         # calc DFI amount on address category
         mnDFI = balanceMN.sum()
@@ -134,8 +136,8 @@ for richlistFile in foundRichlistFiles:
 
         # generate Series to be add to existing dataframe
         listDFI2Add = [currDate, nbMnId, nbOtherId, fundDFIValue, mnDFI, otherDFI, foundationDFIValue, nbMnGenesisId, mnGenesisDFI, nbMnCakeId, mnCakeDFI, erc20DFIValue,
-                       burnedDFIValue, tokenDFIValue, nbMnMydefichainId, mnMydefichainDFI]
-        seriesDFI2Add = pd.Series(listDFI2Add, index=dfDFIData.columns)
+                       burnedDFIValue, tokenDFIValue, nbMnMydefichainId, mnMydefichainDFI, nbMNlocked5, nbMNlocked10]
+        seriesDFI2Add = pd.Series(listDFI2Add, index=colNames)
 
         dfDFIData = dfDFIData.append(seriesDFI2Add, ignore_index=True, sort=False)
         print('...added to extractedDFIdata.csv')

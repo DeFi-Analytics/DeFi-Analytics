@@ -2,6 +2,7 @@
 import requests
 import ast
 import time
+import json
 
 import pandas as pd
 from datetime import datetime
@@ -23,16 +24,18 @@ while bGetRichlist:
     link = "http://mainnet-api.defichain.io/api/DFI/mainnet/address/stats/rich-list?pageno=1&pagesize=200000"
     siteContent = requests.get(link)
     if siteContent.status_code == 200:
-        text2extract = siteContent.text.replace('null','None')
+        text2extract = siteContent.text.replace('null', 'None')
         apiContentAsDict=ast.literal_eval(text2extract)
         dfRichList = pd.DataFrame(apiContentAsDict['data'])
         bGetRichlist = False
+        print('Finished getting complete DFI richlist')
     else:
         print('Error with API for complete Richlist')
         time.sleep(300)
 
 # convert fi balance into dfi balance
 dfRichList.balance = dfRichList.balance/100000000
+
 
 # get DFI token amount and add to richlist as own entry
 try:
@@ -47,12 +50,30 @@ except:
     print('Error with API for DFI token data')
 
 
+# # get burnt DFI rewards and add to richlist as own entry
+# try:
+#     linkBurnRewards = 'https://api.defichain.io/v1/stats?network=mainnet&pretty'
+#     siteContent = requests.get(linkBurnRewards)
+#     if siteContent.status_code == 200:
+#         tempData = json.loads(siteContent.text)
+#         burnedDFIRewards = tempData['listCommunities']['Burnt']
+#
+#         seriesDFI2Add = pd.Series(['DFIBurntRewards', burnedDFIRewards], index=['address', 'balance'])
+#         dfRichList = dfRichList.append(seriesDFI2Add, ignore_index=True, sort=False)
+#         print('Finished getting burnt DFI rewards')
+#     else:
+#         print('Error with API for burnt DFI rewards, status code not 200')
+# except:
+#     print('Error with API for burnt DFI rewards')
+
+
 # get list of masternodes
 try:
     link = 'http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED'
     siteContent = requests.get(link)
     dfMNList = pd.read_json(siteContent.text).transpose() 
     dfRichList['mnAddressAPI'] = dfRichList['address'].isin(dfMNList.ownerAuthAddress)
+    dfRichList = dfRichList.merge(dfMNList[['ownerAuthAddress','timelock']].set_index('ownerAuthAddress'),how='left', left_on='address', right_index=True)
     print('Finished getting masternode list')
 except:
     dfOldMNList = pd.read_csv(filepathOldMNList, index_col=0)
