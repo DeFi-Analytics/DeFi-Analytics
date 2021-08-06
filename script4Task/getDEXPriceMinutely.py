@@ -32,8 +32,9 @@ while True:
     LiteCoinData = cg.get_price(ids='litecoin', vs_currencies=['usd'])
     ltcDFIPrice = DFIData['defichain']['usd']/LiteCoinData['litecoin']['usd']
     BCHCoinData = cg.get_price(ids='bitcoin-cash', vs_currencies=['usd'])
-    bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']    
-    
+    bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']
+    USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
+    USDCDFIPrice = DFIData['defichain']['usd'] / USDCCoinData['usd-coin']['usd']
     
     dfLMPoolData['DFIPrices'] = None
     dfLMPoolData.loc[4,'DFIPrices'] = DFIData['defichain']['eth']
@@ -42,6 +43,7 @@ while True:
     dfLMPoolData.loc[8,'DFIPrices'] = dogeDFIPrice
     dfLMPoolData.loc[10,'DFIPrices'] = ltcDFIPrice
     dfLMPoolData.loc[12,'DFIPrices'] = bchDFIPrice
+    dfLMPoolData.loc[14, 'DFIPrices'] = USDCDFIPrice
     dfLMPoolData['Time'] = start_time
     
     # prices from Bittrex

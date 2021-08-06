@@ -14,7 +14,7 @@ filepath = path + 'TokenData.csv'
 link='https://api.defichain.io/v1/listtokens?network=mainnet&start=0&including_start=true'
 siteContent = requests.get(link)
 dfTokenData = pd.read_json(siteContent.text).transpose()
-dfTokenData = dfTokenData[['symbol','minted','creationTx','creationHeight','collateralAddress']].iloc[[1,2,3,7,9,11]]
+dfTokenData = dfTokenData[['symbol','minted','creationTx','creationHeight','collateralAddress']].iloc[[1,2,3,7,9,11,13]]
 dfTokenData['Time'] = pd.Timestamp.now()
     
 # burned token on defichain
@@ -37,6 +37,8 @@ if 'LTC' in dfBurnedTokenData.index:
     dfTokenData.loc[9,'Burned']=dfBurnedTokenData.loc['LTC','amount']
 if 'BCH' in dfBurnedTokenData.index:
     dfTokenData.loc[11,'Burned']=dfBurnedTokenData.loc['BCH','amount']
+if 'USDC' in dfBurnedTokenData.index:
+    dfTokenData.loc[13,'Burned']=dfBurnedTokenData.loc['USDC','amount']
 
 # coins on collateral addresses
 #BTC
@@ -74,8 +76,14 @@ siteContent = requests.get(link)
 tempData = json.loads(siteContent.text)
 BCHamount = tempData['balance']
 
+#USDC
+link='https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&address=0x94fa70d079d76279e1815ce403e9b985bccc82ac&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+siteContent = requests.get(link)
+apiContentAsDict=ast.literal_eval(siteContent.text)
+USDCamount = float(apiContentAsDict['result'])*1e-6
 
-dfTokenData['Collateral'] =[ETHamount,BTCamount, USDTamount,DOGEamount,LTCamount,BCHamount]
+
+dfTokenData['Collateral'] =[ETHamount,BTCamount, USDTamount,DOGEamount,LTCamount,BCHamount,USDCamount]
     
 dfOldTokenData = pd.read_csv(filepath,index_col=0)
 dfTokenData = dfOldTokenData.append(dfTokenData, sort=False)

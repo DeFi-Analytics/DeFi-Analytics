@@ -24,7 +24,8 @@ class coinpriceViewClass:
                                                                                             {'label': 'USDT', 'value': 'USDT'},
                                                                                             {'label': 'LTC', 'value': 'LTC'},
                                                                                             {'label': 'DOGE', 'value': 'DOGE'},
-                                                                                            {'label': 'BCH', 'value': 'BCH'}],
+                                                                                            {'label': 'BCH', 'value': 'BCH'},
+                                                                                            {'label': 'USDC', 'value': 'USDC'}],
                                                                value='BTC', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
                                           dbc.Row([dbc.Col(dcc.Graph(id='figureCoinpriceLongterm', config={'displayModeBar': False}), lg=7, xl=8, align='start'),
                                                    dbc.Col(dcc.Graph(id='figureCoinpriceShortterm', config={'displayModeBar': False}), lg=5, xl=4)], no_gutters=True),
@@ -38,15 +39,11 @@ class coinpriceViewClass:
     def createPriceGraph(data, selectedCoin, selectedReference, selectedTimeRange, bgImage):
 
         if selectedTimeRange == 'Long':
-            leftMarginGraphic = 130
-            rightMarginGraphic = 20
             bgimageSize = 0.6
             lastValidDate = datetime.utcfromtimestamp(data.index.values[-1].tolist()/1e9)
             date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
             startIndex = data[data.index > date14DaysBack].index.values[0]
         else:
-            leftMarginGraphic = 0
-            rightMarginGraphic = 50
             bgimageSize = 0.8
             startIndex = data.index.values[0]
 
@@ -78,12 +75,15 @@ class coinpriceViewClass:
                                 mode='lines', line=dict(color='#ff2ebe'), line_width=2, hovertemplate='%{y:.2f}%')
         trace_relLongBCH = dict(type='scatter', name='BCH', x=data['BCH-DFI_relPriceDev'+selectedReference].loc[startIndex:].dropna().index, y=data['BCH-DFI_relPriceDev'+selectedReference].loc[startIndex:].dropna()*100,
                                 mode='lines', line=dict(color='#410eb2'), line_width=2, hovertemplate='%{y:.2f}%')
+        trace_relLongUSDC = dict(type='scatter', name='USDC', x=data['USDC-DFI_relPriceDev'+selectedReference].loc[startIndex:].dropna().index, y=data['USDC-DFI_relPriceDev'+selectedReference].loc[startIndex:].dropna()*100,
+                                mode='lines', line=dict(color='#7f4c00'), line_width=2, hovertemplate='%{y:.2f}%')
         figPrice.add_trace(trace_relLongBTC, 1, 1)
         figPrice.add_trace(trace_relLongETH, 1, 1)
         figPrice.add_trace(trace_relLongUSDT, 1, 1)
         figPrice.add_trace(trace_relLongDoge, 1, 1)
         figPrice.add_trace(trace_relLongLTC, 1, 1)
         figPrice.add_trace(trace_relLongBCH, 1, 1)
+        figPrice.add_trace(trace_relLongUSDC, 1, 1)
 
         # absolute price
         if selectedCoin == 'USDT':
@@ -106,6 +106,10 @@ class coinpriceViewClass:
             tickFormatYAxis = ",.4f"
             lineColor = '#410eb2'
             priceCurrency = 'BCH/DFI'
+        elif selectedCoin == 'USDC':
+            tickFormatYAxis = ",.2f"
+            lineColor = '#7f4c00'
+            priceCurrency = 'USDC/DFI'
         else:
             tickFormatYAxis = ",.7f"
             lineColor = '#da3832'

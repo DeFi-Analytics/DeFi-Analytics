@@ -9,7 +9,7 @@ filepathCoinPrices = path + 'coinPriceList.csv'
 filepathTradingResults = path + 'dailyTradingResultsDEX.csv'
 
 
-availablePools = {'ETH':4,'BTC':5,'USDT':6,'DOGE':8,'LTC':10,'BCH':12}
+availablePools = {'ETH':4,'BTC':5,'USDT':6,'DOGE':8,'LTC':10,'BCH':12,'USDC':14}
 dfTradeResult = pd.DataFrame()
 
 # get all swaps over all pools
@@ -33,7 +33,7 @@ for key in availablePools:
 
 # add usd price information for all coins
 dfCoinPrices = pd.read_csv(filepathCoinPrices,index_col=0)
-dfTradeResult = dfTradeResult.merge(dfCoinPrices[['DFIPriceUSD','BTCPriceUSD','ETHPriceUSD','USDTPriceUSD','DOGEPriceUSD','LTCPriceUSD','BCHPriceUSD']],
+dfTradeResult = dfTradeResult.merge(dfCoinPrices[['DFIPriceUSD','BTCPriceUSD','ETHPriceUSD','USDTPriceUSD','DOGEPriceUSD','LTCPriceUSD','BCHPriceUSD','USDCPriceUSD']],
                                     how='left',left_index=True, right_index=True)
 
 # calculate trading volume in USD for each base coin and sum of pool

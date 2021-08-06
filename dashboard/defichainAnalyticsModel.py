@@ -87,7 +87,8 @@ class defichainAnalyticsModelClass:
             lmCoins['USDT_pool'] = self.hourlyData.groupby('Date')['USDT-DFI_reserveB'].first()
             lmCoins['DOGE_pool'] = self.hourlyData.groupby('Date')['DOGE-DFI_reserveB'].first()
             lmCoins['LTC_pool'] = self.hourlyData.groupby('Date')['LTC-DFI_reserveB'].first()
-            lmCoins['overall'] = lmCoins['BTC_pool'] + lmCoins['ETH_pool'] + lmCoins['USDT_pool'] + lmCoins['DOGE_pool'].fillna(0) + lmCoins['LTC_pool'].fillna(0)
+            lmCoins['USDC_pool'] = self.hourlyData.groupby('Date')['USDC-DFI_reserveB'].first()
+            lmCoins['overall'] = lmCoins['BTC_pool'] + lmCoins['ETH_pool'] + lmCoins['USDT_pool'] + lmCoins['DOGE_pool'].fillna(0) + lmCoins['LTC_pool'].fillna(0) + lmCoins['USDC_pool'] .fillna(0)
             self.dailyData['lmDFI'] = lmCoins['overall']
 
             # sum of addresses and DFI

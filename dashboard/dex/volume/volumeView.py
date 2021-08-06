@@ -46,6 +46,8 @@ class volumeViewClass:
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty', visible='legendonly')
         trace_VolBCH = dict(type='scatter', name='BCH', x=data['BCH_VolTotal'].dropna().index, y=data['BCH_VolTotal'].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#410eb2'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty', visible='legendonly')
+        trace_VolUSDC = dict(type='scatter', name='USDC', x=data['USDC_VolTotal'].dropna().index, y=data['USDC_VolTotal'].dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty', visible='legendonly')
 
         # overall TVL graph
         trace_VolOverallDEX = dict(type='scatter', name='Overall DEX', x=data['VolTotal'].dropna().index, y=data['VolTotal'].dropna(),
@@ -59,6 +61,7 @@ class volumeViewClass:
         figDEXVol.add_trace(trace_VolDOGE, 1, 1)
         figDEXVol.add_trace(trace_VolLTC, 1, 1)
         figDEXVol.add_trace(trace_VolBCH, 1, 1)
+        figDEXVol.add_trace(trace_VolUSDC, 1, 1)
         figDEXVol.add_trace(trace_VolOverallDEX, 1, 1)
         figDEXVol.add_trace(trace_VolOverallCG, 1, 1)
 

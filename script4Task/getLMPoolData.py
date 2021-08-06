@@ -26,7 +26,8 @@ LiteCoinData = cg.get_price(ids='litecoin', vs_currencies=['usd'])
 ltcDFIPrice = DFIData['defichain']['usd']/LiteCoinData['litecoin']['usd']
 BCHCoinData = cg.get_price(ids='bitcoin-cash', vs_currencies=['usd'])
 bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']    
-
+USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
+USDCDFIPrice = DFIData['defichain']['usd']/USDCCoinData['usd-coin']['usd']
 
 dfLMPoolData['DFIPrices'] = None
 dfLMPoolData.loc[4,'DFIPrices'] = DFIData['defichain']['eth']
@@ -35,6 +36,7 @@ dfLMPoolData.loc[6,'DFIPrices'] = DFIData['defichain']['usd']
 dfLMPoolData.loc[8,'DFIPrices'] = dogeDFIPrice
 dfLMPoolData.loc[10,'DFIPrices'] = ltcDFIPrice
 dfLMPoolData.loc[12,'DFIPrices'] = bchDFIPrice
+dfLMPoolData.loc[14,'DFIPrices'] = USDCDFIPrice
 dfLMPoolData['Time'] = pd.Timestamp.now()
 
 # prices from Bittrex
@@ -105,7 +107,17 @@ try:
 except:
     BCHDFIaddresses = np.nan
     print('Error with API of BCH/DFI Richlist')
-    
+
+# UDSC/DFI-Token on DefiChain
+try:
+    link = "https://api.defichain.io/v1/gettokenrichlist?id=14&network=mainnet"
+    siteContent = requests.get(link)
+    temp = pd.read_json(siteContent.text)
+    USDCDFIaddresses = temp['balance'].count()
+except:
+    USDCDFIaddresses = np.nan
+    print('Error with API of USDC/DFI Richlist')
+
 ####### add none when wrong dimension
 dfLMPoolData['numberAddresses'] = None
 dfLMPoolData.loc[4, 'numberAddresses'] = ETHDFIaddresses
@@ -114,7 +126,7 @@ dfLMPoolData.loc[6, 'numberAddresses'] = USDTDFIaddresses
 dfLMPoolData.loc[8, 'numberAddresses'] = DOGEDFIaddresses
 dfLMPoolData.loc[10, 'numberAddresses'] = LTCDFIaddresses
 dfLMPoolData.loc[12, 'numberAddresses'] = BCHDFIaddresses
-  
+dfLMPoolData.loc[14, 'numberAddresses'] = USDCDFIaddresses
     
 dfOldLMPoolData = pd.read_csv(filepath, index_col=0)
 dfLMPoolData = dfOldLMPoolData.append(dfLMPoolData, sort=False)
