@@ -23,7 +23,7 @@ while True:
     oldSnapshot = pd.read_csv(filepath, index_col=0)
 
     # Some data is only updated every 30 minutes
-    if (now-pd.to_datetime(oldSnapshot['date'].values[0])) > timedelta(minutes=30):
+    if (now-pd.to_datetime(oldSnapshot['date'].values[0])) > timedelta(minutes=15):
         nowSnapshot = now
         bCorrectValues = True
 
@@ -90,21 +90,29 @@ while True:
 
         # get DFI from LiquidityMining and DFI-Token
         print('... getting LM and token data')
-        link='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
-        siteContent = requests.get(link)
-        if siteContent.status_code == 200:
-            dfLMPoolData = pd.read_json(siteContent.text).transpose()
-            lmDFIValue = dfLMPoolData.reserveB.astype('float').sum()
-        else:
-            lmDFIValue = np.NaN
+        try:
+            link='http://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
+            siteContent = requests.get(link, timeout=60)
+            if siteContent.status_code == 200:
+                dfLMPoolData = pd.read_json(siteContent.text).transpose()
+                lmDFIValue = dfLMPoolData.reserveB.astype('float').sum()
+            else:
+                lmDFIValue = oldSnapshot['lmDFI'].values[0]
+        except:
+            print('### error lm api ')
+            lmDFIValue = oldSnapshot['lmDFI'].values[0]
 
-        link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
-        siteContent = requests.get(link)
-        if siteContent.status_code == 200:
-            dfDFIToken = pd.read_json(siteContent.text)
-            tokenDFIValue = dfDFIToken[dfDFIToken.address != addFoundation].balance.sum()
-        else:
-            tokenDFIValue = np.NaN
+        try:
+            link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
+            siteContent = requests.get(link, timeout=10)
+            if siteContent.status_code == 200:
+                dfDFIToken = pd.read_json(siteContent.text)
+                tokenDFIValue = dfDFIToken[dfDFIToken.address != addFoundation].balance.sum()
+            else:
+                tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
+        except:
+            print('### error token richlist')
+            tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
 
         if addFoundation in dfRichList.values:
             foundationDFIValue = dfRichList[dfRichList.address==addFoundation].balance.values[0]
