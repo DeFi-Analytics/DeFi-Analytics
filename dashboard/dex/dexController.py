@@ -10,6 +10,9 @@ from .coinprice.coinpriceCallbacks import coinpriceCallbacksClass
 from .stability.stabilityView import stabilityViewClass
 from .stability.stabilityCallbacks import stabilityCallbacksClass
 
+from .slippage.slippageView import slippageViewClass
+from .slippage.slippageCallbacks import slippageCallbacksClass
+
 class dexControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -31,6 +34,10 @@ class dexControllerClass:
         self.stabilityView = stabilityViewClass()
         self.stabilityCallbacks = stabilityCallbacksClass(self.defichainAnalyticsModel, self.stabilityView, app)
 
+        # initialize price stability classes
+        self.slippageView = slippageViewClass()
+        self.slippageCallbacks = slippageCallbacksClass(self.defichainAnalyticsModel, self.slippageView, app)
+
     def getContent(self,entry):
         pageContent = None
         if entry in ["", "coinPrices"]:
@@ -43,7 +50,8 @@ class dexControllerClass:
             self.defichainAnalyticsModel.loadDEXVolume()
             pageContent = self.volume24hrView.getVolume24hrContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["stability"]:
-            # self.defichainAnalyticsModel.loadDEXVolume()
             pageContent = self.stabilityView.getStabilityContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
+        elif entry in ["slippage"]:
+            pageContent = self.slippageView.getSlippageContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent
