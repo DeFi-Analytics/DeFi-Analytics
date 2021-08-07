@@ -76,7 +76,7 @@ class liquidityTokenViewClass:
 
         figLiquidityToken.add_trace(trace_LiquidityToken, 1, 1)
         figLiquidityToken.add_trace(trace_dailyChange, 2, 1)
-        # figLiquidityToken.add_trace(trace_nbAddresses, 3, 1)
+        figLiquidityToken.add_trace(trace_nbAddresses, 3, 1)
 
         figLiquidityToken.update_yaxes(title_text='Liquidity Token ' + selectedCoin + '-DFI', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
                                        zerolinecolor='#6c757d', row=1, col=1)
