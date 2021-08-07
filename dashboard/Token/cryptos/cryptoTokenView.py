@@ -18,7 +18,8 @@ class crpytoTokenViewClass:
                                                                                              {'label': 'USDT', 'value': 'USDT'},
                                                                                              {'label': 'DOGE', 'value': 'DOGE'},
                                                                                              {'label': 'LTC', 'value': 'LTC'},
-                                                                                             {'label': 'BCH', 'value': 'BCH'}],
+                                                                                             {'label': 'BCH', 'value': 'BCH'},
+                                                                                             {'label': 'USDC', 'value': 'USDC'}],
                                                               value='BTC', clearable=False, style=dict(width='200px', verticalAlign="bottom"))),
                    dbc.Col(dcc.Graph(id='figureTokenCryptos', config={'displayModeBar': False})),
                    dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoToken")))]))]
@@ -64,6 +65,11 @@ class crpytoTokenViewClass:
             y1Range = [-100, 1000]
             y1dTick = 200
             nameCollateralBlockchain = 'Bitcoin-Cash Chain'
+        elif selectedCoin == 'USDC':
+            selectedCoinColor = '#7f4c00'
+            y1Range = [-50000, 300000]
+            y1dTick = 50000
+            nameCollateralBlockchain = 'Ethereum'
         else:
             selectedCoinColor = '#da3832'
             y1Range = [-10, 60]

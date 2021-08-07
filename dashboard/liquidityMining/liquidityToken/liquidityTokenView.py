@@ -20,7 +20,8 @@ class liquidityTokenViewClass:
                                             {'label':'USDT','value':'USDT'},
                                             {'label':'DOGE','value':'DOGE'},
                                             {'label':'LTC','value':'LTC'},
-                                            {'label':'BCH','value':'BCH'}],
+                                            {'label':'BCH','value':'BCH'},
+                                            {'label':'USDC','value':'USDC'}],
                                             value='BTC', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
                             dbc.Col(dcc.Graph(id = 'figureLiquidityToken', config={'displayModeBar': False})),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoLT")))]))]
@@ -54,6 +55,8 @@ class liquidityTokenViewClass:
             lineColor = '#ff2ebe'
         elif selectedCoin == 'BCH':
             lineColor = '#410eb2'
+        elif selectedCoin == 'USDC':
+            lineColor = '#7f4c00'
         else:
             lineColor = '#da3832'
 

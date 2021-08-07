@@ -114,6 +114,16 @@ try:
     temp.set_index('Date', inplace=True)
     coinPricesDF[['BCHPriceEUR','BCHPriceUSD']] = temp[['BCHPriceEUR','BCHPriceUSD']]
 
+    # USDC-price
+    coinInfosCG = cg.get_coin_market_chart_range_by_id(id='usd-coin',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+    coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='usd-coin',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
+    temp = pd.DataFrame(coinInfosCG['prices'])
+    temp['USDCPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
+    temp = temp.rename(columns={0:'Date',1:'USDCPriceEUR',2:'USDCPriceUSD'})
+    temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
+    temp.set_index('Date', inplace=True)
+    coinPricesDF[['USDCPriceEUR','USDCPriceUSD']] = temp[['USDCPriceEUR','USDCPriceUSD']]
+
     # generate filepath relative to script location
     scriptPath = __file__
     path = scriptPath[:-32] + '/data/'
