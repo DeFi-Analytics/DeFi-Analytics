@@ -10,7 +10,7 @@ scriptPath = __file__
 path = scriptPath[:-34] + '/data/'
 filepath = path + 'hourlyDEXTrades.csv'
 
-availablePools = {'ETH':4,'BTC':5,'USDT':6,'DOGE':8,'LTC':10,'BCH':12}
+availablePools = {'ETH':4,'BTC':5,'USDT':6,'DOGE':8,'LTC':10,'BCH':12,'USDC':14}
 dfTradeHourlyResult = pd.DataFrame()
 
 # get all swaps over all pools
@@ -36,16 +36,16 @@ for key in availablePools:
     dfTradeHourlyResult[key+'pool_quote'+availableBaseToken[1]] = dfTrades.loc[dfTrades.quoteTokenSymbol==availableBaseToken[1]].groupby('DateHour')['quoteTokenAmount'].sum()
 
 # keep max last x hours and remove newest row (both may not complete)
-lastUsedHours = 12
+lastUsedHours = 24
 dfTradeHourlyResult = dfTradeHourlyResult[dfTradeHourlyResult.index[-1]-dateutil.relativedelta.relativedelta(hours=lastUsedHours):dfTradeHourlyResult.index[-2]]
 
 
 # add usd price information for all coins
 nbDays = '30'
-currNameCoingecko = ['bitcoin', 'ethereum', 'tether', 'dogecoin', 'litecoin', 'bitcoin-cash', 'defichain']
-currName = ['BTC', 'ETH', 'USDT', 'DOGE', 'LTC', 'BCH', 'DFI']
+currNameCoingecko = ['bitcoin', 'ethereum', 'tether', 'dogecoin', 'litecoin', 'bitcoin-cash', 'usd-coin', 'defichain']
+currName = ['BTC', 'ETH', 'USDT', 'DOGE', 'LTC', 'BCH', 'USDC', 'DFI']
 
-for ind in range(7):
+for ind in range(8):
     print('Get coinprice for: ' + currName[ind])
     link = 'https://api.coingecko.com/api/v3/coins/'+currNameCoingecko[ind]+'/market_chart?vs_currency=usd&days='+nbDays
     siteContent = requests.get(link)
