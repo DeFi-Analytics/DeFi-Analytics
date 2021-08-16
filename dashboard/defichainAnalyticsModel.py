@@ -406,16 +406,18 @@ class defichainAnalyticsModelClass:
             hourlyTrades.index = pd.to_datetime(hourlyTrades.index).tz_localize(None)
 
             columns2update = []
-            currName = ['BTC', 'ETH', 'USDT', 'DOGE', 'LTC', 'BCH', 'DFI']
-            for ind in range(6):
+            currName = ['BTC', 'ETH', 'USDT', 'DOGE', 'LTC', 'BCH', 'USDC', 'DFI']
+            for ind in range(7):
                 hourlyTrades['volume'+currName[ind]+'buyDFI'] = hourlyTrades[currName[ind]+'pool_base'+currName[ind]] * hourlyTrades[currName[ind]+'-USD']
                 hourlyTrades['volume'+currName[ind]+'sellDFI'] = hourlyTrades[currName[ind]+'pool_quote'+currName[ind]] * hourlyTrades[currName[ind]+'-USD']
                 columns2update.extend(['volume'+currName[ind]+'buyDFI', 'volume'+currName[ind]+'sellDFI'])
 
             hourlyTrades['volumeOverallbuyDFI'] = hourlyTrades['volumeBTCbuyDFI']+hourlyTrades['volumeETHbuyDFI']+hourlyTrades['volumeUSDTbuyDFI'] + \
-                                                    hourlyTrades['volumeDOGEbuyDFI']+hourlyTrades['volumeLTCbuyDFI']+hourlyTrades['volumeBCHbuyDFI']
+                                                    hourlyTrades['volumeDOGEbuyDFI']+hourlyTrades['volumeLTCbuyDFI']+hourlyTrades['volumeBCHbuyDFI'] + \
+                                                    hourlyTrades['volumeUSDCbuyDFI']
             hourlyTrades['volumeOverallsellDFI'] = hourlyTrades['volumeBTCsellDFI']+hourlyTrades['volumeETHsellDFI']+hourlyTrades['volumeUSDTsellDFI'] + \
-                                                    hourlyTrades['volumeDOGEsellDFI']+hourlyTrades['volumeLTCsellDFI']+hourlyTrades['volumeBCHsellDFI']
+                                                    hourlyTrades['volumeDOGEsellDFI']+hourlyTrades['volumeLTCsellDFI']+hourlyTrades['volumeBCHsellDFI'] + \
+                                                    hourlyTrades['volumeUSDCsellDFI']
             columns2update.extend(['volumeOverallbuyDFI', 'volumeOverallsellDFI'])
 
             ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist
