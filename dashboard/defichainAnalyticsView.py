@@ -102,6 +102,7 @@ class defichainAnalyticsViewClass:
                     dbc.NavLink("Volume", href="/dex?entry=volume", className="linkstyle", id="volume"),
                     dbc.NavLink("Volume (24hr)", href="/dex?entry=24hrVolume", className="linkstyle", id="24hrVolume"),
                     dbc.NavLink("Price Stability", href="/dex?entry=stability", className="linkstyle", id="stability"),
+                    dbc.NavLink("Price Slippage", href="/dex?entry=slippage", className="linkstyle", id="slippage"),
                 ],
                 id="submenu-dex-collapse",
             ),

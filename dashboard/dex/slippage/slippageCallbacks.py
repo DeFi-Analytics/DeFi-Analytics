@@ -2,7 +2,7 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 class slippageCallbacksClass:
-    def __init__(self, defichainAnalyticsModel, stabilityView, app):
+    def __init__(self, defichainAnalyticsModel, slippageView, app):
 
         @app.callback([Output('slippagePoolLastUpdate', 'children'),
                        Output('slippagePoolCoinA', 'children'),
@@ -14,27 +14,25 @@ class slippageCallbacksClass:
             coinB = "{:,.0f}".format(defichainAnalyticsModel.hourlyData[selectedPool + '-DFI_reserveB'].dropna().iloc[-1]) + ' DFI'
             return lastUpdate, coinA, coinB
 
-        # @app.callback([Output('figureStabilityDFI', 'figure'),
-        #                Output('stabilityChangePriceOutput', 'children')],
-        #               [Input('stabilityChangePriceInput', 'value'),
-        #                Input('stabilityPoolSelection', 'value')])
-        # def updateFigStabilityDFI(ratioChangeInput, selectedPool):
-        #     figStabilityDFI, nbDFIneeded = stabilityView.createStabilityDFIGraph(defichainAnalyticsModel.hourlyData, defichainAnalyticsModel.figBackgroundImage, selectedPool, ratioChangeInput)
-        #     return figStabilityDFI, "{:,.0f}DFI".format(nbDFIneeded)
-        #
-        # @app.callback([Output('figureStabilityPrice', 'figure'),
-        #                Output('stabilityChangeDFIOutput', 'children')],
-        #               [Input('stabilityChangeDFIInput', 'value'),
-        #                Input('stabilityPoolSelection', 'value')])
-        # def updateFigStabilityDFI(DFIChangeInput, selectedPool):
-        #     figStabilityDFI, nbDFIneeded = stabilityView.createDFIRatioGraph(defichainAnalyticsModel.hourlyData, defichainAnalyticsModel.figBackgroundImage, selectedPool, DFIChangeInput)
-        #     return figStabilityDFI, "{:,.2f}%".format(nbDFIneeded)
-        #
-        # @app.callback(
-        #     Output("modalStability", "is_open"),
-        #     [Input("openInfoStability", "n_clicks"), Input("closeInfoStability", "n_clicks")],
-        #     [State("modalStability", "is_open")],)
-        # def toggle_modal(n1, n2, is_open):
-        #     if n1 or n2:
-        #         return not is_open
-        #     return is_open
+        @app.callback([Output('figureSlippage', 'figure'),
+                       Output('slippageSwappedDFI', 'children'),
+                       Output('slippageSwappedCoinB', 'children'),
+                       Output('slippageStartPrice', 'children'),
+                       Output('slippageMeanPrice', 'children'),
+                       Output('slippageEndPrice', 'children'),
+                       ],
+                      [Input('slippageCoinAmount', 'value'),
+                       Input('slippageOrderSelection', 'value'),
+                       Input('slippagePoolSelection', 'value')])
+        def updateFigSlippageDFI(coins2sell, selectedOrder, selectedPool):
+            figSlippage, swappedDFI, swappedCoinB, startPrice, meanPrice, endPrice = slippageView.createSlippageGraph(defichainAnalyticsModel.hourlyData, defichainAnalyticsModel.figBackgroundImage, selectedPool, selectedOrder, coins2sell)
+            return figSlippage, swappedDFI, swappedCoinB, startPrice, meanPrice, endPrice
+
+        @app.callback(
+            Output("modalSlippage", "is_open"),
+            [Input("openInfoSlippage", "n_clicks"), Input("closeInfoSlippage", "n_clicks")],
+            [State("modalSlippage", "is_open")],)
+        def toggle_modal(n1, n2, is_open):
+            if n1 or n2:
+                return not is_open
+            return is_open

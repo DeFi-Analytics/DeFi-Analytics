@@ -43,6 +43,7 @@
     #figureVolume {height: 690px}
     #figureStabilityDFI {height: 480px}
     #figureStabilityPrice {height: 480px}
+    #figureSlippage {height: 525px}
     #figureTVL {height: 715px}
     #figureLiquidityToken {height: 715px}
     #figureLMPaidFees {height: 600px}
@@ -102,6 +103,7 @@
         #figureVolume {height: 600px}
         #figureStabilityDFI {height: 480px}
         #figureStabilityPrice {height: 480px}
+        #figureSlippage {height: 480px}
         #figureTVL {height: 600px}
         #figureLiquidityToken {height: 600px}
         #figureLMPaidFees {height: 600px}
@@ -134,6 +136,7 @@
         #figureVolume {height: 300px}
         #figureStabilityDFI {height: 330px}
         #figureStabilityPrice {height: 330px}
+        #figureSlippage {height: 330px}
         #figureTVL {height: 330px}
         #figureLiquidityToken {height: 330px}
         #figureLMPaidFees {height: 330px}
