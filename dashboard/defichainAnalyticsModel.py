@@ -25,6 +25,7 @@ class defichainAnalyticsModelClass:
 
         # last update of csv-files
         self.updated_nodehubIO = None
+        self.updated_allnodes = None
         self.updated_extractedRichlist = None
         self.updated_tradingData = None
         self.updated_blocktime = None
@@ -80,9 +81,24 @@ class defichainAnalyticsModelClass:
             self.updated_nodehubIO = fileInfo.stat()
             print('>>>> nodehub data loaded from csv-file <<<<')
 
+    def loadMNAllnodes(self):
+        print('>>>> Start update allnodes data ...  <<<<')
+        filePath = self.dataPath + 'mnAllnodes.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_allnodes:
+            allnodesData = pd.read_csv(filePath, index_col=0)
+            allnodesData.set_index('date', inplace=True)
+
+            ind2Delete = self.dailyData.columns.intersection(allnodesData.columns)
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                        # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(allnodesData['nbMNAllnode'], how='outer', left_index=True, right_index=True)
+
+            self.updated_allnodes = fileInfo.stat()
+            print('>>>> allnodes data loaded from csv-file <<<<')
 
     def loadExtractedRichlistData(self):
         self.loadMNnodehub()  # number masternode hosted by nodehub must be load here to ensure correct values for other and relative representation
+        self.loadMNAllnodes()  # number masternode hosted by Allnodes must be load here to ensure correct values for other and relative representation
         print('>>>> Start update extracted richlist data ...  <<<<')
         filePath = self.dataPath + 'extractedDFIdata.csv'
         fileInfo = pathlib.Path(filePath)
@@ -93,11 +109,15 @@ class defichainAnalyticsModelClass:
             self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete existing columns to add new ones
             self.dailyData = self.dailyData.merge(extractedRichlist, how='outer', left_index=True, right_index=True)      # add new columns to daily table
 
-            self.dailyData['nbMNOther'] = self.dailyData['nbMnId']-self.dailyData['nbMnCakeId']-self.dailyData['nbMydefichainId']-self.dailyData['nbMNNodehub'].fillna(0)
+            self.dailyData['nbMNOther'] = self.dailyData['nbMnId']-self.dailyData['nbMnCakeId']-self.dailyData['nbMydefichainId']\
+                                          -self.dailyData['nbMNNodehub'].fillna(0)-self.dailyData['nbMNAllnode'].fillna(0)
+            self.dailyData['nbMNnonCake'] = self.dailyData['nbMnId']-self.dailyData['nbMnCakeId']
+
             self.dailyData['nbMnCakeIdRelative'] = self.dailyData['nbMnCakeId']/self.dailyData['nbMnId']*100
             self.dailyData['nbMNOtherRelative'] = self.dailyData['nbMNOther'] / self.dailyData['nbMnId'] * 100
             self.dailyData['nbMydefichainRelative'] = self.dailyData['nbMydefichainId'] / self.dailyData['nbMnId'] * 100
             self.dailyData['nbMNNodehubRelative'] = self.dailyData['nbMNNodehub'] / self.dailyData['nbMnId'] * 100
+            self.dailyData['nbMNAllnodeRelative'] = self.dailyData['nbMNAllnode'] / self.dailyData['nbMnId'] * 100
 
             # extracting DFI in Liquidity-Mining
             lmCoins = pd.DataFrame(index=self.dailyData.index)

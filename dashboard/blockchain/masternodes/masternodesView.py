@@ -38,6 +38,7 @@ class masternodesViewClass:
             sigNameMNOther = 'nbMNOtherRelative'
             sigNameMydefichain = 'nbMydefichainRelative'
             sigNameNodehub = 'nbMNNodehubRelative'
+            sigNameAllnodes = 'nbMNAllnodeRelative'
             hoverTemplateRepresenation = '%{y:,.3f}%'
             yLabelText = 'Part of enabled masternodes in %'
             yTickRepresentation = ",.2f"
@@ -46,14 +47,18 @@ class masternodesViewClass:
             sigNameMNOther = 'nbMNOther'
             sigNameMydefichain = 'nbMydefichainId'
             sigNameNodehub = 'nbMNNodehub'
+            sigNameAllnodes = 'nbMNAllnode'
             hoverTemplateRepresenation = '%{y:,.0f}'
             yTickRepresentation = ",.0f"
             yLabelText = 'Number of masternodes'
 
 
+
             # single MN graphs
         trace_MNCake = dict(type='scatter', name='Cake', x=data[sigNameMNCake].fillna(method="ffill").index, y=data[sigNameMNCake].fillna(method="ffill"),
                             stackgroup='one', mode='lines', line=dict(color='#5b10ff'), line_width=0, hovertemplate=hoverTemplateRepresenation, visible='legendonly', fill='tozeroy')
+        trace_MNAllnode = dict(type='scatter', name='Allnodes', x=data[sigNameNodehub].fillna(method="ffill").index, y=data[sigNameAllnodes].fillna(method="ffill"),
+                                   stackgroup='one', mode='lines', line=dict(color='#00fffb'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_MNNodehub = dict(type='scatter', name='Nodehub', x=data[sigNameNodehub].fillna(method="ffill").index, y=data[sigNameNodehub].fillna(method="ffill"),
                                    stackgroup='one', mode='lines', line=dict(color='#da3832'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_MNMydefichain = dict(type='scatter', name='MyDefichain', x=data[sigNameMydefichain].fillna(method="ffill").index, y=data[sigNameMydefichain].fillna(method="ffill"),
@@ -62,15 +67,20 @@ class masternodesViewClass:
                              stackgroup='one', mode='lines', line=dict(color='#22b852'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # total number of MN
+        trace_MNnonCake = dict(type='scatter', name='Non-Cake MN', x=data['nbMNnonCake'].dropna().index, y=data['nbMNnonCake'].dropna(),
+                                mode='lines', line=dict(color='#ff00af', dash='dot'), line_width=3, hovertemplate=hoverTemplateRepresenation)
         trace_MNOverall = dict(type='scatter', name='Overall', x=data['nbMnId'].dropna().index, y=data['nbMnId'].dropna(),
                                 mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate=hoverTemplateRepresenation, visible='legendonly')
 
+
         figMN.add_trace(trace_MNCake, 1, 1)
+        figMN.add_trace(trace_MNAllnode, 1, 1)
         figMN.add_trace(trace_MNNodehub, 1, 1)
         figMN.add_trace(trace_MNMydefichain, 1, 1)
         figMN.add_trace(trace_MNOther, 1, 1)
         if selectRepresentation == 'absolute':
             figMN.add_trace(trace_MNOverall, 1, 1)
+            figMN.add_trace(trace_MNnonCake, 1, 1)
 
         figMN.update_yaxes(title_text=yLabelText, tickformat=yTickRepresentation, gridcolor='#6c757d', color='#6c757d',
                             zerolinecolor='#6c757d', row=1, col=1)
