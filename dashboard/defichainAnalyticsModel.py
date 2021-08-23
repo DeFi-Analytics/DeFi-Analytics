@@ -118,6 +118,9 @@ class defichainAnalyticsModelClass:
             self.dailyData['nbMNNodehubRelative'] = self.dailyData['nbMNNodehub'] / self.dailyData['nbMnId'] * 100
             self.dailyData['nbMNAllnodeRelative'] = self.dailyData['nbMNAllnode'] / self.dailyData['nbMnId'] * 100
 
+            self.dailyData['nbMNlocked10Relative'] = self.dailyData['nbMNlocked10'] / self.dailyData['nbMnId'] * 100
+            self.dailyData['nbMNlocked5Relative'] = self.dailyData['nbMNlocked5'] / self.dailyData['nbMnId'] * 100
+
             # extracting DFI in Liquidity-Mining
             lmCoins = pd.DataFrame(index=self.dailyData.index)
             lmCoins['BTC_pool'] = self.hourlyData.groupby('Date')['BTC-DFI_reserveB'].first()

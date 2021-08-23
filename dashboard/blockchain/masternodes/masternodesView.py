@@ -39,6 +39,8 @@ class masternodesViewClass:
             sigNameMydefichain = 'nbMydefichainRelative'
             sigNameNodehub = 'nbMNNodehubRelative'
             sigNameAllnodes = 'nbMNAllnodeRelative'
+            sigNameFreezer10 = 'nbMNlocked10Relative'
+            sigNameFreezer5 = 'nbMNlocked5Relative'
             hoverTemplateRepresenation = '%{y:,.3f}%'
             yLabelText = 'Part of enabled masternodes in %'
             yTickRepresentation = ",.2f"
@@ -48,6 +50,8 @@ class masternodesViewClass:
             sigNameMydefichain = 'nbMydefichainId'
             sigNameNodehub = 'nbMNNodehub'
             sigNameAllnodes = 'nbMNAllnode'
+            sigNameFreezer10 = 'nbMNlocked10'
+            sigNameFreezer5 = 'nbMNlocked5'
             hoverTemplateRepresenation = '%{y:,.0f}'
             yTickRepresentation = ",.0f"
             yLabelText = 'Number of masternodes'
@@ -72,11 +76,19 @@ class masternodesViewClass:
         trace_MNOverall = dict(type='scatter', name='Overall', x=data['nbMnId'].dropna().index, y=data['nbMnId'].dropna(),
                                 mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate=hoverTemplateRepresenation, visible='legendonly')
 
+        # freezed masternodes
+        trace_MNfreezer10 = dict(type='scatter', name='Locked 10 years', x=data[sigNameFreezer10].dropna().index, y=data[sigNameFreezer10].dropna(),
+                                mode='lines', line=dict(color='#0000ff', dash='dash'), line_width=3, hovertemplate=hoverTemplateRepresenation)
+        trace_MNfreezer5 = dict(type='scatter', name='Locked 5 years', x=data[sigNameFreezer5].dropna().index, y=data[sigNameFreezer5].dropna(),
+                                mode='lines', line=dict(color='#0000ff', dash='dot'), line_width=3, hovertemplate=hoverTemplateRepresenation)
+
         figMN.add_trace(trace_MNOther, 1, 1)
         figMN.add_trace(trace_MNMydefichain, 1, 1)
         figMN.add_trace(trace_MNAllnode, 1, 1)
         figMN.add_trace(trace_MNNodehub, 1, 1)
         figMN.add_trace(trace_MNCake, 1, 1)
+        figMN.add_trace(trace_MNfreezer10, 1, 1)
+        figMN.add_trace(trace_MNfreezer5, 1, 1)
         if selectRepresentation == 'absolute':
             figMN.add_trace(trace_MNOverall, 1, 1)
             figMN.add_trace(trace_MNnonCake, 1, 1)
