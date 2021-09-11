@@ -18,18 +18,26 @@ siteContent = requests.get(link)
 temp= json.loads(siteContent.text)
 
 try:
-    buyOrder = temp['dfxStatistic'][0]['totalOrder'][0]['buyOrder']
-    sellOrder = temp['dfxStatistic'][0]['totalOrder'][1]['sellOrder']
+    buyOrder = temp['dfxStatistic']['routes']['buy']
+    sellOrder = temp['dfxStatistic']['routes']['sell']
 except:
     print('Error in volume data')
     buyOrder = np.nan
     sellOrder = np.nan
 
 try:
-    buyVolume = temp['dfxStatistic'][1]['totalVolume'][0]['buyVolume']
-    sellVolume = temp['dfxStatistic'][1]['totalVolume'][1]['sellVolume']
+    buyVolume = temp['dfxStatistic']['volume']['DFI']['buy']
+    sellVolume = temp['dfxStatistic']['volume']['DFI']['sell']
 except:
-    print('Error in volume data')
+    print('Error in DFI volume data')
+    buyVolume = np.nan
+    sellVolume = np.nan
+
+try:
+    buyVolumeCHF = temp['dfxStatistic']['volume']['CHF']['buy']
+    sellVolumeCHF = temp['dfxStatistic']['volume']['CHF']['sell']
+except:
+    print('Error in CHF volume data')
     buyVolume = np.nan
     sellVolume = np.nan
 
@@ -41,9 +49,9 @@ strTimestamp = dateTimeObj.strftime("%Y-%m-%d %H:%M")
 dfDFXData = pd.read_csv(filepath, index_col=0)
 
 # get remaining time for frozen DFI
-newData = pd.Series(data=[buyOrder, sellOrder, buyVolume, sellVolume])
+newData = pd.Series(data=[buyOrder, sellOrder, buyVolume, sellVolume, buyVolumeCHF, sellVolumeCHF], index=['buyOrder', 'sellOrder', 'buyVolume', 'sellVolume', 'buyVolumeCHF', 'sellVolumeCHF'])
 newData.name = strTimestamp
-dfDFXData.loc[strTimestamp] = newData.values
+dfDFXData = dfDFXData.append(newData)
 
 # writing file
 dfDFXData.to_csv(filepath)
