@@ -121,11 +121,11 @@ while True:
 
         # calculated statistical data
         if np.isnan(tokenDFIValue):
-            tokenDFIValue2Calc = 0
+            tokenDFIValue = 0
             bCorrectValues = False
 
 
-        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue2Calc + erc20DFIValue
+        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue
         totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue
 
         maxDFIValue = 1200000000
