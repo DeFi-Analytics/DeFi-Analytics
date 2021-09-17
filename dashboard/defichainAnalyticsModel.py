@@ -44,6 +44,9 @@ class defichainAnalyticsModelClass:
         self.update_promoDatabase = None
         self.update_analyticsVisits = None
         self.updated_hourlyDEXTrades = None
+        self.update_MNmonitor = None
+        self.updated_dfx = None
+
 
         # background image for figures
         with open(workDir + "/assets/analyticsLandscapeGrey2.png", "rb") as image_file:
@@ -307,7 +310,7 @@ class defichainAnalyticsModelClass:
         print('>>>> Start update masternode monitor database ... <<<<')
         filePath = self.dataPath + 'masternodeMonitorData.csv'
         fileInfo = pathlib.Path(filePath)
-        if fileInfo.stat() != self.update_promoDatabase:
+        if fileInfo.stat() != self.update_MNmonitor:
             monitorRawData = pd.read_csv(filePath, index_col=0)
 
             columns2update = ['nbMasternodes', 'nbAccounts']
@@ -317,7 +320,7 @@ class defichainAnalyticsModelClass:
             self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
             self.dailyData = self.dailyData.merge(monitorRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
-            self.update_promoDatabase = fileInfo.stat()
+            self.update_MNmonitor = fileInfo.stat()
             print('>>>> MN Monitor database loaded from csv-file <<<<')
 
     def loadAnalyticsVisitsData(self):
@@ -348,6 +351,7 @@ class defichainAnalyticsModelClass:
         self.loadDEXVolume()
         self.loadTokenCrypto()
         self.loadHourlyDEXTrades()
+        self.loadDFXdata()
 
 
     def loadHourlyDEXdata(self):
@@ -477,6 +481,24 @@ class defichainAnalyticsModelClass:
             self.updated_tokenCryptos = fileInfo.stat()
             print('>>>> DAT Cryptos data loaded from csv-file <<<<')
 
+    def loadDFXdata(self):
+        print('>>>> Start update DFX data ... <<<<')
+        filePath = self.dataPath + 'dfxData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_dfx:
+            dfxData = pd.read_csv(filePath, index_col=0)
+            dfxData['timeRounded'] = pd.to_datetime(dfxData.index).floor('H')
+            dfxData.set_index(['timeRounded'], inplace=True)
+
+            columns2update = ['dfxBuyRoutes', 'dfxSellRoutes', 'dfxBuyVolume', 'dfxSellVolume', 'dfxBuyVolumeCHF', 'dfxSellVolumeCHF']
+
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(dfxData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_dfx = fileInfo.stat()
+            print('>>>> DFX data loaded from csv-file <<<<')
 
     #### MINUTELY DATA ####
     def loadMinutelyData(self):

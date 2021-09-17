@@ -15,6 +15,9 @@ from .promo.promoCallbacks import promoCallbacksClass
 
 from .mnMonitor.mnMonitorView import mnMonitorViewClass
 
+from .dfx.dfxViews import dfxViewClass
+from .dfx.dfxCallbacks import dfxCallbacksClass
+
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -44,6 +47,9 @@ class communityControllerClass:
         # initialize MN monitor classes
         self.mnMonitorView = mnMonitorViewClass()
 
+        # initialize defichain promo classes
+        self.dfxView = dfxViewClass()
+        self.dfxCallbacks = dfxCallbacksClass(self.defichainAnalyticsModel, self.dfxView, app)
 
     def getContent(self, entry):
         pageContent = None
@@ -68,5 +74,8 @@ class communityControllerClass:
         elif entry in ["mnmonitor"]:
             self.defichainAnalyticsModel.loadMNMonitorDatabase()
             pageContent = self.mnMonitorView.getmnMonitorContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
+        elif entry in ["dfx"]:
+            self.defichainAnalyticsModel.loadDFXdata()
+            pageContent = self.dfxView.getDFXContent()
 
         return pageContent

@@ -49,7 +49,9 @@ strTimestamp = dateTimeObj.strftime("%Y-%m-%d %H:%M")
 dfDFXData = pd.read_csv(filepath, index_col=0)
 
 # get remaining time for frozen DFI
-newData = pd.Series(data=[buyOrder, sellOrder, buyVolume, sellVolume, buyVolumeCHF, sellVolumeCHF], index=['buyOrder', 'sellOrder', 'buyVolume', 'sellVolume', 'buyVolumeCHF', 'sellVolumeCHF'])
+newData = pd.Series(data=[buyOrder, sellOrder, buyVolume, sellVolume, buyVolumeCHF, sellVolumeCHF],
+                    index=['dfxBuyRoutes', 'dfxSellRoutes', 'dfxBuyVolume', 'dfxSellVolume', 'dfxBuyVolumeCHF', 'dfxSellVolumeCHF'])
+
 newData.name = strTimestamp
 dfDFXData = dfDFXData.append(newData)
 
