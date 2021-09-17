@@ -59,6 +59,7 @@ class defichainAnalyticsModelClass:
         self.loadDEXVolume()
         self.loadDailyTradingData()
         self.loadExtractedRichlistData()
+        self.calcOverallTVLdata()
         self.loadDailyBlocktimeData()
         self.loadDAAData()
         self.loadTwitterData()
@@ -163,6 +164,17 @@ class defichainAnalyticsModelClass:
 
             self.updated_extractedRichlist = fileInfo.stat()
             print('>>>> Richlist data loaded from csv-file <<<<')
+
+    def calcOverallTVLdata(self):
+        self.dailyData['tvlMNUSD'] = self.dailyData['nbMnId'] * self.dailyData['DFIPriceUSD'] * \
+                                        ((pd.to_datetime(self.dailyData.index)<pd.Timestamp('2021-03-02')) * 1 * 1000000 + (pd.to_datetime(self.dailyData.index)>=pd.Timestamp('2021-03-02')) * 1 * 20000)
+
+        dexLockedDFI = (self.hourlyData['BTC-DFI_lockedDFI']+self.hourlyData['ETH-DFI_lockedDFI']+self.hourlyData['USDT-DFI_lockedDFI'] +
+                      self.hourlyData['DOGE-DFI_lockedDFI'].fillna(0)+self.hourlyData['LTC-DFI_lockedDFI'].fillna(0) +
+                      self.hourlyData['BCH-DFI_lockedDFI'].fillna(0) + self.hourlyData['USDC-DFI_lockedDFI'].fillna(0))
+        dexLockedDFI.index = dexLockedDFI.index.floor('D').astype(str) # remove time information, only date is needed
+        dexLockedDFI = dexLockedDFI.groupby(level=0).first()
+        self.dailyData['tvlDEXUSD'] = dexLockedDFI * self.dailyData['DFIPriceUSD']
 
     def loadDailyTradingData(self):
         print('>>>> Start update trading data ...  <<<<')
