@@ -8,10 +8,10 @@ import dateutil.relativedelta
 
 class overallTVLViewClass:
 
-    def getOverallTVLContent(self, data):
+    def getOverallTVLContent(self):
         content = [dbc.Modal([dbc.ModalHeader("Info Overall Total Value Locked (TVL)"),
                               dbc.ModalBody(self.getOverallTVLExplanation()),
-                              dbc.ModalFooter(dbc.Button("close", id="closeInfoTVL", className="ml-auto"))], id="modalTVL", size='xl'),
+                              dbc.ModalFooter(dbc.Button("close", id="closeInfoOverallTVL", className="ml-auto"))], id="modalOverallTVL", size='xl'),
                    dbc.Card(dbc.CardBody([html.H4(['Overall total value locked (TVL)']),
                                           html.Table([html.Tr([html.Td('Select currency for Overall TVL representation:'),
                                           html.Td(dcc.Dropdown(id='defiOverallTVLCurrency',options=[{'label': 'USD', 'value': 'USD'},
@@ -19,32 +19,28 @@ class overallTVLViewClass:
                                                                                              {'label': 'DFI', 'value': 'DFI'}],
                                                                value='USD', clearable=False, style=dict(width='150px',verticalAlign="bottom")))])]),
                                           dcc.Graph(id = 'figureOverallTVL', config={'displayModeBar': False}),
-                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTVL")))]))]
+                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoOverallTVL")))]))]
         return content
 
     @staticmethod
     def createOverallTVLGraph(data, currencySelection, bgImage):
         if currencySelection == 'BTC':
-            DFIPrice = data['BTC-DFI_DFIPrices']       # choose BTC-pool DFI-price in BTC
-            columnName = 'lockedBTC'
+            DFIPrice = data['DFIPriceUSD']/data['BTCPriceUSD']        # choose BTC-pool DFI-price in BTC
             yAxisLabel = 'Value in BTC'
             hoverTemplateRepresenation = '%{y:,.3f}BTC'
         elif currencySelection == 'DFI':
-            DFIPrice = 1                                        # use DFI as the currency
-            columnName = 'lockedDFI'
+            DFIPrice = data['DFIPriceUSD'] / data['DFIPriceUSD']      # create series with 1 as an entry
             yAxisLabel = 'Value in DFI'
             hoverTemplateRepresenation = '%{y:,.0f}DFI'
         else:
-            DFIPrice = data['USDT-DFI_DFIPrices']       # choose USDT-pool for DFI-price in BTC
-            columnName = 'lockedUSD'
+            DFIPrice = data['DFIPriceUSD']       # choose USDT-pool for DFI-price in BTC
             yAxisLabel = 'Value in $'
             hoverTemplateRepresenation = '$%{y:,.0f}'
 
-        TVLOverall = (data['BTC-DFI_lockedDFI']+data['ETH-DFI_lockedDFI']+data['USDT-DFI_lockedDFI'] +
-                      data['DOGE-DFI_lockedDFI'].fillna(0)+data['LTC-DFI_lockedDFI'].fillna(0) +
-                      data['BCH-DFI_lockedDFI'].fillna(0) + data['USDC-DFI_lockedDFI'].fillna(0)) * DFIPrice  # DFI is USD is highest price of the 3
+        TVLOverall = (data['tvlMNDFI']+data['tvlDEXDFI']) * DFIPrice  # DFI is USD is highest price of the 3
+        indexVector = data['tvlMNDFI'].notnull() & data['tvlDEXDFI'].notnull() & DFIPrice.notnull()
 
-        lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
+        lastValidDate = datetime.strptime(TVLOverall.dropna().index.values[-1], '%Y-%m-%d')
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
         # Plotting long term price
@@ -57,32 +53,17 @@ class overallTVLViewClass:
             subplot_titles=([]))
 
         # single TVL graphs
-        trace_TVLBTC = dict(type='scatter', name='BTC', x=data['BTC-DFI_'+columnName].dropna().index, y=data['BTC-DFI_'+columnName].dropna(), stackgroup='one',
+        trace_tvlMN = dict(type='scatter', name='Masternodes', x=(data.loc[indexVector,'tvlMNDFI']*DFIPrice[indexVector]).index, y=(data.loc[indexVector,'tvlMNDFI']*DFIPrice[indexVector]), stackgroup='one',
                             mode='lines', line=dict(color='#da3832'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tozeroy')
-        trace_TVLETH = dict(type='scatter', name='ETH', x=data['ETH-DFI_'+columnName].dropna().index, y=data['ETH-DFI_'+columnName].dropna(), stackgroup='one',
-                            mode='lines', line=dict(color='#617dea'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
-        trace_TVLUSDT = dict(type='scatter', name='USDT', x=data['USDT-DFI_'+columnName].dropna().index, y=data['USDT-DFI_'+columnName].dropna(), stackgroup='one',
-                             mode='lines', line=dict(color='#22b852'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
-        trace_TVLDOGE = dict(type='scatter', name='DOGE', x=data['DOGE-DFI_'+columnName].dropna().index, y=data['DOGE-DFI_'+columnName].dropna(), stackgroup='one',
-                             mode='lines', line=dict(color='#c2a634'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
-        trace_TVLLTC = dict(type='scatter', name='LTC', x=data['LTC-DFI_'+columnName].dropna().index, y=data['LTC-DFI_'+columnName].dropna(), stackgroup='one',
+        trace_tvlDEX = dict(type='scatter', name='DEX', x=(data.loc[indexVector,'tvlDEXDFI']*DFIPrice[indexVector]).index, y=(data.loc[indexVector,'tvlDEXDFI']*DFIPrice[indexVector]), stackgroup='one',
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
-        trace_TVLBCH = dict(type='scatter', name='BCH', x=data['BCH-DFI_'+columnName].dropna().index, y=data['BCH-DFI_'+columnName].dropna(), stackgroup='one',
-                            mode='lines', line=dict(color='#410eb2'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
-        trace_TVLUSDC = dict(type='scatter', name='USDC', x=data['USDC-DFI_'+columnName].dropna().index, y=data['USDC-DFI_'+columnName].dropna(), stackgroup='one',
-                            mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # overall TVL graph
-        trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall.dropna().index, y=TVLOverall.dropna(),
+        trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall[indexVector].index, y=TVLOverall[indexVector],
                                 mode='lines', line=dict(color='#410eb2'), line_width=3, hovertemplate=hoverTemplateRepresenation)
 
-        figTVL.add_trace(trace_TVLBTC, 1, 1)
-        figTVL.add_trace(trace_TVLETH, 1, 1)
-        figTVL.add_trace(trace_TVLUSDT, 1, 1)
-        figTVL.add_trace(trace_TVLDOGE, 1, 1)
-        figTVL.add_trace(trace_TVLLTC, 1, 1)
-        figTVL.add_trace(trace_TVLBCH, 1, 1)
-        figTVL.add_trace(trace_TVLUSDC, 1, 1)
+        figTVL.add_trace(trace_tvlMN, 1, 1)
+        figTVL.add_trace(trace_tvlDEX, 1, 1)
 
         figTVL.add_trace(trace_TVLOverall, 1, 1)
 
@@ -124,10 +105,9 @@ class overallTVLViewClass:
 
     @staticmethod
     def getOverallTVLExplanation():
-        coinTVLCardExplanation = [html.P(['The overall total value locked is a key figure, that describes the Fiat value (here in Dollar) stored on DefiChain.'],style={'text-align': 'justify'}),
+        coinTVLCardExplanation = [html.P(['The overall total value locked is a key figure, that describes the value stored on DefiChain.'],style={'text-align': 'justify'}),
                                   html.P(['The graph shows the part of the masternodes (red area), the DEX (pink area) and the sum of all parts (purple line).'],style={'text-align': 'justify'}),
-                                  html.P(['Normally the TVL is shown in USD. But in this presentation the value can be influenced by new invested capital and by the coinprices. With beginning of Liquidity Mining we see a big price increase for DFI. ',
-                                       'So, maybe the reprensentation in BTC or DFI is also interesting for giving some information of the TVL.'],style={'text-align': 'justify'}),
+                                  html.P(['Normally the TVL is shown in USD. But maybe the reprensentation in BTC or DFI is also interesting for giving some information of the overall TVL.'],style={'text-align': 'justify'}),
                                    html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                        ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                         style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})

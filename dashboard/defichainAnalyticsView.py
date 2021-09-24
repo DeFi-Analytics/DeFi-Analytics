@@ -40,6 +40,7 @@ class defichainAnalyticsViewClass:
                 [
                     dbc.NavLink("Overview", href="/general?entry=overview", className="linkstyle", id="overview"),
                     dbc.NavLink("Market Cap", href="/general?entry=marketcap", className="linkstyle", id="marketcap"),
+                    dbc.NavLink("Overall TVL", href="/general?entry=overallTVL", className="linkstyle", id="overallTVL"),
                 ],
                 id="submenu-general-collapse",
             ),

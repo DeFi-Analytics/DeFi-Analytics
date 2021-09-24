@@ -58,6 +58,7 @@
     #figurePromoDatabase {height: 640px}
     #figureDFXdata {height: 625px}
     #figureMarketcap {height: 715px}
+    #figureOverallTVL {height: 715px}
 }
 
 @media only screen and (max-width: 768px) {
@@ -119,6 +120,7 @@
         #figurePromoDatabase {height: 600px}
         #figureDFXdata {height: 600px}
         #figureMarketcap {height: 600px}
+        #figureOverallTVL {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -153,6 +155,7 @@
         #figurePromoDatabase {height: 330px}
         #figureDFXdata {height: 330px}
         #figureMarketcap {height: 330px}
+        #figureOverallTVL {height: 330px}
         }
 }
 
