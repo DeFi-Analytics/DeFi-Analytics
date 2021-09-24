@@ -36,7 +36,7 @@ class coinViewClass:
             specs=[[{}]],
             shared_xaxes=True)
 
-        tempData = data.loc[:, ['otherDFI', 'mnDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'fundDFI', 'foundationDFI', 'burnedDFI', 'circDFI', 'totalDFI']]
+        tempData = data.loc[:, ['otherDFI', 'mnDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'fundDFI', 'foundationDFI', 'burnedDFI', 'circDFI', 'totalDFI','nbMNlocked5','nbMNlocked10']]
         tempData.index = pd.to_datetime(tempData.index)
         tempData.sort_index(inplace=True)
         tempData.interpolate(method='pad', inplace=True)
@@ -57,7 +57,8 @@ class coinViewClass:
         trace_otherDFI = dict(type='scatter', name='Other', x=tempData['otherDFI'].dropna().index,
                               y=tempData['otherDFI'].dropna(), mode='lines', line=dict(color='#410eb2'), line_width=0,
                               hovertemplate=hoverRepresentation, stackgroup='one', fill='tozeroy')
-        trace_mnDFI = dict(type='scatter', name='Masternodes', x=tempData['mnDFI'].dropna().index, y=tempData['mnDFI'].dropna(),
+        trace_mnDFI = dict(type='scatter', name='Masternodes', x=(tempData['mnDFI']-(tempData['nbMNlocked10'] + tempData['nbMNlocked5']).fillna(0) * 20000).dropna().index,
+                           y=(tempData['mnDFI']-(tempData['nbMNlocked10'] + tempData['nbMNlocked5']).fillna(0) * 20000).dropna(),
                            mode='lines', line=dict(color='#da3832'), line_width=0, hovertemplate=hoverRepresentation, stackgroup='one', fill='tonexty') #visible='legendonly')
         trace_lmDFI = dict(type='scatter', name='Liquidity pool', x=tempData['lmDFI'].dropna().index, y=tempData['lmDFI'].dropna(),
                            mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverRepresentation, stackgroup='one', fill='tonexty')
@@ -66,6 +67,10 @@ class coinViewClass:
         trace_erc20DFI = dict(type='scatter', name='ERC20 Collateral', x=tempData['erc20DFI'].dropna().index, y=tempData['erc20DFI'].dropna(),
                            mode='lines', line=dict(color='#808000'), line_width=0, hovertemplate=hoverRepresentation, stackgroup='one', fill='tonexty')
 
+
+        trace_lockedMN = dict(type='scatter', name='Locked Masternodes', x=((tempData['nbMNlocked10'] + tempData['nbMNlocked5']).fillna(0) * 20000).dropna().index,
+                              y=((tempData['nbMNlocked10'] + tempData['nbMNlocked5']).fillna(0) * 20000).dropna(),
+                             mode='lines', line=dict(color='#711714'), line_width=0, hovertemplate=hoverRepresentation, stackgroup='one', fill='tonexty')
         trace_fundDFI = dict(type='scatter', name='Community fund', x=tempData['fundDFI'].dropna().index, y=tempData['fundDFI'].dropna(),
                              mode='lines', line=dict(color='#ff9800'), line_width=0, hovertemplate=hoverRepresentation, stackgroup='one', fill='tonexty')
         trace_foundationDFI = dict(type='scatter', name='Foundation', x=tempData['foundationDFI'].dropna().index,
@@ -83,6 +88,7 @@ class coinViewClass:
 
         # if the graphic is not relative circulating supply, than plot fund, foundation and burned coins
         if (selection != 'relativeCirc'):
+            figDFI.add_trace(trace_lockedMN, 1, 1)
             figDFI.add_trace(trace_fundDFI, 1, 1)
             figDFI.add_trace(trace_foundationDFI, 1, 1)
             figDFI.add_trace(trace_burnedDFI, 1, 1)

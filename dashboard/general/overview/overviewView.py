@@ -41,8 +41,8 @@ class overviewViewClass:
                 html.Tr(html.Td(html.Br())),
                 html.Tr([html.Td('Other addresses'),
                          html.Td("{:,.0f} DFI".format(data['otherDFI'].values[0]), style={'text-align': 'right'})]),
-                html.Tr([html.Td('Masternodes'),
-                         html.Td("{:,.0f} DFI".format(data['mnDFI'].values[0]), style={'text-align': 'right'})]),
+                html.Tr([html.Td('NormalMasternodes'),
+                         html.Td("{:,.0f} DFI".format(data['mnDFI'].values[0]-(data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000), style={'text-align': 'right'})]),
                 html.Tr([html.Td('Liquidity Pool'),
                          html.Td("{:,.0f} DFI".format(data['lmDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr([html.Td('DFI Token'),
@@ -51,9 +51,14 @@ class overviewViewClass:
                          html.Td("{:,.0f} DFI".format(data['erc20DFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('Circulating supply', style={'font-weight': 'bold'}),
-                     html.Td(["{:,.0f} DFI".format(data['circDFI'].values[0])+hintAfterNumber], style={'text-align': 'right', 'font-weight': 'bold', 'color': fontColor})]),
+                     html.Td(["{:,.0f} DFI".format(data['circDFI'].values[0]-(data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000)+hintAfterNumber], style={'text-align': 'right', 'font-weight': 'bold', 'color': fontColor})]),
                 html.Tr(html.Td(html.Br())),
 
+
+
+                html.Tr(
+                    [html.Td('Locked Masternodes'),
+                     html.Td("{:,.0f} DFI".format((data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('Community Fund'),
                      html.Td("{:,.0f} DFI".format(data['fundDFI'].values[0]), style={'text-align': 'right'})]),
@@ -92,10 +97,11 @@ class overviewViewClass:
     def createPieChartDFI(data,  bgImage):
         figDFIPie = go.Figure()
 
-        labelList = ['Masternodes', 'Community fund', 'Foundation', 'Other', 'Liquidity Pool', 'DFI token', 'ERC20 Collateral', 'Burned DFI']
-        valueList = [data['mnDFI'].values[0], data['fundDFI'].values[0], data['foundationDFI'].values[0], data['otherDFI'].values[0], data['lmDFI'].values[0],
-                     data['tokenDFI'].values[0], data['erc20DFI'].values[0], data['burnedDFI'].values[0]]
-        colorList = ['#da3832', '#ff9800', '#22b852', '#410eb2', '#ff2ebe', '#00fffb', '#808000', '#5d5d5d']
+        labelList = ['Masternodes', 'Community fund', 'Foundation', 'Other', 'Liquidity Pool', 'DFI token', 'ERC20 Collateral', 'Burned DFI', 'Locked Masternodes']
+        valueList = [data['mnDFI'].values[0]-(data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000, data['fundDFI'].values[0],
+                     data['foundationDFI'].values[0], data['otherDFI'].values[0], data['lmDFI'].values[0], data['tokenDFI'].values[0], data['erc20DFI'].values[0],
+                     data['burnedDFI'].values[0], (data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000]
+        colorList = ['#da3832', '#ff9800', '#22b852', '#410eb2', '#ff2ebe', '#00fffb', '#808000', '#5d5d5d', '#711714']
         trace_pieDFI = dict(type='pie', name='', labels=labelList, values=valueList, marker=dict(colors=colorList), opacity=1,
                             textposition='inside', textfont_size=16, hovertemplate='%{label}: <br> %{value:,.0f}')
         figDFIPie.add_trace(trace_pieDFI)

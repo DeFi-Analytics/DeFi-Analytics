@@ -52,17 +52,24 @@ while True:
             dfMNList = pd.read_json(siteContent.text).transpose()
             dfMNList.to_csv(filepathMNList, index=True)
             condMN = (dfRichList['address'].isin(dfMNList.ownerAuthAddress)) & (dfRichList['address'].notnull())
+            nbMNlocked5 = dfMNList[dfMNList.timelock == '5 years'].shape[0]
+            nbMNlocked10 = dfMNList[dfMNList.timelock == '10 years'].shape[0]
         except:
             print('Error with API of masternode list')
             dfOldMNList = pd.read_csv(filepathMNList, index_col=0) # load available MN-List from the past
             condMN = (dfRichList['address'].isin(dfOldMNList.ownerAuthAddress)) & (dfRichList['address'].notnull())
+            nbMNlocked5 = dfOldMNList[dfOldMNList.timelock == '5 years'].shape[0]
+            nbMNlocked10 = dfOldMNList[dfOldMNList.timelock == '10 years'].shape[0]
+
 
         condPrivateAddress = (~condMN) & (dfRichList.address != addFund) & (dfRichList.address != addFoundation) & (dfRichList.address != addERC20) \
                                 & (dfRichList.address != addBurn)
 
+
         # calc DFI Coin amounts
         nbMnId = dfRichList[condMN].balance.size
         nbOtherId = dfRichList[condPrivateAddress].balance.size
+
 
         if addFund in dfRichList.values:
             fundDFIValue = dfRichList[dfRichList.address == addFund].balance.values[0]
@@ -184,9 +191,9 @@ while True:
     print('... saving data')
     # convert single data to pandas series
     colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'burnedDFI', 'circDFI',
-                'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft', 'bCorrectValues']
+                'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft', 'bCorrectValues', 'nbMNlocked5', 'nbMNlocked10']
     listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, burnedDFIValue, circDFIValue,
-                totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft, bCorrectValues]
+                totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft, bCorrectValues, nbMNlocked5, nbMNlocked10]
     seriesData = pd.Series(listData, index = colNames)
 
     data2Save = pd.DataFrame(columns=colNames)
