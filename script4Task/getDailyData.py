@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 from datetime import datetime
+import json
 
 scriptPath = __file__
 path = scriptPath[:-28] + '/data/'
@@ -73,9 +74,26 @@ def getMNMonitorData():
     # writing file
     dfMNMonitor.to_csv(filepath)
 
+def getDFISignalData():
+    # generate filepath relative to script location
+    filepath = path + 'dfiSignalData.csv'
 
+    # API request masternode number
+    link='https://api.dfi-signal.com/v1/statistics/all'
+    siteContent = requests.get(link)
+    jsonData = json.loads(siteContent.text)
+    dfNewData = pd.DataFrame(jsonData['data'])
+    dfNewData.set_index('date', inplace=True)
+
+
+    dfDFISignal = pd.read_csv(filepath, index_col=0)
+    dfDFISignal = pd.concat([dfDFISignal, dfNewData]).drop_duplicates().sort_index()
+    dfDFISignal.to_csv(filepath)
 
 # call all acquisition functions with error handling
+
+
+
 
 # Allnode Masternodes
 try:
@@ -98,4 +116,9 @@ try:
 except:
     print('### Error in Masternode monitor data acquisition')
 
-
+# DFI-Signal data
+try:
+    getDFISignalData()
+    print('Data DFI-Signal saved')
+except:
+    print('### Error in DFI-Signal data acquisition')

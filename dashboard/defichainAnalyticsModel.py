@@ -46,6 +46,7 @@ class defichainAnalyticsModelClass:
         self.updated_hourlyDEXTrades = None
         self.update_MNmonitor = None
         self.updated_dfx = None
+        self.update_DFIsignal = None
 
 
         # background image for figures
@@ -69,6 +70,7 @@ class defichainAnalyticsModelClass:
         self.loadPromoDatabase()
         self.loadMNMonitorDatabase()
         self.loadAnalyticsVisitsData()
+        self.loadDFIsignalDatabase()
 
     def loadMNnodehub(self):
         print('>>>> Start update nodehub.IO data ...  <<<<')
@@ -358,6 +360,23 @@ class defichainAnalyticsModelClass:
 
             self.update_analyticsVisits = fileInfo.stat()
             print('>>>> Analytics visits data loaded from csv-file <<<<')
+
+    def loadDFIsignalDatabase(self):
+        print('>>>> Start update DFI-signal database ... <<<<')
+        filePath = self.dataPath + 'dfiSignalData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_DFIsignal:
+            dfiSignalRawData = pd.read_csv(filePath, index_col=0)
+
+            columns2update = ['user_count','masternode_count','messages_sent','commands_received','minted_blocks']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(dfiSignalRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.update_DFIsignal = fileInfo.stat()
+            print('>>>> DFI-Signal database loaded from csv-file <<<<')
 
 
     #### HOURLY DATA ####

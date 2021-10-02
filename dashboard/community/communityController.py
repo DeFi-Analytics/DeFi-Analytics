@@ -18,6 +18,8 @@ from .mnMonitor.mnMonitorView import mnMonitorViewClass
 from .dfx.dfxViews import dfxViewClass
 from .dfx.dfxCallbacks import dfxCallbacksClass
 
+from .dfiSignal.dfiSignalView import dfiSignalViewClass
+
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -51,6 +53,9 @@ class communityControllerClass:
         self.dfxView = dfxViewClass()
         self.dfxCallbacks = dfxCallbacksClass(self.defichainAnalyticsModel, self.dfxView, app)
 
+        # initialize DFI-signal class
+        self.dfiSignalView = dfiSignalViewClass()
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "twitter"]:
@@ -77,5 +82,8 @@ class communityControllerClass:
         elif entry in ["dfx"]:
             self.defichainAnalyticsModel.loadDFXdata()
             pageContent = self.dfxView.getDFXContent()
+        elif entry in ["dfisignal"]:
+            self.defichainAnalyticsModel.loadDFIsignalDatabase()
+            pageContent = self.dfiSignalView.getDFISignalContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent
