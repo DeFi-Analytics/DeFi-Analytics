@@ -132,7 +132,7 @@ class crpytoTokenViewClass:
                                html.P(['The Bitcoin address holding the real BTC for the DefiChain-BTC is',html.Br(),
                                        html.B('38pZuWUti3vSQuvuFYs8Lwbyje8cmaGhrT'),html.Br(),
                                        'and I am using the following API for getting the data (',html.A('API-Link',href='https://blockchain.info/q/addressbalance/38pZuWUti3vSQuvuFYs8Lwbyje8cmaGhrT',target='_blank', className='defiLink'),')'],style={'text-align': 'justify'}),
-                               html.P(['The ETH and USDT are both deposited on one Ethereum address, which is',html.Br(),
+                               html.P(['The ETH, USDT and USDC are all deposited on one Ethereum address, which is',html.Br(),
                                        html.B('0x94fa70d079d76279e1815ce403e9b985bccc82ac'),html.Br(),
                                        'and can be get via Etherscan API (no Link because of individual key for access)',],style={'text-align': 'justify'}),
                                html.P(['The Dogecoin address holding the real DOGE is',html.Br(),
