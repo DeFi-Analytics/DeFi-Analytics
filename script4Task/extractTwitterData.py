@@ -9,10 +9,14 @@ path = scriptPath[:-33] + '/data/'
 
 # create new dataframe for analyzed data
 dfRawData = pd.read_csv(path +'TwitterData_overall.csv')
-dfRawData['date'] = pd.to_datetime(dfRawData.created_at).dt.strftime('%Y-%m-%d')
+dfRawData['date'] = pd.to_datetime(dfRawData.created_at, errors='coerce')   # convert to datetime and write NaT in case of invalid string
+dfRawData = dfRawData[~dfRawData['date'].isna()]                            # remove invalid entries
+dfRawData['date'] = dfRawData['date'].dt.strftime('%Y-%m-%d')               # convert format to only day (remove time information)
+
 dfRawData['date'].unique()
 dfAnalyzedData = pd.DataFrame(index=dfRawData['date'].unique())
 
+print('Empty Dataframe created')
 
 # files to be evaluated
 filenames = ['defichain', 'dfi', 'overall']         # overall must be the last entry to get correct unique users numbers
@@ -21,7 +25,9 @@ for twitterSearch in filenames:
     filepath = path +'TwitterData_'+twitterSearch+'.csv'
     
     dfRawData = pd.read_csv(filepath)
-    dfRawData['date'] = pd.to_datetime(dfRawData.created_at).dt.strftime('%Y-%m-%d')
+    dfRawData['date'] = pd.to_datetime(dfRawData.created_at, errors='coerce')  # convert to datetime and write NaT in case of invalid string
+    dfRawData = dfRawData[~dfRawData['date'].isna()]  # remove invalid entries
+    dfRawData['date'] = dfRawData['date'].dt.strftime('%Y-%m-%d')  # convert format to only day (remove time information)
     
     # define keywords to filter out non-defichain related Tweets
     filterKeywords = ['@defiqa3']
@@ -36,7 +42,7 @@ for twitterSearch in filenames:
 
     temp = dfRawData[dfRawData['in_reply_to_screen_name'].isna() & dfRawData['retweeted_status.id'].isna()].groupby(dfRawData['date'])
     dfAnalyzedData[twitterSearch+'_Tweet'] = temp.date.count()
-    
+    print('Information of '+twitterSearch+' analyzed')
 
 
 # Extract unique users
