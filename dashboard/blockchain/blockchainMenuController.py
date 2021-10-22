@@ -63,7 +63,7 @@ class blockchainControllerClass:
 
         # initialize transactions classes
         self.transactionsView = transactionsViewClass()
-        self.transactionsCallbacks = transactionsCallbacksClass(app)
+        self.transactionsCallbacks = transactionsCallbacksClass(self.defichainAnalyticsModel, self.transactionsView, app)
 
     def getContent(self, entry):
         pageContent = None
@@ -95,7 +95,7 @@ class blockchainControllerClass:
             pageContent = self.blocktimeView.getBlocktimeContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["transactions"]:
             self.defichainAnalyticsModel.loadDailyBlocktimeData()
-            pageContent = self.transactionsView.getTransactionsContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
+            pageContent = self.transactionsView.getTransactionsContent()
 
         return pageContent
 

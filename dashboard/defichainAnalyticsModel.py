@@ -207,7 +207,7 @@ class defichainAnalyticsModelClass:
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_blocktime:
             dailyBlocktimeData = pd.read_csv(filePath, index_col=0)
-            dailyBlocktimeData['tps'] = dailyBlocktimeData['txCount'] / (24 * 60 * 60)
+
 
             ind2Delete = self.dailyData.columns.intersection(dailyBlocktimeData.columns)                                # check if columns exist
             self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete existing columns to add new ones

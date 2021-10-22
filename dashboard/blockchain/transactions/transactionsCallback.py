@@ -2,7 +2,13 @@ from dash.dependencies import Input, Output, State
 
 
 class transactionsCallbacksClass:
-    def __init__(self, app):
+    def __init__(self, defichainAnalyticsModel, txView, app):
+
+        @app.callback(Output('figureTransactions', 'figure'),
+                      [Input('transactionSelection', 'value')])
+        def updateVolumeGraph(selectedGraph):
+            figTx = txView.createTransactionsFigure(defichainAnalyticsModel.dailyData, defichainAnalyticsModel.figBackgroundImage, selectedGraph)
+            return figTx
 
         @app.callback(
             Output("modalTransactions", "is_open"),

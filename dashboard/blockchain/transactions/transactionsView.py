@@ -1,41 +1,70 @@
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
+import pandas as pd
+import numpy as np
 
 from plotly.subplots import make_subplots
+
+from datetime import datetime
+import dateutil.relativedelta
 
 
 class transactionsViewClass:
 
-    def getTransactionsContent(self, data, bgImage):
+    def getTransactionsContent(self):
         content = [dbc.Modal([dbc.ModalHeader("Info Transactions"),
                               dbc.ModalBody(self.getTxOverviewExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoTransactions", className="ml-auto"))],
                                     id="modalTransactions", size='xl'),
                    dbc.Card(dbc.CardBody([html.H4(['Transactions on a daily base']),
-                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.getTransactionsFigure(data, bgImage), config={'displayModeBar': False}, id='figureTransactions'))),
+                                          html.Table([html.Tr([html.Td('Select time base for representation:'),
+                                                               html.Td(dcc.Dropdown(id='transactionSelection',
+                                                                                    options=[{'label': 'Daily Transactions', 'value': 'D'},
+                                                                                             {'label': 'Weekly Transactions', 'value': 'W'}],
+                                                                                    value='D', clearable=False, style=dict(width='180px', verticalAlign="bottom")))])]),
+                                          dbc.Row(dbc.Col(dcc.Graph(config={'displayModeBar': False}, id='figureTransactions'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoTransactions")))
                                           ]))]
         return content
 
     @staticmethod
-    def getTransactionsFigure(data, bgImage):
+    def createTransactionsFigure(data, bgImage, representation):
         figTxOverview = make_subplots(
             rows=2, cols=1,
             vertical_spacing=0.15,
-            row_width=[0.7, 0.3],  # from bottom to top
+            row_width=[0.55, 0.45],  # from bottom to top
             specs=[[{}],
                    [{}]],
             shared_xaxes=True)
 
-        trace_allTx = dict(type='scatter', name='all Tx', x=data['txCount'].dropna().index.values[:-1], y=data['txCount'].dropna().values[:-1],
+        tempData = data[['txCount', 'txWOreward']].copy()
+        tempData.index = pd.to_datetime(tempData.index) # change index from object to datetime for groupby function
+
+        if representation == 'W':
+            timeBase4tps = (7 * 24 * 60 * 60)
+        else:
+            timeBase4tps = (24 * 60 * 60)
+
+        lastValidDate = datetime.strptime(tempData['txCount'].dropna().groupby(pd.Grouper(freq=representation)).sum().index.strftime('%Y-%m-%d').values[-2], '%Y-%m-%d')
+        date30DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
+
+        trace_allTx = dict(type='scatter', name='all Tx',
+                           x=tempData['txCount'].dropna().groupby(pd.Grouper(freq=representation)).sum().index.strftime('%Y-%m-%d').values[:-1],
+                           y=tempData['txCount'].dropna().groupby(pd.Grouper(freq=representation)).sum().values[:-1],
                            mode='lines', line=dict(color='#da3832'), line_width=2, hovertemplate='%{y:.0f}')
-        figTxOverview.add_trace(trace_allTx, 1, 1)
-        trace_TxWOReward = dict(type='scatter', name='Tx without rewards', x=data['txWOreward'].dropna().index.values[:-1], y=data['txWOreward'].dropna().values[:-1],
+
+        trace_TxWOReward = dict(type='scatter', name='Tx without rewards',
+                                x=tempData['txWOreward'].dropna().groupby(pd.Grouper(freq=representation)).sum().index.strftime('%Y-%m-%d').values[:-1],
+                                y=tempData['txWOreward'].dropna().groupby(pd.Grouper(freq=representation)).sum().values[:-1],
                                 mode='lines', line=dict(color='#ff9800'), line_width=2, hovertemplate='%{y:.0f}')
+
+        figTxOverview.add_trace(trace_allTx, 1, 1)
         figTxOverview.add_trace(trace_TxWOReward, 1, 1)
 
-        trace_tps = dict(type='scatter', name='TPS (all Tx)', x=data['tps'].dropna().index.values[:-1], y=data['tps'].dropna().values[:-1],
+        trace_tps = dict(type='scatter', name='TPS (all Tx)',
+                         x=tempData['txCount'].dropna().groupby(pd.Grouper(freq=representation)).sum().index.strftime('%Y-%m-%d').values[:-1],
+                         y=tempData['txCount'].dropna().groupby(pd.Grouper(freq=representation)).sum().values[:-1]/timeBase4tps,
                          mode='lines', line=dict(color='#22b852'), line_width=2, hovertemplate='%{y:.3f}')
         figTxOverview.add_trace(trace_tps, 2, 1)
 
@@ -44,9 +73,9 @@ class transactionsViewClass:
         figTxOverview.update_yaxes(title_text='Transactions per second (TPS)', tickformat=",.2f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2,
                                    col=1)  # ,range=[-200000, 1000000]
         figTxOverview.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
-                                   range=[data['txCount'].dropna().index[-32], data['txCount'].dropna().index[-2]], row=1, col=1)
+                                   range=[date30DaysBack, lastValidDate], row=1, col=1)
         figTxOverview.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
-                                   range=[data['txCount'].dropna().index[-32], data['txCount'].dropna().index[-2]], row=2, col=1)
+                                   range=[date30DaysBack, lastValidDate], row=2, col=1)
 
         # Add range slider
         figTxOverview.update_layout(xaxis=dict(
