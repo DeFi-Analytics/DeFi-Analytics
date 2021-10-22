@@ -16,11 +16,15 @@ class dfiSignalViewClass:
                                                   'You want to know more? Have a look on: ',
                                                   html.A('https://dfi-signal.com/', href='https://dfi-signal.com/', target='_blank', className='defiLink')],
                                                  style={'text-align': 'justify'}),
-                                          dcc.Graph(figure=self.createUserMNCount(data, bgImage), id='figureDFISignal', config={'displayModeBar': False})]))]
+                                          html.Table([html.Tr([html.Td('Select graph for evaluation:'),
+                                                               html.Td(dcc.Dropdown(id='dfiSignalSelectGraph', options=[{'label': 'User base', 'value': 'user'},
+                                                                                                                  {'label': 'Messages base', 'value': 'message'}],
+                                                                                    value='user', clearable=False, style=dict(verticalAlign="bottom")))])]),
+                                          dcc.Graph(id='figureDFISignal', config={'displayModeBar': False})]))]
         return content
 
     @staticmethod
-    def createUserMNCount(data, bgImage):
+    def createUserMNCount(data, bgImage, representation):
         figSignal = make_subplots(
             rows=1, cols=1,
             vertical_spacing=0.15,
@@ -29,11 +33,28 @@ class dfiSignalViewClass:
             shared_xaxes=True,
             subplot_titles=([]))
 
-        trace_signalUsers = dict(type='scatter', name='Users', x=data['user_count'].dropna().index, y=data['user_count'].dropna(),
+        if representation=='message':
+            name1 = 'Sent messages'
+            xdata1 = data['messages_sent'].dropna().index
+            ydata1 = data['messages_sent'].dropna()
+            name2 = 'Received commands'
+            xdata2 = data['commands_received'].dropna().index
+            ydata2 = data['commands_received'].dropna()
+        else:
+            name1 = 'Users'
+            xdata1 = data['user_count'].dropna().index
+            ydata1 = data['user_count'].dropna()
+            name2 = 'Masternodes'
+            xdata2 = data['masternode_count'].dropna().index
+            ydata2 = data['masternode_count'].dropna()
+
+
+
+        trace_signalUsers = dict(type='scatter', name=name1, x=xdata1, y=ydata1,
                                   mode='lines', line=dict(color='#ff7fd7'), line_width=3, hovertemplate='%{y:.f}')
         figSignal.add_trace(trace_signalUsers, 1, 1)
 
-        trace_signalMN = dict(type='scatter', name='Masternodes', x=data['masternode_count'].dropna().index, y=data['masternode_count'].dropna(),
+        trace_signalMN = dict(type='scatter', name=name2, x=xdata2, y=ydata2,
                                   mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.f}')
         figSignal.add_trace(trace_signalMN, 1, 1)
 

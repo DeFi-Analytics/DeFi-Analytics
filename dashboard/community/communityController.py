@@ -19,6 +19,7 @@ from .dfx.dfxViews import dfxViewClass
 from .dfx.dfxCallbacks import dfxCallbacksClass
 
 from .dfiSignal.dfiSignalView import dfiSignalViewClass
+from .dfiSignal.dfiSignalCallbacks import dfiSignalCallbacksClass
 
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -55,6 +56,7 @@ class communityControllerClass:
 
         # initialize DFI-signal class
         self.dfiSignalView = dfiSignalViewClass()
+        self.dfiSignalCallbacks = dfiSignalCallbacksClass(self.defichainAnalyticsModel, self.dfiSignalView, app)
 
     def getContent(self, entry):
         pageContent = None
