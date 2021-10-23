@@ -4,8 +4,11 @@ from .volume24hr.volume24hrCallbacks import volume24hrCallbacksClass
 from .volume.volumeView import volumeViewClass
 from .volume.volumeCallbacks import volumeCallbacksClass
 
-from .coinprice.coinpriceView import coinpriceViewClass
-from .coinprice.coinpriceCallbacks import coinpriceCallbacksClass
+from .coinprices.coinpricesView import coinpricesViewClass
+from .coinprices.coinpricesCallbacks import coinpricesCallbacksClass
+
+from .arbitrage.arbitrageView import arbitrageViewClass
+from .arbitrage.arbitrageCallbacks import arbitrageCallbacksClass
 
 from .stability.stabilityView import stabilityViewClass
 from .stability.stabilityCallbacks import stabilityCallbacksClass
@@ -26,9 +29,13 @@ class dexControllerClass:
         self.volumeView = volumeViewClass()
         self.volumeCallbacks = volumeCallbacksClass(self.defichainAnalyticsModel, self.volumeView, app)
 
-        # initialize coinprice classes
-        self.coinpriceView = coinpriceViewClass()
-        self.coinpriceCallbacks = coinpriceCallbacksClass(self.defichainAnalyticsModel, self.coinpriceView, app)      # create callbacks on top level
+        # initialize coinprices classes
+        self.coinpricesView = coinpricesViewClass()
+        self.coinpricesCallbacks = coinpricesCallbacksClass(self.defichainAnalyticsModel, self.coinpricesView, app)      # create callbacks on top level
+
+        # initialize arbitrage classes
+        self.arbitrageView = arbitrageViewClass()
+        self.arbitrageCallbacks = arbitrageCallbacksClass(self.defichainAnalyticsModel, self.arbitrageView, app)      # create callbacks on top level
 
         # initialize price stability classes
         self.stabilityView = stabilityViewClass()
@@ -40,9 +47,12 @@ class dexControllerClass:
 
     def getContent(self,entry):
         pageContent = None
-        if entry in ["", "coinPrices"]:
+        if entry in ["", "arbitrage"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
-            pageContent = self.coinpriceView.getCoinpriceContent()
+            pageContent = self.arbitrageView.getArbitrageContent()
+        elif entry in ["coinprices"]:
+            self.defichainAnalyticsModel.loadHourlyDEXdata()
+            pageContent = self.coinpricesView.getCoinpricesContent()
         elif entry in ["volume"]:
             self.defichainAnalyticsModel.loadHourlyDEXTrades()
             pageContent = self.volumeView.getVolumeContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)

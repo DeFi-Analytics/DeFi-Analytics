@@ -37,8 +37,9 @@
     #figureBlocks {height: 750px}
     #figureBlocktime {height: 750px}
     #figureTransactions {height: 710px}
-    #figureCoinpriceLongterm {height: 675px}
-    #figureCoinpriceShortterm {height: 675px}
+    #figureCoinprices {height: 715px}
+    #figureArbitrageLongterm {height: 675px}
+    #figureArbitrageShortterm {height: 675px}
     #figureVolume24hr {height: 750px}
     #figureVolume {height: 690px}
     #figureStabilityDFI {height: 480px}
@@ -100,8 +101,9 @@
         #figureBlocks {height: 600px}
         #figureBlocktime {height: 600px}
         #figureTransactions {height: 600px}
-        #figureCoinpriceLongterm {height: 600px}
-        #figureCoinpriceShortterm {height: 600px}
+        #figureCoinprices {height: 600px}
+        #figureArbitrageLongterm {height: 600px}
+        #figureArbitrageShortterm {height: 600px}
         #figureVolume24hr {height: 600px}
         #figureVolume {height: 600px}
         #figureStabilityDFI {height: 480px}
@@ -136,8 +138,9 @@
         #figureBlocks {height: 330px}
         #figureBlocktime {height: 330px}
         #figureTransactions {height: 330px}
-        #figureCoinpriceLongterm {height: 330px}
-        #figureCoinpriceShortterm {height: 330px}
+        #figureCoinprices {height: 330px}
+        #figureArbitrageLongterm {height: 330px}
+        #figureArbitrageShortterm {height: 330px}
         #figureVolume24hr {height: 330px}
         #figureVolume {height: 300px}
         #figureStabilityDFI {height: 330px}
