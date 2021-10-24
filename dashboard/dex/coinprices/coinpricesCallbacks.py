@@ -10,11 +10,11 @@ class coinpricesCallbacksClass:
             figVolume = coinpricesView.createPriceGraph(defichainAnalyticsModel.hourlyData, selectedCoin, defichainAnalyticsModel.figBackgroundImage)
             return figVolume
 
-        # @app.callback(
-        #     Output("modalArbitrage", "is_open"),
-        #     [Input("openInfoArbitrage", "n_clicks"), Input("closeInfoArbitrage", "n_clicks")],
-        #     [State("modalArbitrage", "is_open")],)
-        # def toggle_modal(n1, n2, is_open):
-        #     if n1 or n2:
-        #         return not is_open
-        #     return is_open
+        @app.callback(
+            Output("modalCoinprices", "is_open"),
+            [Input("openInfoCoinprices", "n_clicks"), Input("closeInfoCoinprices", "n_clicks")],
+            [State("modalCoinprices", "is_open")],)
+        def toggle_modal(n1, n2, is_open):
+            if n1 or n2:
+                return not is_open
+            return is_open

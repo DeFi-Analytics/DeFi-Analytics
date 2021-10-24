@@ -100,6 +100,7 @@ class defichainAnalyticsViewClass:
             dbc.Collapse(
                 [
                     dbc.NavLink("Arbitrage", href="/dex?entry=arbitrage", className="linkstyle", id="arbitrage"),
+                    dbc.NavLink("Coinprices", href="/dex?entry=coinprices", className="linkstyle", id="coinprices"),
                     dbc.NavLink("Volume", href="/dex?entry=volume", className="linkstyle", id="volume"),
                     dbc.NavLink("Volume (24hr)", href="/dex?entry=24hrVolume", className="linkstyle", id="24hrVolume"),
                     dbc.NavLink("Price Stability", href="/dex?entry=stability", className="linkstyle", id="stability"),

@@ -13,7 +13,7 @@ class coinpricesViewClass:
     def getCoinpricesContent(self):
         content = [dbc.Modal([dbc.ModalHeader("Info DEX Coinprice"),
                               dbc.ModalBody(self.getCoinpricesExplanation()),
-                              dbc.ModalFooter(dbc.Button("close", id="closeInfoCoinprice", className="ml-auto"))], id="modalCoinprice", size='xl'),
+                              dbc.ModalFooter(dbc.Button("close", id="closeInfoCoinprices", className="ml-auto"))], id="modalCoinprices", size='xl'),
                    dbc.Card(dbc.CardBody([html.H4(['Coinprices on DEX']),
                                           html.Table([html.Tr([html.Td('Select Coin for price graph:'),
                                                                html.Td(dcc.Dropdown(id='dexCoinpriceCoin', options=[{'label': 'BTC', 'value': 'BTC'},
@@ -25,7 +25,7 @@ class coinpricesViewClass:
                                                                                             {'label': 'USDC', 'value': 'USDC'}],
                                                                                     value='BTC', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
                                           dcc.Graph(id='figureCoinprices', config={'displayModeBar': False}),
-                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinprice")))]))
+                                          dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinprices")))]))
                    ]
         return content
 
@@ -126,8 +126,9 @@ class coinpricesViewClass:
 
     @staticmethod
     def getCoinpricesExplanation():
-        coinAddressCardExplanation = [html.P(['...'],
-                                             style={'text-align': 'justify'}),
+        coinAddressCardExplanation = [html.P(['The decentral exchange (DEX) on DefiChain has, like other DEXes, no classical orderbook. The coin ratio in the liquidity pool represents the price and can be influenced by '
+                                       ' coin swaps. Each swap will add coins on one side and will remove coins on the other side of the liquidity pool. This graph shows the coin ratio development over (nearly) complete time.'],style={'text-align': 'justify'}),
+                                      html.P(['The user can select the coin, for which the absolut price of the DEX and Coingecko will be drawn.'],style={'text-align': 'justify'}),
                                       html.P([html.B('Hint:'),
                                               ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                               ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
