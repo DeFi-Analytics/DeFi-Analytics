@@ -17,7 +17,7 @@ class mnMonitorViewClass:
                                                   'You want to know more? Have a look on: ',
                                                   html.A('https://www.defichain-masternode-monitor.com/', href='https://www.defichain-masternode-monitor.com/', target='_blank', className='defiLink')],
                                                  style={'text-align': 'justify'}),
-                                          dcc.Graph(figure=self.createNodesAccounts(data, bgImage), id='figureVisitsIncome', config={'displayModeBar': False})]))]
+                                          dcc.Graph(figure=self.createNodesAccounts(data, bgImage), id='figureMNMonitor', config={'displayModeBar': False})]))]
         return content
 
     @staticmethod
