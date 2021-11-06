@@ -13,7 +13,7 @@ dfAnalyzedData = pd.read_csv(filepath, index_col=0)
 print('Analyzed Twitter Data loaded')
 
 # files to be evaluated
-filenames = ['defichain', 'dfi', 'overall']         # overall must be the last entry to get correct unique users numbers
+filenames = ['defichain', 'dfi', 'nativeDefi', 'hashtagDFI', 'overall']         # overall must be the last entry to get correct unique users numbers
 dfData2Add = pd.DataFrame()
 for twitterSearch in filenames:
     filepath = path +'TwitterData_'+twitterSearch+'.csv'
