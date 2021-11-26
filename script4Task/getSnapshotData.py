@@ -29,14 +29,12 @@ while True:
 
         # get DFI richlist data
         print('... getting Richlist')
-        link = "http://mainnet-api.defichain.io/api/DFI/mainnet/address/stats/rich-list?pageno=1&pagesize=200000"
-        siteContent = requests.get(link)
-        text2extract = siteContent.text.replace('null','None')
-        apiContentAsDict = ast.literal_eval(text2extract)
-        dfRichList = pd.DataFrame(apiContentAsDict['data'])
+        link = "https://chainz.cryptoid.info/dfi/api.dws?q=allbalances&key=6ba465be70b4"
+        cryptoIDContent = requests.get(link)
+        apiCryptoIDAsDict = ast.literal_eval(cryptoIDContent.text)
+        dfRichList = pd.DataFrame(data={'address': list(apiCryptoIDAsDict['balances'].keys()), 'balance':list(apiCryptoIDAsDict['balances'].values())}).sort_values(by=['balance'], ascending=False)
+        dfRichList = dfRichList.drop(dfRichList[dfRichList.address.isin(['nulldata', 'op_return'])].index).reset_index(drop=True) # remove line with nulldata and op_return
 
-        # convert fi balance into dfi balance
-        dfRichList.balance = dfRichList.balance/100000000
 
         # special DFI addresses
         addFoundation = 'dJEbxbfufyPF14SC93yxiquECEfq4YSd9L'
@@ -132,8 +130,8 @@ while True:
             bCorrectValues = False
 
 
-        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue
-        totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue
+        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue - (nbMNlocked5 + nbMNlocked10)*20000
+        totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue + (nbMNlocked5 + nbMNlocked10)*20000
 
         maxDFIValue = 1200000000
 
@@ -204,7 +202,7 @@ while True:
     duration = datetime.now()-now
     print('Data updated. Routine duration: '+str(duration))
     print('  ')
-    time.sleep(120-np.minimum(duration.seconds, 120))   # avoid negative numbers for sleep
+    time.sleep(300-np.minimum(duration.seconds, 300))   # avoid negative numbers for sleep
 
 print('Script finished')
 
