@@ -21,21 +21,17 @@ bGetRichlist = True
 
 while bGetRichlist:
     # get DFI-Richlist data
-    link = "http://mainnet-api.defichain.io/api/DFI/mainnet/address/stats/rich-list?pageno=1&pagesize=200000"
-    siteContent = requests.get(link)
-    if siteContent.status_code == 200:
-        text2extract = siteContent.text.replace('null', 'None')
-        apiContentAsDict=ast.literal_eval(text2extract)
-        dfRichList = pd.DataFrame(apiContentAsDict['data'])
+    link = "https://chainz.cryptoid.info/dfi/api.dws?q=allbalances&key=6ba465be70b4"
+    cryptoIDContent = requests.get(link)
+    if cryptoIDContent.status_code == 200:
+        apiCryptoIDAsDict = ast.literal_eval(cryptoIDContent.text)
+        dfRichList = pd.DataFrame(data={'address': list(apiCryptoIDAsDict['balances'].keys()), 'balance': list(apiCryptoIDAsDict['balances'].values())}).sort_values(by=['balance'],ascending=False)
+        dfRichList = dfRichList.drop(dfRichList[dfRichList.address.isin(['nulldata', 'op_return'])].index).reset_index(drop=True)  # remove line with nulldata and op_return
         bGetRichlist = False
         print('Finished getting complete DFI richlist')
     else:
         print('Error with API for complete Richlist')
         time.sleep(300)
-
-# convert fi balance into dfi balance
-dfRichList.balance = dfRichList.balance/100000000
-
 
 # get DFI token amount and add to richlist as own entry
 try:
