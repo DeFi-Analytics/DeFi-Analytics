@@ -7,19 +7,28 @@ scriptPath = __file__
 path = scriptPath[:-27] + '/data/'
 filepath = path +'BlockListStatistics.csv'
 
-limit4Block = 8000
-link = 'http://mainnet-api.defichain.io/api/DFI/mainnet/block?limit='+str(limit4Block)+'&anchorsOnly=false'
+limit4Block = 80000
+# link = 'http://mainnet-api.defichain.io/api/DFI/mainnet/block?limit='+str(limit4Block)+'&anchorsOnly=false'
+
+# get the first 200 entries
+link = 'https://ocean.defichain.com/v0/mainnet/blocks?size=200'
 siteContent = requests.get(link)
 apiContentAsDict=ast.literal_eval(siteContent.text)
+dfBlockList = pd.DataFrame(apiContentAsDict['data'])
 
-dfBlockList = pd.DataFrame(apiContentAsDict)
+# make another 49 requests to get 10k entries
+for iAPICall in range(1,50):
+    link = 'https://ocean.defichain.com/v0/mainnet/blocks?size=200&next='+apiContentAsDict['page']['next']
+    siteContent = requests.get(link)
+    apiContentAsDict = ast.literal_eval(siteContent.text)
+    dfBlockList = dfBlockList.append(pd.DataFrame(apiContentAsDict['data']))
+
+
 dfBlockList.set_index('height',inplace=True)
-dfBlockList.drop(columns=['chain','network','previousBlockHash','nextBlockHash'],inplace=True)
+dfBlockList.sort_values(by='height',ascending=True, inplace=True)
 
-dfBlockList.sort_values(by='time',inplace=True)
-
-dfBlockList['DateFormatted'] = pd.to_datetime(dfBlockList['time'],utc=True).dt.strftime('%Y-%m-%d')
-dfBlockList['DiffTime'] = pd.to_datetime(dfBlockList['time']).diff().dt.seconds
+dfBlockList['DateFormatted'] = pd.to_datetime(dfBlockList['time'],unit='s').dt.strftime('%Y-%m-%d')
+dfBlockList['DiffTime'] = dfBlockList['medianTime'].diff()
 dfBlockList['transactionCountWOReward'] = dfBlockList.transactionCount.sub(1)
 dfBlockList.sort_index(ascending=False, inplace=True)
 
@@ -41,7 +50,7 @@ dfBlockStatistic['MaxBlockTime'] = dfBlockList.groupby(dfBlockList['DateFormatte
 
 # read exisiting statistic and add new days
 dfOldBlockStatistic = pd.read_csv(filepath,index_col=0)
-dfOldBlockStatistic = dfOldBlockStatistic.iloc[2:] # delete newest entry to avoid incomplete data
+dfOldBlockStatistic = dfOldBlockStatistic.iloc[1:] # delete newest entry to avoid incomplete data
 
 # merge old and current data
 dfNewBlockStatistic = dfOldBlockStatistic.append(dfBlockStatistic.loc[~dfBlockStatistic.index.isin(dfOldBlockStatistic.index)])
