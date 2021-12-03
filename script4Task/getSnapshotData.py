@@ -178,6 +178,9 @@ while True:
         currDFI24hVol = oldSnapshot['tradingVolume'].values[0]
         marketCap = oldSnapshot['marketCap'].values[0]
         marketCapRank = oldSnapshot['marketCapRank'].values[0]
+        bCorrectValues = oldSnapshot['bCorrectValues'].values[0]
+        nbMNlocked5 = oldSnapshot['nbMNlocked5'].values[0]
+        nbMNlocked10 = oldSnapshot['nbMNlocked10'].values[0]
 
     # countdown block data data
     print('... getting block data for countdown')
@@ -202,7 +205,7 @@ while True:
     duration = datetime.now()-now
     print('Data updated. Routine duration: '+str(duration))
     print('  ')
-    time.sleep(300-np.minimum(duration.seconds, 300))   # avoid negative numbers for sleep
+    time.sleep(120-np.minimum(duration.seconds, 120))   # avoid negative numbers for sleep
 
 print('Script finished')
 

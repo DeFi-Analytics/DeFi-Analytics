@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 import numpy as np
 from pycoingecko import CoinGeckoAPI
-
+import json
 
 scriptPath = __file__
 path = scriptPath[:-28] + '/data/'
@@ -10,11 +10,26 @@ filepath = path + 'LMPoolData.csv'
 
 requests.adapters.DEFAULT_RETRIES = 5
 
-link='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
+link='https://ocean.defichain.com/v0/mainnet/poolpairs?size=200'
 siteContent = requests.get(link)
-dfLMPoolData = pd.read_json(siteContent.text).transpose()
-dfLMPoolData.drop(['name', 'status','tradeEnabled','ownerAddress','blockCommissionA',
-                   'blockCommissionB','rewardPct','creationTx','creationHeight'], axis=1,inplace=True)
+dfLMPoolDataNewAPI = json.loads(siteContent.text)
+
+dfLMPoolData = pd.DataFrame(data = {'symbol': [item['symbol'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'idTokenA': [item['tokenA']['id'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'idTokenB': [item['tokenB']['id'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'reserveA': [item['tokenA']['reserve'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'reserveB': [item['tokenB']['reserve'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'commission': [item['commission'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'totalLiquidity': [item['totalLiquidity']['token'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'reserveA/reserveB': [item['priceRatio']['ab'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'reserveB/reserveA': [item['priceRatio']['ba'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'rewardLoanPct': [item['rewardPct'] for item in dfLMPoolDataNewAPI['data'][:]]})
+
+# link='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
+# siteContent = requests.get(link)
+# dfLMPoolData = pd.read_json(siteContent.text).transpose()
+# dfLMPoolData.drop(['name', 'status','tradeEnabled','ownerAddress','blockCommissionA',
+#                    'blockCommissionB','rewardPct','creationTx','creationHeight'], axis=1,inplace=True)
 
 # prices from Coingecko
 cg = CoinGeckoAPI()
@@ -30,13 +45,13 @@ USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
 USDCDFIPrice = DFIData['defichain']['usd']/USDCCoinData['usd-coin']['usd']
 
 dfLMPoolData['DFIPrices'] = None
-dfLMPoolData.loc[4,'DFIPrices'] = DFIData['defichain']['eth']
-dfLMPoolData.loc[5,'DFIPrices'] = DFIData['defichain']['btc']
-dfLMPoolData.loc[6,'DFIPrices'] = DFIData['defichain']['usd']
-dfLMPoolData.loc[8,'DFIPrices'] = dogeDFIPrice
-dfLMPoolData.loc[10,'DFIPrices'] = ltcDFIPrice
-dfLMPoolData.loc[12,'DFIPrices'] = bchDFIPrice
-dfLMPoolData.loc[14,'DFIPrices'] = USDCDFIPrice
+dfLMPoolData.loc[0,'DFIPrices'] = DFIData['defichain']['eth']
+dfLMPoolData.loc[1,'DFIPrices'] = DFIData['defichain']['btc']
+dfLMPoolData.loc[2,'DFIPrices'] = DFIData['defichain']['usd']
+dfLMPoolData.loc[3,'DFIPrices'] = dogeDFIPrice
+dfLMPoolData.loc[4,'DFIPrices'] = ltcDFIPrice
+dfLMPoolData.loc[5,'DFIPrices'] = bchDFIPrice
+dfLMPoolData.loc[6,'DFIPrices'] = USDCDFIPrice
 dfLMPoolData['Time'] = pd.Timestamp.now()
 
 # prices from Bittrex
@@ -44,89 +59,20 @@ link='https://api.bittrex.com/v3/markets/tickers'
 siteContent = requests.get(link)    
 dfBittrexTicker = pd.read_json(siteContent.text)  
 dfLMPoolData['DFIPricesBittrex'] = None
-dfLMPoolData.loc[5,'DFIPricesBittrex'] = dfBittrexTicker[dfBittrexTicker['symbol']=='DFI-BTC']['lastTradeRate'].values[0]
-dfLMPoolData.loc[6,'DFIPricesBittrex'] = dfBittrexTicker[dfBittrexTicker['symbol']=='DFI-USDT']['lastTradeRate'].values[0]
+dfLMPoolData.loc[1,'DFIPricesBittrex'] = dfBittrexTicker[dfBittrexTicker['symbol']=='DFI-BTC']['lastTradeRate'].values[0]
+dfLMPoolData.loc[2,'DFIPricesBittrex'] = dfBittrexTicker[dfBittrexTicker['symbol']=='DFI-USDT']['lastTradeRate'].values[0]
 
-# Amount addresses with liquidity token
-# BTC/DFI-Token on DefiChain
-try:
-    link = "https://api.defichain.io/v1/gettokenrichlist?id=5&network=mainnet"
-    siteContent = requests.get(link)
-    temp = pd.read_json(siteContent.text)
-    BTCDFIaddresses = temp['balance'].count()
-except:
-    BTCDFIaddresses = np.nan
-    print('Error with API of BTC/DFI Richlist')
-    
-# ETH/DFI-Token on DefiChain
-try:
-    link = "https://api.defichain.io/v1/gettokenrichlist?id=4&network=mainnet"
-    siteContent = requests.get(link)
-    temp = pd.read_json(siteContent.text)
-    ETHDFIaddresses = temp['balance'].count()
-except:
-    ETHDFIaddresses = np.nan
-    print('Error with API of ETH/DFI Richlist')
-    
-# USDT/DFI-Token on DefiChain
-try:
-    link = "https://api.defichain.io/v1/gettokenrichlist?id=6&network=mainnet"
-    siteContent = requests.get(link)
-    temp = pd.read_json(siteContent.text)
-    USDTDFIaddresses = temp['balance'].count()
-except:
-    USDTDFIaddresses = np.nan
-    print('Error with API of USDT/DFI Richlist')
-    
-# DOGE/DFI-Token on DefiChain
-try:    
-    link = "https://api.defichain.io/v1/gettokenrichlist?id=8&network=mainnet"
-    siteContent = requests.get(link)
-    temp = pd.read_json(siteContent.text)
-    DOGEDFIaddresses = temp['balance'].count()
-except:
-    DOGEDFIaddresses = np.nan
-    print('Error with API of DOGE/DFI Richlist')
-    
-# LTC/DFI-Token on DefiChain
-try:
-    link = "https://api.defichain.io/v1/gettokenrichlist?id=10&network=mainnet"
-    siteContent = requests.get(link)
-    temp = pd.read_json(siteContent.text)
-    LTCDFIaddresses = temp['balance'].count()
-except:
-    LTCDFIaddresses = np.nan
-    print('Error with API of LTC/DFI Richlist')
 
-# BCH/DFI-Token on DefiChain
-try:
-    link = "https://api.defichain.io/v1/gettokenrichlist?id=12&network=mainnet"
-    siteContent = requests.get(link)
-    temp = pd.read_json(siteContent.text)
-    BCHDFIaddresses = temp['balance'].count()
-except:
-    BCHDFIaddresses = np.nan
-    print('Error with API of BCH/DFI Richlist')
-
-# UDSC/DFI-Token on DefiChain
-try:
-    link = "https://api.defichain.io/v1/gettokenrichlist?id=14&network=mainnet"
-    siteContent = requests.get(link)
-    temp = pd.read_json(siteContent.text)
-    USDCDFIaddresses = temp['balance'].count()
-except:
-    USDCDFIaddresses = np.nan
-    print('Error with API of USDC/DFI Richlist')
 
 ####### add none when wrong dimension
 dfLMPoolData['numberAddresses'] = None
-dfLMPoolData.loc[4, 'numberAddresses'] = ETHDFIaddresses
-dfLMPoolData.loc[5, 'numberAddresses'] = BTCDFIaddresses
-dfLMPoolData.loc[6, 'numberAddresses'] = USDTDFIaddresses
-dfLMPoolData.loc[8, 'numberAddresses'] = DOGEDFIaddresses
-dfLMPoolData.loc[10, 'numberAddresses'] = LTCDFIaddresses
-dfLMPoolData.loc[12, 'numberAddresses'] = BCHDFIaddresses
-dfLMPoolData.loc[14, 'numberAddresses'] = USDCDFIaddresses
+# dfLMPoolData.loc[4, 'numberAddresses'] = ETHDFIaddresses
+# dfLMPoolData.loc[5, 'numberAddresses'] = BTCDFIaddresses
+# dfLMPoolData.loc[6, 'numberAddresses'] = USDTDFIaddresses
+# dfLMPoolData.loc[8, 'numberAddresses'] = DOGEDFIaddresses
+# dfLMPoolData.loc[10, 'numberAddresses'] = LTCDFIaddresses
+# dfLMPoolData.loc[12, 'numberAddresses'] = BCHDFIaddresses
+# dfLMPoolData.loc[14, 'numberAddresses'] = USDCDFIaddresses
     
 dfOldLMPoolData = pd.read_csv(filepath, index_col=0)
 dfLMPoolData = dfOldLMPoolData.append(dfLMPoolData, sort=False)
