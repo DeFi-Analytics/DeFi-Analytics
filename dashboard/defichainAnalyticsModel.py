@@ -47,6 +47,7 @@ class defichainAnalyticsModelClass:
         self.update_MNmonitor = None
         self.updated_dfx = None
         self.update_DFIsignal = None
+        self.updated_vaults = None
 
 
         # background image for figures
@@ -386,6 +387,7 @@ class defichainAnalyticsModelClass:
         self.loadTokenCrypto()
         self.loadHourlyDEXTrades()
         self.loadDFXdata()
+        self.loadVaultData()
 
 
     def loadHourlyDEXdata(self):
@@ -533,6 +535,30 @@ class defichainAnalyticsModelClass:
 
             self.updated_dfx = fileInfo.stat()
             print('>>>> DFX data loaded from csv-file <<<<')
+
+    def loadVaultData(self):
+        print('>>>> Start update Vault data ... <<<<')
+        filePath = self.dataPath + 'vaultsData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_vaults:
+            vaultsData = pd.read_csv(filePath, index_col=0)
+            vaultsData['timeRounded'] = pd.to_datetime(vaultsData.index).floor('H')
+            vaultsData.set_index(['timeRounded'], inplace=True)
+
+            sumValues = [item for item in vaultsData.columns if "sum" in item]
+            liveTicker = [item[3:]+'-USD' for item in vaultsData.columns if "sum" in item]
+
+            columns2update = sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'MIN150', 'MIN175', 'MIN200', 'MIN350', 'MIN500', 'MIN1000']
+            columns2update.remove('Interest-USD')
+            columns2update.remove('DUSD-USD')
+
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(vaultsData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_vaults = fileInfo.stat()
+            print('>>>> Vaults data loaded from csv-file <<<<')
 
     #### MINUTELY DATA ####
     def loadMinutelyData(self):
