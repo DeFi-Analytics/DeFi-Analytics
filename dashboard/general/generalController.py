@@ -27,7 +27,7 @@ class generalControllerClass:
         pageContent = None
         if entry in ['', "overview"]:
             self.defichainAnalyticsModel.loadSnapshotData()
-            pageContent = self.overviewView.getOverviewContent(self.defichainAnalyticsModel.snapshotData,  vaultsDFI, self.defichainAnalyticsModel.figBackgroundImage)
+            pageContent = self.overviewView.getOverviewContent(self.defichainAnalyticsModel.snapshotData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["marketcap"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadDailyTradingData()
