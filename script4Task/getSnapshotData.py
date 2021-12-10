@@ -14,6 +14,7 @@ path = scriptPath[:-31] + '/data/'
 
 filepath = path + 'snapshotData.csv'
 filepathMNList = path + 'currentMNList.csv'
+filePathVaults = path + 'vaultsData.csv'
 
 while True:
     print('Start updating ...')
@@ -100,7 +101,7 @@ while True:
             siteContent = requests.get(link, timeout=60)
             if siteContent.status_code == 200:
                 dfLMPoolData = pd.read_json(siteContent.text).transpose()
-                lmDFIValue = dfLMPoolData.reserveB.astype('float').sum()
+                lmDFIValue = dfLMPoolData[dfLMPoolData.idTokenB=='0'].reserveB.astype('float').sum()
             else:
                 lmDFIValue = oldSnapshot['lmDFI'].values[0]
         except:
@@ -119,6 +120,10 @@ while True:
             print('### error token richlist')
             tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
 
+        # get DFI in vaults of last capture (time consumptive API)
+        vaultsData = pd.read_csv(filePathVaults, index_col=0)
+        vaultsDFIValue = vaultsData.sumDFI[vaultsData.sumDFI.notna()].iloc[-1]
+
         if addFoundation in dfRichList.values:
             foundationDFIValue = dfRichList[dfRichList.address==addFoundation].balance.values[0]
         else: # at the beginning there was no foundation address, should not be needed any longer
@@ -130,7 +135,7 @@ while True:
             bCorrectValues = False
 
 
-        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue - (nbMNlocked5 + nbMNlocked10)*20000
+        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue + vaultsDFIValue - (nbMNlocked5 + nbMNlocked10)*20000
         totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue + (nbMNlocked5 + nbMNlocked10)*20000
 
         maxDFIValue = 1200000000
@@ -170,6 +175,7 @@ while True:
         lmDFIValue = oldSnapshot['lmDFI'].values[0]
         tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
         erc20DFIValue = oldSnapshot['erc20DFI'].values[0]
+        vaultsDFIValue = oldSnapshot['vaultsDFI'].values[0]
         burnedDFIValue = oldSnapshot['burnedDFI'].values[0]
         circDFIValue = oldSnapshot['circDFI'].values[0]
         totalDFI = oldSnapshot['totalDFI'].values[0]
@@ -192,9 +198,9 @@ while True:
     print('... saving data')
     # convert single data to pandas series
     colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'burnedDFI', 'circDFI',
-                'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft', 'bCorrectValues', 'nbMNlocked5', 'nbMNlocked10']
+                'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft', 'bCorrectValues', 'nbMNlocked5', 'nbMNlocked10', 'vaultsDFI']
     listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, burnedDFIValue, circDFIValue,
-                totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft, bCorrectValues, nbMNlocked5, nbMNlocked10]
+                totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft, bCorrectValues, nbMNlocked5, nbMNlocked10, vaultsDFIValue]
     seriesData = pd.Series(listData, index = colNames)
 
     data2Save = pd.DataFrame(columns=colNames)

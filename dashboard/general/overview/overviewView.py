@@ -45,6 +45,8 @@ class overviewViewClass:
                          html.Td("{:,.0f} DFI".format(data['mnDFI'].values[0]-(data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000), style={'text-align': 'right'})]),
                 html.Tr([html.Td('Liquidity Pool'),
                          html.Td("{:,.0f} DFI".format(data['lmDFI'].values[0]), style={'text-align': 'right'})]),
+                html.Tr([html.Td('Vaults Collateral'),
+                         html.Td("{:,.0f} DFI".format(data['vaultsDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr([html.Td('DFI Token'),
                          html.Td("{:,.0f} DFI".format(data['tokenDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr([html.Td('ERC20 Collateral'),
@@ -94,14 +96,14 @@ class overviewViewClass:
         return htmlContent
 
     @staticmethod
-    def createPieChartDFI(data,  bgImage):
+    def createPieChartDFI(data, bgImage):
         figDFIPie = go.Figure()
 
-        labelList = ['Masternodes', 'Community fund', 'Foundation', 'Other', 'Liquidity Pool', 'DFI token', 'ERC20 Collateral', 'Burned DFI', 'Locked Masternodes']
+        labelList = ['Masternodes', 'Community fund', 'Foundation', 'Other', 'Liquidity Pool', 'DFI token', 'ERC20 Collateral', 'Burned DFI', 'Locked Masternodes', 'Vaults Collateral']
         valueList = [data['mnDFI'].values[0]-(data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000, data['fundDFI'].values[0],
                      data['foundationDFI'].values[0], data['otherDFI'].values[0], data['lmDFI'].values[0], data['tokenDFI'].values[0], data['erc20DFI'].values[0],
-                     data['burnedDFI'].values[0], (data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000]
-        colorList = ['#da3832', '#ff9800', '#22b852', '#410eb2', '#ff2ebe', '#00fffb', '#808000', '#5d5d5d', '#711714']
+                     data['burnedDFI'].values[0], (data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000, data['vaultsDFI'].values[0]]
+        colorList = ['#da3832', '#ff9800', '#22b852', '#410eb2', '#ff2ebe', '#00fffb', '#808000', '#5d5d5d', '#711714', '#adff2f']
         trace_pieDFI = dict(type='pie', name='', labels=labelList, values=valueList, marker=dict(colors=colorList), opacity=1,
                             textposition='inside', textfont_size=16, hovertemplate='%{label}: <br> %{value:,.0f}')
         figDFIPie.add_trace(trace_pieDFI)
