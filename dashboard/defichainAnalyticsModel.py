@@ -48,6 +48,7 @@ class defichainAnalyticsModelClass:
         self.updated_dfx = None
         self.update_DFIsignal = None
         self.updated_vaults = None
+        self.update_coinPriceList = None
 
 
         # background image for figures
@@ -72,6 +73,7 @@ class defichainAnalyticsModelClass:
         self.loadMNMonitorDatabase()
         self.loadAnalyticsVisitsData()
         self.loadDFIsignalDatabase()
+        self.loadCoinPriceList()
 
     def loadMNnodehub(self):
         print('>>>> Start update nodehub.IO data ...  <<<<')
@@ -180,6 +182,14 @@ class defichainAnalyticsModelClass:
                       self.hourlyData['BCH-DFI_lockedDFI'].fillna(0) + self.hourlyData['USDC-DFI_lockedDFI'].fillna(0))
         dexLockedDFI.index = dexLockedDFI.index.floor('D').astype(str) # remove time information, only date is needed
         self.dailyData['tvlDEXDFI'] = dexLockedDFI.groupby(level=0).first()
+
+        vaultsLockedDFI = self.hourlyData.sumBTC / self.hourlyData['BTC-DFI_reserveA/reserveB'] + \
+                            self.hourlyData.sumDFI + \
+                            self.hourlyData.sumUSDC / self.hourlyData['USDC-DFI_reserveA/reserveB'] + \
+                            self.hourlyData.sumUSDT / self.hourlyData['USDC-DFI_reserveA/reserveB']
+        vaultsLockedDFI.index = vaultsLockedDFI.index.floor('D').astype(str) # remove time information, only date is needed
+        self.dailyData['tvlVaultsDFI'] = vaultsLockedDFI[(vaultsLockedDFI!=0.0) & (vaultsLockedDFI.notnull())].groupby(level=0).first()
+
 
 
     def loadDailyTradingData(self):
@@ -379,6 +389,22 @@ class defichainAnalyticsModelClass:
             self.update_DFIsignal = fileInfo.stat()
             print('>>>> DFI-Signal database loaded from csv-file <<<<')
 
+    def loadCoinPriceList(self):
+        print('>>>> Start update coin price list ... <<<<')
+        filePath = self.dataPath + 'coinPriceList.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_coinPriceList:
+            coinPriceListData = pd.read_csv(filePath, index_col=0)
+
+            columns2update = ['DFIPriceUSD','BTCPriceUSD','ETHPriceUSD','USDTPriceUSD','DOGEPriceUSD','LTCPriceUSD','BCHPriceUSD','USDCPriceUSD']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(coinPriceListData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.update_coinPriceList = fileInfo.stat()
+            print('>>>> Coin price list loaded from csv-file <<<<')
 
     #### HOURLY DATA ####
     def loadHourlyData(self):

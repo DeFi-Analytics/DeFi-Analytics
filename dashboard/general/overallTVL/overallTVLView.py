@@ -37,7 +37,7 @@ class overallTVLViewClass:
             yAxisLabel = 'Value in $'
             hoverTemplateRepresenation = '$%{y:,.0f}'
 
-        TVLOverall = (data['tvlMNDFI']+data['tvlDEXDFI']) * DFIPrice  # DFI is USD is highest price of the 3
+        TVLOverall = (data['tvlMNDFI']+data['tvlDEXDFI']+data['tvlVaultsDFI'].fillna(0)) * DFIPrice  # DFI is USD is highest price of the 3
         indexVector = data['tvlMNDFI'].notnull() & data['tvlDEXDFI'].notnull() & DFIPrice.notnull()
 
         lastValidDate = datetime.strptime(TVLOverall.dropna().index.values[-1], '%Y-%m-%d')
@@ -57,6 +57,8 @@ class overallTVLViewClass:
                             mode='lines', line=dict(color='#da3832'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tozeroy')
         trace_tvlDEX = dict(type='scatter', name='DEX', x=(data.loc[indexVector,'tvlDEXDFI']*DFIPrice[indexVector]).index, y=(data.loc[indexVector,'tvlDEXDFI']*DFIPrice[indexVector]), stackgroup='one',
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+        trace_tvlVaults = dict(type='scatter', name='Vaults', x=(data.loc[indexVector,'tvlVaultsDFI']*DFIPrice[indexVector]).index, y=(data.loc[indexVector,'tvlVaultsDFI'].fillna(0)*DFIPrice[indexVector]), stackgroup='one',
+                            mode='lines', line=dict(color='#808000'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # overall TVL graph
         trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall[indexVector].index, y=TVLOverall[indexVector],
@@ -64,6 +66,7 @@ class overallTVLViewClass:
 
         figTVL.add_trace(trace_tvlMN, 1, 1)
         figTVL.add_trace(trace_tvlDEX, 1, 1)
+        figTVL.add_trace(trace_tvlVaults, 1, 1)
 
         figTVL.add_trace(trace_TVLOverall, 1, 1)
 
