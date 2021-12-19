@@ -88,7 +88,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(nodehubData['nbMNNodehub'], how='outer', left_index=True, right_index=True)
 
             self.updated_nodehubIO = fileInfo.stat()
-            print('>>>> nodehub data loaded from csv-file <<<<')
+            print('>>>> nodehub data loaded from csv-file <<<<'+str(len(self.dailyData.columns)))
 
     def loadMNAllnodes(self):
         print('>>>> Start update allnodes data ...  <<<<')
@@ -103,7 +103,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(allnodesData['nbMNAllnode'], how='outer', left_index=True, right_index=True)
 
             self.updated_allnodes = fileInfo.stat()
-            print('>>>> allnodes data loaded from csv-file <<<<')
+            print('>>>> allnodes data loaded from csv-file <<<<'+str(len(self.dailyData.columns)))
 
     def loadExtractedRichlistData(self):
         self.loadMNnodehub()  # number masternode hosted by nodehub must be load here to ensure correct values for other and relative representation
@@ -141,9 +141,13 @@ class defichainAnalyticsModelClass:
             lmCoins['overall'] = lmCoins['BTC_pool'] + lmCoins['ETH_pool'] + lmCoins['USDT_pool'] + lmCoins['DOGE_pool'].fillna(0) + lmCoins['LTC_pool'].fillna(0) + lmCoins['USDC_pool'] .fillna(0)
             self.dailyData['lmDFI'] = lmCoins['overall']
 
+            # getting DFI in vaults
+            vaultsDFI = self.hourlyData[['Date', 'sumDFI']]
+            self.dailyData['vaultDFI'] = vaultsDFI[(vaultsDFI!=0.0) & (vaultsDFI.notnull())].groupby('Date')['sumDFI'].first()
+
             # sum of addresses and DFI
             self.dailyData['nbOverall'] = self.dailyData['nbMnId'] + self.dailyData['nbOtherId']
-            self.dailyData['circDFI'] = self.dailyData['mnDFI'] + self.dailyData['otherDFI'] \
+            self.dailyData['circDFI'] = self.dailyData['mnDFI'] + self.dailyData['otherDFI'] + self.dailyData['vaultDFI'].fillna(0)\
                                         + self.dailyData['tokenDFI'].fillna(0) + self.dailyData['lmDFI'].fillna(0) + self.dailyData['erc20DFI'].fillna(0) \
                                         - (self.dailyData['nbMNlocked10']+self.dailyData['nbMNlocked5']).fillna(0)*20000
             self.dailyData['totalDFI'] = self.dailyData['circDFI'] + self.dailyData['fundDFI'] + self.dailyData['foundationDFI'].fillna(0) \
@@ -171,7 +175,7 @@ class defichainAnalyticsModelClass:
 
 
             self.updated_extractedRichlist = fileInfo.stat()
-            print('>>>> Richlist data loaded from csv-file <<<<')
+            print('>>>> Richlist data loaded from csv-file <<<<'+str(len(self.dailyData.columns)))
 
     def calcOverallTVLdata(self):
         self.dailyData['tvlMNDFI'] = self.dailyData['nbMnId'] * ((pd.to_datetime(self.dailyData.index)<pd.Timestamp('2021-03-02')) * 1 * 1000000 + \
@@ -189,7 +193,7 @@ class defichainAnalyticsModelClass:
                             self.hourlyData.sumUSDT / self.hourlyData['USDC-DFI_reserveA/reserveB']
         vaultsLockedDFI.index = vaultsLockedDFI.index.floor('D').astype(str) # remove time information, only date is needed
         self.dailyData['tvlVaultsDFI'] = vaultsLockedDFI[(vaultsLockedDFI!=0.0) & (vaultsLockedDFI.notnull())].groupby(level=0).first()
-
+        print('>>>> Overall TVL calcuöated <<<<' + str(len(self.dailyData.columns)))
 
 
     def loadDailyTradingData(self):
@@ -210,7 +214,7 @@ class defichainAnalyticsModelClass:
                 self.dailyData['marketCapBTC'] = self.dailyData['marketCapUSD'] / self.dailyData['BTCPriceUSD']
 
             self.updated_tradingData = fileInfo.stat()
-            print('>>>> Trading data loaded from csv-file <<<<')
+            print('>>>> Trading data loaded from csv-file <<<<'+str(len(self.dailyData.columns)))
 
     def loadDailyBlocktimeData(self):
         print('>>>> Start update blocktime data ... <<<<')
@@ -225,7 +229,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(dailyBlocktimeData, how='outer', left_index=True,right_index=True)    # add new columns to daily table
 
             self.updated_blocktime = fileInfo.stat()
-            print('>>>> Blocktime data loaded from csv-file <<<<')
+            print('>>>> Blocktime data loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadDAAData(self):
         print('>>>> Start update DAA data ... <<<<')
@@ -241,7 +245,7 @@ class defichainAnalyticsModelClass:
             self.dailyData.sort_index(inplace=True)
 
             self.updated_daa = fileInfo.stat()
-            print('>>>> DAA data loaded from csv-file <<<<')
+            print('>>>> DAA data loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadTwitterData(self):
         print('>>>> Start update twitter data ... <<<<')
@@ -258,7 +262,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(twitterData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.updated_twitterData = fileInfo.stat()
-            print('>>>> Twitter data loaded from csv-file <<<<')
+            print('>>>> Twitter data loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadTwitterFollowerData(self):
         print('>>>> Start update twitter follower data ... <<<<')
@@ -275,7 +279,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(twitterFollowData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.updated_twitterFollower = fileInfo.stat()
-            print('>>>> Twitter data loaded from csv-file <<<<')
+            print('>>>> Twitter data loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadIncomeVisitsData(self):
         print('>>>> Start update income visits data ... <<<<')
@@ -293,7 +297,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(incomeVisitsData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_incomeVisits = fileInfo.stat()
-            print('>>>> Income visits data loaded from csv-file <<<<')
+            print('>>>> Income visits data loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadPortfolioDownloads(self):
         print('>>>> Start update portfolio downloads data ... <<<<')
@@ -315,7 +319,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(dfPortfolioData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_portfolioDownloads = fileInfo.stat()
-            print('>>>> Portfolio downloads data loaded from csv-file <<<<')
+            print('>>>> Portfolio downloads data loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadPromoDatabase(self):
         print('>>>> Start update DefiChain promo database ... <<<<')
@@ -332,7 +336,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(promoRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_promoDatabase = fileInfo.stat()
-            print('>>>> DefiChain promo database loaded from csv-file <<<<')
+            print('>>>> DefiChain promo database loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadMNMonitorDatabase(self):
         print('>>>> Start update masternode monitor database ... <<<<')
@@ -349,7 +353,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(monitorRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_MNmonitor = fileInfo.stat()
-            print('>>>> MN Monitor database loaded from csv-file <<<<')
+            print('>>>> MN Monitor database loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadAnalyticsVisitsData(self):
         print('>>>> Start update raw data analytics visits ... <<<<')
@@ -370,7 +374,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(analyticsVisitData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_analyticsVisits = fileInfo.stat()
-            print('>>>> Analytics visits data loaded from csv-file <<<<')
+            print('>>>> Analytics visits data loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadDFIsignalDatabase(self):
         print('>>>> Start update DFI-signal database ... <<<<')
@@ -387,7 +391,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(dfiSignalRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_DFIsignal = fileInfo.stat()
-            print('>>>> DFI-Signal database loaded from csv-file <<<<')
+            print('>>>> DFI-Signal database loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     def loadCoinPriceList(self):
         print('>>>> Start update coin price list ... <<<<')
@@ -404,7 +408,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(coinPriceListData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_coinPriceList = fileInfo.stat()
-            print('>>>> Coin price list loaded from csv-file <<<<')
+            print('>>>> Coin price list loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
 
     #### HOURLY DATA ####
     def loadHourlyData(self):
@@ -451,7 +455,7 @@ class defichainAnalyticsModelClass:
 
             self.hourlyData['Date'] = pd.to_datetime(self.hourlyData.index).strftime('%Y-%m-%d')
             self.updated_dexHourly = fileInfo.stat()
-            print('>>>> Hourly DEX data loaded from csv-file <<<<')
+            print('>>>> Hourly DEX data loaded from csv-file <<<<'+str(len(self.hourlyData.columns)))
 
     def loadDEXVolume(self):
         print('>>>> Start update DEX volume data ... <<<<')
@@ -482,7 +486,7 @@ class defichainAnalyticsModelClass:
 
             self.hourlyData['VolTotalCoingecko'] = volumeData[volumeData['base_name']=='BTC']['coingeckoVolume']
             self.updated_dexVolume = fileInfo.stat()
-            print('>>>> DEX volume data loaded from csv-file <<<<')
+            print('>>>> DEX volume data loaded from csv-file <<<<'+str(len(self.hourlyData.columns)))
 
     def loadHourlyDEXTrades(self):
         print('>>>> Start update hourly DEX trade data ... <<<<')
@@ -514,7 +518,7 @@ class defichainAnalyticsModelClass:
 
 
             self.updated_hourlyDEXTrades = fileInfo.stat()
-            print('>>>> DEX volume data loaded from csv-file <<<<')
+            print('>>>> DEX volume data loaded from csv-file <<<<'+str(len(self.hourlyData.columns)))
 
     def loadTokenCrypto(self):
         print('>>>> Start update token data ... <<<<')
@@ -541,7 +545,7 @@ class defichainAnalyticsModelClass:
                 self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
             self.updated_tokenCryptos = fileInfo.stat()
-            print('>>>> DAT Cryptos data loaded from csv-file <<<<')
+            print('>>>> DAT Cryptos data loaded from csv-file <<<<'+str(len(self.hourlyData.columns)))
 
     def loadDFXdata(self):
         print('>>>> Start update DFX data ... <<<<')
@@ -560,7 +564,7 @@ class defichainAnalyticsModelClass:
             self.hourlyData = self.hourlyData.merge(dfxData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.updated_dfx = fileInfo.stat()
-            print('>>>> DFX data loaded from csv-file <<<<')
+            print('>>>> DFX data loaded from csv-file <<<<'+str(len(self.hourlyData.columns)))
 
     def loadVaultData(self):
         print('>>>> Start update Vault data ... <<<<')
@@ -584,7 +588,7 @@ class defichainAnalyticsModelClass:
             self.hourlyData = self.hourlyData.merge(vaultsData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.updated_vaults = fileInfo.stat()
-            print('>>>> Vaults data loaded from csv-file <<<<')
+            print('>>>> Vaults data loaded from csv-file <<<<'+str(len(self.hourlyData.columns)))
 
     #### MINUTELY DATA ####
     def loadMinutelyData(self):
@@ -618,7 +622,7 @@ class defichainAnalyticsModelClass:
 
             self.minutelyData.dropna(axis=0, how='all',inplace=True)
             self.update_dexMinutely = fileInfo.stat()
-            print('>>>> Minutely DEX data loaded from csv-file <<<<')
+            print('>>>> Minutely DEX data loaded from csv-file <<<<'+str(len(self.minutelyData.columns)))
 
     #### NO TIMESERIES ####
     def loadNoTimeseriesData(self):
@@ -641,7 +645,7 @@ class defichainAnalyticsModelClass:
             self.lastRichlist['date'] = pd.to_datetime(newestDate)
 
             self.updated_LastRichlist = fname.stat()
-            print('>>>>>>>>>>>>> Richlist ', file2Load[0], ' loaded <<<<<<<<<<<<<')
+            print('>>>>>>>>>>>>> Richlist ', file2Load[0], ' loaded <<<<<<<<<<<<<'+str(len(self.lastRichlist.columns)))
 
     def loadSnapshotData(self):
         filePath = self.dataPath + 'snapshotData.csv'
@@ -653,7 +657,7 @@ class defichainAnalyticsModelClass:
             self.snapshotData['duration'] = duration-timedelta(microseconds=duration.microseconds)          # remove microseconds
             self.snapshotData['etaEvent'] = datetime.utcnow()+self.snapshotData['duration']
             self.update_snapshotData = fileInfo.stat()
-            print('>>>>>>>>>>>>> Snapshot data loaded <<<<<<<<<<<<<')
+            print('>>>>>>>>>>>>> Snapshot data loaded <<<<<<<<<<<<<'+str(len(self.snapshotData.columns)))
 
     def loadChangelogData(self):
         filePath = self.dataPath + 'changelogHistory.xlsx'
@@ -663,4 +667,4 @@ class defichainAnalyticsModelClass:
             self.changelogData.sort_values(by=['Date'], inplace=True, ascending=False)
             self.changelogData['Date'] = pd.to_datetime(self.changelogData['Date'], utc=True).dt.strftime('%Y-%m-%d')
             self.update_changelogData = fileInfo.stat()
-            print('>>>>>>>>>>>>> Changelog data loaded <<<<<<<<<<<<<')
+            print('>>>>>>>>>>>>> Changelog data loaded <<<<<<<<<<<<<'+str(len(self.changelogData.columns)))

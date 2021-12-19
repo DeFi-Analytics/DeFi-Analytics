@@ -36,7 +36,7 @@ class coinViewClass:
             specs=[[{}]],
             shared_xaxes=True)
 
-        tempData = data.loc[:, ['otherDFI', 'mnDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'fundDFI', 'foundationDFI', 'burnedDFI', 'circDFI', 'totalDFI','nbMNlocked5','nbMNlocked10']]
+        tempData = data.loc[:, ['otherDFI', 'mnDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'fundDFI', 'foundationDFI', 'burnedDFI', 'circDFI', 'totalDFI','nbMNlocked5','nbMNlocked10','vaultDFI']]
         tempData.index = pd.to_datetime(tempData.index)
         tempData.sort_index(inplace=True)
         tempData.interpolate(method='pad', inplace=True)
@@ -65,8 +65,9 @@ class coinViewClass:
         trace_tokenDFI = dict(type='scatter', name='DFI Token', x=tempData['tokenDFI'].dropna().index, y=tempData['tokenDFI'].dropna(),
                            mode='lines', line=dict(color='#00fffb'), line_width=0, hovertemplate=hoverRepresentation, stackgroup='one', fill='tonexty')
         trace_erc20DFI = dict(type='scatter', name='ERC20 Collateral', x=tempData['erc20DFI'].dropna().index, y=tempData['erc20DFI'].dropna(),
+                           mode='lines', line=dict(color='#adff2f'), line_width=0, hovertemplate=hoverRepresentation, stackgroup='one', fill='tonexty')
+        trace_vault20DFI = dict(type='scatter', name='Vaults Collateral', x=tempData['vaultDFI'].dropna().index, y=tempData['vaultDFI'].dropna(),
                            mode='lines', line=dict(color='#808000'), line_width=0, hovertemplate=hoverRepresentation, stackgroup='one', fill='tonexty')
-
 
         trace_lockedMN = dict(type='scatter', name='Locked Masternodes', x=((tempData['nbMNlocked10'] + tempData['nbMNlocked5']).fillna(0) * 20000).dropna().index,
                               y=((tempData['nbMNlocked10'] + tempData['nbMNlocked5']).fillna(0) * 20000).dropna(),
@@ -85,6 +86,7 @@ class coinViewClass:
         figDFI.add_trace(trace_lmDFI, 1, 1)
         figDFI.add_trace(trace_tokenDFI, 1, 1)
         figDFI.add_trace(trace_erc20DFI, 1, 1)
+        figDFI.add_trace(trace_vault20DFI, 1, 1)
 
         # if the graphic is not relative circulating supply, than plot fund, foundation and burned coins
         if (selection != 'relativeCirc'):
