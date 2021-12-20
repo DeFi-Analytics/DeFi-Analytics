@@ -31,3 +31,21 @@ class arbitrageCallbacksClass:
             if n1 or n2:
                 return not is_open
             return is_open
+
+
+        # old callbacks for running instances
+        @app.callback(Output('figureCoinpriceLongterm', 'figure'),
+                      [Input('dexCoinprice600s', 'n_intervals'),
+                       Input('dexCoinpriceCoin', 'value'),
+                       Input('dexCoinpriceReference', 'value'), ])
+        def updateHourlyCoinpriceGraph(nInt, selectedCoin, selectedReference):
+
+            return None
+
+        @app.callback(Output('figureCoinpriceShortterm', 'figure'),
+                      [Input('dexCoinprice60s', 'n_intervals'),
+                       Input('dexCoinpriceCoin', 'value'),
+                       Input('dexCoinpriceReference', 'value'), ])
+        def updateMinutelyCoinpriceGraph(nInt, selectedCoin, selectedReference):
+
+            return None

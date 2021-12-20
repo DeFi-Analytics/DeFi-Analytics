@@ -32,6 +32,8 @@ class arbitrageViewClass:
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoArbitrage")))])),
                    dcc.Interval(id='dexArbitrage60s', interval=60 * 1000, n_intervals=0),
                    dcc.Interval(id='dexArbitrage600s', interval=600 * 1000, n_intervals=0),
+                   html.Div(dcc.Graph(id='figureCoinpriceShortterm', config={'displayModeBar': False}), style={'display': 'none'}) # needed for old running instances
+
                    ]
         return content
 
