@@ -42,43 +42,33 @@ class changeCoinAddressesViewClass:
         # change in address count
         trace_diffNbMN = dict(type='scatter', name='Masternodes', x=data['diffNbMN'].dropna().index, y=data['diffNbMN'].dropna(),
                               mode='lines', line=dict(color='#f44235'), line_width=3, hovertemplate='%{y:,.0f}', legendgroup='MN', visible='legendonly')
-        figChange.add_trace(trace_diffNbMN, 1, 1)
-
-        trace_diffNbFund = dict(type='scatter', name='Community fund', x=data['diffNbNone'].dropna().index, y=data['diffNbNone'].dropna(),            # dropna not useful for none-array
-                                mode='lines', line=dict(color='#ff9800'), line_width=3, hovertemplate='%{y:,.0f}', legendgroup='CF', visible='legendonly')
-        figChange.add_trace(trace_diffNbFund, 1, 1)
-
-        trace_diffNbFoundation = dict(type='scatter', name='Foundation', x=data['diffNbNone'].dropna().index, y=data['diffNbNone'].dropna(),          # dropna not useful for none-array
-                                      mode='lines', line=dict(color='#22b852'), line_width=3, hovertemplate='%{y:,.0f}', legendgroup='Found', visible='legendonly')
-        figChange.add_trace(trace_diffNbFoundation, 1, 1)
 
         trace_diffNbOther = dict(type='scatter', name='Other', x=data['diffNbOther'].dropna().index, y=data['diffNbOther'].dropna(),
                                  mode='lines', line=dict(color='#410eb2'), line_width=3, hovertemplate='%{y:,.0f}', legendgroup='other')
 
+        figChange.add_trace(trace_diffNbMN, 1, 1)
         figChange.add_trace(trace_diffNbOther, 1, 1)
+
 
         # change in DFI amount
         trace_diffMnDFI = dict(type='scatter', name='', x=data['diffmnDFI'].dropna().index, y=data['diffmnDFI'].dropna(),
                                mode='lines', line=dict(color='#f44235'), line_width=3, hovertemplate='%{y:,.0f}', legendgroup='MN', showlegend=False, visible='legendonly')
-        figChange.add_trace(trace_diffMnDFI, 2, 1)
-
-        trace_diffFundDFI = dict(type='scatter', name='', x=data['difffundDFI'].dropna().index, y=data['difffundDFI'].dropna(),
-                                 mode='lines', line=dict(color='#ff9800'), line_width=3, hovertemplate='%{y:,.0f}', legendgroup='CF', showlegend=False, visible='legendonly')
-        figChange.add_trace(trace_diffFundDFI, 2, 1)
-
-        trace_diffFoundationDFI = dict(type='scatter', name='', x=data['difffoundationDFI'].dropna().index, y=data['difffoundationDFI'].dropna(),
-                                       mode='lines', line=dict(color='#22b852'), line_width=3,
-                                       hovertemplate='%{y:,.0f}', legendgroup='Found', showlegend=False, visible='legendonly')
-        figChange.add_trace(trace_diffFoundationDFI, 2, 1)
 
         trace_diffOtherDFI = dict(type='scatter', name='', x=data['diffotherDFI'].dropna().index, y=data['diffotherDFI'].dropna(),
                                   mode='lines', line=dict(color='#410eb2'), line_width=3, hovertemplate='%{y:,.0f}', legendgroup='other', showlegend=False)
-        figChange.add_trace(trace_diffOtherDFI, 2, 1)
 
         trace_diffLMDFI = dict(type='scatter', name='Liquidity pool', x=data['diffLMDFI'].dropna().index, y=data['diffLMDFI'].dropna(),
                                mode='lines', line=dict(color='#ff00af'), line_width=3,
                                hovertemplate='%{y:,.0f}', legendgroup='lm')
+
+        trace_diffvaultDFI = dict(type='scatter', name='Vaults', x=data['diffvaultDFI'].dropna().index, y=data['diffvaultDFI'].dropna(),
+                               mode='lines', line=dict(color='#808000'), line_width=3,
+                               hovertemplate='%{y:,.0f}', legendgroup='vaults')
+
+        figChange.add_trace(trace_diffMnDFI, 2, 1)
+        figChange.add_trace(trace_diffOtherDFI, 2, 1)
         figChange.add_trace(trace_diffLMDFI, 2, 1)
+        figChange.add_trace(trace_diffvaultDFI, 2, 1)
 
         figChange.update_yaxes(title_text='Daily change address count', tickformat=",.f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1,
                                col=1)  # ,range=[-50, 200]
