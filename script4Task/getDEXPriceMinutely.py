@@ -63,7 +63,7 @@ while True:
         
     dfOldLMPoolData = pd.read_csv(filepath,index_col=0)
     dfLMPoolData = dfOldLMPoolData.append(dfLMPoolData, sort=False)
-    dfLMPoolData = dfLMPoolData[-540:]
+    dfLMPoolData = dfLMPoolData[-2070:]
     dfLMPoolData.reset_index(inplace=True, drop=True)
         
     dfLMPoolData.to_csv(filepath)
