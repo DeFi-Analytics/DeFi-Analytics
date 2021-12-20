@@ -423,7 +423,17 @@ class defichainAnalyticsModelClass:
         filePath = self.dataPath + 'LMPoolData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_dexHourly:
-            hourlyDEXData = pd.read_csv(filePath, index_col=0)
+            # hourlyDEXData = pd.read_csv(filePath, index_col=0,
+            #                             dtype={"DFIPrices": float, "DFIPricesBittrex": float, "Time": "string", "commission": float, "customRewards": "string",
+            #                                    "idTokenA": int, "idTokenB": int, 'numberAddresses': float, 'reserveA': float, 'reserveA/reserveB': float,
+            #                                    'reserveB': float, 'reserveB/reserveA':float, 'symbol': "string", 'totalLiquidity': float, 'rewardLoanPct': float})
+            hourlyDEXData = pd.read_csv(filePath, header=0,
+                                        usecols=["DFIPrices", "DFIPricesBittrex", "Time", "idTokenA", "idTokenB", 'numberAddresses', 'reserveA', 'reserveA/reserveB',
+                                               'reserveB', 'reserveB/reserveA', 'symbol', 'totalLiquidity'],
+                                        dtype={"DFIPrices": float, "DFIPricesBittrex": float, "Time": "string",
+                                               "idTokenA": int, "idTokenB": int, 'numberAddresses': float, 'reserveA': float, 'reserveA/reserveB': float,
+                                               'reserveB': float, 'reserveB/reserveA':float, 'symbol': "string", 'totalLiquidity': float})
+
             hourlyDEXData['timeRounded'] = pd.to_datetime(hourlyDEXData.Time).dt.floor('H')
             hourlyDEXData.set_index(['timeRounded'], inplace=True)
             hourlyDEXData['reserveA_DFI'] = hourlyDEXData['reserveA'] / hourlyDEXData['DFIPrices']
