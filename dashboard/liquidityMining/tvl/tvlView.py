@@ -25,7 +25,7 @@ class tvlViewClass:
     @staticmethod
     def createTVLGraph(data, currencySelection, bgImage):
         if currencySelection == 'BTC':
-            DFIPrice = data['BTC-DFI_DFIPrices']       # choose BTC-pool DFI-price in BTC
+            DFIPrice = data['BTC-DFI_DFIPrices'].fillna(0)       # choose BTC-pool DFI-price in BTC
             columnName = 'lockedBTC'
             yAxisLabel = 'Value in BTC'
             hoverTemplateRepresenation = '%{y:,.3f}BTC'
@@ -35,14 +35,15 @@ class tvlViewClass:
             yAxisLabel = 'Value in DFI'
             hoverTemplateRepresenation = '%{y:,.0f}DFI'
         else:
-            DFIPrice = data['USDT-DFI_DFIPrices']       # choose USDT-pool for DFI-price in BTC
+            DFIPrice = data['USDT-DFI_DFIPrices'].fillna(0)       # choose USDT-pool for DFI-price in BTC
             columnName = 'lockedUSD'
             yAxisLabel = 'Value in $'
             hoverTemplateRepresenation = '$%{y:,.0f}'
 
         TVLOverall = (data['BTC-DFI_lockedDFI']+data['ETH-DFI_lockedDFI']+data['USDT-DFI_lockedDFI'] +
                       data['DOGE-DFI_lockedDFI'].fillna(0)+data['LTC-DFI_lockedDFI'].fillna(0) +
-                      data['BCH-DFI_lockedDFI'].fillna(0) + data['USDC-DFI_lockedDFI'].fillna(0)) * DFIPrice  # DFI is USD is highest price of the 3
+                      data['BCH-DFI_lockedDFI'].fillna(0) + data['USDC-DFI_lockedDFI'].fillna(0) +
+                      data['DUSD-DFI_reserveB'].fillna(0)) * DFIPrice  # DFI is USD is highest price of the 3
 
         lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
@@ -61,6 +62,10 @@ class tvlViewClass:
                             mode='lines', line=dict(color='#da3832'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tozeroy')
         trace_TVLETH = dict(type='scatter', name='ETH', x=data['ETH-DFI_'+columnName].dropna().index, y=data['ETH-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#617dea'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+
+        trace_TVLDFI_dUSD = dict(type='scatter', name='dUSD (only DFI part)', x=data['DUSD-DFI_reserveB'].dropna().index, y=(data['DUSD-DFI_reserveB'] * DFIPrice).dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#ff9800'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+
         trace_TVLUSDT = dict(type='scatter', name='USDT', x=data['USDT-DFI_'+columnName].dropna().index, y=data['USDT-DFI_'+columnName].dropna(), stackgroup='one',
                              mode='lines', line=dict(color='#22b852'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_TVLDOGE = dict(type='scatter', name='DOGE', x=data['DOGE-DFI_'+columnName].dropna().index, y=data['DOGE-DFI_'+columnName].dropna(), stackgroup='one',
@@ -78,11 +83,13 @@ class tvlViewClass:
 
         figTVL.add_trace(trace_TVLBTC, 1, 1)
         figTVL.add_trace(trace_TVLETH, 1, 1)
+        figTVL.add_trace(trace_TVLDFI_dUSD, 1, 1)
         figTVL.add_trace(trace_TVLUSDT, 1, 1)
-        figTVL.add_trace(trace_TVLDOGE, 1, 1)
+        figTVL.add_trace(trace_TVLUSDC, 1, 1)
         figTVL.add_trace(trace_TVLLTC, 1, 1)
         figTVL.add_trace(trace_TVLBCH, 1, 1)
-        figTVL.add_trace(trace_TVLUSDC, 1, 1)
+        figTVL.add_trace(trace_TVLDOGE, 1, 1)
+
 
         figTVL.add_trace(trace_TVLOverall, 1, 1)
 
