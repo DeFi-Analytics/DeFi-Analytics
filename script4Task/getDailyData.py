@@ -90,10 +90,31 @@ def getDFISignalData():
     dfDFISignal = pd.concat([dfDFISignal, dfNewData]).drop_duplicates().sort_index()
     dfDFISignal.to_csv(filepath)
 
+def getEmissionData():
+    # generate filepath relative to script location
+    filepath = path + 'dfiEmissionData.csv'
+
+    dateTimeObj = datetime.now()
+    strTimestamp = dateTimeObj.strftime("%Y-%m-%d")
+
+    # API request masternode number
+    link='https://ocean.defichain.com/v0/mainnet/stats'
+    siteContent = requests.get(link)
+    jsonData = json.loads(siteContent.text)
+    dfNewData = pd.Series(jsonData['data']['emission'])
+    dfNewData['dToken'] = dfNewData['total']*0.1234*2
+    dfNewData['burned'] = dfNewData['burned'] - dfNewData['dToken']
+    dfNewData.name = strTimestamp
+
+    dfDFIemission = pd.read_csv(filepath, index_col=0)
+    dfDFIemission = dfDFIemission.append(dfNewData)
+    # dfPromoData.loc[strTimestamp] = newData.values
+
+    # writing file
+    dfDFIemission.to_csv(filepath)
+
+
 # call all acquisition functions with error handling
-
-
-
 
 # Allnode Masternodes
 try:
@@ -122,3 +143,10 @@ try:
     print('Data DFI-Signal saved')
 except:
     print('### Error in DFI-Signal data acquisition')
+
+# DFI emission data
+try:
+    getEmissionData()
+    print('Data DFI emission saved')
+except:
+    print('### Error in DFI emission data acquisition')
