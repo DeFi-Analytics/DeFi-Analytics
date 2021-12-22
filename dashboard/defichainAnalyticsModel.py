@@ -138,7 +138,9 @@ class defichainAnalyticsModelClass:
             lmCoins['DOGE_pool'] = self.hourlyData.groupby('Date')['DOGE-DFI_reserveB'].first()
             lmCoins['LTC_pool'] = self.hourlyData.groupby('Date')['LTC-DFI_reserveB'].first()
             lmCoins['USDC_pool'] = self.hourlyData.groupby('Date')['USDC-DFI_reserveB'].first()
-            lmCoins['overall'] = lmCoins['BTC_pool'] + lmCoins['ETH_pool'] + lmCoins['USDT_pool'] + lmCoins['DOGE_pool'].fillna(0) + lmCoins['LTC_pool'].fillna(0) + lmCoins['USDC_pool'] .fillna(0)
+            lmCoins['dUSD_pool'] = self.hourlyData.groupby('Date')['DUSD-DFI_reserveB'].first()
+            lmCoins['overall'] = lmCoins['BTC_pool'] + lmCoins['ETH_pool'] + lmCoins['USDT_pool'] + lmCoins['DOGE_pool'].fillna(0) + lmCoins['LTC_pool'].fillna(0) \
+                                 + lmCoins['USDC_pool'] .fillna(0) + lmCoins['dUSD_pool'].fillna(0)
             self.dailyData['lmDFI'] = lmCoins['overall']
 
             # getting DFI in vaults
