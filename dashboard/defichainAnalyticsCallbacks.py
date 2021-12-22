@@ -7,12 +7,14 @@ PFEIL_ZU = "fas fa-chevron-right mr-3"
 PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 
 class defichainAnalyticsCallbacksClass:
-    def __init__(self, defichainAnalyticsModel, generalController, blockchainController, dexController, liquidityMiningController, tokenController, communityController, aboutController):
+    def __init__(self, defichainAnalyticsModel, generalController, blockchainController, dexController, liquidityMiningController, vaultsLoansController,
+                 tokenController, communityController, aboutController):
         self.defichainAnalyticsModel = defichainAnalyticsModel
         self.generalController = generalController
         self.blockchainController = blockchainController
         self.dexController = dexController
         self.liquidityMiningController = liquidityMiningController
+        self.vaultsLoansController = vaultsLoansController
         self.tokenController = tokenController
         self.communityController = communityController
         self.aboutController = aboutController
@@ -326,6 +328,8 @@ class defichainAnalyticsCallbacksClass:
                 pageContent = self.dexController.getContent(selectedEntry)
             elif urlPath in ["/liquidityMining"]:
                 pageContent = self.liquidityMiningController.getContent(selectedEntry)
+            elif urlPath in ["/vaultsLoans"]:
+                pageContent = self.vaultsLoansController.getContent(selectedEntry)
             elif urlPath in ["/token"]:
                 pageContent = self.tokenController.getContent(selectedEntry)
             elif urlPath in ["/community"]:
