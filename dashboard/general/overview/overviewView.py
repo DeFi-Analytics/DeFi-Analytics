@@ -42,7 +42,7 @@ class overviewViewClass:
                 html.Tr([html.Td('Other addresses'),
                          html.Td("{:,.0f} DFI".format(data['otherDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr([html.Td('NormalMasternodes'),
-                         html.Td("{:,.0f} DFI".format(data['mnDFI'].values[0]-(data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000), style={'text-align': 'right'})]),
+                         html.Td("{:,.0f} DFI".format(data['mnDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr([html.Td('Liquidity Pool'),
                          html.Td("{:,.0f} DFI".format(data['lmDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr([html.Td('Vaults Collateral'),
@@ -53,14 +53,14 @@ class overviewViewClass:
                          html.Td("{:,.0f} DFI".format(data['erc20DFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('Circulating supply', style={'font-weight': 'bold'}),
-                     html.Td(["{:,.0f} DFI".format(data['circDFI'].values[0]-(data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000)+hintAfterNumber], style={'text-align': 'right', 'font-weight': 'bold', 'color': fontColor})]),
+                     html.Td(["{:,.0f} DFI".format(data['circDFI'].values[0])+hintAfterNumber], style={'text-align': 'right', 'font-weight': 'bold', 'color': fontColor})]),
                 html.Tr(html.Td(html.Br())),
 
 
 
                 html.Tr(
                     [html.Td('Locked Masternodes'),
-                     html.Td("{:,.0f} DFI".format((data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000), style={'text-align': 'right'})]),
+                     html.Td("{:,.0f} DFI".format(data['mnDFILocked'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('Community Fund'),
                      html.Td("{:,.0f} DFI".format(data['fundDFI'].values[0]), style={'text-align': 'right'})]),

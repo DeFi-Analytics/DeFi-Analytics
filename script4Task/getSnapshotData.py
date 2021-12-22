@@ -72,12 +72,17 @@ while True:
 
         if addFund in dfRichList.values:
             fundDFIValue = dfRichList[dfRichList.address == addFund].balance.values[0]
-        mnDFIValue = dfRichList[condMN].balance.sum()
+        mnDFIOverallValue = dfRichList[condMN].balance.sum()
         otherDFIValue = dfRichList[condPrivateAddress].balance.sum()
         if addERC20 in dfRichList.values:
             erc20DFIValue = dfRichList[dfRichList.address == addERC20].balance.values[0]
         else:
             erc20DFIValue = 0
+
+        # calculate DFI locked and not locked
+        mnDFIValue = mnDFIOverallValue - (nbMNlocked5 + nbMNlocked10)*20000
+        mnDFILockedValue = (nbMNlocked5 + nbMNlocked10)*20000
+
 
         # get all burned DFI
         linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
@@ -135,8 +140,8 @@ while True:
             bCorrectValues = False
 
 
-        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue + vaultsDFIValue - (nbMNlocked5 + nbMNlocked10)*20000
-        totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue + (nbMNlocked5 + nbMNlocked10)*20000
+        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue + vaultsDFIValue
+        totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue + mnDFILockedValue
 
         maxDFIValue = 1200000000
 
@@ -170,6 +175,7 @@ while True:
         nbOtherId = oldSnapshot['nbOtherId'].values[0]
         fundDFIValue = oldSnapshot['fundDFI'].values[0]
         mnDFIValue = oldSnapshot['mnDFI'].values[0]
+        mnDFILockedValue = oldSnapshot['mnDFILocked'].values[0]
         otherDFIValue = oldSnapshot['otherDFI'].values[0]
         foundationDFIValue = oldSnapshot['foundationDFI'].values[0]
         lmDFIValue = oldSnapshot['lmDFI'].values[0]
@@ -197,9 +203,9 @@ while True:
 
     print('... saving data')
     # convert single data to pandas series
-    colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'burnedDFI', 'circDFI',
+    colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'mnDFILocked', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'burnedDFI', 'circDFI',
                 'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft', 'bCorrectValues', 'nbMNlocked5', 'nbMNlocked10', 'vaultsDFI']
-    listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, burnedDFIValue, circDFIValue,
+    listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, mnDFILockedValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, burnedDFIValue, circDFIValue,
                 totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft, bCorrectValues, nbMNlocked5, nbMNlocked10, vaultsDFIValue]
     seriesData = pd.Series(listData, index = colNames)
 
