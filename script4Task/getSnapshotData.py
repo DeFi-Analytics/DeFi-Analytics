@@ -123,7 +123,8 @@ while True:
                 tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
         except:
             print('### error token richlist')
-            tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
+            #tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
+            tokenDFIValue = np.NaN
 
         # get DFI in vaults of last capture (time consumptive API)
         vaultsData = pd.read_csv(filePathVaults, index_col=0)
