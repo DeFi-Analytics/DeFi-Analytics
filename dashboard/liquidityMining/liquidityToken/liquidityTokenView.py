@@ -30,20 +30,18 @@ class liquidityTokenViewClass:
     @staticmethod
     def createLiquidityTokenGraph(data, selectedCoin, bgImage):
         figLiquidityToken = make_subplots(
-            rows=3, cols=1,
+            rows=2, cols=1,
             vertical_spacing=0.10,
-            row_width=[0.3, 0.3, 0.4],  # from bottom to top
+            row_width=[0.3, 0.7],  # from bottom to top
             specs=[[{}],
-                   [{}],
                    [{}]],
             shared_xaxes=True,
-            subplot_titles=(['Liquidity Token', 'Daily change LT', 'Addresses holding LT']))
+            subplot_titles=(['Liquidity Token', 'Daily change LT']))
         figLiquidityToken.layout.annotations[0].font.color = '#6c757d'  # subplot title font color
         figLiquidityToken.layout.annotations[0].font.size = 20
         figLiquidityToken.layout.annotations[1].font.color = '#6c757d'
         figLiquidityToken.layout.annotations[1].font.size = 20
-        figLiquidityToken.layout.annotations[2].font.color = '#6c757d'
-        figLiquidityToken.layout.annotations[2].font.size = 20
+
         # absolute price
         if selectedCoin == 'USDT':
             lineColor = '#22b852'
@@ -70,25 +68,18 @@ class liquidityTokenViewClass:
                                  x=data.groupby('Date')[selectedCoin + '-DFI_totalLiquidity'].first().diff().index,
                                  y=data.groupby('Date')[selectedCoin + '-DFI_totalLiquidity'].first().diff(),
                                  mode='lines', line=dict(color=lineColor, dash='dash'), line_width=2, hovertemplate='%{y:,.1f} ' + selectedCoin + '-DFI')
-        trace_nbAddresses = dict(type='scatter', name='Number Addresses', x=data[selectedCoin + '-DFI_numberAddresses'].dropna().index,
-                                 y=data[selectedCoin + '-DFI_numberAddresses'].dropna(),
-                                 mode='lines', line=dict(color=lineColor, dash='dot'), line_width=2, hovertemplate='%{y:,.0f}')
 
         figLiquidityToken.add_trace(trace_LiquidityToken, 1, 1)
         figLiquidityToken.add_trace(trace_dailyChange, 2, 1)
-        figLiquidityToken.add_trace(trace_nbAddresses, 3, 1)
 
         figLiquidityToken.update_yaxes(title_text='Liquidity Token ' + selectedCoin + '-DFI', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
                                        zerolinecolor='#6c757d', row=1, col=1)
         figLiquidityToken.update_yaxes(title_text='Absolute change of ' + selectedCoin + '-DFI', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
                                        zerolinecolor='#6c757d', row=2, col=1)
-        figLiquidityToken.update_yaxes(title_text='Number', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
-                                       zerolinecolor='#6c757d', row=3, col=1)
 
         figLiquidityToken.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
                                        range=[date30DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
-        figLiquidityToken.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
-        figLiquidityToken.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=3, col=1)
+        figLiquidityToken.update_xaxes(title_text="Date",gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=2, col=1)
 
         # Add range slider
         figLiquidityToken.update_layout(xaxis=dict(
@@ -104,8 +95,7 @@ class liquidityTokenViewClass:
             type="date"))
 
         # add background picture
-        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.85, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
-        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.46, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
+        figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.69, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
         figLiquidityToken.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.13, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.25))
 
         figLiquidityToken.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
