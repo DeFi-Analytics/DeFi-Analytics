@@ -64,6 +64,7 @@
     #figureOverallTVL {height: 715px}
 
     #figureNbVaults {height: 750px}
+    #figureTVLVaults {height: 715px}
 }
 
 @media only screen and (max-width: 768px) {
@@ -131,6 +132,7 @@
         #figureOverallTVL {height: 600px}
 
         #figureNbVaults {height: 600px}
+        #figureTVLVaults {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -171,6 +173,7 @@
         #figureOverallTVL {height: 330px}
 
         #figureNbVaults {height: 330px}
+        #figureTVLVaults {height: 330px}
         }
 }
 

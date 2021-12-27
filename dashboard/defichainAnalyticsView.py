@@ -156,7 +156,7 @@ class defichainAnalyticsViewClass:
             dbc.Collapse(
                 [
                     dbc.NavLink("Number vaults", href="/vaultsLoans?entry=nbVaults", className="linkstyle", id="nbVaults"),
-
+                    dbc.NavLink("TVL vaults", href="/vaultsLoans?entry=tvlVaults", className="linkstyle", id="tvlVaults"),
                 ],
                 id="submenu-vaultsLoans-collapse",
             ),

@@ -191,7 +191,7 @@ class defichainAnalyticsModelClass:
         vaultsLockedDFI = self.hourlyData.sumBTC / self.hourlyData['BTC-DFI_reserveA/reserveB'] + \
                             self.hourlyData.sumDFI + \
                             self.hourlyData.sumUSDC / self.hourlyData['USDC-DFI_reserveA/reserveB'] + \
-                            self.hourlyData.sumUSDT / self.hourlyData['USDC-DFI_reserveA/reserveB']
+                            self.hourlyData.sumUSDT / self.hourlyData['USDT-DFI_reserveA/reserveB']
         vaultsLockedDFI.index = vaultsLockedDFI.index.floor('D').astype(str) # remove time information, only date is needed
         self.dailyData['tvlVaultsDFI'] = vaultsLockedDFI[(vaultsLockedDFI!=0.0) & (vaultsLockedDFI.notnull())].groupby(level=0).first()
         print('>>>> Overall TVL calculated <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
