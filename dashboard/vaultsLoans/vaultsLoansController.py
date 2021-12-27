@@ -1,6 +1,6 @@
 
 from .nbVaults.nbVaultsView import nbVaultsViewClass
-#from .fees.feesCallbacks import feesCallbacksClass
+from .nbVaults.nbVaultsCallbacks import nbVaultsCallbacksClass
 
 class vaultsLoansControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -8,7 +8,7 @@ class vaultsLoansControllerClass:
 
         # initialize daa classes
         self.nbVaultsView = nbVaultsViewClass()
-        # self.daaCallbacks = daaCallbacksClass(app)
+        self.nbVaultsCallbacks = nbVaultsCallbacksClass(app)
 
     def getContent(self, entry):
         pageContent = None

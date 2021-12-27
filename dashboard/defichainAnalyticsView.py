@@ -137,6 +137,31 @@ class defichainAnalyticsViewClass:
             ),
         ]
 
+        submenu_vaultsLoans = [
+            html.Li(
+                # use Row and Col components to position the chevrons
+                dbc.Row(
+                    [
+                        dbc.Col("Vaults & Loans"),
+                        dbc.Col(
+                            html.I(className=PFEIL_ZU, id="submenu-vaultsLoans-arrow"), width="auto"
+                        ),
+                    ],
+                    className="my-1",
+                ),
+                className="submenu_linkstyle",
+                id="submenu-vaultsLoans",
+            ),
+            # we use the Collapse component to hide and reveal the navigation links
+            dbc.Collapse(
+                [
+                    dbc.NavLink("Number vaults", href="/vaultsLoans?entry=nbVaults", className="linkstyle", id="nbVaults"),
+
+                ],
+                id="submenu-vaultsLoans-collapse",
+            ),
+        ]
+
         submenu_token = [
             html.Li(
                 # use Row and Col components to position the chevrons
@@ -262,7 +287,8 @@ class defichainAnalyticsViewClass:
             [
                 sidebar_header,
 
-                dbc.Collapse([html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_token + submenu_community + submenu_about,
+                dbc.Collapse([html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_vaultsLoans + submenu_token
+                                               + submenu_community + submenu_about,
                               vertical=True, id='navbar-container'), className="scrollbar_sidemenu"),
                              sidebar_footer],
                     id="menuResponsiveCollapse", className="menu_collapse"),
@@ -273,7 +299,7 @@ class defichainAnalyticsViewClass:
 
         MainWindow = dcc.Loading([html.Div(id="page-content", className="contentstyle"),
                                   refLink,
-                                  html.Div(id='hiddenDivTimestampsMenuClicked', children='0 0 0 0 0 0 0', style={'display':'none'})],
+                                  html.Div(id='hiddenDivTimestampsMenuClicked', children='0 0 0 0 0 0 0 0', style={'display':'none'})],
                                  type="default")
         self.trackVisit()
         self.layout = html.Div([dcc.Location(id="url"), sidebar, MainWindow])

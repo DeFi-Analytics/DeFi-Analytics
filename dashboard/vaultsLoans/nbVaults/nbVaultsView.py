@@ -43,7 +43,17 @@ class nbVaultsViewClass:
         trace_nbVaults = dict(type='scatter', name='Vaults',
                          x=data['nbVaults'].dropna().index, y=data['nbVaults'].dropna(),
                          mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:.0f}')
+
+        trace_nbLiquiditation = dict(type='scatter', name='In liquidation',x=data['nbLiquidation'].dropna().index, y=data['nbLiquidation'].dropna(),
+                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:.f}', fill='tozeroy')
+
+        trace_otherAddresses = dict(type='scatter', name='Active', x=(data['nbVaults']-data['nbLiquidation']).dropna().index, y=(data['nbVaults']-data['nbLiquidation']).dropna(),
+                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:.f}', fill='tonexty')
+
+        figNbVaults.add_trace(trace_nbLiquiditation, 1, 1)
+        figNbVaults.add_trace(trace_otherAddresses, 1, 1)
         figNbVaults.add_trace(trace_nbVaults, 1, 1)
+
 
         figNbVaults.update_yaxes(title_text='number vaults', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)  # ,range=[-50, 200]
         figNbVaults.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
@@ -82,7 +92,8 @@ class nbVaultsViewClass:
 
     @staticmethod
     def getNbVaultsExplanation():
-        nbVaultsCardExplanation = [html.P([''],style={'text-align': 'justify'}),
+        nbVaultsCardExplanation = [html.P(['For minting dTokens on DefiChain you have to put a collateral into a vault. This evaluation shows the number of all vaults on DefiChain over time. '
+                                           'There is also a separation into active running vaults and that ones in liquidation, where the owner has no longer access to the collateral.'],style={'text-align': 'justify'}),
                                html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                        ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                         style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})

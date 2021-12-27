@@ -62,6 +62,8 @@
     #figureDFISignal {height: 635px}
     #figureMarketcap {height: 715px}
     #figureOverallTVL {height: 715px}
+
+    #figureNbVaults {height: 750px}
 }
 
 @media only screen and (max-width: 768px) {
@@ -127,6 +129,8 @@
         #figureDFISignal {height: 600px}
         #figureMarketcap {height: 600px}
         #figureOverallTVL {height: 600px}
+
+        #figureNbVaults {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -165,6 +169,8 @@
         #figureDFISignal {height: 330px}
         #figureMarketcap {height: 330px}
         #figureOverallTVL {height: 330px}
+
+        #figureNbVaults {height: 330px}
         }
 }
 
