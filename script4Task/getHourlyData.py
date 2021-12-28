@@ -37,7 +37,7 @@ def getVaultsData():
             newDataAPI = False
         for item in tempData['data']:
             listAvailableTokens.append(item['token']['symbol'])
-    listAvailableTokens = ['sum' + item for item in listAvailableTokens]
+    listAvailableTokens = ['sumLoan' + item for item in listAvailableTokens]
 
     # API request of available ticker prices
     dfOracle = pd.DataFrame()
@@ -69,8 +69,8 @@ def getVaultsData():
         burnedPayback = np.NaN
 
 
-    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT']+dfOracle.index.to_list()+['burnedAuction', 'burnedPayback'],
-                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+[burnedAuction, burnedPayback])
+    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD']+dfOracle.index.to_list()+['burnedAuction', 'burnedPayback'],
+                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+[burnedAuction, burnedPayback])
 
 
     # API request current vaults
@@ -98,7 +98,7 @@ def getVaultsData():
                 for coinsCollateral in item['collateralAmounts']:
                     vaultData['sum'+coinsCollateral['symbol']] += float(coinsCollateral['amount'])
                 for coinsMinted in item['loanAmounts']:
-                    vaultData['sum'+coinsMinted['symbol']] += float(coinsMinted['amount'])
+                    vaultData['sumLoan'+coinsMinted['symbol']] += float(coinsMinted['amount'])
 
             elif item['state'] == 'IN_LIQUIDATION':
                 vaultData['nbLiquidation'] += 1
