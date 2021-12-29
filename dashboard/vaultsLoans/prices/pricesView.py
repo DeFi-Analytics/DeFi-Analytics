@@ -106,7 +106,10 @@ class pricesDTokenViewClass:
 
     @staticmethod
     def getPricesExplanation():
-        dTokenPricesCardExplanation = [html.P(['...'],style={'text-align': 'justify'}),
+        dTokenPricesCardExplanation = [html.P(['dTokens on DefiChain are tradable on the DEX and the current price is defined by the pool ratio. The token price is not directly linked to the real asset. '
+                                               'The only connection to the world outside the blockchain is the price feed of the oracle, which is used in the loan. With the oracle price the '
+                                               'current collateralization ratio is determined and defines the liquidation level.'],style={'text-align': 'justify'}),
+                                       html.P(['This graphs shows both price informations - DEX and oracle - over time for the selected ticker symbol.'], style={'text-align': 'justify'}),
                                html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                        ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                         style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})
