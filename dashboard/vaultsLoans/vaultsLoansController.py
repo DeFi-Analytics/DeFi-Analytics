@@ -5,6 +5,9 @@ from .nbVaults.nbVaultsCallbacks import nbVaultsCallbacksClass
 from .tvl.tvlView import tvlVaultsViewClass
 from .tvl.tvlCallbacks import tvlVaultsCallbacksClass
 
+from .prices.pricesView import pricesDTokenViewClass
+from .prices.pricesCallbacks import pricesDTokenCallbacksClass
+
 class vaultsLoansControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -17,6 +20,10 @@ class vaultsLoansControllerClass:
         self.tvlVaultsView = tvlVaultsViewClass()
         self.tvlVaultsCallbacksClass = tvlVaultsCallbacksClass(self.defichainAnalyticsModel, self.tvlVaultsView, app)
 
+        # initialize tvlVaults classes
+        self.pricesDTokenView = pricesDTokenViewClass()
+        self.pricesDTokenCallbacks = pricesDTokenCallbacksClass(self.defichainAnalyticsModel, self.pricesDTokenView, app)
+
 
     def getContent(self, entry):
         pageContent = None
@@ -26,6 +33,11 @@ class vaultsLoansControllerClass:
         elif entry == 'tvlVaults':
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadVaultData()
-            pageContent = self.tvlVaultsView.getTVLContent(self.defichainAnalyticsModel.hourlyData)
+            pageContent = self.tvlVaultsView.getTVLContent()
+        elif entry == 'dTokenPrices':
+            self.defichainAnalyticsModel.loadHourlyDEXdata()
+            self.defichainAnalyticsModel.loadVaultData()
+            pageContent = self.pricesDTokenView.getPricesDTokenContent()
+
 
         return pageContent

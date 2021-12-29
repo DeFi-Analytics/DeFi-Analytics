@@ -8,7 +8,7 @@ import dateutil.relativedelta
 
 class tvlVaultsViewClass:
 
-    def getTVLContent(self, data):
+    def getTVLContent(self):
         content = [dbc.Modal([dbc.ModalHeader("Info Total Value Locked (TVL) as Collateral"),
                               dbc.ModalBody(self.getTVLExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoTVLVaults", className="ml-auto"))], id="modalTVLVaults", size='xl'),
