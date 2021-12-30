@@ -15,14 +15,31 @@ class liquidityTokenViewClass:
                    dbc.Card(dbc.CardBody([html.H4(['Liquidity Token']),
                                           html.Table([html.Tr([html.Td('Select pool for plotting liquidity token data:'),
                                           html.Td(dcc.Dropdown(id='LTSelection',options=[
-                                            {'label':'BTC','value':'BTC'},
-                                            {'label':'ETH','value':'ETH'},
-                                            {'label':'USDT','value':'USDT'},
-                                            {'label':'DOGE','value':'DOGE'},
-                                            {'label':'LTC','value':'LTC'},
-                                            {'label':'BCH','value':'BCH'},
-                                            {'label':'USDC','value':'USDC'}],
-                                            value='BTC', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
+                                            {'label':'BTC','value':'BTC-DFI'},
+                                            {'label':'ETH','value':'ETH-DFI'},
+                                            {'label':'USDT','value':'USDT-DFI'},
+                                            {'label':'DOGE','value':'DOGE-DFI'},
+                                            {'label':'LTC','value':'LTC-DFI'},
+                                            {'label':'BCH','value':'BCH-DFI'},
+                                            {'label':'USDC','value':'USDC-DFI'},
+                                            {'label': 'dUSD', 'value': 'DUSD-DFI'},
+                                            {'label': 'AAPL', 'value': 'AAPL-DUSD'},
+                                            {'label': 'ARKK', 'value': 'ARKK-DUSD'},
+                                            {'label': 'BABA', 'value': 'BABA-DUSD'},
+                                            {'label': 'GLD', 'value': 'GLD-DUSD'},
+                                            {'label': 'GME', 'value': 'GME-DUSD'},
+                                            {'label': 'GOOGL', 'value': 'GOOGL-DUSD'},
+                                            {'label': 'PDBC', 'value': 'PDBC-DUSD'},
+                                            {'label': 'PLTR', 'value': 'PLTR-DUSD'},
+                                            {'label': 'QQQ', 'value': 'QQQ-DUSD'},
+                                            {'label': 'SLV', 'value': 'SLV-DUSD'},
+                                            {'label': 'SPY', 'value': 'SPY-DUSD'},
+                                            {'label': 'TLT', 'value': 'TLT-DUSD'},
+                                            {'label': 'TSLA', 'value': 'TSLA-DUSD'},
+                                            {'label': 'URTH', 'value': 'URTH-DUSD'},
+                                            {'label': 'VNQ', 'value': 'VNQ-DUSD'}
+                                          ],
+                                            value='BTC-DFI', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
                             dbc.Col(dcc.Graph(id = 'figureLiquidityToken', config={'displayModeBar': False})),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoLT")))]))]
         return content
@@ -43,30 +60,32 @@ class liquidityTokenViewClass:
         figLiquidityToken.layout.annotations[1].font.size = 20
 
         # absolute price
-        if selectedCoin == 'USDT':
+        if selectedCoin == 'USDT-DFI':
             lineColor = '#22b852'
-        elif selectedCoin == 'ETH':
+        elif selectedCoin == 'ETH-DFI':
             lineColor = '#617dea'
-        elif selectedCoin == 'DOGE':
+        elif selectedCoin == 'DOGE-DFI':
             lineColor = '#c2a634'
-        elif selectedCoin == 'LTC':
+        elif selectedCoin == 'LTC-DFI':
             lineColor = '#ff2ebe'
-        elif selectedCoin == 'BCH':
+        elif selectedCoin == 'BCH-DFI':
             lineColor = '#410eb2'
-        elif selectedCoin == 'USDC':
+        elif selectedCoin == 'USDC-DFI':
             lineColor = '#7f4c00'
-        else:
+        elif selectedCoin == 'BTC-DFI':
             lineColor = '#da3832'
+        else:
+            lineColor = '#ff00af'
 
         lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
         date30DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
 
-        trace_LiquidityToken = dict(type='scatter', name='Liquidity Token', x=data[selectedCoin + '-DFI_totalLiquidity'].dropna().index,
-                                    y=data[selectedCoin + '-DFI_totalLiquidity'].dropna(),
+        trace_LiquidityToken = dict(type='scatter', name='Liquidity Token', x=data[selectedCoin + '_totalLiquidity'].dropna().index,
+                                    y=data[selectedCoin + '_totalLiquidity'].dropna(),
                                     mode='lines', line=dict(color=lineColor), line_width=2, hovertemplate='%{y:,.1f} ' + selectedCoin + '-DFI')
         trace_dailyChange = dict(type='scatter', name='Absolute Daily Change',
-                                 x=data.groupby('Date')[selectedCoin + '-DFI_totalLiquidity'].first().diff().index,
-                                 y=data.groupby('Date')[selectedCoin + '-DFI_totalLiquidity'].first().diff(),
+                                 x=data.groupby('Date')[selectedCoin + '_totalLiquidity'].first().diff().index,
+                                 y=data.groupby('Date')[selectedCoin + '_totalLiquidity'].first().diff(),
                                  mode='lines', line=dict(color=lineColor, dash='dash'), line_width=2, hovertemplate='%{y:,.1f} ' + selectedCoin + '-DFI')
 
         figLiquidityToken.add_trace(trace_LiquidityToken, 1, 1)
