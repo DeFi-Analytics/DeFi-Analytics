@@ -24,7 +24,7 @@ def getVaultsData():
 
 
     # API request of available decentralized tokens
-    listAvailableTokens = []
+    listAvailableTicker = []
     newDataAPI = True
     nextPage = ''
     while newDataAPI:
@@ -36,8 +36,8 @@ def getVaultsData():
         else:
             newDataAPI = False
         for item in tempData['data']:
-            listAvailableTokens.append(item['token']['symbol'])
-    listAvailableTokens = ['sumLoan' + item for item in listAvailableTokens]
+            listAvailableTicker.append(item['token']['symbol'])
+    listAvailableTokens = ['sumLoan' + item for item in listAvailableTicker] + ['sumLoanLiquidation' + item for item in listAvailableTicker]
 
     # API request of available ticker prices
     dfOracle = pd.DataFrame()
@@ -101,6 +101,8 @@ def getVaultsData():
                     vaultData['sumLoan'+coinsMinted['symbol']] += float(coinsMinted['amount'])
 
             elif item['state'] == 'IN_LIQUIDATION':
+                for batches in item['batches']:
+                    vaultData['sumLoanLiquidation'+batches['loan']['symbol']] += float(batches['loan']['amount'])
                 vaultData['nbLiquidation'] += 1
 
         vaultData.name = pd.Timestamp.now()
