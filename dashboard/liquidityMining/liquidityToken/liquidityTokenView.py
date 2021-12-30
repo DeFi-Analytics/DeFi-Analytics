@@ -91,9 +91,9 @@ class liquidityTokenViewClass:
         figLiquidityToken.add_trace(trace_LiquidityToken, 1, 1)
         figLiquidityToken.add_trace(trace_dailyChange, 2, 1)
 
-        figLiquidityToken.update_yaxes(title_text='Liquidity Token ' + selectedCoin + '-DFI', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
+        figLiquidityToken.update_yaxes(title_text='Liquidity Token ' + selectedCoin, tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
                                        zerolinecolor='#6c757d', row=1, col=1)
-        figLiquidityToken.update_yaxes(title_text='Absolute change of ' + selectedCoin + '-DFI', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
+        figLiquidityToken.update_yaxes(title_text='Absolute change of ' + selectedCoin, tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
                                        zerolinecolor='#6c757d', row=2, col=1)
 
         figLiquidityToken.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
