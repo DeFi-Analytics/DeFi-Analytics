@@ -12,35 +12,32 @@ filepath = path + 'TokenData.csv'
 
 # minted token on defichain
 print('Get tokens on defichain ...')
-link='https://api.defichain.io/v1/listtokens?network=mainnet&start=0&including_start=true'
+
+
+link='https://ocean.defichain.com/v0/mainnet/tokens'
 siteContent = requests.get(link)
-dfTokenData = pd.read_json(siteContent.text).transpose()
-dfTokenData = dfTokenData[['symbol','minted','creationTx','creationHeight','collateralAddress']].iloc[[1,2,3,7,9,11,13]]
+tempData = json.loads(siteContent.text)
+
+dfTokenData = pd.DataFrame(columns=['symbol','minted','creationTx','creationHeight','collateralAddress'])
+idTokens = {1, 2, 3, 7, 9, 11, 13}
+for id in idTokens:
+    dfTokenData.loc[id, 'symbol'] = tempData['data'][id]['symbol']
+    dfTokenData.loc[id, 'minted'] = tempData['data'][id]['minted']
+    dfTokenData.loc[id, 'creationTx'] = tempData['data'][id]['creation']['tx']
+    dfTokenData.loc[id, 'creationHeight'] = tempData['data'][id]['creation']['height']
+    dfTokenData.loc[id, 'collateralAddress'] = tempData['data'][id]['collateralAddress']
 dfTokenData['Time'] = pd.Timestamp.now()
     
 # burned token on defichain
 print('Get burned tokens on defichain ...')
-link='https://api.defichain.io/v1/getaccount?start=0&limit=500&network=mainnet&including_start=true&owner=8defichainBurnAddressXXXXXXXdRQkSm'
+link='https://ocean.defichain.com/v0/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm/tokens'
 siteContent = requests.get(link)
-dfTempData = pd.read_json(siteContent.text)
-dfBurnedTokenData = pd.DataFrame(dfTempData[0].str.split('@',1).tolist(),columns = ['amount','coin'])
-dfBurnedTokenData.set_index('coin',inplace=True)
+tempData = json.loads(siteContent.text)
+for item in tempData['data']:
+    if int(item['id']) in idTokens:
+        dfTokenData.loc[int(item['id']), 'Burned'] = item['amount']
 
-dfTokenData['Burned'] = None
-if 'BTC' in dfBurnedTokenData.index:
-    dfTokenData.loc[2,'Burned']=dfBurnedTokenData.loc['BTC','amount']
-if 'ETH' in dfBurnedTokenData.index:
-    dfTokenData.loc[1,'Burned']=dfBurnedTokenData.loc['ETH','amount']
-if 'USDT' in dfBurnedTokenData.index:
-    dfTokenData.loc[3,'Burned']=dfBurnedTokenData.loc['USDT','amount']
-if 'DOGE' in dfBurnedTokenData.index:
-    dfTokenData.loc[7,'Burned']=dfBurnedTokenData.loc['DOGE','amount']
-if 'LTC' in dfBurnedTokenData.index:
-    dfTokenData.loc[9,'Burned']=dfBurnedTokenData.loc['LTC','amount']
-if 'BCH' in dfBurnedTokenData.index:
-    dfTokenData.loc[11,'Burned']=dfBurnedTokenData.loc['BCH','amount']
-if 'USDC' in dfBurnedTokenData.index:
-    dfTokenData.loc[13,'Burned']=dfBurnedTokenData.loc['USDC','amount']
+
 
 
 print('Check collaterals ...')
