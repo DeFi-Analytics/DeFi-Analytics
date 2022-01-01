@@ -108,25 +108,17 @@ for richlistFile in foundRichlistFiles:
         linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
         siteContent = requests.get(linkBurninfo)
         if siteContent.status_code==200:
-            tempData = pd.read_json(siteContent.text).transpose()
-            burnedDFIFees = tempData.loc['feeburn', 0]
+            tempData = json.loads(siteContent.text)
+            burnedDFICoins = tempData['amount']
+            burnedDFIFees = tempData['feeburn']
+            burnedDFIRewards = tempData['emissionburn']
+            burnedDFIToken = tempData['tokens'][0][:-4]
+            burnedDFIAuction = tempData['auctionburn']
+            burnedDFILoan = tempData['paybackburn']
         else:
             burnedDFIFees = np.NaN
 
-        linkBurnRewards = 'https://api.defichain.io/v1/stats?network=mainnet&pretty'
-        siteContent = requests.get(linkBurnRewards)
-        if siteContent.status_code==200:
-            tempData = json.loads(siteContent.text)
-            burnedDFIRewards = tempData['listCommunities']['Burnt']
-        else:
-            burnedDFIRewards = np.NaN
-
-        if addBurned in rawRichlist.values:
-            burnedDFICoins = rawRichlist[rawRichlist.address == addBurned].balance.values[0]
-        else:
-            burnedDFICoins = 0
-
-        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards)
+        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan)
 
 
         if addDFIToken in rawRichlist.values:

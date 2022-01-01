@@ -83,21 +83,21 @@ while True:
         mnDFIValue = mnDFIOverallValue - (nbMNlocked5 + nbMNlocked10)*20000
         mnDFILockedValue = (nbMNlocked5 + nbMNlocked10)*20000
 
-
         # get all burned DFI
         linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
         siteContent = requests.get(linkBurninfo)
         if siteContent.status_code==200:
-            tempData = pd.read_json(siteContent.text).transpose()
-            burnedDFIFees = tempData.loc['feeburn', 0]
-            burnedDFIRewards = tempData.loc['emissionburn',0]
-            burnedDFICoins = tempData.loc['amount',0]
+            tempData = json.loads(siteContent.text)
+            burnedDFICoins = tempData['amount']
+            burnedDFIFees = tempData['feeburn']
+            burnedDFIRewards = tempData['emissionburn']
+            burnedDFIToken = tempData['tokens'][0][:-4]
+            burnedDFIAuction = tempData['auctionburn']
+            burnedDFILoan = tempData['paybackburn']
         else:
             burnedDFIFees = np.NaN
-            burnedDFIRewards = np.NaN
-            burnedDFICoins = np.NaN
 
-        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards)
+        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan)
 
         # get DFI from LiquidityMining and DFI-Token
         print('... getting LM and token data')
