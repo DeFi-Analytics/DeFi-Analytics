@@ -67,6 +67,7 @@
     #figureTVLVaults {height: 715px}
     #figurePricesDToken {height: 715px}
     #figureNbDToken {height: 715px}
+    #figureInterest {height: 715px}
 }
 
 @media only screen and (max-width: 768px) {
@@ -137,6 +138,7 @@
         #figureTVLVaults {height: 600px}
         #figurePricesDToken {height: 600px}
         #figureNbDToken {height: 600px}
+        #figureInterest {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -180,6 +182,7 @@
         #figureTVLVaults {height: 330px}
         #figurePricesDToken {height: 330px}
         #figureNbDToken {height: 330px}
+        #figureInterest {height: 330px}
         }
 }
 

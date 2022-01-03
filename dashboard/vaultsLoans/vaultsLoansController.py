@@ -11,6 +11,9 @@ from .prices.pricesCallbacks import pricesDTokenCallbacksClass
 from .nbDToken.nbDTokenView import nbDTokenViewClass
 from .nbDToken.nbDTokenCallbacks import nbDTokenCallbacksClass
 
+from .interest.interestView import interestViewClass
+from .interest.interestCallbacks import interestCallbacksClass
+
 class vaultsLoansControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -31,6 +34,10 @@ class vaultsLoansControllerClass:
         self.nbDTokenView = nbDTokenViewClass()
         self.nbDTokenCallbacks = nbDTokenCallbacksClass(self.defichainAnalyticsModel, self.nbDTokenView, app)
 
+        # initialize interest classes
+        self.interestView = interestViewClass()
+        self.interestCallbacks = interestCallbacksClass(self.defichainAnalyticsModel, self.interestView, app)
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "nbVaults"]:
@@ -47,5 +54,9 @@ class vaultsLoansControllerClass:
         elif entry == 'nbDToken':
             self.defichainAnalyticsModel.loadVaultData()
             pageContent = self.nbDTokenView.getnbDTokenContent()
+        elif entry == 'interest':
+            self.defichainAnalyticsModel.loadHourlyDEXdata()
+            self.defichainAnalyticsModel.loadVaultData()
+            pageContent = self.interestView.getInterestContent()
 
         return pageContent

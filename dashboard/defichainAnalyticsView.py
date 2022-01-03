@@ -159,6 +159,7 @@ class defichainAnalyticsViewClass:
                     dbc.NavLink("TVL vaults", href="/vaultsLoans?entry=tvlVaults", className="linkstyle", id="tvlVaults"),
                     dbc.NavLink("dToken prices", href="/vaultsLoans?entry=dTokenPrices", className="linkstyle", id="dTokenPrices"),
                     dbc.NavLink("Number dToken", href="/vaultsLoans?entry=nbDToken", className="linkstyle", id="nbDToken"),
+                    dbc.NavLink("Open Interest", href="/vaultsLoans?entry=interest", className="linkstyle", id="interest"),
                 ],
                 id="submenu-vaultsLoans-collapse",
             ),
