@@ -71,7 +71,7 @@ class blockchainControllerClass:
             self.defichainAnalyticsModel.loadExtractedRichlistData()
             pageContent = self.addressesView.getAddressContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ['mn']:
-            self.defichainAnalyticsModel.loadExtractedRichlistData()
+            self.defichainAnalyticsModel.calcMasternodeNumbers()
             pageContent = self.masternodesView.getMasternodesContent()
         elif entry in ["daa"]:
             self.defichainAnalyticsModel.loadDAAData()

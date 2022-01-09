@@ -106,8 +106,6 @@ class defichainAnalyticsModelClass:
             print('>>>> allnodes data loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
 
     def loadExtractedRichlistData(self):
-        self.loadMNnodehub()  # number masternode hosted by nodehub must be load here to ensure correct values for other and relative representation
-        self.loadMNAllnodes()  # number masternode hosted by Allnodes must be load here to ensure correct values for other and relative representation
         print('>>>> Start update extracted richlist data ...  <<<<')
         filePath = self.dataPath + 'extractedDFIdata.csv'
         fileInfo = pathlib.Path(filePath)
@@ -117,18 +115,6 @@ class defichainAnalyticsModelClass:
             ind2Delete = self.dailyData.columns.intersection(extractedRichlist.columns)                                 # check if columns exist
             self.dailyData.drop(columns=ind2Delete, inplace=True)                                                       # delete existing columns to add new ones
             self.dailyData = self.dailyData.merge(extractedRichlist, how='outer', left_index=True, right_index=True)      # add new columns to daily table
-
-            self.dailyData['nbMNOther'] = self.dailyData['nbMnId']-self.dailyData['nbMnCakeId']-self.dailyData['nbMydefichainId']-self.dailyData['nbMNNodehub'].fillna(0)-self.dailyData['nbMNAllnode'].fillna(0)
-            self.dailyData['nbMNnonCake'] = self.dailyData['nbMnId']-self.dailyData['nbMnCakeId']
-
-            self.dailyData['nbMnCakeIdRelative'] = self.dailyData['nbMnCakeId']/self.dailyData['nbMnId']*100
-            self.dailyData['nbMNOtherRelative'] = self.dailyData['nbMNOther'] / self.dailyData['nbMnId'] * 100
-            self.dailyData['nbMydefichainRelative'] = self.dailyData['nbMydefichainId'] / self.dailyData['nbMnId'] * 100
-            self.dailyData['nbMNNodehubRelative'] = self.dailyData['nbMNNodehub'] / self.dailyData['nbMnId'] * 100
-            self.dailyData['nbMNAllnodeRelative'] = self.dailyData['nbMNAllnode'] / self.dailyData['nbMnId'] * 100
-
-            self.dailyData['nbMNlocked10Relative'] = self.dailyData['nbMNlocked10'] / self.dailyData['nbMnId'] * 100
-            self.dailyData['nbMNlocked5Relative'] = self.dailyData['nbMNlocked5'] / self.dailyData['nbMnId'] * 100
 
             # extracting DFI in Liquidity-Mining
             lmCoins = pd.DataFrame(index=self.dailyData.index)
@@ -176,6 +162,27 @@ class defichainAnalyticsModelClass:
 
             self.updated_extractedRichlist = fileInfo.stat()
             print('>>>> Richlist data loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
+
+    def calcMasternodeNumbers(self):
+        # load all relevant data
+        self.loadExtractedRichlistData()
+        self.loadMNnodehub()
+        self.loadMNAllnodes()
+
+        # calculate missing information
+        self.dailyData['nbMNOther'] = self.dailyData['nbMnId'] - self.dailyData['nbMnCakeId'] - self.dailyData['nbMydefichainId'] - self.dailyData['nbMNNodehub'].fillna(0) - \
+                                      self.dailyData['nbMNAllnode'].fillna(0)
+        self.dailyData['nbMNnonCake'] = self.dailyData['nbMnId'] - self.dailyData['nbMnCakeId']
+
+        self.dailyData['nbMnCakeIdRelative'] = self.dailyData['nbMnCakeId'] / self.dailyData['nbMnId'] * 100
+        self.dailyData['nbMNOtherRelative'] = self.dailyData['nbMNOther'] / self.dailyData['nbMnId'] * 100
+        self.dailyData['nbMydefichainRelative'] = self.dailyData['nbMydefichainId'] / self.dailyData['nbMnId'] * 100
+        self.dailyData['nbMNNodehubRelative'] = self.dailyData['nbMNNodehub'] / self.dailyData['nbMnId'] * 100
+        self.dailyData['nbMNAllnodeRelative'] = self.dailyData['nbMNAllnode'] / self.dailyData['nbMnId'] * 100
+
+        self.dailyData['nbMNlocked10Relative'] = self.dailyData['nbMNlocked10'] / self.dailyData['nbMnId'] * 100
+        self.dailyData['nbMNlocked5Relative'] = self.dailyData['nbMNlocked5'] / self.dailyData['nbMnId'] * 100
+        print('>>>> Masternode data calculated <<<< ====')
 
     def calcOverallTVLdata(self):
         self.dailyData['tvlMNDFI'] = self.dailyData['nbMnId'] * ((pd.to_datetime(self.dailyData.index)<pd.Timestamp('2021-03-02')) * 1 * 1000000 + \
