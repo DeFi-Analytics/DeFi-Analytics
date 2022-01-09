@@ -16,6 +16,7 @@ class pricesDTokenViewClass:
                    dbc.Card(dbc.CardBody([html.H4(['dToken prices - DEX vs. Oracles']),
                                           html.Table([html.Tr([html.Td('Select dToken for price evaluation:'),
                                                                html.Td(dcc.Dropdown(id='vaultsLoansPricesDtoken', options=[{'label': 'dUSD', 'value': 'DUSD'},
+                                                                                                                           {'label': 'DFI in dUSD', 'value': 'DFI'},
                                                                                                                          {'label': 'AAPL', 'value': 'AAPL'},
                                                                                                                          {'label': 'ARKK', 'value': 'ARKK'},
                                                                                                                          {'label': 'BABA', 'value': 'BABA'},
@@ -51,6 +52,10 @@ class pricesDTokenViewClass:
         if representation =='DUSD':
             dataDEX = (data['DFI-USD']/data['DUSD-DFI_reserveA/reserveB']).dropna()
             dataOracle = (data['DFI-USD']/data['DFI-USD']).dropna()
+            selectionDEX = dataDEX != 0
+        elif representation =='DFI':
+            dataDEX = data['DUSD-DFI_reserveA/reserveB'].dropna()
+            dataOracle = data['DFI-USD'].dropna()
             selectionDEX = dataDEX != 0
         else:
             dataDEX = data[representation+'-DUSD_reserveB/reserveA'].dropna()
