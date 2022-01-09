@@ -37,14 +37,14 @@ class burnedDFIViewClass:
 
         # generate over addresses
         trace_OverallBurned = dict(type='scatter', name='Overall', x=(data['burnedAuction']+data['burnedPayback']).dropna().index, y=(data['burnedAuction']+data['burnedPayback']).dropna(),
-                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.f} DFI')
+                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f} DFI')
 
         # generate specific addresses
         trace_AuctionBurned = dict(type='scatter', name='Auction',x=data['burnedAuction'].dropna().index, y=data['burnedAuction'].dropna(),
-                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:.f} DFI', fill='tozeroy')
+                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} DFI', fill='tozeroy')
 
         trace_PaybackBurn = dict(type='scatter', name='Loan payback', x=data['burnedPayback'].dropna().index, y=data['burnedPayback'].dropna(),
-                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:.f} DFI', fill='tonexty')
+                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} DFI', fill='tonexty')
 
         figBurnedDFI.add_trace(trace_AuctionBurned, 1, 1)
         figBurnedDFI.add_trace(trace_PaybackBurn, 1, 1)
