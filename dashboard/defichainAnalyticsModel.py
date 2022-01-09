@@ -170,8 +170,8 @@ class defichainAnalyticsModelClass:
         self.loadMNAllnodes()
 
         # calculate missing information
-        self.dailyData['nbMNOther'] = self.dailyData['nbMnId'] - self.dailyData['nbMnCakeId'] - self.dailyData['nbMydefichainId'] - self.dailyData['nbMNNodehub'].fillna(0) - \
-                                      self.dailyData['nbMNAllnode'].fillna(0)
+        self.dailyData['nbMNOther'] = self.dailyData['nbMnId'] - self.dailyData['nbMnCakeId'] - self.dailyData['nbMydefichainId'].fillna(method="ffill") - self.dailyData['nbMNNodehub'].fillna(method="ffill") - \
+                                      self.dailyData['nbMNAllnode'].fillna(method="ffill")
         self.dailyData['nbMNnonCake'] = self.dailyData['nbMnId'] - self.dailyData['nbMnCakeId']
 
         self.dailyData['nbMnCakeIdRelative'] = self.dailyData['nbMnCakeId'] / self.dailyData['nbMnId'] * 100
