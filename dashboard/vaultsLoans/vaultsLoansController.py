@@ -14,6 +14,9 @@ from .nbDToken.nbDTokenCallbacks import nbDTokenCallbacksClass
 from .interest.interestView import interestViewClass
 from .interest.interestCallbacks import interestCallbacksClass
 
+from .burnedDFI.burnedDFIView import burnedDFIViewClass
+from .burnedDFI.burnedDFICallbacks import burnedDFICallbacksClass
+
 class vaultsLoansControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -38,6 +41,10 @@ class vaultsLoansControllerClass:
         self.interestView = interestViewClass()
         self.interestCallbacks = interestCallbacksClass(self.defichainAnalyticsModel, self.interestView, app)
 
+        # initialize burned DFI classes
+        self.burnedDFIView = burnedDFIViewClass()
+        self.burnedDFICallbacks = burnedDFICallbacksClass(app)
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "nbVaults"]:
@@ -58,5 +65,8 @@ class vaultsLoansControllerClass:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadVaultData()
             pageContent = self.interestView.getInterestContent()
+        elif entry in ["", "burnedDFI"]:
+            self.defichainAnalyticsModel.loadVaultData()
+            pageContent = self.burnedDFIView.getBurnedDFIContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent
