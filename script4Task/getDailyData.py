@@ -90,6 +90,23 @@ def getDFISignalData():
     dfDFISignal = pd.concat([dfDFISignal, dfNewData]).drop_duplicates().sort_index()
     dfDFISignal.to_csv(filepath)
 
+def getDobbyData():
+    # generate filepath relative to script location
+    filepath = path + 'dobbyData.csv'
+
+    # API request masternode numaber
+    link='https://api.defichain-dobby.com/statistics?page=1'
+    siteContent = requests.get(link)
+    jsonData = json.loads(siteContent.text)
+    dfNewData = pd.DataFrame(columns = ['date', 'user_count', 'vault_count', 'sum_messages', 'sum_collateral', 'sum_loan', 'avg_ratio'],
+                             data = [[item['date'],item['user_count'],item['vault_count'],item['messages']['sum_messages'],item['sum_collateral'],item['sum_loan'],item['avg_ratio']] for item in jsonData['data']])
+    dfNewData.set_index('date', inplace=True)
+
+
+    dfDobby = pd.read_csv(filepath, index_col=0)
+    dfDobby = pd.concat([dfDobby, dfNewData]).drop_duplicates().sort_index()
+    dfDobby.to_csv(filepath)
+
 def getEmissionData():
     # generate filepath relative to script location
     filepath = path + 'dfiEmissionData.csv'
@@ -143,6 +160,13 @@ try:
     print('Data DFI-Signal saved')
 except:
     print('### Error in DFI-Signal data acquisition')
+
+# Dobby data
+try:
+    getDobbyData()
+    print('Data Dobby saved')
+except:
+    print('### Error in Dobby data acquisition')
 
 # DFI emission data
 try:
