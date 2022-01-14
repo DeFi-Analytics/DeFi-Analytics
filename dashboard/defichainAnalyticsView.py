@@ -219,7 +219,8 @@ class defichainAnalyticsViewClass:
                     dbc.NavLink("Project: Defichain-Promo", href="/community?entry=promo", className="linkstyle", id="promo"),
                     dbc.NavLink("Project: Masternode Monitor", href="/community?entry=mnmonitor", className="linkstyle", id="mnmonitor"),
                     dbc.NavLink("Project: DFX", href="/community?entry=dfx", className="linkstyle", id="dfx"),
-                    dbc.NavLink("Project: DFI-Signal", href="/community?entry=dfisignal", className="linkstyle", id="dfisignal")
+                    dbc.NavLink("Project: DFI-Signal", href="/community?entry=dfisignal", className="linkstyle", id="dfisignal"),
+                    dbc.NavLink("Project: Dobby", href="/community?entry=dobby", className="linkstyle", id="dobby")
                 ],
                 id="submenu-community-collapse",
             ),

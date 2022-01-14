@@ -21,6 +21,9 @@ from .dfx.dfxCallbacks import dfxCallbacksClass
 from .dfiSignal.dfiSignalView import dfiSignalViewClass
 from .dfiSignal.dfiSignalCallbacks import dfiSignalCallbacksClass
 
+from .dobby.dobbyViews import dobbyViewClass
+from .dobby.dobbyCallbacks import dobbyCallbacksClass
+
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -50,13 +53,17 @@ class communityControllerClass:
         # initialize MN monitor classes
         self.mnMonitorView = mnMonitorViewClass()
 
-        # initialize defichain promo classes
+        # initialize DFX classes
         self.dfxView = dfxViewClass()
         self.dfxCallbacks = dfxCallbacksClass(self.defichainAnalyticsModel, self.dfxView, app)
 
         # initialize DFI-signal class
         self.dfiSignalView = dfiSignalViewClass()
         self.dfiSignalCallbacks = dfiSignalCallbacksClass(self.defichainAnalyticsModel, self.dfiSignalView, app)
+
+        # initialize dobby classes
+        self.dobbyView = dobbyViewClass()
+        self.dobbyCallbacks = dobbyCallbacksClass(self.defichainAnalyticsModel, self.dobbyView, app)
 
     def getContent(self, entry):
         pageContent = None
@@ -87,5 +94,8 @@ class communityControllerClass:
         elif entry in ["dfisignal"]:
             self.defichainAnalyticsModel.loadDFIsignalDatabase()
             pageContent = self.dfiSignalView.getDFISignalContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
+        elif entry in ["dobby"]:
+            self.defichainAnalyticsModel.loadDobbyDatabase()
+            pageContent = self.dobbyView.getDobbyContent()
 
         return pageContent
