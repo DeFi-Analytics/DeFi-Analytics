@@ -74,7 +74,7 @@ class pricesDTokenViewClass:
         figPrices.add_trace(trace_priceDEX, 1, 1)
         figPrices.add_trace(trace_priceOracle, 1, 1)
 
-        figPrices.update_yaxes(title_text='dToken price', tickformat=".f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        figPrices.update_yaxes(title_text='dToken price', gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figPrices.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',
                                range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
 

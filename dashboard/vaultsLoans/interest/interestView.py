@@ -48,7 +48,7 @@ class interestViewClass:
 
         figNbDToken.add_trace(trace_nbDToken, 1, 1)
 
-        figNbDToken.update_yaxes(title_text='number dTokens in Loans', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        figNbDToken.update_yaxes(title_text='Interest value in USD', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figNbDToken.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',
                                range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
 
