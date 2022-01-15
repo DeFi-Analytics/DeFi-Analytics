@@ -7,6 +7,9 @@ from .marketcap.marketcapCallbacks import marketcapCallbacksClass
 from .overallTVL.overallTVLView import overallTVLViewClass
 from .overallTVL.overallTVLCallbacks import overallTVLCallbacksClass
 
+from .emission.emissionView import emissionViewClass
+from .emission.emissionCallbacks import emissionCallbacksClass
+
 class generalControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -19,9 +22,13 @@ class generalControllerClass:
         self.marketcapView = marketcapViewClass()
         self.marketcapCallback = marketcapCallbacksClass(self.defichainAnalyticsModel, self.marketcapView, app)
 
-        # initialize marketcap classes
+        # initialize overallTVL classes
         self.overallTVLView = overallTVLViewClass()
         self.overallTVLCallback = overallTVLCallbacksClass(self.defichainAnalyticsModel, self.overallTVLView, app)
+
+        # initialize emission classes
+        self.emissionView = emissionViewClass()
+        self.emissionCallback = emissionCallbacksClass(self.defichainAnalyticsModel, self.emissionView, app)
 
     def getContent(self, entry):
         pageContent = None
@@ -33,6 +40,10 @@ class generalControllerClass:
             self.defichainAnalyticsModel.loadDailyTradingData()
             self.defichainAnalyticsModel.loadExtractedRichlistData()
             pageContent = self.marketcapView.getMarketcapContent(self.defichainAnalyticsModel.dailyData,  self.defichainAnalyticsModel.figBackgroundImage)
+        elif entry in ["emission"]:
+            self.defichainAnalyticsModel.loadEmissionRateData()
+            self.defichainAnalyticsModel.loadExtractedRichlistData()
+            pageContent = self.emissionView.getEmissionContent()
         elif entry in ["overallTVL"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadExtractedRichlistData()

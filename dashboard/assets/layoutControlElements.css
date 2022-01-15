@@ -5,6 +5,7 @@
     #dfxSelectGraph {width: 200px}
     #dfiSignalSelectGraph {width: 250px}
     #dobbySelectGraph {width: 250px}
+    #selectEmission {width: 300px}
 }
 
 @media only screen and (max-width: 850px) {
@@ -16,6 +17,7 @@
         #dfxSelectGraph {width: 180px}
         #dfiSignalSelectGraph {width: 180px}
         #dobbySelectGraph {width: 180px}
+        #selectEmission {width: 180px}
         }
 
     @media (orientation: landscape) {
@@ -24,5 +26,6 @@
         #dfxSelectGraph {width: 260px}
         #dfiSignalSelectGraph {width: 260px}
         #dobbySelectGraph {width: 260px}
+        #selectEmission {width: 300px}
         }
 }
