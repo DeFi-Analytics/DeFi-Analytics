@@ -43,7 +43,7 @@ class interestViewClass:
         lastValidDate = datetime.utcfromtimestamp(data['sumInterest'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
-        trace_nbDToken = dict(type='scatter', name='DEX price in dUSD', x=(data['sumInterest']*price).dropna().index, y=(data['sumInterest']*price).dropna(),
+        trace_nbDToken = dict(type='scatter', name='Interest', x=(data['sumInterest']*price).dropna().index, y=(data['sumInterest']*price).dropna(),
                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f}')
 
         figNbDToken.add_trace(trace_nbDToken, 1, 1)
