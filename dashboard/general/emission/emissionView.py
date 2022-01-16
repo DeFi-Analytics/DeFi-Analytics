@@ -41,7 +41,7 @@ class emissionViewClass:
             yAxisLabel = 'DFI coins'
             yAxisRange = [0, 310]
             lineData = data['totalEmission']
-            hoverTemplateRepresenation = '%{y:,.2f}'
+            hoverTemplateRepresenation = '%{y:,.2f} DFI'
 
         lastValidDate = datetime.strptime(data['otherDFI'].dropna().index.values[-1], '%Y-%m-%d')
         date2MonthsBack = lastValidDate - dateutil.relativedelta.relativedelta(months=2)
@@ -121,7 +121,11 @@ class emissionViewClass:
 
     @staticmethod
     def getEmissionExplanation():
-        emissionCardExplanation = [html.P([''],style={'text-align': 'justify'}),
+        emissionCardExplanation = [html.P(['DefiChain emissions new DFI with each minted blocks (like nearly all other blockchains). These coins are used to incentivize different features on the blockchain like minting blocks (masternodes), '
+                                           'providing liquidity on the DEX or just to fill up the community fund for upcoming CFPs. Every 32,690 blocks the rewards are reduced by 1.658%. '
+                                           'This ensures that in about 10 years we will reach the max. supply of 1.2 billion DFI. The first graph shows the DFI per block and their allocation.'],style={'text-align': 'justify'}),
+                                   html.P(['The user can also select the inflation graph, which calculates the annual inflation based on the current DFI emission. The theoretical value of 2880 blocks per days is used for this purpose. '
+                                           'The basis is also the current amount of circulating DFI coins with and without the locked masternodes (hard to tell if the DFI are ciruclating or not).'], style={'text-align': 'justify'}),
                                    html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                        ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                         style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})
