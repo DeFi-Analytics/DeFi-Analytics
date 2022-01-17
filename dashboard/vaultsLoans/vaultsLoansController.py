@@ -17,6 +17,9 @@ from .interest.interestCallbacks import interestCallbacksClass
 from .burnedDFI.burnedDFIView import burnedDFIViewClass
 from .burnedDFI.burnedDFICallbacks import burnedDFICallbacksClass
 
+from .scheme.schemeView import schemeViewClass
+from .scheme.schemeCallbacks import schemeCallbacksClass
+
 class vaultsLoansControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -45,6 +48,10 @@ class vaultsLoansControllerClass:
         self.burnedDFIView = burnedDFIViewClass()
         self.burnedDFICallbacks = burnedDFICallbacksClass(app)
 
+        # initialize scheme classes
+        self.schemeView = schemeViewClass()
+        self.schemeCallbacks = schemeCallbacksClass(self.defichainAnalyticsModel, self.schemeView, app)
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "nbVaults"]:
@@ -65,8 +72,12 @@ class vaultsLoansControllerClass:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadVaultData()
             pageContent = self.interestView.getInterestContent()
-        elif entry in ["", "burnedDFI"]:
+        elif entry == 'burnedDFI':
             self.defichainAnalyticsModel.loadVaultData()
             pageContent = self.burnedDFIView.getBurnedDFIContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
+            pageContent = self.interestView.getInterestContent()
+        elif entry == 'scheme':
+            self.defichainAnalyticsModel.loadVaultData()
+            pageContent = self.schemeView.getSchemeContent()
 
         return pageContent
