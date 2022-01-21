@@ -4,9 +4,6 @@ import dash_bootstrap_components as dbc
 
 from plotly.subplots import make_subplots
 
-
-import time
-
 class addressesViewClass:
     def __init__(self):
         None
@@ -35,20 +32,20 @@ class addressesViewClass:
 
         # generate over addresses
         trace_AllAddresses = dict(type='scatter', name='Overall', x=data['nbOverall'].dropna().index, y=data['nbOverall'].dropna(),
-                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.f}')
+                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f}')
 
         # generate specific addresses
         trace_mnAddresses = dict(type='scatter', name='Masternodes',x=data['nbMnGenesisId'].dropna().index, y=(data['nbMnId'] - data['nbMnGenesisId']).dropna(),
-                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:.f}', fill='tozeroy')
+                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f}', fill='tozeroy')
 
         trace_otherAddresses = dict(type='scatter', name='Non-Masternodes', x=data['nbOtherId'].dropna().index, y=data['nbOtherId'].dropna(),
-                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:.f}', fill='tonexty')
+                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f}', fill='tonexty')
 
         figAddress.add_trace(trace_mnAddresses, 1, 1)
         figAddress.add_trace(trace_otherAddresses, 1, 1)
         figAddress.add_trace(trace_AllAddresses, 1, 1)
 
-        figAddress.update_yaxes(title_text='Addresses', tickformat=".f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        figAddress.update_yaxes(title_text='Number addresses', tickformat=",.f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figAddress.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=1, col=1)
 
         figAddress.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
