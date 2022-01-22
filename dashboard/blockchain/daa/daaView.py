@@ -38,7 +38,7 @@ class daaViewClass:
 
         trace_DAA = dict(type='scatter', name='DAA',
                          x=data['countAddresses'].dropna().index.values[:-1], y=data['countAddresses'].dropna().values[:-1],
-                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:.0f}')
+                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.0f}')
         figDAA.add_trace(trace_DAA, 1, 1)
 
         figDAA.update_yaxes(title_text='number addresses involved in transactions', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1,

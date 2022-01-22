@@ -52,12 +52,12 @@ class transactionsViewClass:
         trace_allTx = dict(type='scatter', name='all Tx',
                            x=tempData['txCount'].dropna().groupby(pd.Grouper(freq=representation)).sum().index.strftime('%Y-%m-%d').values[:-1],
                            y=tempData['txCount'].dropna().groupby(pd.Grouper(freq=representation)).sum().values[:-1],
-                           mode='lines', line=dict(color='#da3832'), line_width=2, hovertemplate='%{y:.0f}')
+                           mode='lines', line=dict(color='#da3832'), line_width=2, hovertemplate='%{y:,.0f}')
 
         trace_TxWOReward = dict(type='scatter', name='Tx without rewards',
                                 x=tempData['txWOreward'].dropna().groupby(pd.Grouper(freq=representation)).sum().index.strftime('%Y-%m-%d').values[:-1],
                                 y=tempData['txWOreward'].dropna().groupby(pd.Grouper(freq=representation)).sum().values[:-1],
-                                mode='lines', line=dict(color='#ff9800'), line_width=2, hovertemplate='%{y:.0f}')
+                                mode='lines', line=dict(color='#ff9800'), line_width=2, hovertemplate='%{y:,.0f}')
 
         figTxOverview.add_trace(trace_allTx, 1, 1)
         figTxOverview.add_trace(trace_TxWOReward, 1, 1)

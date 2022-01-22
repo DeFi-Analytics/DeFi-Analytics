@@ -38,7 +38,7 @@ class blocksViewClass:
 
         trace_Blocks = dict(type='scatter', name='Blocks',
                          x=data['nbBlocks'].dropna().index.values[:-1], y=data['nbBlocks'].dropna().values[:-1],
-                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:.0f}')
+                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.0f}')
         figBlocks.add_trace(trace_Blocks, 1, 1)
 
         figBlocks.update_yaxes(title_text='minted blocks per day', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1,

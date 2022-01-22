@@ -46,13 +46,13 @@ class dfxViewClass:
 
 
         trace_buyVolume = dict(type='scatter', name=nameBuyVolume, x=xdata, y=ydata,
-                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.4f}')
+                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.4f}')
 
 
         figDFX.add_trace(trace_buyVolume, 1, 1)
 
 
-        figDFX.update_yaxes(title_text='Buy volume in DFI', tickformat=".f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        figDFX.update_yaxes(title_text='Buy volume in DFI', tickformat=",.f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figDFX.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=1, col=1)
 
         figDFX.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
