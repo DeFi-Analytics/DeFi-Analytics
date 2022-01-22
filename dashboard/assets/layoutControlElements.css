@@ -6,6 +6,7 @@
     #dfiSignalSelectGraph {width: 250px}
     #dobbySelectGraph {width: 250px}
     #selectEmission {width: 300px}
+    #coinsSchemeGraphic {width: 200px}
 }
 
 @media only screen and (max-width: 850px) {
@@ -18,6 +19,7 @@
         #dfiSignalSelectGraph {width: 180px}
         #dobbySelectGraph {width: 180px}
         #selectEmission {width: 180px}
+        #coinsSchemeGraphic {width: 180px}
         }
 
     @media (orientation: landscape) {
@@ -27,5 +29,6 @@
         #dfiSignalSelectGraph {width: 260px}
         #dobbySelectGraph {width: 260px}
         #selectEmission {width: 300px}
+        #coinsSchemeGraphic {width: 260px}
         }
 }

@@ -35,54 +35,46 @@ class schemeViewClass:
             specs=[[{}]],
             shared_xaxes=True)
 
-        # tempData = data.loc[:, ['otherDFI', 'mnDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'fundDFI', 'foundationDFI', 'burnedDFI', 'circDFI', 'totalDFI','nbMNlocked5','nbMNlocked10','vaultDFI']]
-        # tempData.index = pd.to_datetime(tempData.index)
-        # tempData.sort_index(inplace=True)
-        # tempData.interpolate(method='pad', inplace=True)
-
-        # IN1000,MIN200,MIN350,MIN500,MIN150,MIN175
-
-        hoverRepresentation = '%{y:,.0f}'
         if selection == 'relative':
-            # tempData = tempData.divide(tempData['circDFI'], axis=0)*100
+            scalingFactor = (data['MIN150'].values+data['MIN175']+data['MIN200']+data['MIN350']+data['MIN500']+data['MIN1000'])/100
             hoverRepresentation = '%{y:,.2f}%'
             yAxisLabel = 'Relative part of loan scheme'
+            fill1 = 'tozeroy'
+            fill2 = 'tonexty'
+            labelStackgroup = 'relStacked'
         else:
-            # tempData = tempData.divide(tempData['totalDFI'], axis=0)*100
+            scalingFactor = 1
             hoverRepresentation = '%{y:,.f}'
             yAxisLabel = 'Number loan schemes'
+            fill1 = 'none'
+            fill2 = 'none'
+            labelStackgroup = ''
 
         lastValidDate = datetime.utcfromtimestamp(data['MIN500'].dropna().index.values[-1].tolist()/1e9)
-        date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
+        date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
 
         # absolut DFI representation
-        trace_Min150 = dict(type='scatter', name='150%', x=data['MIN150'].dropna().index, y=data['MIN150'].dropna(), mode='lines', line=dict(color='#410eb2'), line_width=2,
-                              hovertemplate=hoverRepresentation)
-        trace_MIN175 = dict(type='scatter', name='175%', x=data['MIN175'].dropna().index, y=data['MIN175'].dropna(), mode='lines', line=dict(color='#da3832'), line_width=2,
-                              hovertemplate=hoverRepresentation)
-        trace_MIN200 = dict(type='scatter', name='200%', x=data['MIN200'].dropna().index, y=data['MIN200'].dropna(), mode='lines', line=dict(color='#ff2ebe'), line_width=2,
-                              hovertemplate=hoverRepresentation)
-        trace_MIN350 = dict(type='scatter', name='350%', x=data['MIN350'].dropna().index, y=data['MIN350'].dropna(), mode='lines', line=dict(color='#22b852'), line_width=2,
-                              hovertemplate=hoverRepresentation)
-        trace_MIN500 = dict(type='scatter', name='500%', x=data['MIN500'].dropna().index, y=data['MIN500'].dropna(), mode='lines', line=dict(color='#ff9800'), line_width=2,
-                              hovertemplate=hoverRepresentation)
-        trace_MIN1000 = dict(type='scatter', name='1000%', x=data['MIN1000'].dropna().index, y=data['MIN1000'].dropna(), mode='lines', line=dict(color='#711714'), line_width=2,
-                              hovertemplate=hoverRepresentation)
+        trace_Min150 = dict(type='scatter', name='150%', x=(data['MIN150']/scalingFactor).dropna().index, y=(data['MIN150']/scalingFactor).dropna(), mode='lines', line=dict(color='#410eb2'),
+                            line_width=3, fill=fill2, hovertemplate=hoverRepresentation, stackgroup=labelStackgroup)
+        trace_MIN175 = dict(type='scatter', name='175%', x=(data['MIN150']/scalingFactor).dropna().index, y=(data['MIN175']/scalingFactor).dropna(), mode='lines', line=dict(color='#da3832'),
+                            line_width=3, fill=fill2, hovertemplate=hoverRepresentation, stackgroup=labelStackgroup)
+        trace_MIN200 = dict(type='scatter', name='200%', x=(data['MIN150']/scalingFactor).dropna().index, y=(data['MIN200']/scalingFactor).dropna(), mode='lines', line=dict(color='#ff2ebe'),
+                            line_width=3, fill=fill2, hovertemplate=hoverRepresentation, stackgroup=labelStackgroup)
+        trace_MIN350 = dict(type='scatter', name='350%', x=(data['MIN150']/scalingFactor).dropna().index, y=(data['MIN350']/scalingFactor).dropna(), mode='lines', line=dict(color='#22b852'),
+                            line_width=3, fill=fill2, hovertemplate=hoverRepresentation, stackgroup=labelStackgroup)
+        trace_MIN500 = dict(type='scatter', name='500%', x=(data['MIN150']/scalingFactor).dropna().index, y=(data['MIN500']/scalingFactor).dropna(), mode='lines', line=dict(color='#ff9800'),
+                            line_width=3, fill=fill2, hovertemplate=hoverRepresentation, stackgroup=labelStackgroup)
+        trace_MIN1000 = dict(type='scatter', name='1000%', x=(data['MIN150']/scalingFactor).dropna().index, y=(data['MIN1000']/scalingFactor).dropna(), mode='lines', line=dict(color='#711714'),
+                             line_width=3, fill=fill1, hovertemplate=hoverRepresentation, stackgroup=labelStackgroup)
 
-        figScheme.add_trace(trace_Min150, 1, 1)
-        figScheme.add_trace(trace_MIN175, 1, 1)
-        figScheme.add_trace(trace_MIN200, 1, 1)
-        figScheme.add_trace(trace_MIN350, 1, 1)
-        figScheme.add_trace(trace_MIN500, 1, 1)
         figScheme.add_trace(trace_MIN1000, 1, 1)
+        figScheme.add_trace(trace_MIN500, 1, 1)
+        figScheme.add_trace(trace_MIN350, 1, 1)
+        figScheme.add_trace(trace_MIN200, 1, 1)
+        figScheme.add_trace(trace_MIN175, 1, 1)
+        figScheme.add_trace(trace_Min150, 1, 1)
 
 
-        # curves of circulating and total supply is only relevant in absolute representation
-        # if (selection != 'relativeCirc') & (selection != 'relativeTotal'):
-        #     trace_circSupply = dict(type='scatter', name='Circulating Supply', x=tempData['circDFI'].dropna().index,
-        #                             y=tempData['circDFI'].dropna(), mode='lines', line=dict(color='#ff00af'), line_width=4, hovertemplate='%{y:,.0f}')
-        #     figScheme.add_trace(trace_circSupply, 1, 1)
-        #     figScheme.add_trace(trace_totalSupply, 1, 1)
 
         figScheme.update_yaxes(title_text=yAxisLabel, tickformat=",.f", gridcolor='#6c757d', color='#6c757d',
                             zerolinecolor='#6c757d', row=1, col=1)
@@ -121,7 +113,10 @@ class schemeViewClass:
 
     @staticmethod
     def getSchemeExplanation():
-        schemeCardExplanation = [html.P([''],
+        schemeCardExplanation = [html.P(['When creating a vault, the user can select a specific loans scheme. This defines the minimum collateralization ratio, which is needed to avoid '
+                                         'liquidation. The lower scheme have a higher interest rate, but on the other side more capital can be used for minting dTokens.'],
+                                      style={'text-align': 'justify'}),
+                                 html.P(['This evaluation shows the absolut number of used loan schemes or the relative composition across all loans.'],
                                       style={'text-align': 'justify'}),
                                  html.P([html.B('Hint:'),
                                        ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
