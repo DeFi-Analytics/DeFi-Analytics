@@ -42,9 +42,9 @@ class dobbyViewClass:
             xdata2 = xdata1
             ydata2 = ydata1
             ylabel = 'Number'
-            hoverRepresentation = '%{y:.f}'
-            tickRepresentation = ".f"
-        if representation=='collateralLoan':
+            hoverRepresentation = '%{y:,.f}'
+            tickRepresentation = ",.f"
+        elif representation=='collateralLoan':
             name1 = 'Loans'
             xdata1 = data['sum_loan'].dropna().index
             ydata1 = data['sum_loan'].dropna()
