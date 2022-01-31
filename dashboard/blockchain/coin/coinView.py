@@ -124,8 +124,7 @@ class coinViewClass:
         figDFI.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.45, sizey=0.45,  xanchor="center", yanchor="middle", opacity=0.2))
 
 
-        figDFI.update_layout(height=750,
-                             margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figDFI.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d"),
                              legend=dict(orientation="h",
