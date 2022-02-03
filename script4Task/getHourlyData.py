@@ -61,9 +61,10 @@ def getVaultsData():
     linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
     siteContent = requests.get(linkBurninfo)
     try:
-        tempData = pd.read_json(siteContent.text).transpose()
-        burnedAuction = tempData.loc['auctionburn', 0]
-        burnedPayback = tempData.loc['paybackburn',0]
+        tempData = json.loads(siteContent.text)
+        burnedAuction = tempData['auctionburn']
+        burnedPayback = tempData['paybackburn']
+
     except:
         burnedAuction = np.NaN
         burnedPayback = np.NaN
