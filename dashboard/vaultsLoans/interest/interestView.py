@@ -44,7 +44,7 @@ class interestViewClass:
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
         trace_nbDToken = dict(type='scatter', name='Interest', x=(data['sumInterest']*price).dropna().index, y=(data['sumInterest']*price).dropna(),
-                                 mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f}')
+                                 mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.2f}')
 
         figNbDToken.add_trace(trace_nbDToken, 1, 1)
 

@@ -42,16 +42,16 @@ class nbVaultsViewClass:
 
         trace_nbVaults = dict(type='scatter', name='Vaults',
                          x=data['nbVaults'].dropna().index, y=data['nbVaults'].dropna(),
-                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:.0f}')
+                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.0f}')
 
         trace_nbLiquiditation = dict(type='scatter', name='In liquidation',x=data['nbLiquidation'].dropna().index, y=data['nbLiquidation'].dropna(),
-                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:.f}', fill='tozeroy')
+                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f}', fill='tozeroy')
 
-        trace_otherAddresses = dict(type='scatter', name='Active', x=(data['nbVaults']-data['nbLiquidation']).dropna().index, y=(data['nbVaults']-data['nbLiquidation']).dropna(),
-                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:.f}', fill='tonexty')
+        trace_active = dict(type='scatter', name='Active', x=(data['nbVaults']-data['nbLiquidation']).dropna().index, y=(data['nbVaults']-data['nbLiquidation']).dropna(),
+                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f}', fill='tonexty')
 
         figNbVaults.add_trace(trace_nbLiquiditation, 1, 1)
-        figNbVaults.add_trace(trace_otherAddresses, 1, 1)
+        figNbVaults.add_trace(trace_active, 1, 1)
         figNbVaults.add_trace(trace_nbVaults, 1, 1)
 
 

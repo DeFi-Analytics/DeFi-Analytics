@@ -54,7 +54,7 @@ class burnedDFIViewClass:
         figBurnedDFI.add_trace(trace_PaybackBurn, 1, 1)
         figBurnedDFI.add_trace(trace_OverallBurned, 1, 1)
 
-        figBurnedDFI.update_yaxes(title_text='Burned DFI', tickformat=".f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        figBurnedDFI.update_yaxes(title_text='Burned DFI', tickformat=",.f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figBurnedDFI.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',
                                range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
 
