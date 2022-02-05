@@ -42,8 +42,8 @@ class dfiSignalViewClass:
             ydata2 = data['commands_received'].dropna()
         else:
             name1 = 'Users'
-            xdata1 = data['user_count'].dropna().index
-            ydata1 = data['user_count'].dropna()
+            xdata1 = data['DFISignal_user_count'].dropna().index
+            ydata1 = data['DFISignal_user_count'].dropna()
             name2 = 'Masternodes'
             xdata2 = data['masternode_count'].dropna().index
             ydata2 = data['masternode_count'].dropna()

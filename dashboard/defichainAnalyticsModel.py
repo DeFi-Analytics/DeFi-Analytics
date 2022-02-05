@@ -396,8 +396,8 @@ class defichainAnalyticsModelClass:
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.update_DFIsignal:
             dfiSignalRawData = pd.read_csv(filePath, index_col=0)
-
-            columns2update = ['user_count','masternode_count','messages_sent','commands_received','minted_blocks']
+            dfiSignalRawData.rename(columns={'user_count': 'DFISignal_user_count'}, inplace=True)
+            columns2update = ['DFISignal_user_count','masternode_count','messages_sent','commands_received','minted_blocks']
 
             # delete existing information and add new one
             ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
