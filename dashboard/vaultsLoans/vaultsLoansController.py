@@ -8,6 +8,9 @@ from .tvl.tvlCallbacks import tvlVaultsCallbacksClass
 from .prices.pricesView import pricesDTokenViewClass
 from .prices.pricesCallbacks import pricesDTokenCallbacksClass
 
+from .premium.premiumView import premiumDTokenViewClass
+from .premium.premiumCallbacks import premiumCallbacksClass
+
 from .nbDToken.nbDTokenView import nbDTokenViewClass
 from .nbDToken.nbDTokenCallbacks import nbDTokenCallbacksClass
 
@@ -32,11 +35,15 @@ class vaultsLoansControllerClass:
         self.tvlVaultsView = tvlVaultsViewClass()
         self.tvlVaultsCallbacksClass = tvlVaultsCallbacksClass(self.defichainAnalyticsModel, self.tvlVaultsView, app)
 
-        # initialize tvlVaults classes
+        # initialize prices classes
         self.pricesDTokenView = pricesDTokenViewClass()
         self.pricesDTokenCallbacks = pricesDTokenCallbacksClass(self.defichainAnalyticsModel, self.pricesDTokenView, app)
 
-        # initialize tvlVaults classes
+        # initialize premium classes
+        self.premiumDTokenView = premiumDTokenViewClass()
+        self.premiumDTokenCallbacks = premiumCallbacksClass(app)
+
+        # initialize nb Token classes
         self.nbDTokenView = nbDTokenViewClass()
         self.nbDTokenCallbacks = nbDTokenCallbacksClass(self.defichainAnalyticsModel, self.nbDTokenView, app)
 
@@ -75,9 +82,12 @@ class vaultsLoansControllerClass:
         elif entry == 'burnedDFI':
             self.defichainAnalyticsModel.loadVaultData()
             pageContent = self.burnedDFIView.getBurnedDFIContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
-            pageContent = self.interestView.getInterestContent()
         elif entry == 'scheme':
             self.defichainAnalyticsModel.loadVaultData()
             pageContent = self.schemeView.getSchemeContent()
+        elif entry == 'premium':
+            self.defichainAnalyticsModel.loadHourlyDEXdata()
+            self.defichainAnalyticsModel.loadVaultData()
+            pageContent = self.premiumDTokenView.getPremiumDTokenContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent

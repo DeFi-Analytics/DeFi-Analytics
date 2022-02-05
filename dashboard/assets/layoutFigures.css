@@ -72,6 +72,7 @@
     #figureInterest {height: 715px}
     #figureBurnedDFI {height: 750px}
     #figureScheme {height: 715px}
+    #figurePremiumDToken {height: 750px}
 }
 
 @media only screen and (max-width: 768px) {
@@ -147,6 +148,7 @@
         #figureInterest {height: 600px}
         #figureBurnedDFI {height: 600px}
         #figureScheme {height: 600px}
+        #figurePremiumDToken {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -195,6 +197,7 @@
         #figureInterest {height: 330px}
         #figureBurnedDFI {height: 330px}
         #figureScheme {height: 330px}
+        #figurePremiumDToken {height: 330px}
         }
 }
 
