@@ -642,7 +642,7 @@ class defichainAnalyticsModelClass:
             liveTicker = [item[7:]+'-USD' for item in vaultsData.columns if (("sumLoan") in item) & ~(('sumLoanLiquidation') in item)]
             liveTicker += ['DFI-USD']
 
-            columns2update = sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'MIN150', 'MIN175', 'MIN200', 'MIN350', 'MIN500', 'MIN1000']
+            columns2update = sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'burnedDFIPayback', 'MIN150', 'MIN175', 'MIN200', 'MIN350', 'MIN500', 'MIN1000']
             columns2update.remove('DUSD-USD')
 
             # delete existing information and add new one
