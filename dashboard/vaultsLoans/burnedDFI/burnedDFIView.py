@@ -36,17 +36,18 @@ class burnedDFIViewClass:
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
         # generate over addresses
-        trace_OverallBurned = dict(type='scatter', name='Overall', x=(data['burnedAuction']+data['burnedPayback']+data['burnedDFIPayback'].fillna(0)).dropna().index, y=(data['burnedAuction']+data['burnedPayback']).dropna(),
+        trace_OverallBurned = dict(type='scatter', name='Overall', x=(data['burnedAuction']+data['burnedPayback']+data['burnedDFIPayback'].fillna(0)).dropna().index,
+                                                                   y=(data['burnedAuction']+data['burnedPayback']+data['burnedDFIPayback'].fillna(0)).dropna(),
                                   mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f} DFI')
 
         # generate specific addresses
-        trace_DFIPaybackBurn = dict(type='scatter', name='DFI payback',x=data['burnedDFIPayback'].dropna().index, y=data['burnedDFIPayback'].dropna(),
+        trace_DFIPaybackBurn = dict(type='scatter', name='dUSD payback with DFI',x=data['burnedDFIPayback'].dropna().index, y=(data['burnedDFIPayback']*(1+99)).dropna(),
                                  mode='lines', line=dict(color='#f800aa'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} DFI', fill='tozeroy')
 
         trace_AuctionBurned = dict(type='scatter', name='Auction fee',x=data['burnedAuction'].dropna().index, y=data['burnedAuction'].dropna(),
                                  mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} DFI', fill='tonexty')
 
-        trace_PaybackBurn = dict(type='scatter', name='Interest loan payback', x=data['burnedPayback'].dropna().index, y=data['burnedPayback'].dropna(),
+        trace_PaybackBurn = dict(type='scatter', name='Interest dToken payback', x=data['burnedPayback'].dropna().index, y=(data['burnedPayback']-data['burnedDFIPayback'].fillna(0)*99).dropna(),
                                     mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} DFI', fill='tonexty')
 
         figBurnedDFI.add_trace(trace_DFIPaybackBurn, 1, 1)
@@ -93,9 +94,9 @@ class burnedDFIViewClass:
         burnedDFICardExplanation = [html.P(['The vaults and loans feature on DefiChain has two different DFI burn mechanisms implemented:',
                                             html.Ul([html.Li('Auction fee: Everyone bidding on a vault has to pay a fee of 5% in form of the dToken in the corresponding loan. These '
                                                              'dToken will be swapped into DFI and burned.'),
-                                                     html.Li('Interest loan payback: With selection of the loan scheme the user chooses an interest rate. The accumulated interests must be paid before paying back the loan. '
+                                                     html.Li('Interest dToken payback: With selection of the loan scheme the user chooses an interest rate. The accumulated interests must be paid before paying back the loan. '
                                                              'These dToken will be swapped into DFI and burned.'),
-                                                     html.Li('DFI payback: With Fort Canning Hill update user can payback their dUSD loans with DFI. The complete amount (loan+interest+fee) of DFI will be burned.')
+                                                     html.Li('dUSD payback with DFI: With Fort Canning Hill update user can payback their dUSD loans with DFI. The complete amount (loan+interest+fee) of DFI will be burned.')
                                                      ]),
                                             ], style={'text-align': 'justify'}),
                                   html.P([html.B('Hint:'),
