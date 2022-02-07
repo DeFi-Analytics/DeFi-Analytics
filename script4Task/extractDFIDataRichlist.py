@@ -115,10 +115,11 @@ for richlistFile in foundRichlistFiles:
             burnedDFIToken = tempData['tokens'][0][:-4]
             burnedDFIAuction = tempData['auctionburn']
             burnedDFILoan = tempData['paybackburn']
+            burnedDFIPaybackFee = tempData['dfipaybackfee']
         else:
             burnedDFIFees = np.NaN
 
-        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan)
+        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan) + float(burnedDFIPaybackFee)
 
 
         if addDFIToken in rawRichlist.values:
