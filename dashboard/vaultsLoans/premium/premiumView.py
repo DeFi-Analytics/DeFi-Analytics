@@ -34,7 +34,7 @@ class premiumDTokenViewClass:
         lastValidDate = datetime.utcfromtimestamp(data['AAPL-USD'].index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
-        trace_premiumDUSD = dict(type='scatter', name='dSUD',
+        trace_premiumDUSD = dict(type='scatter', name='dUSD',
                               x=((data['DFI-USD']/data['DUSD-DFI_reserveA/reserveB'])-1).dropna().index,
                               y=((data['DFI-USD']/data['DUSD-DFI_reserveA/reserveB'])-1).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
