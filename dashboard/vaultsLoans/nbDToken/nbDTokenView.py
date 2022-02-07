@@ -55,10 +55,26 @@ class nbDTokenViewClass:
         lastValidDate = datetime.utcfromtimestamp(data['sumLoan'+representation].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
-        trace_nbDToken = dict(type='scatter', name='number circulating dTokens', x=data['sumLoan'+representation].dropna().index, y=data['sumLoan'+representation].dropna(),
-                                 mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.f}')
+        if representation=='DUSD':
+            trace_dUSDLoans = dict(type='scatter', name='dUSD with loans', x=data['sumLoan'+representation].dropna().index, y=data['sumLoan'+representation].dropna(),
+                                  mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tozeroy')
+            trace_dUSDPaid = dict(type='scatter', name='dUSD without loans (paid with DFI)', x=data['DUSDpaidDFI'].dropna().index, y=data['DUSDpaidDFI'].dropna(),
+                                  mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
+            trace_dUSDburnedFee = dict(type='scatter', name='burned dUSD with DEX-Fee', x=data['burnedDUSDDEX'].dropna().index, y=-data['burnedDUSDDEX'].dropna(),
+                                  mode='lines', line=dict(color='#5d5d5d'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
+            trace_nbDToken = dict(type='scatter', name='number circulating dTokens',
+                                  x=(data['sumLoan'+representation]+data['DUSDpaidDFI'].fillna(0)-data['burnedDUSDDEX'].fillna(0)).dropna().index,
+                                  y=(data['sumLoan'+representation]+data['DUSDpaidDFI'].fillna(0)-data['burnedDUSDDEX'].fillna(0)).dropna(),
+                                     mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f}')
 
-        figNbDToken.add_trace(trace_nbDToken, 1, 1)
+            figNbDToken.add_trace(trace_dUSDLoans, 1, 1)
+            figNbDToken.add_trace(trace_dUSDPaid, 1, 1)
+            figNbDToken.add_trace(trace_dUSDburnedFee, 1, 1)
+            figNbDToken.add_trace(trace_nbDToken, 1, 1)
+        else:
+            trace_nbDToken = dict(type='scatter', name='number circulating dTokens', x=data['sumLoan'+representation].dropna().index, y=data['sumLoan'+representation].dropna(),
+                                     mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f}')
+            figNbDToken.add_trace(trace_nbDToken, 1, 1)
 
         figNbDToken.update_yaxes(title_text='number dTokens in Loans', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figNbDToken.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',

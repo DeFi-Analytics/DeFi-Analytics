@@ -65,6 +65,8 @@ def getVaultsData():
         burnedAuction = tempData['auctionburn']
         burnedPayback = tempData['paybackburn']
         burnedDFIPayback = tempData['dfipaybackfee']
+        dfipaybacktokens = tempData['dfipaybacktokens']
+        dexfeetokens = tempData['dexfeetokens']
 
     except:
         print('### Error getburninfo ###')
@@ -72,8 +74,8 @@ def getVaultsData():
         burnedPayback = np.NaN
         burnedDFIPayback = np.NaN
 
-    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD']+dfOracle.index.to_list()+['burnedAuction', 'burnedPayback','burnedDFIPayback'],
-                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+[burnedAuction, burnedPayback, burnedDFIPayback])
+    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD']+dfOracle.index.to_list()+['burnedAuction', 'burnedPayback','burnedDFIPayback','dfipaybacktokens', 'dexfeetokens'],
+                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+[burnedAuction, burnedPayback, burnedDFIPayback, dfipaybacktokens, dexfeetokens])
 
 
     # API request current vaults

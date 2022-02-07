@@ -5,6 +5,7 @@ import re
 import base64
 
 import pandas as pd
+from ast import literal_eval
 
 from datetime import datetime, timedelta
 
@@ -638,11 +639,21 @@ class defichainAnalyticsModelClass:
             vaultsData['timeRounded'] = pd.to_datetime(vaultsData.index).floor('H')
             vaultsData.set_index(['timeRounded'], inplace=True)
 
+            tempDataFormat = pd.DataFrame()
+            tempDataFormat['dexfeetokensRaw'] = vaultsData[~vaultsData.dexfeetokens.isna()].dexfeetokens.apply(lambda x: literal_eval(str(x)))
+            tempDataFormat['dfipaybacktokens'] = vaultsData[~vaultsData.dfipaybacktokens.isna()].dfipaybacktokens.apply(lambda x: literal_eval(str(x)))
+            tempDataFormat[['burnedBTCDEX','burnedDUSDDEX']] = pd.DataFrame(tempDataFormat['dexfeetokensRaw'].tolist(), index=tempDataFormat.index)
+            tempDataFormat[['DUSDpaidDFI']] = pd.DataFrame(tempDataFormat['dfipaybacktokens'].tolist(), index=tempDataFormat.index)
+            vaultsData['burnedBTCDEX'] = tempDataFormat['burnedBTCDEX'].apply(lambda x: float(x[:-4]))
+            vaultsData['burnedDUSDDEX'] = tempDataFormat['burnedDUSDDEX'].apply(lambda x: float(x[:-5]))
+            vaultsData['DUSDpaidDFI'] = tempDataFormat['DUSDpaidDFI'].apply(lambda x: float(x[:-5]))
+
             sumValues = [item for item in vaultsData.columns if "sum" in item]
             liveTicker = [item[7:]+'-USD' for item in vaultsData.columns if (("sumLoan") in item) & ~(('sumLoanLiquidation') in item)]
             liveTicker += ['DFI-USD']
 
-            columns2update = sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'burnedDFIPayback', 'MIN150', 'MIN175', 'MIN200', 'MIN350', 'MIN500', 'MIN1000']
+            columns2update = sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'burnedDFIPayback', 'MIN150', 'MIN175',
+                                                       'MIN200', 'MIN350', 'MIN500', 'MIN1000', 'burnedBTCDEX', 'burnedDUSDDEX', 'DUSDpaidDFI']
             columns2update.remove('DUSD-USD')
 
             # delete existing information and add new one
