@@ -100,7 +100,7 @@ class overviewViewClass:
         figDFIPie = go.Figure()
 
         labelList = ['Masternodes', 'Community fund', 'Foundation', 'Other', 'Liquidity Pool', 'DFI token', 'ERC20 Collateral', 'Burned DFI', 'Locked Masternodes', 'Vaults Collateral']
-        valueList = [data['mnDFI'].values[0]-(data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000, data['fundDFI'].values[0],
+        valueList = [data['mnDFI'].values[0], data['fundDFI'].values[0],
                      data['foundationDFI'].values[0], data['otherDFI'].values[0], data['lmDFI'].values[0], data['tokenDFI'].values[0], data['erc20DFI'].values[0],
                      data['burnedDFI'].values[0], (data['nbMNlocked10'] + data['nbMNlocked5']).values[0] * 20000, data['vaultsDFI'].values[0]]
         colorList = ['#da3832', '#ff9800', '#22b852', '#410eb2', '#ff2ebe', '#00fffb', '#adff2f', '#5d5d5d', '#711714', '#808000']
