@@ -23,7 +23,12 @@ dfLMPoolData = pd.DataFrame(data = {'symbol': [item['symbol'] for item in dfLMPo
                                         'totalLiquidity': [item['totalLiquidity']['token'] for item in dfLMPoolDataNewAPI['data'][:]],
                                         'reserveA/reserveB': [item['priceRatio']['ab'] for item in dfLMPoolDataNewAPI['data'][:]],
                                         'reserveB/reserveA': [item['priceRatio']['ba'] for item in dfLMPoolDataNewAPI['data'][:]],
-                                        'rewardLoanPct': [item['rewardPct'] for item in dfLMPoolDataNewAPI['data'][:]]})
+                                        'rewardLoanPct': [item['rewardPct'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        '24hrTrading': [item['volume']['h24'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        '30dTrading': [item['volume']['d30'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'APRblock': [item['apr']['reward'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'APRcommission': [item['apr']['commission'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                    })
 
 # link='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
 # siteContent = requests.get(link)
@@ -73,7 +78,12 @@ dfLMPoolData['numberAddresses'] = None
 # dfLMPoolData.loc[10, 'numberAddresses'] = LTCDFIaddresses
 # dfLMPoolData.loc[12, 'numberAddresses'] = BCHDFIaddresses
 # dfLMPoolData.loc[14, 'numberAddresses'] = USDCDFIaddresses
-    
+# pd.read_csv(filePath, header=0,
+#                                         usecols=["DFIPrices", "DFIPricesBittrex", "Time", "idTokenA", "idTokenB", 'numberAddresses', 'reserveA', 'reserveA/reserveB',
+#                                                'reserveB', 'reserveB/reserveA', 'symbol', 'totalLiquidity', '24hrTrading', '30dTrading'],
+#                                         dtype={"DFIPrices": float, "DFIPricesBittrex": float, "Time": "string",
+#                                                "idTokenA": int, "idTokenB": int, 'numberAddresses': float, 'reserveA': float, 'reserveA/reserveB': float,
+#                                                'reserveB': float, 'reserveB/reserveA':float, 'symbol': "string", 'totalLiquidity': float, '24hrTrading': float, '30dTrading': float})
 dfOldLMPoolData = pd.read_csv(filepath, index_col=0)
 dfLMPoolData = dfOldLMPoolData.append(dfLMPoolData, sort=False)
 dfLMPoolData.reset_index(inplace=True, drop=True)

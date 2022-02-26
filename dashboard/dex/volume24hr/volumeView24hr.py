@@ -34,34 +34,28 @@ class volume24hrViewClass:
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
         hoverTemplateRepresenation = '$%{y:,.0f}'
 
-        trace_VolBTC = dict(type='scatter', name='BTC', x=data['BTC_VolTotal'].dropna().index, y=data['BTC_VolTotal'].dropna(), stackgroup='one',
-                            mode='lines', line=dict(color='#da3832'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tozeroy', visible='legendonly')
-        trace_VolETH = dict(type='scatter', name='ETH', x=data['ETH_VolTotal'].dropna().index, y=data['ETH_VolTotal'].dropna(), stackgroup='one',
-                            mode='lines', line=dict(color='#617dea'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty', visible='legendonly')
-        trace_VolUSDT = dict(type='scatter', name='USDT', x=data['USDT_VolTotal'].dropna().index, y=data['USDT_VolTotal'].dropna(), stackgroup='one',
-                             mode='lines', line=dict(color='#22b852'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty', visible='legendonly')
-        trace_VolDOGE = dict(type='scatter', name='DOGE', x=data['DOGE_VolTotal'].dropna().index, y=data['DOGE_VolTotal'].dropna(), stackgroup='one',
-                             mode='lines', line=dict(color='#c2a634'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty', visible='legendonly')
-        trace_VolLTC = dict(type='scatter', name='LTC', x=data['LTC_VolTotal'].dropna().index, y=data['LTC_VolTotal'].dropna(), stackgroup='one',
-                            mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty', visible='legendonly')
-        trace_VolBCH = dict(type='scatter', name='BCH', x=data['BCH_VolTotal'].dropna().index, y=data['BCH_VolTotal'].dropna(), stackgroup='one',
-                            mode='lines', line=dict(color='#410eb2'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty', visible='legendonly')
-        trace_VolUSDC = dict(type='scatter', name='USDC', x=data['USDC_VolTotal'].dropna().index, y=data['USDC_VolTotal'].dropna(), stackgroup='one',
-                            mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty', visible='legendonly')
+        indTradingVolumes = [element for element in data.columns.values if "24hrTrading" in element]
+        indTradingVolumesDToken = [element for element in indTradingVolumes if "DUSD" in element]
+        indTradingVolumesCrypto = [element for element in indTradingVolumes if "DUSD" not in element]
+
+        tradingVolumeDToken = data[indTradingVolumesDToken].sum(axis=1)
+        tradingVolumeCrypto = data[indTradingVolumesCrypto].sum(axis=1)
+
+        trace_tradingVolumeCrypto = dict(type='scatter', name='Crypto volume', x=tradingVolumeCrypto.dropna().index, y=tradingVolumeCrypto.dropna(),
+                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate=hoverTemplateRepresenation, fill='tozeroy')
+
+        trace_tradingVolumeDToken = dict(type='scatter', name='dToken colume',x=tradingVolumeDToken.dropna().index, y=tradingVolumeDToken.dropna(),
+                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # overall TVL graph
-        trace_VolOverallDEX = dict(type='scatter', name='Overall DEX', x=data['VolTotal'].dropna().index, y=data['VolTotal'].dropna(),
+        trace_VolOverallDEX = dict(type='scatter', name='Overall DEX', x=(tradingVolumeDToken+tradingVolumeCrypto).dropna().index, y=(tradingVolumeDToken+tradingVolumeCrypto).dropna(),
                                 mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate=hoverTemplateRepresenation)
-        trace_VolOverallCG = dict(type='scatter', name='Overall Coingecko', x=data['VolTotalCoingecko'].dropna().index, y=data['VolTotalCoingecko'].dropna(),
+        trace_VolOverallCG = dict(type='scatter', name='Overall Coingecko (only DFI)', x=data['VolTotalCoingecko'].dropna().index, y=data['VolTotalCoingecko'].dropna(),
                                 mode='lines', line=dict(color='#5c0fff'), line_width=3, hovertemplate=hoverTemplateRepresenation)
 
-        figDEXVol.add_trace(trace_VolBTC, 1, 1)
-        figDEXVol.add_trace(trace_VolETH, 1, 1)
-        figDEXVol.add_trace(trace_VolUSDT, 1, 1)
-        figDEXVol.add_trace(trace_VolDOGE, 1, 1)
-        figDEXVol.add_trace(trace_VolLTC, 1, 1)
-        figDEXVol.add_trace(trace_VolBCH, 1, 1)
-        figDEXVol.add_trace(trace_VolUSDC, 1, 1)
+
+        figDEXVol.add_trace(trace_tradingVolumeCrypto, 1, 1)
+        figDEXVol.add_trace(trace_tradingVolumeDToken, 1, 1)
         figDEXVol.add_trace(trace_VolOverallDEX, 1, 1)
         figDEXVol.add_trace(trace_VolOverallCG, 1, 1)
 
@@ -104,8 +98,8 @@ class volume24hrViewClass:
     @staticmethod
     def getDEXVolExplanation():
         coinDEXVolCardExplanation = [html.P(['The ',
-                                             html.A('DEX-API',href='https://api.defichain.io/v1/listswaps?network=mainnet',target='_blank', className='defiLink'),
-                                             ' is used to read out the moving 24 hour trading volume in USD. The values are given for each trading pool and for each coin.',html.Br(),
+                                             html.A('Ocean-API',href='https://ocean.defichain.com/v0/mainnet/poolpairs',target='_blank', className='defiLink'),
+                                             ' is used to read out the moving 24 hour trading volume in USD. The values are represented for the crypto- and dToken-pools.',html.Br(),
                                              'Also the 24hr trading volume from the Coingecko is shown to compare the DEX with the centralized exchanges volume.']),
                                              html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                                    ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
