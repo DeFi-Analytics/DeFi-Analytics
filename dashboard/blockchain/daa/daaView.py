@@ -36,10 +36,22 @@ class daaViewClass:
         lastValidDate = datetime.strptime(data['countAddresses'].dropna().index.values[-2], '%Y-%m-%d')
         date6MonthsBack = lastValidDate - dateutil.relativedelta.relativedelta(months=6)
 
-        trace_DAA = dict(type='scatter', name='DAA',
+        MA7dDAA = data['countAddresses'].rolling(window=7).mean()
+        MA28dDAA = data['countAddresses'].rolling(window=28).mean()
+
+        trace_DAA = dict(type='scatter', name='daily data',
                          x=data['countAddresses'].dropna().index.values[:-1], y=data['countAddresses'].dropna().values[:-1],
-                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.0f}')
+                         mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.0f}')
+        trace_DAA7d = dict(type='scatter', name='7d moving average',
+                         x=MA7dDAA.dropna().index.values[:-1], y=MA7dDAA.dropna().values[:-1],
+                         mode='lines', line=dict(color='#5f18ff'), line_width=3, hovertemplate='%{y:,.0f}')
+        trace_DAA28d = dict(type='scatter', name='28d moving average',
+                         x=MA28dDAA.dropna().index.values[:-1], y=MA28dDAA.dropna().values[:-1],
+                         mode='lines', line=dict(color='#af8bfe'), line_width=3, hovertemplate='%{y:,.0f}')
+
         figDAA.add_trace(trace_DAA, 1, 1)
+        figDAA.add_trace(trace_DAA7d, 1, 1)
+        figDAA.add_trace(trace_DAA28d, 1, 1)
 
         figDAA.update_yaxes(title_text='number addresses involved in transactions', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1,
                             col=1)  # ,range=[-50, 200]
