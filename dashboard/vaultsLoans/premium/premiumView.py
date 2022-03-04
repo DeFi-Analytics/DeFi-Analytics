@@ -62,6 +62,10 @@ class premiumDTokenViewClass:
                               x=((data['EEM-DUSD_reserveB/reserveA']-data['EEM-USD'])/data['EEM-USD']).dropna().index,
                               y=((data['EEM-DUSD_reserveB/reserveA']-data['EEM-USD'])/data['EEM-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
+        trace_premiumFB = dict(type='scatter', name='dFB',
+                              x=((data['FB-DUSD_reserveB/reserveA']-data['FB-USD'])/data['FB-USD']).dropna().index,
+                              y=((data['FB-DUSD_reserveB/reserveA']-data['FB-USD'])/data['FB-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
         trace_premiumGLD = dict(type='scatter', name='dGLD',
                               x=((data['GLD-DUSD_reserveB/reserveA']-data['GLD-USD'])/data['GLD-USD']).dropna().index,
                               y=((data['GLD-DUSD_reserveB/reserveA']-data['GLD-USD'])/data['GLD-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
@@ -73,6 +77,14 @@ class premiumDTokenViewClass:
         trace_premiumGOOGL = dict(type='scatter', name='dGOOGL',
                               x=((data['GOOGL-DUSD_reserveB/reserveA']-data['GOOGL-USD'])/data['GOOGL-USD']).dropna().index,
                               y=((data['GOOGL-DUSD_reserveB/reserveA']-data['GOOGL-USD'])/data['GOOGL-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
+        trace_premiumMSFT = dict(type='scatter', name='dMSFT',
+                              x=((data['MSFT-DUSD_reserveB/reserveA']-data['MSFT-USD'])/data['MSFT-USD']).dropna().index,
+                              y=((data['MSFT-DUSD_reserveB/reserveA']-data['MSFT-USD'])/data['MSFT-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
+        trace_premiumNFLX = dict(type='scatter', name='dNFLX',
+                              x=((data['NFLX-DUSD_reserveB/reserveA']-data['NFLX-USD'])/data['NFLX-USD']).dropna().index,
+                              y=((data['NFLX-DUSD_reserveB/reserveA']-data['NFLX-USD'])/data['NFLX-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
         trace_premiumNVDA = dict(type='scatter', name='dNVDA',
                               x=((data['NVDA-DUSD_reserveB/reserveA']-data['NVDA-USD'])/data['NVDA-USD']).dropna().index,
@@ -114,6 +126,10 @@ class premiumDTokenViewClass:
                               x=((data['VNQ-DUSD_reserveB/reserveA']-data['VNQ-USD'])/data['VNQ-USD']).dropna().index,
                               y=((data['VNQ-DUSD_reserveB/reserveA']-data['VNQ-USD'])/data['VNQ-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
+        trace_premiumVOO = dict(type='scatter', name='dVOO',
+                              x=((data['VOO-DUSD_reserveB/reserveA']-data['VOO-USD'])/data['VOO-USD']).dropna().index,
+                              y=((data['VOO-DUSD_reserveB/reserveA']-data['VOO-USD'])/data['VOO-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
         figPrices.add_trace(trace_premiumDUSD, 1, 1)
         figPrices.add_trace(trace_premiumAAPL, 1, 1)
         figPrices.add_trace(trace_premiumAMZN, 1, 1)
@@ -121,9 +137,12 @@ class premiumDTokenViewClass:
         figPrices.add_trace(trace_premiumBABA, 1, 1)
         figPrices.add_trace(trace_premiumCOIN, 1, 1)
         figPrices.add_trace(trace_premiumEEM, 1, 1)
+        figPrices.add_trace(trace_premiumFB, 1, 1)
         figPrices.add_trace(trace_premiumGLD, 1, 1)
         figPrices.add_trace(trace_premiumGME, 1, 1)
         figPrices.add_trace(trace_premiumGOOGL, 1, 1)
+        figPrices.add_trace(trace_premiumMSFT, 1, 1)
+        figPrices.add_trace(trace_premiumNFLX, 1, 1)
         figPrices.add_trace(trace_premiumNVDA, 1, 1)
         figPrices.add_trace(trace_premiumPDBC, 1, 1)
         figPrices.add_trace(trace_premiumPLTR, 1, 1)
@@ -134,7 +153,7 @@ class premiumDTokenViewClass:
         figPrices.add_trace(trace_premiumTSLA, 1, 1)
         figPrices.add_trace(trace_premiumURTH, 1, 1)
         figPrices.add_trace(trace_premiumVNQ, 1, 1)
-
+        figPrices.add_trace(trace_premiumVOO, 1, 1)
 
 
         figPrices.update_yaxes(title_text='Premium in %', gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1, range=[-20, 60])
