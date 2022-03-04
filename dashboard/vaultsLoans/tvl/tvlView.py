@@ -40,7 +40,8 @@ class tvlVaultsViewClass:
         TVLOverall = (data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'] + \
                           data['sumDFI'] + \
                           data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] + \
-                          data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB']) * DFIPrice
+                          data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] + \
+                          data['sumDUSD'].fillna(0) / data['DUSD-DFI_reserveA/reserveB'].fillna(0)) * DFIPrice
 
         lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
@@ -70,6 +71,10 @@ class tvlVaultsViewClass:
                              y=(data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
+        trace_TVLDUSD = dict(type='scatter', name='dUSD', x=(data['sumDUSD'] / data['DUSD-DFI_reserveA/reserveB']).dropna().index,
+                             y=(data['sumDUSD'] / data['DUSD-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+
         # overall TVL graph
         trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall.dropna().index, y=TVLOverall.dropna(),
                                 mode='lines', line=dict(color='#410eb2'), line_width=3, hovertemplate=hoverTemplateRepresenation)
@@ -78,6 +83,7 @@ class tvlVaultsViewClass:
         figTVL.add_trace(trace_TVLBTC, 1, 1)
         figTVL.add_trace(trace_TVLUSDT, 1, 1)
         figTVL.add_trace(trace_TVLUSDC, 1, 1)
+        figTVL.add_trace(trace_TVLDUSD, 1, 1)
 
         figTVL.add_trace(trace_TVLOverall, 1, 1)
 
