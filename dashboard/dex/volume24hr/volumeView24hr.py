@@ -38,7 +38,7 @@ class volume24hrViewClass:
         indTradingVolumesDToken = [element for element in indTradingVolumes if "DUSD" in element]
         indTradingVolumesCrypto = [element for element in indTradingVolumes if ("DUSD" not in element) & ("BURN" not in element)]
 
-        tradingVolumeDToken = data[indTradingVolumesDToken].sum(axis=1, skipna=False)
+        tradingVolumeDToken = data[indTradingVolumesDToken].sum(axis=1, skipna=True)
         tradingVolumeCrypto = data[indTradingVolumesCrypto].sum(axis=1, skipna=False)
 
         trace_tradingVolumeCrypto = dict(type='scatter', name='Crypto volume', x=tradingVolumeCrypto.dropna().index, y=tradingVolumeCrypto.dropna(),
