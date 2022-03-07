@@ -10,6 +10,8 @@ import json
 scriptPath = __file__
 path = scriptPath[:-38] + '/data/'
 filepath = path+'extractedDFIdata.csv'
+filepathSnapshot = path + 'snapshotData.csv'
+
 
 pathRichlist = scriptPath[:-38] + '/data/Richlist/'
 listCSVFiles = glob.glob(pathRichlist+"*_01-*.csv")
@@ -122,10 +124,14 @@ for richlistFile in foundRichlistFiles:
         burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan) + float(burnedDFIPaybackFee)
 
 
-        if addDFIToken in rawRichlist.values:
-            tokenDFIValue = rawRichlist[rawRichlist.address == addDFIToken].balance.values[0]
-        else:
-            tokenDFIValue = 0
+        # if addDFIToken in rawRichlist.values:
+        #     tokenDFIValue = rawRichlist[rawRichlist.address == addDFIToken].balance.values[0]
+        # else:
+        #     tokenDFIValue = 0
+        # workaround for DFI-token: use estimation from snapshot data
+
+        snapshotData = pd.read_csv(filepathSnapshot, index_col=0)
+        tokenDFIValue = snapshotData['tokenDFI'].values[0]
 
         # generate Series to be add to existing dataframe
         listDFI2Add = [currDate, nbMnId, nbOtherId, fundDFIValue, mnDFI, otherDFI, foundationDFIValue, nbMnGenesisId, mnGenesisDFI, nbMnCakeId, mnCakeDFI, erc20DFIValue,

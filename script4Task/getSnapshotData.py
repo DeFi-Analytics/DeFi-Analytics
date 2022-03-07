@@ -100,7 +100,7 @@ while True:
 
         burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan) + float(burnedDFIPaybackFee)
 
-        # get DFI from LiquidityMining and DFI-Token
+        # get DFI from LiquidityMining
         print('... getting LM and token data')
         try:
             link='http://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
@@ -114,18 +114,24 @@ while True:
             print('### error lm api ')
             lmDFIValue = oldSnapshot['lmDFI'].values[0]
 
-        try:
-            link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
-            siteContent = requests.get(link, timeout=10)
-            if siteContent.status_code == 200:
-                dfDFIToken = pd.read_json(siteContent.text)
-                tokenDFIValue = dfDFIToken[dfDFIToken.address != addFoundation].balance.sum()
-            else:
-                tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
-        except:
-            print('### error token richlist')
-            #tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
-            tokenDFIValue = np.NaN
+        # get DFI-Token
+        # try:
+        #     link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
+        #     siteContent = requests.get(link, timeout=10)
+        #     if siteContent.status_code == 200:
+        #         dfDFIToken = pd.read_json(siteContent.text)
+        #         tokenDFIValue = dfDFIToken[dfDFIToken.address != addFoundation].balance.sum()
+        #     else:
+        #         tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
+        # except:
+        #     print('### error token richlist')
+        #     #tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
+        #     tokenDFIValue = np.NaN
+        # calculated statistical data
+        # if np.isnan(tokenDFIValue):
+        #     tokenDFIValue = 0
+        #     bCorrectValues = False
+
 
         # get DFI in vaults of last capture (time consumptive API)
         vaultsData = pd.read_csv(filePathVaults, index_col=0)
@@ -136,11 +142,22 @@ while True:
         else: # at the beginning there was no foundation address, should not be needed any longer
             foundationDFIValue = 0
 
-        # calculated statistical data
-        if np.isnan(tokenDFIValue):
-            tokenDFIValue = 0
-            bCorrectValues = False
+        # get overall minted DFI
+        try:
+            link = "https://ocean.defichain.com/v0.26/mainnet/stats/supply"
+            siteContent = requests.get(link, timeout=10)
+            if siteContent.status_code == 200:
+                tempData = json.loads(siteContent.text)
+                mintedDFICoins = tempData['data']['total']
+            else:
+                mintedDFICoins = np.NaN
+        except:
+            print('### error token richlist')
+            #tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
+            tokenDFIValue = np.NaN
 
+        # workaround to estimate DFI Token
+        tokenDFIValue = mintedDFICoins - (mnDFIValue + otherDFIValue + lmDFIValue + erc20DFIValue + vaultsDFIValue + foundationDFIValue + fundDFIValue + burnedDFIValue + mnDFILockedValue)
 
         circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue + vaultsDFIValue
         totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue + mnDFILockedValue
@@ -185,9 +202,8 @@ while True:
                 bittrexDFIValue = np.NaN
                 #bittrexDFIValue = oldSnapshot['bittrexDFI'].values[0]
         except:
-            print('### error token richlist')
-            #tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
-            tokenDFIValue = np.NaN
+            print('### error bittrex API')
+            bittrexDFIValue = np.NaN
 
 
     else:

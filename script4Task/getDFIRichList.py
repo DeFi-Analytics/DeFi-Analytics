@@ -34,33 +34,16 @@ while bGetRichlist:
         time.sleep(300)
 
 # get DFI token amount and add to richlist as own entry
-try:
-    link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
-    siteContent = requests.get(link)
-    temp = pd.read_json(siteContent.text)
-
-    seriesDFI2Add = pd.Series(['DFITokenOnDefiChain', temp.balance.sum()], index=['address', 'balance'])
-    dfRichList = dfRichList.append(seriesDFI2Add, ignore_index=True, sort=False)
-    print('Finished getting DFI Token data')
-except:
-    print('Error with API for DFI token data')
-
-
-# # get burnt DFI rewards and add to richlist as own entry
 # try:
-#     linkBurnRewards = 'https://api.defichain.io/v1/stats?network=mainnet&pretty'
-#     siteContent = requests.get(linkBurnRewards)
-#     if siteContent.status_code == 200:
-#         tempData = json.loads(siteContent.text)
-#         burnedDFIRewards = tempData['listCommunities']['Burnt']
+#     link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
+#     siteContent = requests.get(link)
+#     temp = pd.read_json(siteContent.text)
 #
-#         seriesDFI2Add = pd.Series(['DFIBurntRewards', burnedDFIRewards], index=['address', 'balance'])
-#         dfRichList = dfRichList.append(seriesDFI2Add, ignore_index=True, sort=False)
-#         print('Finished getting burnt DFI rewards')
-#     else:
-#         print('Error with API for burnt DFI rewards, status code not 200')
+#     seriesDFI2Add = pd.Series(['DFITokenOnDefiChain', temp.balance.sum()], index=['address', 'balance'])
+#     dfRichList = dfRichList.append(seriesDFI2Add, ignore_index=True, sort=False)
+#     print('Finished getting DFI Token data')
 # except:
-#     print('Error with API for burnt DFI rewards')
+#     print('Error with API for DFI token data')
 
 
 # get list of masternodes
