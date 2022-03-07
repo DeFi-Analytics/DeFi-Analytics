@@ -170,6 +170,26 @@ while True:
             marketCapRank = np.NaN
         else:
             marketCapRank = marketCapList[marketCapList.market_cap < marketCap].iloc[0].market_cap_rank
+
+
+        # get DFI amount on Bittrex
+        try:
+            link = 'https://global.bittrex.com/api/v2.0/pub/currencies/GetWalletHealth?showAll=true'
+            siteContent = requests.get(link, timeout=10)
+            if siteContent.status_code == 200:
+                bittrexCoins = json.loads(siteContent.text)
+                matches = [x for x in bittrexCoins['result'] if x['Currency']['Currency']=='DFI']
+                bittrexDFIValue = matches[0]['Health']['WalletBalance']
+
+            else:
+                bittrexDFIValue = np.NaN
+                #bittrexDFIValue = oldSnapshot['bittrexDFI'].values[0]
+        except:
+            print('### error token richlist')
+            #tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
+            tokenDFIValue = np.NaN
+
+
     else:
         print('... taking old snapshot data')
         nowSnapshot = oldSnapshot['date'].values[0]
@@ -195,6 +215,8 @@ while True:
         bCorrectValues = oldSnapshot['bCorrectValues'].values[0]
         nbMNlocked5 = oldSnapshot['nbMNlocked5'].values[0]
         nbMNlocked10 = oldSnapshot['nbMNlocked10'].values[0]
+        bittrexDFIValue = np.NaN
+        # bittrexDFIValue = oldSnapshot['bittrexDFI'].values[0]
 
     # countdown block data data
     print('... getting block data for countdown')
@@ -206,9 +228,9 @@ while True:
     print('... saving data')
     # convert single data to pandas series
     colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'mnDFILocked', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'burnedDFI', 'circDFI',
-                'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft', 'bCorrectValues', 'nbMNlocked5', 'nbMNlocked10', 'vaultsDFI']
+                'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft', 'bCorrectValues', 'nbMNlocked5', 'nbMNlocked10', 'vaultsDFI', 'bittrexDFIValue']
     listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, mnDFILockedValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, burnedDFIValue, circDFIValue,
-                totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft, bCorrectValues, nbMNlocked5, nbMNlocked10, vaultsDFIValue]
+                totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft, bCorrectValues, nbMNlocked5, nbMNlocked10, vaultsDFIValue, bittrexDFIValue]
     seriesData = pd.Series(listData, index = colNames)
 
     data2Save = pd.DataFrame(columns=colNames)
