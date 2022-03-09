@@ -144,7 +144,7 @@ while True:
 
         # get overall minted DFI
         try:
-            link = "https://ocean.defichain.com/v0.26/mainnet/stats/supply"
+            link = "https://ocean.defichain.com/v0/mainnet/stats/supply"
             siteContent = requests.get(link, timeout=10)
             if siteContent.status_code == 200:
                 tempData = json.loads(siteContent.text)
