@@ -47,6 +47,7 @@
     #figureSlippage {height: 525px}
     #figureTVL {height: 715px}
     #figureLiquidityToken {height: 715px}
+    #figureAPRRate {height: 715px}
     #figureLMPaidFees {height: 600px}
     #figureLMPaidCoinFees {height: 680px}
     #figureTokenCryptos {height: 715px}
@@ -124,6 +125,7 @@
         #figureSlippage {height: 480px}
         #figureTVL {height: 600px}
         #figureLiquidityToken {height: 600px}
+        #figureAPRRate {height: 600px}
         #figureLMPaidFees {height: 600px}
         #figureLMPaidCoinFees {height: 600px}
         #figureTokenCryptos {height: 600px}
@@ -174,6 +176,7 @@
         #figureSlippage {height: 330px}
         #figureTVL {height: 330px}
         #figureLiquidityToken {height: 330px}
+        #figureAPRRate {height: 330px}
         #figureLMPaidFees {height: 330px}
         #figureLMPaidCoinFees {height: 330px}
         #figureTokenCryptos {height: 330px}

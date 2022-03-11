@@ -487,7 +487,7 @@ class defichainAnalyticsModelClass:
             #                                    'reserveB': float, 'reserveB/reserveA':float, 'symbol': "string", 'totalLiquidity': float, 'rewardLoanPct': float})
             hourlyDEXData = pd.read_csv(filePath, header=0,
                                         usecols=["DFIPrices", "DFIPricesBittrex", "Time", "idTokenA", "idTokenB", 'numberAddresses', 'reserveA', 'reserveA/reserveB',
-                                               'reserveB', 'reserveB/reserveA', 'symbol', 'totalLiquidity', '24hrTrading', '30dTrading'],
+                                               'reserveB', 'reserveB/reserveA', 'symbol', 'totalLiquidity', '24hrTrading', '30dTrading', 'APRblock', 'APRcommission'],
                                         dtype={"DFIPrices": float, "DFIPricesBittrex": float, "Time": "string",
                                                "idTokenA": int, "idTokenB": int, 'numberAddresses': float, 'reserveA': float, 'reserveA/reserveB': float,
                                                'reserveB': float, 'reserveB/reserveA':float, 'symbol': "string", 'totalLiquidity': float, '24hrTrading': float, '30dTrading': float})

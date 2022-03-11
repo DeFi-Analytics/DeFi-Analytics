@@ -132,7 +132,7 @@ class defichainAnalyticsViewClass:
                 [
                     dbc.NavLink("TVL", href="/liquidityMining?entry=tvl", className="linkstyle", id="tvl"),
                     dbc.NavLink("Liquidity Token", href="/liquidityMining?entry=liquidityToken", className="linkstyle", id="liquidityToken"),
-                    #dbc.NavLink("Coins locked", href="/liquidityMining?entry=coinsLocked", className="linkstyle", id="coinsLocked"),
+                    dbc.NavLink("APR Rates", href="/liquidityMining?entry=apr", className="linkstyle", id="apr"),
                     dbc.NavLink("Fees", href="/liquidityMining?entry=fees", className="linkstyle", id="fees")
                 ],
                 id="submenu-liquidityMining-collapse",
