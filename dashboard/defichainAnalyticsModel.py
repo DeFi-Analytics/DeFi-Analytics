@@ -622,7 +622,7 @@ class defichainAnalyticsModelClass:
             dfxData['timeRounded'] = pd.to_datetime(dfxData.index).floor('H')
             dfxData.set_index(['timeRounded'], inplace=True)
 
-            columns2update = ['dfxBuyRoutes', 'dfxSellRoutes', 'dfxBuyVolume', 'dfxSellVolume', 'dfxBuyVolumeCHF', 'dfxSellVolumeCHF']
+            columns2update = ['dfxBuyVolume', 'dfxSellVolume']
 
             # delete existing information and add new one
             ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist

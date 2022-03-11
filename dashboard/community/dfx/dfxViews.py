@@ -3,6 +3,8 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 
 from plotly.subplots import make_subplots
+from datetime import datetime
+import dateutil.relativedelta
 
 
 class dfxViewClass:
@@ -18,9 +20,9 @@ class dfxViewClass:
                                                   html.A('https://dfx.swiss/', href='https://dfx.swiss/', target='_blank', className='defiLink')],
                                                  style={'text-align': 'justify'}),
                                           html.Table([html.Tr([html.Td('Select graph for evaluation:'),
-                                          html.Td(dcc.Dropdown(id='dfxSelectGraph', options=[{'label': 'Total DFI volume', 'value': 'totalDFIvolume'},
-                                                                                               {'label': 'Daily DFI volume', 'value': 'dailyDFIvolume'}],
-                                                               value='totalDFIvolume', clearable=False, style=dict(verticalAlign="bottom")))])]),
+                                          html.Td(dcc.Dropdown(id='dfxSelectGraph', options=[{'label': 'Total volume', 'value': 'totalVolume'},
+                                                                                               {'label': 'Daily volume', 'value': 'dailyVolume'}],
+                                                               value='totalVolume', clearable=False, style=dict(verticalAlign="bottom")))])]),
                                           dcc.Graph(id='figureDFXdata', config={'displayModeBar': False})]))]
         return content
 
@@ -34,32 +36,49 @@ class dfxViewClass:
             shared_xaxes=True,
             subplot_titles=([]))
 
-        if representation=='dailyDFIvolume':
-            nameBuyVolume = 'Daily volume'
-            temp = data['dfxBuyVolume'].dropna()
-            xdata = temp.groupby(temp.index.floor('d')).last().diff().index
-            ydata = temp.groupby(temp.index.floor('d')).last().diff()
+        if representation=='dailyVolume':
+            ydataBuy = data['dfxBuyVolume'].groupby(data['dfxBuyVolume'].index.floor('d')).last().diff()
+            ydataSell = data['dfxSellVolume'].groupby(data['dfxSellVolume'].index.floor('d')).last().diff()
         else:
-            nameBuyVolume = 'Overall volume'
-            xdata = data['dfxBuyVolume'].dropna().index
-            ydata = data['dfxBuyVolume'].dropna()
+            ydataBuy = data['dfxBuyVolume'].dropna()
+            ydataSell = data['dfxSellVolume'].dropna()
+
+        lastValidDate = datetime.utcfromtimestamp(data['dfxBuyVolume'].dropna().index.values[-1].tolist() / 1e9)
+        dateGoBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
+        formatHover = '%{y:,.2f}€'
+
+        trace_diff = dict(type='scatter', name='Difference', x=(ydataBuy-ydataSell).dropna().index, y=(ydataBuy-ydataSell).dropna(),
+                          mode='lines', line=dict(color='#ff2ebe'), line_width=3, hovertemplate=formatHover)
+        trace_buy = dict(type='scatter', name='Buy orders', x=ydataBuy.dropna().index, y=ydataBuy.dropna(),
+                          mode='lines', line=dict(color='#90dba8'), line_width=3, hovertemplate=formatHover, fill='tozeroy')
+        trace_sell = dict(type='scatter', name='Sell orders', x=ydataSell.dropna().index, y=-ydataSell.dropna(),
+                          mode='lines', line=dict(color='#ec9b98'), line_width=3, hovertemplate=formatHover, fill='tozeroy')
+
+        figDFX.add_trace(trace_buy, 1, 1)
+        figDFX.add_trace(trace_sell, 1, 1)
+        figDFX.add_trace(trace_diff, 1, 1)
 
 
-        trace_buyVolume = dict(type='scatter', name=nameBuyVolume, x=xdata, y=ydata,
-                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.4f}')
-
-
-        figDFX.add_trace(trace_buyVolume, 1, 1)
-
-
-        figDFX.update_yaxes(title_text='Buy volume in DFI', tickformat=",.f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
-        figDFX.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=1, col=1)
+        figDFX.update_yaxes(title_text='Volume in EUR', tickformat=",.f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        figDFX.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', range=[dateGoBack, lastValidDate], row=1, col=1)
 
         figDFX.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
 
+        # Add range slider
+        figDFX.update_layout(barmode='stack',
+            xaxis=dict(
+            rangeselector=dict(
+                buttons=list([dict(count=14, label="14d", step="day", stepmode="backward"),
+                              dict(count=30, label="30d", step="day", stepmode="backward"),
+                              dict(count=2, label="2m", step="month", stepmode="backward"),
+                              dict(count=6, label="6m", step="month", stepmode="backward"),
+                              dict(count=1, label="YTD", step="year", stepmode="todate"),
+                              dict(count=1, label="1y", step="year", stepmode="backward"),
+                              dict(step="all")])),
+            rangeslider=dict(visible=False),
+            type="date"))
 
-
-        figDFX.update_layout(margin={"t": 20, "l": 0, "b": 0, "r": 0},
+        figDFX.update_layout(margin={"t": 50, "l": 0, "b": 0, "r": 0},
                                  barmode='stack',
                                  hovermode='x unified',
                                  hoverlabel=dict(font_color="#6c757d", bgcolor='#ffffff'),
@@ -74,81 +93,3 @@ class dfxViewClass:
         figDFX.layout.legend.font.color = '#6c757d'  # font color legend
         return figDFX
 
-    @staticmethod
-    def createPromoIncentiveFigure(data, bgImage):
-        figPromoIncentive = make_subplots(
-            rows=1, cols=1,
-            vertical_spacing=0.15,
-            row_width=[1],  # from bottom to top
-            specs=[[{}]],
-            shared_xaxes=True,
-            subplot_titles=([]))
-
-        trace_incentivePoints = dict(type='scatter', name='Daily overall incentive points', x=data['incentivePointsToday'].dropna().index, y=data['incentivePointsToday'].dropna(),
-                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.0f}')
-
-        figPromoIncentive.add_trace(trace_incentivePoints, 1, 1)
-
-
-
-        figPromoIncentive.update_yaxes(title_text='Daily incentive promo points (all users)', tickformat=".f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
-        figPromoIncentive.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=1, col=1)
-
-        figPromoIncentive.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
-
-
-
-        figPromoIncentive.update_layout(margin={"t": 20, "l": 0, "b": 0, "r": 0},
-                                 barmode='stack',
-                                 hovermode='x unified',
-                                 hoverlabel=dict(font_color="#6c757d", bgcolor='#ffffff'),
-                                 legend=dict(orientation="h",
-                                             yanchor="top",
-                                             y=-0.12,
-                                             xanchor="right",
-                                             x=1),
-                                 )
-        figPromoIncentive.layout.plot_bgcolor = '#ffffff'  # background plotting area
-        figPromoIncentive.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area
-        figPromoIncentive.layout.legend.font.color = '#6c757d'  # font color legend
-        return figPromoIncentive
-
-
-    @staticmethod
-    def createPromoUsersFigure(data, bgImage):
-        figPromoUser = make_subplots(
-            rows=1, cols=1,
-            vertical_spacing=0.15,
-            row_width=[1],  # from bottom to top
-            specs=[[{}]],
-            shared_xaxes=True,
-            subplot_titles=([]))
-
-        trace_incentivePoints = dict(type='scatter', name='Defichain Promo users', x=data['incentiveUsers'].dropna().index, y=data['incentiveUsers'].dropna(),
-                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:.0f}')
-
-        figPromoUser.add_trace(trace_incentivePoints, 1, 1)
-
-
-
-        figPromoUser.update_yaxes(title_text='Number incentive program users', tickformat=".f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
-        figPromoUser.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d', row=1, col=1)
-
-        figPromoUser.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.35, sizey=0.35,  xanchor="center", yanchor="middle", opacity=0.2))
-
-
-
-        figPromoUser.update_layout(margin={"t": 20, "l": 0, "b": 0, "r": 0},
-                                 barmode='stack',
-                                 hovermode='x unified',
-                                 hoverlabel=dict(font_color="#6c757d", bgcolor='#ffffff'),
-                                 legend=dict(orientation="h",
-                                             yanchor="top",
-                                             y=-0.12,
-                                             xanchor="right",
-                                             x=1),
-                                 )
-        figPromoUser.layout.plot_bgcolor = '#ffffff'  # background plotting area
-        figPromoUser.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area
-        figPromoUser.layout.legend.font.color = '#6c757d'  # font color legend
-        return figPromoUser

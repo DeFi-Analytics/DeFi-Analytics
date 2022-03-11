@@ -9,52 +9,41 @@ from datetime import datetime
 # generate filepath relative to script location
 scriptPath = __file__
 path = scriptPath[:-26] + '/data/'
-filepath = path + 'dfxData.csv'
+filepathSummary = path + 'dfxData.csv'
+filepathComplete = path + 'dfxAllOrdersData.csv'
 
-
-# API request for freezer DFI
-link='https://api.dfx.swiss/v1/statistic'
+# API request for complete transaction list of DFX
+link='https://api.dfx.swiss/v1/statistic/transactions'
 siteContent = requests.get(link)
-temp= json.loads(siteContent.text)
+tempData= json.loads(siteContent.text)
 
-try:
-    buyOrder = temp['dfxStatistic']['routes']['buy']
-    sellOrder = temp['dfxStatistic']['routes']['sell']
-except:
-    print('Error in volume data')
-    buyOrder = np.nan
-    sellOrder = np.nan
+# load existing list of orders
+dfDFXorders = pd.DataFrame()
 
-try:
-    buyVolume = temp['dfxStatistic']['volume']['DFI']['buy']
-    sellVolume = temp['dfxStatistic']['volume']['DFI']['sell']
-except:
-    print('Error in DFI volume data')
-    buyVolume = np.nan
-    sellVolume = np.nan
+tempDataframe = pd.DataFrame(tempData['buy'])
+tempDataframe['order'] = 'buy'
+dfDFXorders = dfDFXorders.append(tempDataframe)
 
-try:
-    buyVolumeCHF = temp['dfxStatistic']['volume']['CHF']['buy']
-    sellVolumeCHF = temp['dfxStatistic']['volume']['CHF']['sell']
-except:
-    print('Error in CHF volume data')
-    buyVolume = np.nan
-    sellVolume = np.nan
+tempDataframe = pd.DataFrame(tempData['sell'])
+tempDataframe['order'] = 'sell'
+dfDFXorders = dfDFXorders.append(tempDataframe)
 
-dateTimeObj = datetime.now()
-strTimestamp = dateTimeObj.strftime("%Y-%m-%d %H:%M")
+dfDFXorders.drop_duplicates(inplace=True)
+dfDFXorders['date'] = pd.to_datetime(dfDFXorders['date'])
+dfDFXorders.sort_values(by='date', inplace=True)
+dfDFXorders.set_index('date', inplace=True)
 
-# load existing data and add new row
-# dfDFXData = pd.DataFrame(columns=['buyOrder', 'sellOrder', 'buyVolume', 'sellVolume'])                        # needed for first time without old data
-dfDFXData = pd.read_csv(filepath, index_col=0)
+# dfDFXorders.to_csv(filepathComplete)
 
-# get remaining time for frozen DFI
-newData = pd.Series(data=[buyOrder, sellOrder, buyVolume, sellVolume, buyVolumeCHF, sellVolumeCHF],
-                    index=['dfxBuyRoutes', 'dfxSellRoutes', 'dfxBuyVolume', 'dfxSellVolume', 'dfxBuyVolumeCHF', 'dfxSellVolumeCHF'])
 
-newData.name = strTimestamp
-dfDFXData = dfDFXData.append(newData)
+# get hourly data
+dfDFXData = pd.DataFrame(columns=['dfxBuyVolume', 'dfxSellVolume'])
+dfDFXData['dfxBuyVolume'] = dfDFXorders[dfDFXorders.order == 'buy'].fiatAmount.groupby(pd.Grouper(freq='H')).sum()
+dfDFXData['dfxBuyVolume'] = dfDFXData['dfxBuyVolume'].fillna(0).cumsum()
+dfDFXData['dfxSellVolume'] = dfDFXorders[dfDFXorders.order == 'sell'].fiatAmount.groupby(pd.Grouper(freq='H')).sum()
+dfDFXData['dfxSellVolume'] = dfDFXData['dfxSellVolume'].fillna(0).cumsum()
 
+dfDFXData.index = dfDFXData.index.strftime('%Y-%m-%d %H:%M')
 # writing file
-dfDFXData.to_csv(filepath)
+dfDFXData.to_csv(filepathSummary)
 print('Data for DFX saved')
