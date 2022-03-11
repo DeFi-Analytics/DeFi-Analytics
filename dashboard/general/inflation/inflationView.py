@@ -40,7 +40,7 @@ class inflationViewClass:
 
         formatHover = '%{y:,.2f} DFI'
         lastValidDate = datetime.strptime(dataDaily['nbBlocks'].dropna().index.values[-1], '%Y-%m-%d')
-        date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
+        date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
         yAxisRange = [-2000000, 1000000]
 
         emissionDFI = ((dataDaily['masternodeEmission'] + dataDaily['dexEmission'] + dataDaily['dTokenEmission'] + dataDaily['anchorEmission']) * dataDaily['nbBlocks']).dropna().drop_duplicates().iloc[:-1]
@@ -78,8 +78,7 @@ class inflationViewClass:
         figInflation.update_layout(barmode='stack',
             xaxis=dict(
             rangeselector=dict(
-                buttons=list([dict(count=14, label="14d", step="day", stepmode="backward"),
-                              dict(count=30, label="30d", step="day", stepmode="backward"),
+                buttons=list([dict(count=30, label="30d", step="day", stepmode="backward"),
                               dict(count=2, label="2m", step="month", stepmode="backward"),
                               dict(count=6, label="6m", step="month", stepmode="backward"),
                               dict(count=1, label="YTD", step="year", stepmode="todate"),
