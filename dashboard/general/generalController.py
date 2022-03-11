@@ -10,6 +10,9 @@ from .overallTVL.overallTVLCallbacks import overallTVLCallbacksClass
 from .emission.emissionView import emissionViewClass
 from .emission.emissionCallbacks import emissionCallbacksClass
 
+from .inflation.inflationView import inflationViewClass
+from .inflation.inflationCallbacks import inflationCallbacksClass
+
 class generalControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -29,6 +32,10 @@ class generalControllerClass:
         # initialize emission classes
         self.emissionView = emissionViewClass()
         self.emissionCallback = emissionCallbacksClass(self.defichainAnalyticsModel, self.emissionView, app)
+
+        # initialize inflation classes
+        self.inflationView = inflationViewClass()
+        self.inflationCallbacks = inflationCallbacksClass(self.defichainAnalyticsModel, self.inflationView, app)
 
     def getContent(self, entry):
         pageContent = None
@@ -51,5 +58,10 @@ class generalControllerClass:
             self.defichainAnalyticsModel.loadVaultData()
             self.defichainAnalyticsModel.calcOverallTVLdata()
             pageContent = self.overallTVLView.getOverallTVLContent()
+        elif entry in ["inflation"]:
+            self.defichainAnalyticsModel.loadEmissionRateData()
+            self.defichainAnalyticsModel.loadDailyBlocktimeData()
+            self.defichainAnalyticsModel.loadVaultData()
+            pageContent = self.inflationView.getInflationContent()
 
         return pageContent

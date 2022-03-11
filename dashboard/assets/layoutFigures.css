@@ -64,6 +64,7 @@
     #figureMarketcap {height: 715px}
     #figureOverallTVL {height: 715px}
     #figureEmission {height: 715px}
+    #figureInflation {height: 710px}
 
     #figureNbVaults {height: 750px}
     #figureTVLVaults {height: 715px}
@@ -140,6 +141,7 @@
         #figureMarketcap {height: 600px}
         #figureOverallTVL {height: 600px}
         #figureEmission {height: 600px}
+        #figureInflation {height: 600px}
 
         #figureNbVaults {height: 600px}
         #figureTVLVaults {height: 600px}
@@ -189,6 +191,7 @@
         #figureMarketcap {height: 330px}
         #figureOverallTVL {height: 330px}
         #figureEmission {height: 330px}
+        #figureInflation {height: 330px}
 
         #figureNbVaults {height: 330px}
         #figureTVLVaults {height: 330px}

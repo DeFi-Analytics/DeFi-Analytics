@@ -42,6 +42,7 @@ class defichainAnalyticsViewClass:
                     dbc.NavLink("Market Cap", href="/general?entry=marketcap", className="linkstyle", id="marketcap"),
                     dbc.NavLink("Overall TVL", href="/general?entry=overallTVL", className="linkstyle", id="overallTVL"),
                     dbc.NavLink("DFI emission", href="/general?entry=emission", className="linkstyle", id="emission"),
+                    dbc.NavLink("Inflation", href="/general?entry=inflation", className="linkstyle", id="inflation"),
                 ],
                 id="submenu-general-collapse",
             ),
