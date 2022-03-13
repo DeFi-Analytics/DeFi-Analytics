@@ -6,16 +6,19 @@ class slippageCallbacksClass:
 
         @app.callback([Output('slippagePoolLastUpdate', 'children'),
                        Output('slippagePoolCoinA', 'children'),
-                       Output('slippagePoolCoinB', 'children')],
+                       Output('slippagePoolCoinB', 'children'),
+                       Output('slippagePoolCoinBName1', 'children'),
+                       Output('slippagePoolCoinBName2', 'children'),],
                       [Input('slippagePoolSelection', 'value')])
         def updateUsedDataInfos(selectedPool):
-            lastUpdate = pd.to_datetime(defichainAnalyticsModel.hourlyData[selectedPool + '-DFI_reserveB'].dropna().index.values[-1]).strftime('%Y-%m-%d %H:%M')
-            coinA = "{:,.1f}".format(defichainAnalyticsModel.hourlyData[selectedPool+'-DFI_reserveA'].dropna().iloc[-1])+' '+selectedPool
-            coinB = "{:,.0f}".format(defichainAnalyticsModel.hourlyData[selectedPool + '-DFI_reserveB'].dropna().iloc[-1]) + ' DFI'
-            return lastUpdate, coinA, coinB
+            lastUpdate = pd.to_datetime(defichainAnalyticsModel.hourlyData[selectedPool + '_reserveB'].dropna().index.values[-1]).strftime('%Y-%m-%d %H:%M')
+            coinA = "{:,.1f}".format(defichainAnalyticsModel.hourlyData[selectedPool+'_reserveA'].dropna().iloc[-1])+' '+ selectedPool[:selectedPool.index('-')]
+            coinB = "{:,.0f}".format(defichainAnalyticsModel.hourlyData[selectedPool + '_reserveB'].dropna().iloc[-1])+' '+ selectedPool[selectedPool.index('-')+1:]
+            coinBName = selectedPool[selectedPool.index('-')+1:]
+            return lastUpdate, coinA, coinB, coinBName, coinBName
 
         @app.callback([Output('figureSlippage', 'figure'),
-                       Output('slippageSwappedDFI', 'children'),
+                       Output('slippageSwappedCoinA', 'children'),
                        Output('slippageSwappedCoinB', 'children'),
                        Output('slippageStartPrice', 'children'),
                        Output('slippageMeanPrice', 'children'),
@@ -25,8 +28,8 @@ class slippageCallbacksClass:
                        Input('slippageOrderSelection', 'value'),
                        Input('slippagePoolSelection', 'value')])
         def updateFigSlippageDFI(coins2sell, selectedOrder, selectedPool):
-            figSlippage, swappedDFI, swappedCoinB, startPrice, meanPrice, endPrice = slippageView.createSlippageGraph(defichainAnalyticsModel.hourlyData, defichainAnalyticsModel.figBackgroundImage, selectedPool, selectedOrder, coins2sell)
-            return figSlippage, swappedDFI, swappedCoinB, startPrice, meanPrice, endPrice
+            figSlippage, swappedCoinA, swappedCoinB, startPrice, meanPrice, endPrice = slippageView.createSlippageGraph(defichainAnalyticsModel.hourlyData, defichainAnalyticsModel.figBackgroundImage, selectedPool, selectedOrder, coins2sell)
+            return figSlippage, swappedCoinA, swappedCoinB, startPrice, meanPrice, endPrice
 
         @app.callback(
             Output("modalSlippage", "is_open"),

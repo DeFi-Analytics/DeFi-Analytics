@@ -13,27 +13,55 @@ class slippageViewClass:
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoSlippage", className="ml-auto"))], id="modalSlippage", size='xl'),
                    dbc.Card(dbc.CardBody([html.H4(['Slippage for DEX swaps']),
                                           html.Table([html.Tr([html.Td('Select pool for your swap:'),
-                                                               html.Td(dcc.Dropdown(id='slippagePoolSelection', options=[{'label': 'BTC', 'value': 'BTC'},
-                                                                                              {'label': 'ETH', 'value': 'ETH'},
-                                                                                              {'label': 'USDT', 'value': 'USDT'},
-                                                                                              {'label': 'DOGE', 'value': 'DOGE'},
-                                                                                              {'label': 'LTC', 'value': 'LTC'},
-                                                                                              {'label': 'BCH', 'value': 'BCH'},
-                                                                                              {'label': 'USDC', 'value': 'USDC'}],
-                                                                                        value='BTC', clearable=False, style=dict(width='150px', verticalAlign="bottom")))])]),
+                                                               html.Td(dcc.Dropdown(id='slippagePoolSelection', options=[
+                                                                   {'label': 'BTC', 'value': 'BTC-DFI'},
+                                                                   {'label': 'ETH', 'value': 'ETH-DFI'},
+                                                                   {'label': 'USDT', 'value': 'USDT-DFI'},
+                                                                   {'label': 'DOGE', 'value': 'DOGE-DFI'},
+                                                                   {'label': 'LTC', 'value': 'LTC-DFI'},
+                                                                   {'label': 'BCH', 'value': 'BCH-DFI'},
+                                                                   {'label': 'USDC', 'value': 'USDC-DFI'},
+                                                                   {'label': 'dUSD', 'value': 'DUSD-DFI'},
+                                                                   {'label': 'AAPL', 'value': 'AAPL-DUSD'},
+                                                                   {'label': 'AMZN', 'value': 'AMZN-DUSD'},
+                                                                   {'label': 'ARKK', 'value': 'ARKK-DUSD'},
+                                                                   {'label': 'BABA', 'value': 'BABA-DUSD'},
+                                                                   {'label': 'COIN', 'value': 'COIN-DUSD'},
+                                                                   {'label': 'EEM', 'value': 'EEM-DUSD'},
+                                                                   {'label': 'FB', 'value': 'FB-DUSD'},
+                                                                   {'label': 'GLD', 'value': 'GLD-DUSD'},
+                                                                   {'label': 'GME', 'value': 'GME-DUSD'},
+                                                                   {'label': 'GOOGL', 'value': 'GOOGL-DUSD'},
+                                                                   {'label': 'MSFT', 'value': 'MSFT-DUSD'},
+                                                                   {'label': 'NFLX', 'value': 'NFLX-DUSD'},
+                                                                   {'label': 'NVDA', 'value': 'NVDA-DUSD'},
+                                                                   {'label': 'PDBC', 'value': 'PDBC-DUSD'},
+                                                                   {'label': 'PLTR', 'value': 'PLTR-DUSD'},
+                                                                   {'label': 'QQQ', 'value': 'QQQ-DUSD'},
+                                                                   {'label': 'SLV', 'value': 'SLV-DUSD'},
+                                                                   {'label': 'SPY', 'value': 'SPY-DUSD'},
+                                                                   {'label': 'TLT', 'value': 'TLT-DUSD'},
+                                                                   {'label': 'TSLA', 'value': 'TSLA-DUSD'},
+                                                                   {'label': 'URTH', 'value': 'URTH-DUSD'},
+                                                                   {'label': 'VNQ', 'value': 'VNQ-DUSD'},
+                                                                   {'label': 'VOO', 'value': 'VOO-DUSD'},
+                                                               ],
+                                                                                        value='BTC-DFI', clearable=False, style=dict(width='150px', verticalAlign="bottom")))])]),
                                           html.Div(['Data used for calculation: Update from ', html.Span(id='slippagePoolLastUpdate'), ', Pool-size of ',
                                                     html.Span(id='slippagePoolCoinA'), ' and ',
                                                     html.Span(id='slippagePoolCoinB')], style={'margin-top': 15}),
-                                          html.Table([html.Tr([html.Td('Do you want to buy or sell DFI?'),
+                                          html.Table([html.Tr([html.Td(['Do you want to buy or sell ',html.Span(id='slippagePoolCoinBName1'),'?']),
                                                                html.Td(dcc.Dropdown(id='slippageOrderSelection', options=[{'label': 'buy', 'value': 'buy'},
                                                                                                                          {'label': 'sell', 'value': 'sell'}],
                                                                                     value='buy', clearable=False, style=dict(width='150px', verticalAlign="bottom")))]),
-                                                      html.Tr([html.Td('How many DFI should be swapped?'),
+                                                      html.Tr([html.Td(['How many ',html.Span(id='slippagePoolCoinBName2'),' should be swapped?']),
                                                                html.Td(dcc.Input(id="slippageCoinAmount", type='number', debounce=True, value=20000))])
                                                       ],
                                                                style=dict(marginTop='30px')),
                                           dbc.Row([dbc.Col(dcc.Graph(id='figureSlippage', config={'displayModeBar': False}),style={'margin-top': 10}, lg=8, xl=9, align='start'),
-                                                   dbc.Col([html.Div([html.B('Swapped coins'), html.Br(), 'DFI: ', html.Span(id='slippageSwappedDFI'), html.Br(), html.Span(id='slippageSwappedCoinB')]),
+                                                   dbc.Col([html.Div([html.B('Swapped coins'), html.Br(),
+                                                                      html.Span(id='slippageSwappedCoinA'), html.Br(),
+                                                                      html.Span(id='slippageSwappedCoinB')]),
                                                             html.Div([html.B('Price ranges for swap'), html.Br(),
                                                                       'Start: ', html.Span(id='slippageStartPrice'), html.Br(),
                                                                       'Mean: ', html.Span(id='slippageMeanPrice'), html.Br(),
@@ -53,38 +81,48 @@ class slippageViewClass:
             shared_xaxes=True,
             subplot_titles=([]))
 
-        if selectedPool == 'USDT':
+        if selectedPool[selectedPool.index('-') + 1:] == 'DFI':
+            priceUnit = selectedPool[:selectedPool.index('-')] + '/' + selectedPool[selectedPool.index('-') + 1:]
+        else:
+            priceUnit = selectedPool[selectedPool.index('-') + 1:] + '/' + selectedPool[:selectedPool.index('-')]
+
+        if selectedPool == 'BTC-DFI':
+            tickFormatYAxis = ",.7f"
+            hoverTemplateRepresenation = '%{y:,.8f} BTC/DFI'
+            yAxisLabel = 'Coinprice in BTC/DFI'
+        elif selectedPool == 'USDT-DFI':
             tickFormatYAxis = ",.2f"
             hoverTemplateRepresenation = '%{y:,.3f} USDT/DFI'
             yAxisLabel = 'Coinprice in USDT/DFI'
-        elif selectedPool == 'USDC':
+        elif selectedPool == 'USDC-DFI':
             tickFormatYAxis = ",.2f"
             hoverTemplateRepresenation = '%{y:,.3f} USDC/DFI'
             yAxisLabel = 'Coinprice in USDC/DFI'
-        elif selectedPool == 'ETH':
+        elif selectedPool == 'ETH-DFI':
             tickFormatYAxis = ",.5f"
             hoverTemplateRepresenation = '%{y:,.8f} ETH/DFI'
             yAxisLabel = 'Coinprice in ETH/DFI'
-        elif selectedPool == 'DOGE':
+        elif selectedPool == 'DOGE-DFI':
             tickFormatYAxis = ",.2f"
             hoverTemplateRepresenation = '%{y:,.2f} DOGE/DFI'
             yAxisLabel = 'Coinprice in DOGE/DFI'
-        elif selectedPool == 'LTC':
+        elif selectedPool == 'LTC-DFI':
             tickFormatYAxis = ",.4f"
             hoverTemplateRepresenation = '%{y:,.6f} LTC/DFI'
             yAxisLabel = 'Coinprice in LTC/DFI'
-        elif selectedPool == 'BCH':
+        elif selectedPool == 'BCH-DFI':
             tickFormatYAxis = ",.4f"
             hoverTemplateRepresenation = '%{y:,.6f} BCH/DFI'
             yAxisLabel = 'Coinprice in BCH/DFI'
         else:
-            tickFormatYAxis = ",.7f"
-            hoverTemplateRepresenation = '%{y:,.8f} BTC/DFI'
-            yAxisLabel = 'Coinprice in BTC/DFI'
+            tickFormatYAxis = ",.2f"
+            hoverTemplateRepresenation = '%{y:,.3f} '+priceUnit
+            yAxisLabel = 'Coinprice in '+priceUnit
 
-        currDFI = data[selectedPool+'-DFI_reserveB'].dropna().iloc[-1]
-        curr2ndCoin = data[selectedPool+'-DFI_reserveA'].dropna().iloc[-1]
+        currDFI = data[selectedPool+'_reserveB'].dropna().iloc[-1]
+        curr2ndCoin = data[selectedPool+'_reserveA'].dropna().iloc[-1]
         currLT = np.sqrt(currDFI*curr2ndCoin)
+
 
         # start and end point calculation
         currRatio = curr2ndCoin/currDFI
@@ -104,12 +142,21 @@ class slippageViewClass:
             amountRange = np.linspace(0, np.minimum(coinAmount*2.5, currDFI), 1000)
             priceRange = currLT**2/((currDFI-amountRange)**2)
 
-        swappedDFI = f"{coinAmount:.8f}"
-        swappedCoinB = selectedPool+': '+f"{amountGetCoin:.8f}"
 
-        traceCurve = dict(type='scatter', name='DFI amount', x=amountRange, y=priceRange,
+        swappedCoinA = selectedPool[:selectedPool.index('-')] + ': '+f"{amountGetCoin:.8f}"
+        swappedCoinB = selectedPool[selectedPool.index('-')+1:] + ': ' + f"{coinAmount:.8f}"
+
+        # change ratio in case of dToken pools
+        if selectedPool[selectedPool.index('-') + 1:] == 'DUSD':
+            currRatio = 1/currRatio
+            meanPrice = 1/meanPrice
+            endPrice = 1/endPrice
+            priceRange = 1/priceRange
+
+
+        traceCurve = dict(type='scatter', name='Price', x=amountRange, y=priceRange,
                                 mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate=hoverTemplateRepresenation)
-        traceCoins2Sell = dict(type='scatter', name='DFI amount', x=[coinAmount, coinAmount],
+        traceCoins2Sell = dict(type='scatter', name='amount', x=[coinAmount, coinAmount],
                                y=[np.min(priceRange)-(np.max(priceRange)-np.min(priceRange))*0.1, np.max(priceRange)+(np.max(priceRange)-np.min(priceRange))*0.1],
                                 mode='lines', line=dict(color='#7f50ff', dash='dot'), line_width=2, hovertemplate=hoverTemplateRepresenation, showlegend=False)
         figSlippage.add_trace(traceCurve, 1, 1)
@@ -154,8 +201,11 @@ class slippageViewClass:
         figSlippage.layout.plot_bgcolor = '#ffffff'  # background plotting area
         figSlippage.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area
         figSlippage.layout.legend.font.color = '#6c757d'  # font color legend
-        return figSlippage, swappedDFI, swappedCoinB, \
-               f"{currRatio:.8f} "+selectedPool+'/DFI', f"{meanPrice:.8f} "+selectedPool+'/DFI', f"{endPrice:.8f} "+selectedPool+'/DFI'
+
+        return figSlippage, swappedCoinA, swappedCoinB, \
+               f"{currRatio:.8f} "+priceUnit, \
+               f"{meanPrice:.8f} "+priceUnit, \
+               f"{endPrice:.8f} "+priceUnit
 
 
     @staticmethod

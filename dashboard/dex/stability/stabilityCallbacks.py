@@ -6,13 +6,18 @@ class stabilityCallbacksClass:
 
         @app.callback([Output('stabilityPoolLastUpdate', 'children'),
                        Output('stabilityPoolCoinA', 'children'),
-                       Output('stabilityPoolCoinB', 'children')],
+                       Output('stabilityPoolCoinB', 'children'),
+                       Output('stabilityPoolCoinBName1', 'children'),
+                       Output('stabilityPoolCoinBName2', 'children'),
+                       Output('stabilityPoolCoinBName3', 'children'),],
                       [Input('stabilityPoolSelection', 'value')])
         def updateUsedDataInfos(selectedPool):
-            lastUpdate = pd.to_datetime(defichainAnalyticsModel.hourlyData[selectedPool + '-DFI_reserveB'].dropna().index.values[-1]).strftime('%Y-%m-%d %H:%M')
-            coinA = "{:,.1f}".format(defichainAnalyticsModel.hourlyData[selectedPool+'-DFI_reserveA'].dropna().iloc[-1])+' '+selectedPool
-            coinB = "{:,.0f}".format(defichainAnalyticsModel.hourlyData[selectedPool + '-DFI_reserveB'].dropna().iloc[-1]) + ' DFI'
-            return lastUpdate, coinA, coinB
+            lastUpdate = pd.to_datetime(defichainAnalyticsModel.hourlyData[selectedPool + '_reserveB'].dropna().index.values[-1]).strftime('%Y-%m-%d %H:%M')
+
+            coinA = "{:,.1f}".format(defichainAnalyticsModel.hourlyData[selectedPool+'_reserveA'].dropna().iloc[-1])+' '+ selectedPool[:selectedPool.index('-')]
+            coinB = "{:,.0f}".format(defichainAnalyticsModel.hourlyData[selectedPool + '_reserveB'].dropna().iloc[-1])+' '+ selectedPool[selectedPool.index('-')+1:]
+            coinBName = selectedPool[selectedPool.index('-')+1:]
+            return lastUpdate, coinA, coinB, coinBName, coinBName, coinBName
 
         @app.callback([Output('figureStabilityDFI', 'figure'),
                        Output('stabilityChangePriceOutput', 'children')],
@@ -20,7 +25,7 @@ class stabilityCallbacksClass:
                        Input('stabilityPoolSelection', 'value')])
         def updateFigStabilityDFI(ratioChangeInput, selectedPool):
             figStabilityDFI, nbDFIneeded = stabilityView.createStabilityDFIGraph(defichainAnalyticsModel.hourlyData, defichainAnalyticsModel.figBackgroundImage, selectedPool, ratioChangeInput)
-            return figStabilityDFI, "{:,.0f}DFI".format(nbDFIneeded)
+            return figStabilityDFI, "{:,.0f}".format(nbDFIneeded)+selectedPool[selectedPool.index('-')+1:]
 
         @app.callback([Output('figureStabilityPrice', 'figure'),
                        Output('stabilityChangeDFIOutput', 'children')],
