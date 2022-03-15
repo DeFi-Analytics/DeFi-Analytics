@@ -39,7 +39,7 @@ class inflationViewClass:
             subplot_titles=([]))
 
         formatHover = '%{y:,.2f} DFI'
-        lastValidDate = datetime.strptime(dataDaily['nbBlocks'].dropna().index.values[-1], '%Y-%m-%d')
+        lastValidDate = datetime.strptime(dataDaily['nbBlocks'].dropna().index.values[-2], '%Y-%m-%d')
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=30)
         yAxisRange = [-2000000, 1000000]
 
@@ -47,6 +47,8 @@ class inflationViewClass:
         burnedDFIHourly = (dataHourly['burnedAuction'] + dataHourly['burnedPayback'] + dataHourly['burnedDFIPayback'].fillna(0)).dropna()
         burnedDFIHourly.groupby(burnedDFIHourly.index.floor('d')).first()
         burnedDFIDaily = burnedDFIHourly.groupby(burnedDFIHourly.index.floor('d')).first().diff().shift(-1)
+        burnedDFIDaily = burnedDFIDaily[:-1]
+        burnedDFIDaily.name= 'burned'
         emissionDFI.index = pd.to_datetime(emissionDFI.index)
 
         if representation == 'W':
@@ -55,9 +57,12 @@ class inflationViewClass:
             yAxisRange = [-10000000, 10000000]
             date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(months=2)
 
-        diffInflationDFI = emissionDFI - burnedDFIDaily
+        diffInflationDFI = pd.DataFrame()
+        diffInflationDFI['emission'] = emissionDFI
+        diffInflationDFI = diffInflationDFI.merge(burnedDFIDaily, how='outer', left_index=True, right_index=True)
+        diffInflationDFI['diff'] = diffInflationDFI['emission'].interpolate() - diffInflationDFI['burned'].interpolate()
 
-        trace_diff = dict(type='scatter', name='Effective inflation',x=diffInflationDFI.dropna().index, y=diffInflationDFI.dropna(),
+        trace_diff = dict(type='scatter', name='Effective inflation',x=diffInflationDFI['diff'].dropna().index, y=diffInflationDFI['diff'].dropna(),
                           mode='lines', line=dict(color='#ff2ebe'), line_width=3, hovertemplate=formatHover)
         trace_emission = dict(type='scatter', name='DFI emissioned to circ cupply', x=emissionDFI.dropna().index, y=emissionDFI.dropna(),
                               mode='lines', line=dict(color='#90dba8'), line_width=3, hovertemplate=formatHover, fill='tozeroy')
