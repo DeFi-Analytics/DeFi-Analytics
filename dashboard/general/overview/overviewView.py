@@ -52,18 +52,17 @@ class overviewViewClass:
                 html.Tr([html.Td('ERC20 Collateral'),
                          html.Td("{:,.0f} DFI".format(data['erc20DFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
-                    [html.Td('Circulating supply', style={'font-weight': 'bold'}),
-                     html.Td(["{:,.0f} DFI".format(data['circDFI'].values[0])+hintAfterNumber], style={'text-align': 'right', 'font-weight': 'bold', 'color': fontColor})]),
-                html.Tr(html.Td(html.Br())),
-
-
-
-                html.Tr(
                     [html.Td('Locked Masternodes'),
                      html.Td("{:,.0f} DFI".format(data['mnDFILocked'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
                     [html.Td('Community Fund'),
                      html.Td("{:,.0f} DFI".format(data['fundDFI'].values[0]), style={'text-align': 'right'})]),
+                html.Tr(
+                    [html.Td('Circulating supply', style={'font-weight': 'bold'}),
+                     html.Td(["{:,.0f} DFI".format(data['circDFI'].values[0])+hintAfterNumber], style={'text-align': 'right', 'font-weight': 'bold', 'color': fontColor})]),
+                html.Tr(html.Td(html.Br())),
+
+
                 html.Tr([html.Td('Foundation'),
                          html.Td("{:,.0f} DFI".format(data['foundationDFI'].values[0]), style={'text-align': 'right'})]),
                 html.Tr(
