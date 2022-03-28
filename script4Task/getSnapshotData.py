@@ -159,8 +159,8 @@ while True:
         # workaround to estimate DFI Token
         tokenDFIValue = mintedDFICoins - (mnDFIValue + otherDFIValue + lmDFIValue + erc20DFIValue + vaultsDFIValue + foundationDFIValue + fundDFIValue + burnedDFIValue + mnDFILockedValue)
 
-        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue + vaultsDFIValue
-        totalDFI = circDFIValue+foundationDFIValue+fundDFIValue+burnedDFIValue + mnDFILockedValue
+        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue + vaultsDFIValue + fundDFIValue + mnDFILockedValue
+        totalDFI = circDFIValue+foundationDFIValue+burnedDFIValue
 
         maxDFIValue = 1200000000
 
@@ -171,23 +171,17 @@ while True:
             DFIData = cg.get_price(ids='defichain', vs_currencies='usd', include_24hr_vol='true')
             currDFIPrice = DFIData['defichain']['usd']
             currDFI24hVol = DFIData['defichain']['usd_24h_vol']
+
             marketCapListCG = cg.get_coins_markets(vs_currency='usd', per_page=150)
             marketCapList = pd.DataFrame.from_dict(marketCapListCG)
-            if (len(marketCapList) == 0):
-                marketCapList = None
+            marketCapRank = marketCapList[marketCapList.symbol == 'dfi'].iloc[0].market_cap_rank
         except:
             currDFIPrice = np.NaN
             currDFI24hVol = np.NaN
-            marketCapList = None
+            marketCapRank = np.NaN
             print('############# Coingecko-API not reached #############')
 
         marketCap = currDFIPrice * circDFIValue
-        # calculate marketcap rank
-        if (np.isnan(marketCap)) | (marketCapList is None) | (circDFIValue < 0):
-            marketCapRank = np.NaN
-        else:
-            marketCapRank = marketCapList[marketCapList.market_cap < marketCap].iloc[0].market_cap_rank
-
 
         # get DFI amount on Bittrex
         try:

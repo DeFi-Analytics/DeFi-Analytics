@@ -15,8 +15,7 @@ class emissionViewClass:
                    dbc.Card(dbc.CardBody([html.H4(['DFI Emission & Inflation']),
                                           html.Table([html.Tr([html.Td('Select evaluation:'),
                                           html.Td(dcc.Dropdown(id='selectEmission',options=[{'label': 'DFI emission per Block', 'value': 'emission'},
-                                                                                             {'label': 'Inflation w/ circ. supply', 'value': 'inflationCirc'},
-                                                                                             {'label': 'Inflation w/ circ. supply + locked MN', 'value': 'inflationCircMN'}],
+                                                                                             {'label': 'Inflation w/ circ. supply', 'value': 'inflationCirc'},],
                                                                value='emission', clearable=False, style=dict(verticalAlign="bottom")))])]),
                                           dcc.Graph(id = 'figureEmission', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoEmission")))]))]
