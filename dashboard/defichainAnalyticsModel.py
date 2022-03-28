@@ -23,6 +23,7 @@ class defichainAnalyticsModelClass:
         self.lastRichlist = None
         self.snapshotData = None
         self.changelogData = None
+        self.cfpData = None
 
         # last update of csv-files
         self.updated_nodehubIO = None
@@ -52,6 +53,7 @@ class defichainAnalyticsModelClass:
         self.updated_vaults = None
         self.update_emissionRate=None
         self.update_coinPriceList = None
+        self.update_cfpData = None
 
 
         # background image for figures
@@ -408,7 +410,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(dfiSignalRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_DFIsignal = fileInfo.stat()
-            print('>>>> DFI-Signal database loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
+            print('>>>> DFI-Signal database loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
 
     def loadDobbyDatabase(self):
         print('>>>> Start update Dobby database ... <<<<')
@@ -424,7 +426,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(dobbyRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.updated_dobby = fileInfo.stat()
-            print('>>>> Dobby database loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
+            print('>>>> Dobby database loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
 
     def loadEmissionRateData(self):
         print('>>>> Start update emission rate data ... <<<<')
@@ -447,7 +449,7 @@ class defichainAnalyticsModelClass:
             self.dailyData = self.dailyData.merge(emissionRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.update_emissionRate = fileInfo.stat()
-            print('>>>> Emission rate data loaded from csv-file <<<<'+ str(len(self.dailyData.columns)))
+            print('>>>> Emission rate data loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
 
     def loadCoinPriceList(self):
         print('>>>> Start update coin price list ... <<<<')
@@ -705,6 +707,7 @@ class defichainAnalyticsModelClass:
         self.loadLastRichlist()
         self.loadSnapshotData()
         self.loadChangelogData()
+        self.loadCFPData()
 
     def loadLastRichlist(self):
         filePath = self.dataPath + 'Richlist/'
@@ -744,3 +747,12 @@ class defichainAnalyticsModelClass:
             self.changelogData['Date'] = pd.to_datetime(self.changelogData['Date'], utc=True).dt.strftime('%Y-%m-%d')
             self.update_changelogData = fileInfo.stat()
             print('>>>>>>>>>>>>> Changelog data loaded <<<<<<<<<<<<<'+str(len(self.changelogData.columns)))
+
+    def loadCFPData(self):
+        filePath = self.dataPath + 'listCFPs.xlsx'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_cfpData:
+            self.cfpData = pd.read_excel(filePath, engine='openpyxl')
+            self.cfpData.sort_values(by=['nb'], inplace=True, ascending=True)
+            self.update_cfpData = fileInfo.stat()
+            print('>>>>>>>>>>>>> CFP data loaded <<<<<<<<<<<<<'+str(len(self.cfpData.columns)))
