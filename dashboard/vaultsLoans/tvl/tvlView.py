@@ -38,7 +38,8 @@ class tvlVaultsViewClass:
             hoverTemplateRepresenation = '$%{y:,.0f}'
 
         TVLOverall = (data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'] + \
-                          data['sumDFI'] + \
+                      data['sumETH'].fillna(0) / data['ETH-DFI_reserveA/reserveB'] + \
+                      data['sumDFI'] + \
                           data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] + \
                           data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] + \
                           data['sumDUSD'].fillna(0) / data['DUSD-DFI_reserveA/reserveB'].fillna(0)) * DFIPrice
@@ -63,6 +64,10 @@ class tvlVaultsViewClass:
                             y=(data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#da3832'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
+        trace_TVLETH = dict(type='scatter', name='ETH', x=(data['sumETH'] / data['ETH-DFI_reserveA/reserveB'] * DFIPrice).dropna().index,
+                            y=(data['sumETH'] / data['ETH-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#617dea'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+
         trace_TVLUSDT = dict(type='scatter', name='USDT', x=(data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] * DFIPrice).dropna().index,
                              y=(data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
                              mode='lines', line=dict(color='#22b852'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
@@ -81,6 +86,7 @@ class tvlVaultsViewClass:
 
         figTVL.add_trace(trace_TVLDFI, 1, 1)
         figTVL.add_trace(trace_TVLBTC, 1, 1)
+        figTVL.add_trace(trace_TVLETH, 1, 1)
         figTVL.add_trace(trace_TVLUSDT, 1, 1)
         figTVL.add_trace(trace_TVLUSDC, 1, 1)
         figTVL.add_trace(trace_TVLDUSD, 1, 1)
