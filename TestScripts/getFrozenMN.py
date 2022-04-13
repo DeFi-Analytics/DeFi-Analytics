@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 
 
-link = 'http://api.mydefichain.com/v1/listmasternodes/?state=ENABLED'
+link = 'https://api.mydeficha.in/v1/listmasternodes/?state=ENABLED'
 siteContent = requests.get(link)
 dfMNList = pd.read_json(siteContent.text).transpose()
 print('Finished getting masternode list')
