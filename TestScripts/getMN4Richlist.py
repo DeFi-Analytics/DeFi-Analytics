@@ -14,7 +14,7 @@ filepath = pathRichlist+'2021-05-17_01-01-10_Richlist.csv'
 
 rawRichlist = pd.read_csv(filepath)
 
-link = 'http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED'
+link = 'http://api.mydefichain.com/v1/listmasternodes/?state=ENABLED'
 siteContent = requests.get(link)
 dfMNList = pd.read_json(siteContent.text).transpose()
 rawRichlist['mnAddressAPI'] = rawRichlist['address'].isin(dfMNList.ownerAuthAddress)

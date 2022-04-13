@@ -46,7 +46,7 @@ while True:
         # condition for mn-addresses and private wallets
         try:
             print('... getting MN-List from mydeficha.in API')
-            link = 'http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED'
+            link = 'http://api.mydefichain.com/v1/listmasternodes/?state=ENABLED'
             siteContent = requests.get(link)
             dfMNList = pd.read_json(siteContent.text).transpose()
             dfMNList.to_csv(filepathMNList, index=True)
@@ -84,7 +84,7 @@ while True:
         mnDFILockedValue = (nbMNlocked5 + nbMNlocked10)*20000
 
         # get all burned DFI
-        linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
+        linkBurninfo = 'http://api.mydefichain.com/v1/getburninfo/'
         siteContent = requests.get(linkBurninfo)
         if siteContent.status_code==200:
             tempData = json.loads(siteContent.text)

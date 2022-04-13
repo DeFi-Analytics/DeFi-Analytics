@@ -75,7 +75,7 @@ class addressesViewClass:
 
                                   html.P(['For identification of the masternodes the listmasternodes() command is used, which is provided by API of Bernd Mack. ',
                                             html.Br(),
-                                            html.A('http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', href='http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink'),
+                                            html.A('http://api.mydefichain.com/v1/listmasternodes/?state=ENABLED', href='http://api.mydefichain.com/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink'),
                                  ], style={'text-align': 'justify'}),
                                   html.P([html.B('Hint:'),
                                           ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'

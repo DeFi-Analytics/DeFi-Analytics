@@ -205,6 +205,7 @@ class defichainAnalyticsModelClass:
         self.dailyData['tvlDEXDFI'] = dexLockedDFI.groupby(level=0).first()
 
         vaultsLockedDFI = self.hourlyData.sumBTC / self.hourlyData['BTC-DFI_reserveA/reserveB'] + \
+                            self.hourlyData.sumETH / self.hourlyData['ETH-DFI_reserveA/reserveB'] + \
                             self.hourlyData.sumDFI + \
                             self.hourlyData.sumUSDC / self.hourlyData['USDC-DFI_reserveA/reserveB'] + \
                             self.hourlyData.sumUSDT / self.hourlyData['USDT-DFI_reserveA/reserveB']
@@ -645,9 +646,13 @@ class defichainAnalyticsModelClass:
             tempDataFormat = pd.DataFrame()
             tempDataFormat['dexfeetokensRaw'] = vaultsData[~vaultsData.dexfeetokens.isna()].dexfeetokens.apply(lambda x: literal_eval(str(x)))
             tempDataFormat['dfipaybacktokens'] = vaultsData[~vaultsData.dfipaybacktokens.isna()].dfipaybacktokens.apply(lambda x: literal_eval(str(x)))
-            tempDataFormat[['burnedBTCDEX','burnedDUSDDEX']] = pd.DataFrame(tempDataFormat['dexfeetokensRaw'].tolist(), index=tempDataFormat.index)
+
+            for index, value in tempDataFormat['dexfeetokensRaw'].items():
+                tempDF = pd.Series(value)
+                colNameFeeTokens = tempDF.apply((lambda x: 'burned'+x[x.find('@')+1:]+'DEX'))
+                tempDataFormat.loc[index, colNameFeeTokens] = value
+
             tempDataFormat[['DUSDpaidDFI']] = pd.DataFrame(tempDataFormat['dfipaybacktokens'].tolist(), index=tempDataFormat.index)
-            vaultsData['burnedBTCDEX'] = tempDataFormat['burnedBTCDEX'].apply(lambda x: float(x[:-4]))
             vaultsData['burnedDUSDDEX'] = tempDataFormat['burnedDUSDDEX'].apply(lambda x: float(x[:-5]))
             vaultsData['DUSDpaidDFI'] = tempDataFormat['DUSDpaidDFI'].apply(lambda x: float(x[:-5]))
 
@@ -656,7 +661,7 @@ class defichainAnalyticsModelClass:
             liveTicker += ['DFI-USD']
 
             columns2update = sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'burnedDFIPayback', 'MIN150', 'MIN175',
-                                                       'MIN200', 'MIN350', 'MIN500', 'MIN1000', 'burnedBTCDEX', 'burnedDUSDDEX', 'DUSDpaidDFI']
+                                                       'MIN200', 'MIN350', 'MIN500', 'MIN1000', 'burnedDUSDDEX', 'DUSDpaidDFI']
             columns2update.remove('DUSD-USD')
 
             # delete existing information and add new one
