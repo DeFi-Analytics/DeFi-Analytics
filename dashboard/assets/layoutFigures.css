@@ -42,9 +42,9 @@
     #figureArbitrageShortterm {height: 675px}
     #figureVolume24hr {height: 750px}
     #figureVolume {height: 690px}
-    #figureStabilityDFI {height: 480px}
-    #figureStabilityPrice {height: 480px}
-    #figureSlippage {height: 525px}
+    #figureStabilityDFI {height: 470px}
+    #figureStabilityPrice {height: 470px}
+    #figureSlippage {height: 515px}
     #figureTVL {height: 715px}
     #figureLiquidityToken {height: 715px}
     #figureAPRRate {height: 715px}
@@ -59,7 +59,7 @@
     #figurePortfolioDownloads {height: 680px}
     #figurePromoDatabase {height: 640px}
     #figureMNMonitor {height: 680px}
-    #figureDFXdata {height: 625px}
+    #figureDFXdata {height: 620px}
     #figureDFISignal {height: 635px}
     #figureDobbydata {height: 655px}
     #figureMarketcap {height: 715px}
