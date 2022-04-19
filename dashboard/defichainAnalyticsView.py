@@ -284,13 +284,11 @@ class defichainAnalyticsViewClass:
         refLink = html.Div(html.Marquee([
                       'You want to support me? You want to get 5 DFI? Sign up (after 17th April 2022) with my ',
                       html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' on CakeDefi and get $30 sign-up bonus in DFI after your first $50 investment in lending or staking/liquidity mining freezer. If you are a ',
+                      ' on CakeDefi and get $30 sign-up bonus in DFI after fullfilling Cakes requirements. If you are a ',
                       html.A('Referral', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
                       ' of me (sign-up after 17th April 2022), I give you additional 5 DFI after you and me got the sign-up bonus. Reveal your information, send me your name, screenshot of sign-up bonus transaction and a DFI deposit address. ',
                       html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet. ',
-                      html.A('Offer', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' Condition: DFI are staking for at least 180 days and generate revenue of >30% APY.']), className='refLinkMarquee')
+                      ' is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet.']), className='refLinkMarquee')
 
         sidebar = html.Div(
             [
