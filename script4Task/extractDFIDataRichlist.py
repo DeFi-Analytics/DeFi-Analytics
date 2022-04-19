@@ -107,7 +107,7 @@ for richlistFile in foundRichlistFiles:
             erc20DFIValue = 0
 
         # get all burned DFI
-        linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
+        linkBurninfo = 'http://api.mydefichain.com/v1/getburninfo/'
         siteContent = requests.get(linkBurninfo)
         if siteContent.status_code==200:
             tempData = json.loads(siteContent.text)

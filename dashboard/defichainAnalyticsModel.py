@@ -5,7 +5,10 @@ import re
 import base64
 
 import pandas as pd
+import numpy as np
 from ast import literal_eval
+
+import time
 
 from datetime import datetime, timedelta
 
@@ -53,7 +56,6 @@ class defichainAnalyticsModelClass:
         self.updated_vaults = None
         self.update_emissionRate=None
         self.update_coinPriceList = None
-        self.update_cfpData = None
 
 
         # background image for figures
@@ -207,9 +209,12 @@ class defichainAnalyticsModelClass:
         self.dailyData['tvlDEXDFI'] = dexLockedDFI.groupby(level=0).first()
 
         vaultsLockedDFI = self.hourlyData.sumBTC / self.hourlyData['BTC-DFI_reserveA/reserveB'] + \
+                            self.hourlyData.sumETH.fillna(0) / self.hourlyData['ETH-DFI_reserveA/reserveB'].fillna(0) + \
                             self.hourlyData.sumDFI + \
                             self.hourlyData.sumUSDC / self.hourlyData['USDC-DFI_reserveA/reserveB'] + \
-                            self.hourlyData.sumUSDT / self.hourlyData['USDT-DFI_reserveA/reserveB']
+                            self.hourlyData.sumUSDT / self.hourlyData['USDT-DFI_reserveA/reserveB'] + \
+                            self.hourlyData.sumDUSD.fillna(0) / self.hourlyData['DUSD-DFI_reserveA/reserveB'].fillna(0)
+
         vaultsLockedDFI.index = vaultsLockedDFI.index.floor('D').astype(str) # remove time information, only date is needed
         self.dailyData['tvlVaultsDFI'] = vaultsLockedDFI[(vaultsLockedDFI!=0.0) & (vaultsLockedDFI.notnull())].groupby(level=0).first()
         print('>>>> Overall TVL calculated <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
@@ -477,6 +482,7 @@ class defichainAnalyticsModelClass:
         self.loadHourlyDEXTrades()
         self.loadDFXdata()
         self.loadVaultData()
+        self.loadDFIPFuturesData()
 
 
     def loadHourlyDEXdata(self):
@@ -498,10 +504,9 @@ class defichainAnalyticsModelClass:
             hourlyDEXData['timeRounded'] = pd.to_datetime(hourlyDEXData.Time).dt.floor('H')
             hourlyDEXData.set_index(['timeRounded'], inplace=True)
             hourlyDEXData['reserveA_DFI'] = hourlyDEXData['reserveA'] / hourlyDEXData['DFIPrices']
-
             for poolSymbol in hourlyDEXData.symbol.dropna().unique():
                 df2Add = hourlyDEXData[hourlyDEXData.symbol == poolSymbol]
-                df2Add = df2Add.drop(columns=['Time', 'symbol'])
+                df2Add = df2Add.drop(columns=['Time', 'symbol', 'idTokenA', 'idTokenB'])
 
                 # calculate locked DFI and corresponding values
                 df2Add = df2Add.assign(lockedDFI=df2Add['reserveB'] + df2Add['reserveA_DFI'])
@@ -535,18 +540,15 @@ class defichainAnalyticsModelClass:
             volumeData['timeRounded'] = pd.to_datetime(volumeData.Time).dt.floor('H')
             volumeData.set_index(['timeRounded'], inplace=True)
 
+            df2Add = pd.DataFrame()
             for poolSymbol in volumeData['base_name'].unique():
-                df2Add = volumeData[volumeData['base_name']==poolSymbol][['base_volume', 'quote_volume']]
-                df2Add['VolTotal'] = df2Add[['base_volume', 'quote_volume']].sum(axis=1)
-                # add prefix to column names for pool identification
-                colNamesOrig = df2Add.columns.astype(str)
-                colNamesNew = poolSymbol + '_' + colNamesOrig
-                df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
+                df2Add[poolSymbol + '_'+'VolTotal'] = volumeData[volumeData['base_name']==poolSymbol][['base_volume', 'quote_volume']].sum(axis=1)
 
-                # delete existing information and add new one
-                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
-                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
-                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+            # delete existing information and add new one
+            colNames = df2Add.columns
+            ind2Delete = self.hourlyData.columns.intersection(colNames)                                          # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
             # calculate total volume after merge of data
             self.hourlyData['VolTotal'] = self.hourlyData['BTC_VolTotal']*0   # only use rows with data; BTC was the first pool and have to most data (beside ETH, USDT)
@@ -645,20 +647,23 @@ class defichainAnalyticsModelClass:
             vaultsData.set_index(['timeRounded'], inplace=True)
 
             tempDataFormat = pd.DataFrame()
-            tempDataFormat['dexfeetokensRaw'] = vaultsData[~vaultsData.dexfeetokens.isna()].dexfeetokens.apply(lambda x: literal_eval(str(x)))
-            tempDataFormat['dfipaybacktokens'] = vaultsData[~vaultsData.dfipaybacktokens.isna()].dfipaybacktokens.apply(lambda x: literal_eval(str(x)))
-            tempDataFormat[['burnedBTCDEX','burnedDUSDDEX']] = pd.DataFrame(tempDataFormat['dexfeetokensRaw'].tolist(), index=tempDataFormat.index)
-            tempDataFormat[['DUSDpaidDFI']] = pd.DataFrame(tempDataFormat['dfipaybacktokens'].tolist(), index=tempDataFormat.index)
-            vaultsData['burnedBTCDEX'] = tempDataFormat['burnedBTCDEX'].apply(lambda x: float(x[:-4]))
-            vaultsData['burnedDUSDDEX'] = tempDataFormat['burnedDUSDDEX'].apply(lambda x: float(x[:-5]))
-            vaultsData['DUSDpaidDFI'] = tempDataFormat['DUSDpaidDFI'].apply(lambda x: float(x[:-5]))
+            # tempDataFormat['dexfeetokensRaw'] = vaultsData[~vaultsData.dexfeetokens.isna()].dexfeetokens.apply(lambda x: literal_eval(str(x)))
+            # tempDataFormat['dfipaybacktokens'] = vaultsData[~vaultsData.dfipaybacktokens.isna()].dfipaybacktokens.apply(lambda x: literal_eval(str(x)))
+
+            for index, value in vaultsData[~vaultsData.dexfeetokens.isna()].dexfeetokens.items():
+                colNameFeeTokens = ['burned'+x[x.find('@')+1:]+'DEX' for x in literal_eval(value)]
+                vaultsData.loc[index,colNameFeeTokens] = [float(x[:x.find('@')]) for x in literal_eval(value)]
+
+            burnedValues = [item for item in vaultsData.columns if "burned" in item if "DEX" in item]
+
+            vaultsData['DUSDpaidDFI'] = vaultsData['dfipaybacktokens'].apply(lambda x: float(str(x)[2:str(x).find('@')]) if isinstance(x,str) else np.nan)
 
             sumValues = [item for item in vaultsData.columns if "sum" in item]
             liveTicker = [item[7:]+'-USD' for item in vaultsData.columns if (("sumLoan") in item) & ~(('sumLoanLiquidation') in item)]
             liveTicker += ['DFI-USD']
 
-            columns2update = sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'burnedDFIPayback', 'MIN150', 'MIN175',
-                                                       'MIN200', 'MIN350', 'MIN500', 'MIN1000', 'burnedBTCDEX', 'burnedDUSDDEX', 'DUSDpaidDFI']
+            columns2update = burnedValues + sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'burnedDFIPayback', 'MIN150', 'MIN175',
+                                                       'MIN200', 'MIN350', 'MIN500', 'MIN1000', 'DUSDpaidDFI']
             columns2update.remove('DUSD-USD')
 
             # delete existing information and add new one
@@ -668,6 +673,24 @@ class defichainAnalyticsModelClass:
 
             self.updated_vaults = fileInfo.stat()
             print('>>>> Vaults data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+
+    def loadDFIPFuturesData(self):
+        print('>>>> Start update DFIP futures data ... <<<<')
+        filePath = self.dataPath + 'DFIPFuturesData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_DFIPFutures:
+            DFIPFuturesData = pd.read_csv(filePath, index_col=0)
+            DFIPFuturesData['timeRounded'] = pd.to_datetime(DFIPFuturesData.index).floor('H')
+            DFIPFuturesData.set_index(['timeRounded'], inplace=True)
+
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(DFIPFuturesData.columns)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(DFIPFuturesData, how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_DFIPFutures = fileInfo.stat()
+            print('>>>> DFIP futures data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+
 
     #### MINUTELY DATA ####
     def loadMinutelyData(self):

@@ -27,54 +27,64 @@
     /* Font Size Pie Chart */
     .slicetext {font-size: 16px !important;}
 
-    #figurePieChartDFI {height: 750px;}
-    #figureAddressesDFI {height: 750px;}
-    #figureMasternodes {height: 715px}
-    #figureDAA {height: 750px}
-    #figureCoin {height: 715px}
-    #figureChangeCoin {height: 750px}
-    #figureCoinsAddresses {height: 600px}
-    #figureBlocks {height: 750px}
-    #figureBlocktime {height: 750px}
-    #figureTransactions {height: 710px}
-    #figureCoinprices {height: 715px}
-    #figureArbitrageLongterm {height: 675px}
-    #figureArbitrageShortterm {height: 675px}
-    #figureVolume24hr {height: 750px}
-    #figureVolume {height: 690px}
-    #figureStabilityDFI {height: 480px}
-    #figureStabilityPrice {height: 480px}
-    #figureSlippage {height: 525px}
-    #figureTVL {height: 715px}
-    #figureLiquidityToken {height: 715px}
-    #figureAPRRate {height: 715px}
+    #figurePieChartDFI {height: 745px;}
+    #figureMarketcap {height: 705px}
+    #figureOverallTVL {height: 705px}
+    #figureEmission {height: 705px}
+    #figureInflation {height: 705px}
+
+    #figureAddressesDFI {height: 745px;}
+    #figureMasternodes {height: 705px}
+    #figureDAA {height: 745px}
+    #figureCoin {height: 705px}
+    #figureChangeCoin {height: 745px}
+    #figureCoinsAddresses {height: 590px}
+    #figureBlocks {height: 745px}
+    #figureBlocktime {height: 745px}
+    #figureTransactions {height: 705px}
+
+    #figureCoinprices {height: 705px}
+    #figureArbitrageLongterm {height: 665px}
+    #figureArbitrageShortterm {height: 665px}
+    #figureVolume24hr {height: 745px}
+    #figureVolume {height: 680px}
+    #figureStabilityDFI {height: 465px}
+    #figureStabilityPrice {height: 465px}
+    #figureSlippage {height: 505px}
+
+    #figureTVL {height: 705px}
+    #figureLiquidityToken {height: 705px}
+    #figureAPRRate {height: 705px}
     #figureLMPaidFees {height: 600px}
     #figureLMPaidCoinFees {height: 680px}
-    #figureTokenCryptos {height: 715px}
+
+    #figureNbVaults {height: 745px}
+    #figureTVLVaults {height: 705px}
+    #figurePricesDToken {height: 705px}
+    #figurePremiumDToken {height: 745px}
+    #figureNbDToken {height: 705px}
+    #figureInterest {height: 705px}
+    #figureBurnedDFI {height: 745px}
+    #figureScheme {height: 705px}
+
+
+    #figureTokenCryptos {height: 705px}
+
     #figureTwitterTweet {height: 680px}
     #figureTwitterUser {height: 350px}
-    #figureTwitterFollower {height: 715px}
-    #figureAnalyticsIncome {height: 725px}
-    #figureVisitsIncome {height: 680px}
-    #figurePortfolioDownloads {height: 680px}
-    #figurePromoDatabase {height: 640px}
-    #figureMNMonitor {height: 680px}
-    #figureDFXdata {height: 625px}
-    #figureDFISignal {height: 635px}
+    #figureTwitterFollower {height: 705px}
+    #figureAnalyticsIncome {height: 715px}
+    #figureVisitsIncome {height: 670px}
+    #figurePortfolioDownloads {height: 670px}
+    #figurePromoDatabase {height: 630px}
+    #figureMNMonitor {height: 670px}
+    #figureDFXdata {height: 620px}
+    #figureDFISignal {height: 625px}
     #figureDobbydata {height: 655px}
-    #figureMarketcap {height: 715px}
-    #figureOverallTVL {height: 715px}
-    #figureEmission {height: 715px}
-    #figureInflation {height: 710px}
 
-    #figureNbVaults {height: 750px}
-    #figureTVLVaults {height: 715px}
-    #figurePricesDToken {height: 715px}
-    #figureNbDToken {height: 715px}
-    #figureInterest {height: 715px}
-    #figureBurnedDFI {height: 750px}
-    #figureScheme {height: 715px}
-    #figurePremiumDToken {height: 750px}
+
+
+
 }
 
 @media only screen and (max-width: 768px) {

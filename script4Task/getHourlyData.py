@@ -8,9 +8,37 @@ import numpy as np
 scriptPath = __file__
 path = scriptPath[:-29] + '/data/'
 
+def getDFIPFuturesData(timeStampData):
+    filepath = path + 'DFIPFuturesData.csv'
 
+    newData = pd.Series(name=timeStampData, dtype=object)
 
-def getVaultsData():
+    # API request available loan schemes
+    link = 'http://api.mydefichain.com/v1/listgovs/'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    tempDataDFIP = tempData[8][0]['ATTRIBUTES']
+
+    for item in tempDataDFIP['v0/live/economy/dfip2203_burned']:
+        dataName = 'DFIPFuture_burned_' + item[item.find('@') + 1:]
+        newData[dataName] = item[:item.find('@')]
+
+    for item in tempDataDFIP['v0/live/economy/dfip2203_minted']:
+        dataName = 'DFIPFuture_minted_' + item[item.find('@') + 1:]
+        newData[dataName] = item[:item.find('@')]
+
+    for item in tempDataDFIP['v0/live/economy/dfip2203_current']:
+        dataName = 'DFIPFuture_current_' + item[item.find('@') + 1:]
+        newData[dataName] = item[:item.find('@')]
+
+    dfOldDFIPData = pd.read_csv(filepath, index_col=0)
+    # dfOldDFIPData = pd.DataFrame()
+    dfDFIPData = dfOldDFIPData.append(newData, sort=False)
+    dfDFIPData.to_csv(filepath)
+
+    print('finished DFIP futures data acquisition')
+
+def getVaultsData(timeStampData):
     # generate filepath relative to script location
     filepath = path + 'vaultsData.csv'
 
@@ -58,7 +86,7 @@ def getVaultsData():
             tempDataDict[item['id']] = item['price']['aggregated']['amount']
         dfOracle = dfOracle.append(pd.DataFrame(data=tempDataDict.values(), index=tempDataDict.keys()))
 
-    linkBurninfo = 'http://api.mydeficha.in/v1/getburninfo/'
+    linkBurninfo = 'http://main.mackchain.de/api/getburninfo'
     siteContent = requests.get(linkBurninfo)
     try:
         tempData = json.loads(siteContent.text)
@@ -74,8 +102,8 @@ def getVaultsData():
         burnedPayback = np.NaN
         burnedDFIPayback = np.NaN
 
-    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD']+dfOracle.index.to_list()+['burnedAuction', 'burnedPayback','burnedDFIPayback','dfipaybacktokens', 'dexfeetokens'],
-                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+[burnedAuction, burnedPayback, burnedDFIPayback, dfipaybacktokens, dexfeetokens])
+    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD', 'sumETH']+dfOracle.index.to_list()+['burnedAuction', 'burnedPayback','burnedDFIPayback','dfipaybacktokens', 'dexfeetokens'],
+                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+[burnedAuction, burnedPayback, burnedDFIPayback, dfipaybacktokens, dexfeetokens])
 
 
     # API request current vaults
@@ -110,7 +138,7 @@ def getVaultsData():
                     vaultData['sumLoanLiquidation'+batches['loan']['symbol']] += float(batches['loan']['amount'])
                 vaultData['nbLiquidation'] += 1
 
-        vaultData.name = pd.Timestamp.now()
+        vaultData.name = timeStampData
 
     # save file
     # dfOldVaultData = pd.DataFrame()
@@ -120,5 +148,7 @@ def getVaultsData():
 
     print('finished vaults/loans data acquisition')
 
-getVaultsData()
+timeStampData = pd.Timestamp.now()
+getDFIPFuturesData(timeStampData)
+getVaultsData(timeStampData)
 

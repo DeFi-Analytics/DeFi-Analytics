@@ -282,15 +282,13 @@ class defichainAnalyticsViewClass:
         sidebar_footer = dbc.Row([dbc.NavLink(html.Div(id='idLogoDonate'), href='/about?entry=donate')], justify="center", align="center", style={'margin-top': '40px'})
 
         refLink = html.Div(html.Marquee([
-                      'You want to stake DFI, but don\'t have the needed 20,000 DFI as a collateral? Then try out the Staking-Service of ',
-                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      '. With the auto-invest functionality of the rewards you can reach >30% APY. Current special ',
-                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' offer: Sign-up Bonus of $20 in DFI (after deposit of $50). You and me get $10 additional in DFI if you use my ',
+                      'You want to support me? You want to get 5 DFI? Sign up (after 17th April 2022) with my ',
                       html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      '. Cake is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet. ',
-                      html.A('Offer', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' Condition: DFI are staking for at least 180 days and generate revenue of >30% APY.']), className='refLinkMarquee')
+                      ' on CakeDefi and get $30 sign-up bonus in DFI after fullfilling Cakes requirements. If you are a ',
+                      html.A('Referral', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
+                      ' of me (sign-up after 17th April 2022), I give you additional 5 DFI after you and me got the sign-up bonus. Reveal your information, send me your name, screenshot of sign-up bonus transaction and a DFI deposit address. ',
+                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
+                      ' is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet.']), className='refLinkMarquee')
 
         sidebar = html.Div(
             [

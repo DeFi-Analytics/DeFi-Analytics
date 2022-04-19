@@ -16,29 +16,33 @@ class nbDTokenViewClass:
                    dbc.Card(dbc.CardBody([html.H4(['Number dTokens with Loans']),
                                           html.Table([html.Tr([html.Td('Select dToken for evaluation:'),
                                                                html.Td(dcc.Dropdown(id='vaultsLoansNbDtoken', options=[{'label': 'dUSD', 'value': 'DUSD'},
-                                                                                                                       {'label': 'AAPL', 'value': 'AAPL'},
-                                                                                                                       {'label': 'AMZN', 'value': 'AMZN'},
-                                                                                                                       {'label': 'ARKK', 'value': 'ARKK'},
-                                                                                                                       {'label': 'BABA', 'value': 'BABA'},
-                                                                                                                       {'label': 'COIN', 'value': 'COIN'},
-                                                                                                                       {'label': 'EEM', 'value': 'EEM'},
-                                                                                                                       {'label': 'FB', 'value': 'FB'},
-                                                                                                                       {'label': 'GLD', 'value': 'GLD'},
-                                                                                                                       {'label': 'GME', 'value': 'GME'},
-                                                                                                                       {'label': 'GOOGL', 'value': 'GOOGL'},
-                                                                                                                       {'label': 'MSFT', 'value': 'MSFT'},
-                                                                                                                       {'label': 'NFLX', 'value': 'NFLX'},
-                                                                                                                       {'label': 'NVDA', 'value': 'NVDA'},
-                                                                                                                       {'label': 'PDBC', 'value': 'PDBC'},
-                                                                                                                       {'label': 'PLTR', 'value': 'PLTR'},
-                                                                                                                       {'label': 'QQQ', 'value': 'QQQ'},
-                                                                                                                       {'label': 'SLV', 'value': 'SLV'},
-                                                                                                                       {'label': 'SPY', 'value': 'SPY'},
-                                                                                                                       {'label': 'TLT', 'value': 'TLT'},
-                                                                                                                       {'label': 'TSLA', 'value': 'TSLA'},
-                                                                                                                       {'label': 'URTH', 'value': 'URTH'},
-                                                                                                                       {'label': 'VNQ', 'value': 'VNQ'},
-                                                                                                                       {'label': 'VOO', 'value': 'VOO'},],
+                                                                                                                         {'label': 'AAPL', 'value': 'AAPL'},
+                                                                                                                         {'label': 'AMZN', 'value': 'AMZN'},
+                                                                                                                         {'label': 'ARKK', 'value': 'ARKK'},
+                                                                                                                         {'label': 'BABA', 'value': 'BABA'},
+                                                                                                                         {'label': 'COIN', 'value': 'COIN'},
+                                                                                                                         {'label': 'DIS', 'value': 'DIS'},
+                                                                                                                         {'label': 'EEM', 'value': 'EEM'},
+                                                                                                                         {'label': 'FB', 'value': 'FB'},
+                                                                                                                         {'label': 'GLD', 'value': 'GLD'},
+                                                                                                                         {'label': 'GME', 'value': 'GME'},
+                                                                                                                         {'label': 'GOOGL', 'value': 'GOOGL'},
+                                                                                                                         {'label': 'INTC', 'value': 'INTC'},
+                                                                                                                         {'label': 'MCHI', 'value': 'MCHI'},
+                                                                                                                         {'label': 'MSFT', 'value': 'MSFT'},
+                                                                                                                         {'label': 'MSTR', 'value': 'MSTR'},
+                                                                                                                         {'label': 'NFLX', 'value': 'NFLX'},
+                                                                                                                         {'label': 'NVDA', 'value': 'NVDA'},
+                                                                                                                         {'label': 'PDBC', 'value': 'PDBC'},
+                                                                                                                         {'label': 'PLTR', 'value': 'PLTR'},
+                                                                                                                         {'label': 'QQQ', 'value': 'QQQ'},
+                                                                                                                         {'label': 'SLV', 'value': 'SLV'},
+                                                                                                                         {'label': 'SPY', 'value': 'SPY'},
+                                                                                                                         {'label': 'TLT', 'value': 'TLT'},
+                                                                                                                         {'label': 'TSLA', 'value': 'TSLA'},
+                                                                                                                         {'label': 'URTH', 'value': 'URTH'},
+                                                                                                                         {'label': 'VNQ', 'value': 'VNQ'},
+                                                                                                                         {'label': 'VOO', 'value': 'VOO'},],
                                                                                     value='DUSD', clearable=False, style=dict(width='150px', verticalAlign="bottom")))])]),
                                           dcc.Graph(id='figureNbDToken', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoNbDToken")))
@@ -59,28 +63,87 @@ class nbDTokenViewClass:
         lastValidDate = datetime.utcfromtimestamp(data['sumLoan'+representation].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
+        # calculate circulating amount
+        basisGraph = data['sumLoan' + representation].interpolate(method='linear', limit_direction='forward').dropna()
+        dTokenCircAmount = basisGraph
+        if 'DFIPFuture_minted_' + representation in data.columns:
+            dTokenCircAmount = dTokenCircAmount + data.loc[basisGraph.index,'DFIPFuture_minted_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0)
+        if representation == 'DUSD':
+            dTokenCircAmount = dTokenCircAmount + data.loc[basisGraph.index,'DUSDpaidDFI'].interpolate(method='linear', limit_direction='forward').fillna(0)
+        if 'DFIPFuture_burned_' + representation in data.columns:
+            dTokenCircAmount = dTokenCircAmount - data.loc[basisGraph.index,'DFIPFuture_burned_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0)
+        if 'burned' + representation + 'DEX' in data.columns:
+            dTokenCircAmount = dTokenCircAmount - data.loc[basisGraph.index,'burned' + representation + 'DEX'].interpolate(method='linear',limit_direction='forward').fillna(0)
+        if 'DFIPFuture_current_' + representation in data.columns:
+            if 'DFIPFuture_burned_' + representation in data.columns:
+                dTokenLocked = data.loc[basisGraph.index,'DFIPFuture_current_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0) \
+                                - data.loc[basisGraph.index,'DFIPFuture_burned_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0)
+            else:
+                dTokenLocked = data.loc[basisGraph.index,'DFIPFuture_current_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0)
+            dTokenCircAmount = dTokenCircAmount - dTokenLocked
+
+
+        trace_nbDToken = dict(type='scatter', name='number circulating dTokens',
+                              x=dTokenCircAmount.dropna().index, y=dTokenCircAmount.dropna(),
+                              mode='lines', line=dict(color='#ff00af'), stackgroup='two', line_width=3, hovertemplate='%{y:,.f} '+representation, fill='none')
+
+
+        ### minted parts
+        # graph for minted dTokens with a loan
+        trace_dTokenLoan = dict(type='scatter', name='dTokens with loans',
+                                x=data['sumLoan' + representation].interpolate(method='linear',limit_direction='forward').dropna().index,
+                                y=data['sumLoan' + representation].interpolate(method='linear',limit_direction='forward').dropna(),
+                                mode='lines', line=dict(color='#f800aa'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tozeroy')
+        figNbDToken.add_trace(trace_dTokenLoan, 1, 1)
+
+        # graph for minted dTokens via a futures swap
+        if 'DFIPFuture_minted_' + representation in data.columns:
+            trace_dTokenFuturesMint = dict(type='scatter', name='dTokens minted via Futures swap',
+                                            x=data['DFIPFuture_minted_' + representation].interpolate(method='linear',limit_direction='forward').dropna().index,
+                                            y=data['DFIPFuture_minted_' + representation].interpolate(method='linear',limit_direction='forward').dropna(),
+                                            mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dTokenFuturesMint, 1, 1)
+
+        # dUSD minted via DFI burn
         if representation=='DUSD':
-            trace_dUSDLoans = dict(type='scatter', name='dUSD with loans', x=data['sumLoan'+representation].dropna().index, y=data['sumLoan'+representation].dropna(),
-                                  mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tozeroy')
-            trace_dUSDPaid = dict(type='scatter', name='dUSD without loans (paid with DFI)', x=data['DUSDpaidDFI'].dropna().index, y=data['DUSDpaidDFI'].dropna(),
-                                  mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
-            trace_dUSDburnedFee = dict(type='scatter', name='burned dUSD with DEX-Fee', x=data['burnedDUSDDEX'].dropna().index, y=-data['burnedDUSDDEX'].dropna(),
-                                  mode='lines', line=dict(color='#5d5d5d'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
-            trace_nbDToken = dict(type='scatter', name='number circulating dTokens',
-                                  x=(data['sumLoan'+representation]+data['DUSDpaidDFI'].fillna(0)-data['burnedDUSDDEX'].fillna(0)).dropna().index,
-                                  y=(data['sumLoan'+representation]+data['DUSDpaidDFI'].fillna(0)-data['burnedDUSDDEX'].fillna(0)).dropna(),
-                                     mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f}')
-
-            figNbDToken.add_trace(trace_dUSDLoans, 1, 1)
+            trace_dUSDPaid = dict(type='scatter', name='dUSD without loans (paid with DFI)',
+                                  x=data['DUSDpaidDFI'].interpolate(method='linear',limit_direction='forward').dropna().index,
+                                  y=data['DUSDpaidDFI'].interpolate(method='linear',limit_direction='forward').dropna(),
+                                  mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dUSDPaid, 1, 1)
-            figNbDToken.add_trace(trace_dUSDburnedFee, 1, 1)
-            figNbDToken.add_trace(trace_nbDToken, 1, 1)
-        else:
-            trace_nbDToken = dict(type='scatter', name='number circulating dTokens', x=data['sumLoan'+representation].dropna().index, y=data['sumLoan'+representation].dropna(),
-                                     mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f}')
-            figNbDToken.add_trace(trace_nbDToken, 1, 1)
 
-        figNbDToken.update_yaxes(title_text='number dTokens in Loans', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
+        # plot circulating supply
+        figNbDToken.add_trace(trace_nbDToken, 1, 1)
+
+
+        ### burned parts
+
+        # graph for burned dTokens via swap fees
+        if 'burned' + representation + 'DEX' in data.columns:
+            trace_dTokenFeeBurn = dict(type='scatter', name='dTokens burned via DEX-Fee',
+                                       x=data['burned' + representation + 'DEX'].interpolate(method='linear',limit_direction='forward').dropna().index,
+                                       y=data['burned' + representation + 'DEX'].interpolate(method='linear',limit_direction='forward').dropna(),
+                                       mode='lines', line=dict(color='#8d8d8d'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dTokenFeeBurn, 1, 1)
+
+        # graph for burned dTokens via a futures swap
+        if 'DFIPFuture_burned_' + representation in data.columns:
+            trace_dTokenFuturesBurn = dict(type='scatter', name='dTokens burned via Futures swap',
+                                            x=data['DFIPFuture_burned_' + representation].interpolate(method='linear',limit_direction='forward').dropna().index,
+                                           y=data['DFIPFuture_burned_' + representation].interpolate(method='linear',limit_direction='forward').dropna(),
+                                            mode='lines', line=dict(color='#171717'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dTokenFuturesBurn, 1, 1)
+
+        # graph for locked dTokens for next futures swap
+        if 'DFIPFuture_current_' + representation in data.columns:
+            trace_dTokenFuturesLocked = dict(type='scatter', name='dTokens locked next Futures swap',
+                                            x=dTokenLocked.dropna().index,
+                                           y=dTokenLocked.dropna(),
+                                            mode='lines', line=dict(color='#5c0fff'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dTokenFuturesLocked, 1, 1)
+
+
+        figNbDToken.update_yaxes(title_text='number dTokens', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figNbDToken.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',
                                range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
 

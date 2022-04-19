@@ -58,6 +58,10 @@ class premiumDTokenViewClass:
                               x=((data['COIN-DUSD_reserveB/reserveA']-data['COIN-USD'])/data['COIN-USD']).dropna().index,
                               y=((data['COIN-DUSD_reserveB/reserveA']-data['COIN-USD'])/data['COIN-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
+        trace_premiumDIS = dict(type='scatter', name='dDIS',
+                              x=((data['DIS-DUSD_reserveB/reserveA']-data['DIS-USD'])/data['DIS-USD']).dropna().index,
+                              y=((data['DIS-DUSD_reserveB/reserveA']-data['DIS-USD'])/data['DIS-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
         trace_premiumEEM = dict(type='scatter', name='dEEM',
                               x=((data['EEM-DUSD_reserveB/reserveA']-data['EEM-USD'])/data['EEM-USD']).dropna().index,
                               y=((data['EEM-DUSD_reserveB/reserveA']-data['EEM-USD'])/data['EEM-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
@@ -78,9 +82,21 @@ class premiumDTokenViewClass:
                               x=((data['GOOGL-DUSD_reserveB/reserveA']-data['GOOGL-USD'])/data['GOOGL-USD']).dropna().index,
                               y=((data['GOOGL-DUSD_reserveB/reserveA']-data['GOOGL-USD'])/data['GOOGL-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
+        trace_premiumINTC = dict(type='scatter', name='dINTC',
+                              x=((data['INTC-DUSD_reserveB/reserveA']-data['INTC-USD'])/data['INTC-USD']).dropna().index,
+                              y=((data['INTC-DUSD_reserveB/reserveA']-data['INTC-USD'])/data['INTC-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
+        trace_premiumMCHI = dict(type='scatter', name='dMCHI',
+                              x=((data['MCHI-DUSD_reserveB/reserveA']-data['MCHI-USD'])/data['MCHI-USD']).dropna().index,
+                              y=((data['MCHI-DUSD_reserveB/reserveA']-data['MCHI-USD'])/data['MCHI-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
         trace_premiumMSFT = dict(type='scatter', name='dMSFT',
                               x=((data['MSFT-DUSD_reserveB/reserveA']-data['MSFT-USD'])/data['MSFT-USD']).dropna().index,
                               y=((data['MSFT-DUSD_reserveB/reserveA']-data['MSFT-USD'])/data['MSFT-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
+        trace_premiumMSTR = dict(type='scatter', name='dMSTR',
+                              x=((data['MSTR-DUSD_reserveB/reserveA']-data['MSTR-USD'])/data['MSTR-USD']).dropna().index,
+                              y=((data['MSTR-DUSD_reserveB/reserveA']-data['MSTR-USD'])/data['MSTR-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
         trace_premiumNFLX = dict(type='scatter', name='dNFLX',
                               x=((data['NFLX-DUSD_reserveB/reserveA']-data['NFLX-USD'])/data['NFLX-USD']).dropna().index,
@@ -136,12 +152,16 @@ class premiumDTokenViewClass:
         figPrices.add_trace(trace_premiumARKK, 1, 1)
         figPrices.add_trace(trace_premiumBABA, 1, 1)
         figPrices.add_trace(trace_premiumCOIN, 1, 1)
+        figPrices.add_trace(trace_premiumDIS, 1, 1)
         figPrices.add_trace(trace_premiumEEM, 1, 1)
         figPrices.add_trace(trace_premiumFB, 1, 1)
         figPrices.add_trace(trace_premiumGLD, 1, 1)
         figPrices.add_trace(trace_premiumGME, 1, 1)
         figPrices.add_trace(trace_premiumGOOGL, 1, 1)
+        figPrices.add_trace(trace_premiumINTC, 1, 1)
+        figPrices.add_trace(trace_premiumMCHI, 1, 1)
         figPrices.add_trace(trace_premiumMSFT, 1, 1)
+        figPrices.add_trace(trace_premiumMSTR, 1, 1)
         figPrices.add_trace(trace_premiumNFLX, 1, 1)
         figPrices.add_trace(trace_premiumNVDA, 1, 1)
         figPrices.add_trace(trace_premiumPDBC, 1, 1)
