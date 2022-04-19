@@ -56,7 +56,8 @@ class defichainAnalyticsModelClass:
         self.updated_vaults = None
         self.update_emissionRate=None
         self.update_coinPriceList = None
-
+        self.updated_DFIPFutures = None
+        self.updated_cfpData = None
 
         # background image for figures
         with open(workDir + "/assets/analyticsLandscapeGrey2.png", "rb") as image_file:
@@ -775,8 +776,8 @@ class defichainAnalyticsModelClass:
     def loadCFPData(self):
         filePath = self.dataPath + 'listCFPs.xlsx'
         fileInfo = pathlib.Path(filePath)
-        if fileInfo.stat() != self.update_cfpData:
+        if fileInfo.stat() != self.updated_cfpData:
             self.cfpData = pd.read_excel(filePath, engine='openpyxl')
             self.cfpData.sort_values(by=['nb'], inplace=True, ascending=True)
-            self.update_cfpData = fileInfo.stat()
+            self.updated_cfpData = fileInfo.stat()
             print('>>>>>>>>>>>>> CFP data loaded <<<<<<<<<<<<<'+str(len(self.cfpData.columns)))
