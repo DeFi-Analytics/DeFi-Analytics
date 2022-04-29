@@ -74,6 +74,7 @@ class vaultsLoansControllerClass:
             pageContent = self.pricesDTokenView.getPricesDTokenContent()
         elif entry == 'nbDToken':
             self.defichainAnalyticsModel.loadVaultData()
+            self.defichainAnalyticsModel.loadDFIPFuturesData()
             pageContent = self.nbDTokenView.getnbDTokenContent()
         elif entry == 'interest':
             self.defichainAnalyticsModel.loadHourlyDEXdata()

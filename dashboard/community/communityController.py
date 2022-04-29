@@ -79,6 +79,7 @@ class communityControllerClass:
             self.defichainAnalyticsModel.loadTwitterFollowerData()
             pageContent = self.followerView.getTwitterFollowerContent()
         elif entry in ['cfp']:
+            self.defichainAnalyticsModel.loadCFPData()
             pageContent = self.cfpView.getCFPContent(self.defichainAnalyticsModel.cfpData)
         elif entry in ["analytics"]:
             self.defichainAnalyticsModel.loadAnalyticsVisitsData()
