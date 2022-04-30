@@ -130,6 +130,26 @@ def getEmissionData():
     # writing file
     dfDFIemission.to_csv(filepath)
 
+def getRedditData():
+    # generate filepath relative to script location
+    filepath = path + 'redditDefichainData.csv'
+
+    dateTimeObj = datetime.now()
+    strTimestamp = dateTimeObj.strftime("%Y-%m-%d")
+
+    # API request reddit user number
+    headers = {'User-Agent': 'Safari/537.36'}
+    link='https://www.reddit.com/r/defiblockchain/about.json'
+    siteContent = requests.get(link, headers=headers)
+    jsonData = json.loads(siteContent.text)
+
+    dfReddit = pd.read_csv(filepath, index_col=0)
+    dfReddit.loc[strTimestamp] = jsonData['data']['subscribers']
+
+    # writing file
+    dfReddit.to_csv(filepath)
+
+
 
 # call all acquisition functions with error handling
 
@@ -174,3 +194,11 @@ try:
     print('Data DFI emission saved')
 except:
     print('### Error in DFI emission data acquisition')
+
+
+# Official DefiChain Reddit
+try:
+    getRedditData()
+    print('Reddit data saved')
+except:
+    print('### Error in Reddit data acquisition')
