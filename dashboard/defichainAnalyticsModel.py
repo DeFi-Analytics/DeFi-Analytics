@@ -58,6 +58,8 @@ class defichainAnalyticsModelClass:
         self.update_coinPriceList = None
         self.updated_DFIPFutures = None
         self.updated_cfpData = None
+        self.updated_BSCBridge = None
+
 
         # background image for figures
         with open(workDir + "/assets/analyticsLandscapeGrey2.png", "rb") as image_file:
@@ -484,6 +486,7 @@ class defichainAnalyticsModelClass:
         self.loadDFXdata()
         self.loadVaultData()
         self.loadDFIPFuturesData()
+        self.loadBSCBridgeData()
 
 
     def loadHourlyDEXdata(self):
@@ -691,6 +694,22 @@ class defichainAnalyticsModelClass:
 
             self.updated_DFIPFutures = fileInfo.stat()
             print('>>>> DFIP futures data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+
+    def loadBSCBridgeData(self):
+        print('>>>> Start update BSC bridge data ... <<<<')
+        filePath = self.dataPath + 'bscDFIBridgeData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_BSCBridge:
+            BSCBridgeData = pd.read_csv(filePath, index_col=0)
+            BSCBridgeData.index = pd.to_datetime(BSCBridgeData.index)
+
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(BSCBridgeData.columns)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(BSCBridgeData, how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_BSCBridge = fileInfo.stat()
+            print('>>>> BSC bridge data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
 
 
     #### MINUTELY DATA ####

@@ -1,12 +1,63 @@
 import requests
 import pandas as pd
-from datetime import datetime
+import datetime
 import json
 import numpy as np
 
 
 scriptPath = __file__
 path = scriptPath[:-29] + '/data/'
+
+def getBSCBridgeData():
+    # generate filepath relative to script location
+    print('   Start acquisition bridgeData ...')
+    filepathRaw = path + 'bscDFIBridgeTxData.csv'
+    filepath = path + 'bscDFIBridgeData.csv'
+
+    # dfBridgeRaw = pd.DataFrame(columns=['block', 'txId', 'time', 'type', 'amount'])
+    dfBridgeRaw = pd.read_csv(filepathRaw, index_col=0)
+    newDataAPI = True
+    nextPage = ''
+    while newDataAPI:
+        link = 'https://ocean.defichain.com/v0/mainnet/address/8Jgfq4pBUdJLiFGStunoTCy2wqRQphP6bQ/transactions?size=200'+nextPage
+        siteContent = requests.get(link)
+        tempData = json.loads(siteContent.text)
+        # check if another page must be requested
+        if 'page' in tempData:
+            nextPage = '&next=' + tempData['page']['next']
+        else:
+            newDataAPI = False
+        # get needed data out of json structure
+        for item in tempData['data']:
+            if item['id'] in dfBridgeRaw.index:
+                print('        reached existing id in bscBridgeData')
+                newDataAPI = False
+                break
+            else:
+                dfBridgeRaw.loc[item['id']] = [item['block']['height'], item['txid'], datetime.datetime.fromtimestamp(item['block']['medianTime']).strftime('%Y-%m-%d %H:%M:%S'), item['type'], item['value']]
+    # Sort and save tx data
+    dfBridgeRaw.sort_values(by=['block'], ascending=False, inplace=True)
+    dfBridgeRaw.to_csv(filepathRaw)
+    dfBridgeRaw['amount'] = dfBridgeRaw.amount.astype(float)
+
+    # create dataframe by unique tx
+    dfBridgeTx = pd.DataFrame()
+    dfBridgeTx['time'] = pd.to_datetime(dfBridgeRaw.groupby('txId').time.first())
+    dfBridgeTx['block'] = dfBridgeRaw.groupby('txId').block.first()
+    dfBridgeTx['nbTx'] = dfBridgeRaw.groupby('txId').block.count()
+    dfBridgeTx['vinAmount'] = dfBridgeRaw[dfBridgeRaw['type']=='vin'].groupby('txId').amount.sum()
+    dfBridgeTx['voutAmount'] = dfBridgeRaw[dfBridgeRaw['type'] == 'vout'].groupby('txId').amount.sum()
+    dfBridgeTx['deltaAmount'] = dfBridgeTx['voutAmount'].fillna(0)-dfBridgeTx['vinAmount'].fillna(0)
+    dfBridgeTx.sort_values(by=['block'], ascending=False, inplace=True)
+
+    # create hourly in- and outflow data
+    dfBridgeTx.set_index('time', inplace=True)
+    dfBridgeData = pd.DataFrame()
+    dfBridgeData['bridgeInflow'] = dfBridgeTx[dfBridgeTx['deltaAmount'] >= 0].deltaAmount.groupby(pd.Grouper(freq='H')).sum()
+    dfBridgeData['bridgeOutflow'] = dfBridgeTx[dfBridgeTx['deltaAmount'] < 0].deltaAmount.groupby(pd.Grouper(freq='H')).sum()
+    dfBridgeData.to_csv(filepath)
+
+    print('   finished bridge data acquisition')
 
 def getDFIPFuturesData(timeStampData):
     filepath = path + 'DFIPFuturesData.csv'
@@ -19,17 +70,20 @@ def getDFIPFuturesData(timeStampData):
     tempData = json.loads(siteContent.text)
     tempDataDFIP = tempData[8][0]['ATTRIBUTES']
 
-    for item in tempDataDFIP['v0/live/economy/dfip2203_burned']:
-        dataName = 'DFIPFuture_burned_' + item[item.find('@') + 1:]
-        newData[dataName] = item[:item.find('@')]
+    if 'v0/live/economy/dfip2203_burned' in tempDataDFIP:
+        for item in tempDataDFIP['v0/live/economy/dfip2203_burned']:
+            dataName = 'DFIPFuture_burned_' + item[item.find('@') + 1:]
+            newData[dataName] = item[:item.find('@')]
 
-    for item in tempDataDFIP['v0/live/economy/dfip2203_minted']:
-        dataName = 'DFIPFuture_minted_' + item[item.find('@') + 1:]
-        newData[dataName] = item[:item.find('@')]
+    if 'v0/live/economy/dfip2203_minted' in tempDataDFIP:
+        for item in tempDataDFIP['v0/live/economy/dfip2203_minted']:
+            dataName = 'DFIPFuture_minted_' + item[item.find('@') + 1:]
+            newData[dataName] = item[:item.find('@')]
 
-    for item in tempDataDFIP['v0/live/economy/dfip2203_current']:
-        dataName = 'DFIPFuture_current_' + item[item.find('@') + 1:]
-        newData[dataName] = item[:item.find('@')]
+    if 'v0/live/economy/dfip2203_current' in tempDataDFIP:
+        for item in tempDataDFIP['v0/live/economy/dfip2203_current']:
+            dataName = 'DFIPFuture_current_' + item[item.find('@') + 1:]
+            newData[dataName] = item[:item.find('@')]
 
     dfOldDFIPData = pd.read_csv(filepath, index_col=0)
     # dfOldDFIPData = pd.DataFrame()
@@ -148,7 +202,42 @@ def getVaultsData(timeStampData):
 
     print('finished vaults/loans data acquisition')
 
-timeStampData = pd.Timestamp.now()
-getDFIPFuturesData(timeStampData)
-getVaultsData(timeStampData)
 
+
+timeStampData = pd.Timestamp.now()
+
+# DFIP Futures data
+try:
+    getDFIPFuturesData(timeStampData)
+    print('DFIP Futures data saved')
+except:
+    print('### Error in DFIP Futures data acquisition')
+
+# Vaults data
+try:
+    getVaultsData(timeStampData)
+    print('Vaults data saved')
+except:
+    print('### Error in vaults data acquisition')
+
+# BSC bridge data
+try:
+    getBSCBridgeData()
+    print('BSC bridge data saved')
+except:
+    print('### Error in BSC bridge data acquisition')
+
+
+
+
+
+
+
+
+#
+# # DFI emission data
+# try:
+#     # getEmissionData()
+#     print('Data DFI emission saved')
+# except:
+#     print('### Error in DFI emission data acquisition')

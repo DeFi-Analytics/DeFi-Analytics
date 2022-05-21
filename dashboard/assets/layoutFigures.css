@@ -67,6 +67,7 @@
     #figureBurnedDFI {height: 745px}
     #figureScheme {height: 705px}
 
+    #figureBSCLiquidity {height: 745px}
 
     #figureTokenCryptos {height: 705px}
 
@@ -163,6 +164,8 @@
         #figureBurnedDFI {height: 600px}
         #figureScheme {height: 600px}
         #figurePremiumDToken {height: 600px}
+
+        #figureBSCLiquidity {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -214,6 +217,8 @@
         #figureBurnedDFI {height: 330px}
         #figureScheme {height: 330px}
         #figurePremiumDToken {height: 330px}
+
+        #figureBSCLiquidity {height: 330px}
         }
 }
 
