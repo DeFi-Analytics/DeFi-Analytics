@@ -64,22 +64,22 @@ class nbDTokenViewClass:
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
         # calculate circulating amount
-        basisGraph = data['sumLoan' + representation].interpolate(method='linear', limit_direction='forward').dropna()
+        basisGraph = data['sumLoan' + representation].interpolate(method='pad', limit_direction='forward').dropna()
         dTokenCircAmount = basisGraph
         if 'DFIPFuture_minted_' + representation in data.columns:
-            dTokenCircAmount = dTokenCircAmount + data.loc[basisGraph.index,'DFIPFuture_minted_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0)
+            dTokenCircAmount = dTokenCircAmount + data.loc[basisGraph.index,'DFIPFuture_minted_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0)
         if representation == 'DUSD':
             dTokenCircAmount = dTokenCircAmount + data.loc[basisGraph.index,'DUSDpaidDFI'].interpolate(method='linear', limit_direction='forward').fillna(0)
         if 'DFIPFuture_burned_' + representation in data.columns:
-            dTokenCircAmount = dTokenCircAmount - data.loc[basisGraph.index,'DFIPFuture_burned_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0)
+            dTokenCircAmount = dTokenCircAmount - data.loc[basisGraph.index,'DFIPFuture_burned_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0)
         if 'burned' + representation + 'DEX' in data.columns:
             dTokenCircAmount = dTokenCircAmount - data.loc[basisGraph.index,'burned' + representation + 'DEX'].interpolate(method='linear',limit_direction='forward').fillna(0)
         if 'DFIPFuture_current_' + representation in data.columns:
             if 'DFIPFuture_burned_' + representation in data.columns:
-                dTokenLocked = data.loc[basisGraph.index,'DFIPFuture_current_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0) \
-                                - data.loc[basisGraph.index,'DFIPFuture_burned_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0)
+                dTokenLocked = data.loc[basisGraph.index,'DFIPFuture_current_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0) \
+                                - data.loc[basisGraph.index,'DFIPFuture_burned_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0)
             else:
-                dTokenLocked = data.loc[basisGraph.index,'DFIPFuture_current_' + representation].interpolate(method='linear', limit_direction='forward').fillna(0)
+                dTokenLocked = data.loc[basisGraph.index,'DFIPFuture_current_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0)
             dTokenCircAmount = dTokenCircAmount - dTokenLocked
 
 
@@ -99,8 +99,8 @@ class nbDTokenViewClass:
         # graph for minted dTokens via a futures swap
         if 'DFIPFuture_minted_' + representation in data.columns:
             trace_dTokenFuturesMint = dict(type='scatter', name='dTokens minted via Futures swap',
-                                            x=data['DFIPFuture_minted_' + representation].interpolate(method='linear',limit_direction='forward').dropna().index,
-                                            y=data['DFIPFuture_minted_' + representation].interpolate(method='linear',limit_direction='forward').dropna(),
+                                            x=data['DFIPFuture_minted_' + representation].interpolate(method='pad',limit_direction='forward').dropna().index,
+                                            y=data['DFIPFuture_minted_' + representation].interpolate(method='pad',limit_direction='forward').dropna(),
                                             mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dTokenFuturesMint, 1, 1)
 
@@ -129,8 +129,8 @@ class nbDTokenViewClass:
         # graph for burned dTokens via a futures swap
         if 'DFIPFuture_burned_' + representation in data.columns:
             trace_dTokenFuturesBurn = dict(type='scatter', name='dTokens burned via Futures swap',
-                                            x=data['DFIPFuture_burned_' + representation].interpolate(method='linear',limit_direction='forward').dropna().index,
-                                           y=data['DFIPFuture_burned_' + representation].interpolate(method='linear',limit_direction='forward').dropna(),
+                                            x=data['DFIPFuture_burned_' + representation].interpolate(method='pad',limit_direction='forward').dropna().index,
+                                           y=data['DFIPFuture_burned_' + representation].interpolate(method='pad',limit_direction='forward').dropna(),
                                             mode='lines', line=dict(color='#171717'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dTokenFuturesBurn, 1, 1)
 

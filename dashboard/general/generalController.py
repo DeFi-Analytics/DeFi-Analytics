@@ -54,7 +54,7 @@ class generalControllerClass:
         elif entry in ["overallTVL"]:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadExtractedRichlistData()
-            self.defichainAnalyticsModel.loadDailyTradingData()
+            self.defichainAnalyticsModel.loadCoinPriceList()
             self.defichainAnalyticsModel.loadVaultData()
             self.defichainAnalyticsModel.calcOverallTVLdata()
             pageContent = self.overallTVLView.getOverallTVLContent()
