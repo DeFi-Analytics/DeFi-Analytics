@@ -48,7 +48,7 @@ while bGetRichlist:
 
 # get list of masternodes
 try:
-    link = 'https://api.mydeficha.in/v1/listmasternodes/?state=ENABLED'
+    link = 'http://api.mydeficha.in/v1/listmasternodes/?state=ENABLED'
     siteContent = requests.get(link)
     dfMNList = pd.read_json(siteContent.text).transpose() 
     dfRichList['mnAddressAPI'] = dfRichList['address'].isin(dfMNList.ownerAuthAddress)
