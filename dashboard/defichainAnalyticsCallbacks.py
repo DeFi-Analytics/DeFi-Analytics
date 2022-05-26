@@ -57,7 +57,10 @@ class defichainAnalyticsCallbacksClass:
                                              Input('interest', 'n_clicks_timestamp'),
                                              Input('burnedDFI', 'n_clicks_timestamp'),
                                              Input('scheme', 'n_clicks_timestamp'),
+
                                              Input('liquidityBridge', 'n_clicks_timestamp'),
+                                             Input('nbSwapsBridge', 'n_clicks_timestamp'),
+
                                              Input('cryptosDAT', 'n_clicks_timestamp'),
                                              Input('twitter', 'n_clicks_timestamp'),
                                              Input('follower', 'n_clicks_timestamp'),
@@ -251,7 +254,10 @@ class defichainAnalyticsCallbacksClass:
                                    'interest',
                                    'burnedDFI',
                                    'scheme',
+
                                    'liquidityBridge',
+                                   'nbSwapsBridge',
+
                                    'cryptosDAT',
                                    'twitter',
                                    'follower',
@@ -302,7 +308,10 @@ class defichainAnalyticsCallbacksClass:
                                             Output('interest', 'className'),
                                             Output('burnedDFI', 'className'),
                                             Output('scheme', 'className'),
+
                                             Output('liquidityBridge', 'className'),
+                                            Output('nbSwapsBridge', 'className'),
+
                                             Output('cryptosDAT', 'className'),
                                             Output('twitter', 'className'),
                                             Output('follower', 'className'),

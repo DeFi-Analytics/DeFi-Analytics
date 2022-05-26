@@ -55,6 +55,10 @@ def getBSCBridgeData():
     dfBridgeData = pd.DataFrame()
     dfBridgeData['bridgeInflow'] = dfBridgeTx[dfBridgeTx['deltaAmount'] >= 0].deltaAmount.groupby(pd.Grouper(freq='H')).sum()
     dfBridgeData['bridgeOutflow'] = dfBridgeTx[dfBridgeTx['deltaAmount'] < 0].deltaAmount.groupby(pd.Grouper(freq='H')).sum()
+    dfBridgeData['bridgeNbInSwaps'] = dfBridgeTx[dfBridgeTx['deltaAmount'] >= 0].block.groupby(pd.Grouper(freq='H')).count()
+    dfBridgeData['bridgeNbOutSwaps'] = 0 # initialize with zeros
+    tempData = dfBridgeTx[dfBridgeTx['deltaAmount'] < 0].block.groupby(pd.Grouper(freq='H')).count() # get data, where available
+    dfBridgeData.loc[tempData.index, 'bridgeNbOutSwaps'] = tempData.iloc[:] # write data into complete dataframe
     dfBridgeData.to_csv(filepath)
 
     print('   finished bridge data acquisition')
@@ -90,7 +94,7 @@ def getDFIPFuturesData(timeStampData):
     dfDFIPData = dfOldDFIPData.append(newData, sort=False)
     dfDFIPData.to_csv(filepath)
 
-    print('finished DFIP futures data acquisition')
+    print('   finished DFIP futures data acquisition')
 
 def getVaultsData(timeStampData):
     # generate filepath relative to script location
@@ -200,9 +204,7 @@ def getVaultsData(timeStampData):
     dfVaultData = dfOldVaultData.append(vaultData, sort=False)
     dfVaultData.to_csv(filepath)
 
-    print('finished vaults/loans data acquisition')
-
-
+    print('   finished vaults/loans data acquisition')
 
 timeStampData = pd.Timestamp.now()
 
@@ -227,17 +229,3 @@ try:
 except:
     print('### Error in BSC bridge data acquisition')
 
-
-
-
-
-
-
-
-#
-# # DFI emission data
-# try:
-#     # getEmissionData()
-#     print('Data DFI emission saved')
-# except:
-#     print('### Error in DFI emission data acquisition')
