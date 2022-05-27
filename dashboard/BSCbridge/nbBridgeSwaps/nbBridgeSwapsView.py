@@ -46,7 +46,7 @@ class nbBridgeSwapsViewClass:
         elif representation == 'D':
             days2show = 30
         else:
-            days2show = 14
+            days2show = 7
 
         lastValidDate = datetime.utcfromtimestamp(totalNb.dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=days2show)
@@ -76,7 +76,8 @@ class nbBridgeSwapsViewClass:
         # Add range slider
         figBSCnbSwaps.update_layout(xaxis=dict(
             rangeselector=dict(
-                buttons=list([dict(count=14, label="14d", step="day", stepmode="backward"),
+                buttons=list([dict(count=7, label="7d", step="day", stepmode="backward"),
+                              dict(count=14, label="14d", step="day", stepmode="backward"),
                               dict(count=30, label="30d", step="day", stepmode="backward"),
                               dict(count=2, label="2m", step="month", stepmode="backward"),
                               dict(count=6, label="6m", step="month", stepmode="backward"),
