@@ -34,7 +34,7 @@ class liquidityViewClass:
             shared_xaxes=True,
             subplot_titles=([]))
 
-        bridgeBalance = (data['bridgeInflow']+data['bridgeOutflow']).cumsum()
+        bridgeBalance = (data['bridgeInflow']+data['bridgeOutflow'].fillna(0)).cumsum()
 
         lastValidDate = datetime.utcfromtimestamp(bridgeBalance.dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
