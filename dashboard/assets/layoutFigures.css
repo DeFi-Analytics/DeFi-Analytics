@@ -69,6 +69,7 @@
 
     #figureBSCLiquidity {height: 745px}
     #figureBSCnbSwaps {height: 705px}
+    #figureBSCInOutFlow {height: 705px}
 
     #figureTokenCryptos {height: 705px}
 
@@ -168,6 +169,7 @@
 
         #figureBSCLiquidity {height: 600px}
         #figureBSCnbSwaps {height: 600px}
+        #figureBSCInOutFlow {height: 600px}
         }
 
     @media (orientation: landscape) {
@@ -222,6 +224,7 @@
 
         #figureBSCLiquidity {height: 330px}
         #figureBSCnbSwaps {height: 330px}
+        #figureBSCInOutFlow {height: 330px}
         }
 }
 

@@ -190,7 +190,8 @@ class defichainAnalyticsViewClass:
             dbc.Collapse(
                 [
                     dbc.NavLink("Bridge liquidity", href="/bscBridge?entry=liquidityBridge", className="linkstyle", id="liquidityBridge"),
-                    dbc.NavLink("Number Bridge swaps", href="/bscBridge?entry=nbSwapsBridge", className="linkstyle", id="nbSwapsBridge")
+                    dbc.NavLink("Bridge in-/outflow", href="/bscBridge?entry=inOutFlow", className="linkstyle", id="inOutFlow"),
+                    dbc.NavLink("Number Bridge swaps", href="/bscBridge?entry=nbSwapsBridge", className="linkstyle", id="nbSwapsBridge"),
                 ],
                 id="submenu-bscBridge-collapse",
             ),

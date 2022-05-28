@@ -11,7 +11,7 @@ import pandas as pd
 
 class nbBridgeSwapsViewClass:
 
-    def getNbBrideSwapsContent(self, data, bgImage):
+    def getNbBrideSwapsContent(self):
         content = [dbc.Modal([dbc.ModalHeader("Info Number swaps BSC-Bridge"),
                               dbc.ModalBody(self.getNbSwapsExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoBSCnbSwaps", className="ml-auto"))],

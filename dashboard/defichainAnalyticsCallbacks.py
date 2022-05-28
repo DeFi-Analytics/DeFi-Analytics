@@ -60,6 +60,7 @@ class defichainAnalyticsCallbacksClass:
 
                                              Input('liquidityBridge', 'n_clicks_timestamp'),
                                              Input('nbSwapsBridge', 'n_clicks_timestamp'),
+                                             Input('inOutFlow', 'n_clicks_timestamp'),
 
                                              Input('cryptosDAT', 'n_clicks_timestamp'),
                                              Input('twitter', 'n_clicks_timestamp'),
@@ -257,6 +258,7 @@ class defichainAnalyticsCallbacksClass:
 
                                    'liquidityBridge',
                                    'nbSwapsBridge',
+                                   'inOutFlow',
 
                                    'cryptosDAT',
                                    'twitter',
@@ -311,6 +313,7 @@ class defichainAnalyticsCallbacksClass:
 
                                             Output('liquidityBridge', 'className'),
                                             Output('nbSwapsBridge', 'className'),
+                                            Output('inOutFlow', 'className'),
 
                                             Output('cryptosDAT', 'className'),
                                             Output('twitter', 'className'),

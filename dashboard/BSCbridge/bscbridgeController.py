@@ -1,11 +1,12 @@
-# from .overview.overviewView import overviewViewClass
-# from .overview.overviewCallbacks import overviewCallbacksClass
 
 from .liquidity.liquidityView import liquidityViewClass
 from .liquidity.liquidityCallbacks import liquiditiyCallbacksClass
 
 from .nbBridgeSwaps.nbBridgeSwapsView import nbBridgeSwapsViewClass
 from .nbBridgeSwaps.nbBridgeSwapsCallbacks import nbBridgeSwapsCallbacksClass
+
+from .inOutFlow.inOutFlowView import inOutFlowViewClass
+from .inOutFlow.inOutFlowCallbacks import inOutFlowCallbacksClass
 
 class bscbridgeControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -19,6 +20,10 @@ class bscbridgeControllerClass:
         self.nbBridgeSwapsView = nbBridgeSwapsViewClass()
         self.nbBridgeSwapsCallbacks = nbBridgeSwapsCallbacksClass(self.defichainAnalyticsModel, self.nbBridgeSwapsView, app)
 
+        # initialize inOutFlow classes
+        self.inOutFlowView = inOutFlowViewClass()
+        self.inOutFlowCallbacks = inOutFlowCallbacksClass(self.defichainAnalyticsModel, self.inOutFlowView, app)
+
 
     def getContent(self, entry):
         pageContent = None
@@ -27,7 +32,9 @@ class bscbridgeControllerClass:
             pageContent = self.liquidityView.getLiquidityContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["nbSwapsBridge"]:
             self.defichainAnalyticsModel.loadBSCBridgeData()
-            pageContent = self.nbBridgeSwapsView.getNbBrideSwapsContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
-
+            pageContent = self.nbBridgeSwapsView.getNbBrideSwapsContent()
+        elif entry in ["inOutFlow"]:
+            self.defichainAnalyticsModel.loadBSCBridgeData()
+            pageContent = self.inOutFlowView.getInOutFlowContent()
 
         return pageContent
