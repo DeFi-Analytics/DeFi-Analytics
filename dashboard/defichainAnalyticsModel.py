@@ -798,5 +798,6 @@ class defichainAnalyticsModelClass:
         if fileInfo.stat() != self.updated_cfpData:
             self.cfpData = pd.read_excel(filePath, engine='openpyxl')
             self.cfpData.sort_values(by=['nb'], inplace=True, ascending=True)
+            self.cfpData.rename(columns={"DFI": "dfi", "nb": "#"}, inplace=True)
             self.updated_cfpData = fileInfo.stat()
             print('>>>>>>>>>>>>> CFP data loaded <<<<<<<<<<<<<'+str(len(self.cfpData.columns)))
