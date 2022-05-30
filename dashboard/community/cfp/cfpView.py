@@ -27,7 +27,7 @@ class cfpViewClass:
         data['Result'] = listResult
         data['DFI'] = listDFI
 
-        data2Show = data[['#','Title','Requester','Github','DFI','Result']]
+        data2Show = data[['#','Date','Title','Requester','Github','DFI','Result']]
 
         cfpDataTable = dbc.Table.from_dataframe(data2Show, striped=True, bordered=True, hover=True)
         contentChangelog = [html.H4("CFP List"),

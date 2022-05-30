@@ -73,7 +73,7 @@ class pricesDTokenViewClass:
             dataDEX = (data['DFI-USD']/data['DUSD-DFI_reserveA/reserveB']).dropna()
             dataOracle = (data['DFI-USD']/data['DFI-USD']).dropna()
             selectionDEX = dataDEX != 0
-            figPrices.update_yaxes(range=[0.96, 1.04])
+            figPrices.update_yaxes(range=[0.86, 1.04])
         elif representation =='DFI':
             dataDEX = data['DUSD-DFI_reserveA/reserveB'].dropna()
             dataOracle = data['DFI-USD'].dropna()

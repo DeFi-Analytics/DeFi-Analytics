@@ -20,10 +20,10 @@ class inOutFlowViewClass:
                    dbc.Card(dbc.CardBody([html.H4(['BSC-Bridge in- and outflows']),
                                           html.Table([html.Tr([html.Td('Select time base for representation:'),
                                                                html.Td(dcc.Dropdown(id='BSCInOutFlowSelection',
-                                                                                    options=[{'label': 'Hourly number swaps', 'value': 'H'},
-                                                                                             {'label': 'Daily number swaps', 'value': 'D'},
-                                                                                             {'label': 'Weekly number swaps', 'value': 'W'}],
-                                                                                    value='H', clearable=False, style=dict(width='200px', verticalAlign="bottom")))])]),
+                                                                                    options=[{'label': 'Hourly in-/outflows', 'value': 'H'},
+                                                                                             {'label': 'Daily in-/outflows', 'value': 'D'},
+                                                                                             {'label': 'Weekly in-/outflows', 'value': 'W'}],
+                                                                                    value='D', clearable=False, style=dict(width='200px', verticalAlign="bottom")))])]),
                                           dbc.Row(dbc.Col(dcc.Graph(config={'displayModeBar': False}, id='figureBSCInOutFlow'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoBSCInOutFlow")))
                                           ]))]
@@ -52,24 +52,24 @@ class inOutFlowViewClass:
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=days2show)
 
         trace_diffInOutFlow = dict(type='scatter', name='Change bridge liquidity', x=diffInOutFlow.dropna().groupby(pd.Grouper(freq=representation)).sum().index, y=diffInOutFlow.groupby(pd.Grouper(freq=representation)).sum().dropna(),
-                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.0f}')
+                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.8f} DFI')
 
         # individual swap numbers
         trace_InFlow = dict(type='scatter', name='Bridge inflow (DeFiChain → BSC)',
                                 x=data.loc[diffInOutFlow.index, 'bridgeInflow'].fillna(0).groupby(pd.Grouper(freq=representation)).sum().index,
                                 y=data.loc[diffInOutFlow.index, 'bridgeInflow'].fillna(0).groupby(pd.Grouper(freq=representation)).sum(),
-                                 mode='lines', line=dict(color='#90dba8'), line_width=0, hovertemplate='%{y:,.8f}', fill='tozeroy')
+                                 mode='lines', line=dict(color='#90dba8'), line_width=0, hovertemplate='%{y:,.8f} DFI', fill='tozeroy')
         trace_OutFlow = dict(type='scatter', name='Bridge outflow (BSC → DeFiChain)',
                              x=data.loc[diffInOutFlow.index, 'bridgeOutflow'].fillna(0).groupby(pd.Grouper(freq=representation)).sum().index,
                              y=data.loc[diffInOutFlow.index, 'bridgeOutflow'].fillna(0).groupby(pd.Grouper(freq=representation)).sum(),
-                                    mode='lines', line=dict(color='#ec9b98'), line_width=0, hovertemplate='%{y:,.8f}', fill='tozeroy')
+                                    mode='lines', line=dict(color='#ec9b98'), line_width=0, hovertemplate='%{y:,.8f} DFI', fill='tozeroy')
 
 
         figBSCInOutFlow.add_trace(trace_InFlow, 1, 1)
         figBSCInOutFlow.add_trace(trace_OutFlow, 1, 1)
         figBSCInOutFlow.add_trace(trace_diffInOutFlow, 1, 1)
 
-        figBSCInOutFlow.update_yaxes(title_text='Number swaps BSC-Bridge', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)  # ,range=[-50, 200]
+        figBSCInOutFlow.update_yaxes(title_text='In-/Outflow measured in DFI', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)  # ,range=[-50, 200]
         figBSCInOutFlow.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
                             range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
 

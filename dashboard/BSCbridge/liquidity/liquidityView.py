@@ -40,8 +40,8 @@ class liquidityViewClass:
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
 
-        trace_balance = dict(type='scatter', name='Vaults', x=bridgeBalance.dropna().index, y=bridgeBalance.dropna(),
-                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.8f}')
+        trace_balance = dict(type='scatter', name='Liquidity', x=bridgeBalance.dropna().index, y=bridgeBalance.dropna(),
+                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.8f} DFI')
 
         figBSCLiquidity.add_trace(trace_balance, 1, 1)
 

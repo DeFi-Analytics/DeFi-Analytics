@@ -4,6 +4,8 @@ import datetime
 import json
 import numpy as np
 
+from bscScanCredentials import apiKeyToken
+
 
 scriptPath = __file__
 path = scriptPath[:-29] + '/data/'
@@ -53,12 +55,26 @@ def getBSCBridgeData():
     # create hourly in- and outflow data
     dfBridgeTx.set_index('time', inplace=True)
     dfBridgeData = pd.DataFrame()
+
+
     dfBridgeData['bridgeInflow'] = dfBridgeTx[dfBridgeTx['deltaAmount'] >= 0].deltaAmount.groupby(pd.Grouper(freq='H')).sum()
-    dfBridgeData['bridgeOutflow'] = dfBridgeTx[dfBridgeTx['deltaAmount'] < 0].deltaAmount.groupby(pd.Grouper(freq='H')).sum()
-    dfBridgeData['bridgeNbInSwaps'] = dfBridgeTx[dfBridgeTx['deltaAmount'] >= 0].block.groupby(pd.Grouper(freq='H')).count()
-    dfBridgeData['bridgeNbOutSwaps'] = 0 # initialize with zeros
-    tempData = dfBridgeTx[dfBridgeTx['deltaAmount'] < 0].block.groupby(pd.Grouper(freq='H')).count() # get data, where available
-    dfBridgeData.loc[tempData.index, 'bridgeNbOutSwaps'] = tempData.iloc[:] # write data into complete dataframe
+
+    tempDF = pd.DataFrame()
+    tempDF['bridgeOutflow'] = dfBridgeTx[dfBridgeTx['deltaAmount'] < 0].deltaAmount.groupby(pd.Grouper(freq='H')).sum()
+    dfBridgeData = dfBridgeData.merge(tempDF['bridgeOutflow'], left_index=True, right_index=True, how='outer')
+
+    tempDF = pd.DataFrame()
+    tempDF['bridgeNbInSwaps'] = dfBridgeTx[dfBridgeTx['deltaAmount'] >= 0].block.groupby(pd.Grouper(freq='H')).count()
+    dfBridgeData = dfBridgeData.merge(tempDF['bridgeNbInSwaps'], left_index=True, right_index=True, how='outer')
+
+    tempDF = pd.DataFrame()
+    tempDF['bridgeNbOutSwaps'] = dfBridgeTx[dfBridgeTx['deltaAmount'] < 0].block.groupby(pd.Grouper(freq='H')).count() # get data, where available
+    dfBridgeData = dfBridgeData.merge(tempDF['bridgeNbOutSwaps'], left_index=True, right_index=True, how='outer')
+
+    dfBridgeData['bridgeInflow'] = dfBridgeData['bridgeInflow'].fillna(0)
+    dfBridgeData['bridgeOutflow'] = dfBridgeData['bridgeOutflow'].fillna(0)
+    dfBridgeData['bridgeNbInSwaps'] = dfBridgeData['bridgeNbInSwaps'].fillna(0)
+    dfBridgeData['bridgeNbOutSwaps'] = dfBridgeData['bridgeNbOutSwaps'].fillna(0)
     dfBridgeData.to_csv(filepath)
 
     print('   finished bridge data acquisition')
@@ -206,6 +222,7 @@ def getVaultsData(timeStampData):
 
     print('   finished vaults/loans data acquisition')
 
+
 timeStampData = pd.Timestamp.now()
 
 # DFIP Futures data
@@ -223,9 +240,9 @@ except:
     print('### Error in vaults data acquisition')
 
 # BSC bridge data
-try:
-    getBSCBridgeData()
-    print('BSC bridge data saved')
-except:
-    print('### Error in BSC bridge data acquisition')
+# try:
+getBSCBridgeData()
+print('BSC bridge data saved')
+# except:
+#     print('### Error in BSC bridge data acquisition')
 

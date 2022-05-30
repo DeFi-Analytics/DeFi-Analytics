@@ -216,7 +216,7 @@ class premiumDTokenViewClass:
         figPrices.add_trace(trace_premiumVOO, 1, 1)
 
 
-        figPrices.update_yaxes(title_text='Premium in %', gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1, range=[-20, 60])
+        figPrices.update_yaxes(title_text='Premium in %', gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1, range=[-17, 17])
         figPrices.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',
                                range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
 
