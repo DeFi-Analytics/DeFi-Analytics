@@ -60,12 +60,17 @@ dfLMPoolData.loc[6,'DFIPrices'] = USDCDFIPrice
 dfLMPoolData['Time'] = pd.Timestamp.now()
 
 # prices from Bittrex
-link='https://api.bittrex.com/v3/markets/tickers'
-siteContent = requests.get(link)    
-dfBittrexTicker = pd.read_json(siteContent.text)  
-dfLMPoolData['DFIPricesBittrex'] = None
-dfLMPoolData.loc[1,'DFIPricesBittrex'] = dfBittrexTicker[dfBittrexTicker['symbol']=='DFI-BTC']['lastTradeRate'].values[0]
-dfLMPoolData.loc[2,'DFIPricesBittrex'] = dfBittrexTicker[dfBittrexTicker['symbol']=='DFI-USDT']['lastTradeRate'].values[0]
+try:
+    link='https://api.bittrex.com/v3/markets/tickers'
+    siteContent = requests.get(link)
+    dfBittrexTicker = pd.read_json(siteContent.text)
+    dfLMPoolData['DFIPricesBittrex'] = None
+    dfLMPoolData.loc[1,'DFIPricesBittrex'] = dfBittrexTicker[dfBittrexTicker['symbol']=='DFI-BTC']['lastTradeRate'].values[0]
+    dfLMPoolData.loc[2,'DFIPricesBittrex'] = dfBittrexTicker[dfBittrexTicker['symbol']=='DFI-USDT']['lastTradeRate'].values[0]
+except:
+    print('### Error Bittrex API')
+    dfLMPoolData.loc[1, 'DFIPricesBittrex'] = np.nan
+    dfLMPoolData.loc[2, 'DFIPricesBittrex'] = np.nan
 
 
 
