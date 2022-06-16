@@ -26,8 +26,8 @@ dfLMPoolData = pd.DataFrame(data = {'symbol': [item['symbol'] for item in dfLMPo
                                         'rewardLoanPct': [item['rewardPct'] for item in dfLMPoolDataNewAPI['data'][:]],
                                         '24hrTrading': [item['volume']['h24'] for item in dfLMPoolDataNewAPI['data'][:]],
                                         '30dTrading': [item['volume']['d30'] for item in dfLMPoolDataNewAPI['data'][:]],
-                                        'APRblock': [item['apr']['reward'] for item in dfLMPoolDataNewAPI['data'][:]],
-                                        'APRcommission': [item['apr']['commission'] for item in dfLMPoolDataNewAPI['data'][:]],
+                                        'APRblock': [item['apr']['reward'] if 'apr' in item.keys() else None for item in dfLMPoolDataNewAPI['data'][:] ],
+                                        'APRcommission': [item['apr']['commission'] if 'apr' in item.keys() else None for item in dfLMPoolDataNewAPI['data'][:] ],
                                     })
 
 # link='https://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
@@ -39,13 +39,13 @@ dfLMPoolData = pd.DataFrame(data = {'symbol': [item['symbol'] for item in dfLMPo
 # prices from Coingecko
 cg = CoinGeckoAPI()
 DFIData = cg.get_price(ids='defichain', vs_currencies=['btc','eth','usd'])
-    
+
 DogeCoinData = cg.get_price(ids='dogecoin', vs_currencies=['usd'])
 dogeDFIPrice = DFIData['defichain']['usd']/DogeCoinData['dogecoin']['usd']
 LiteCoinData = cg.get_price(ids='litecoin', vs_currencies=['usd'])
 ltcDFIPrice = DFIData['defichain']['usd']/LiteCoinData['litecoin']['usd']
 BCHCoinData = cg.get_price(ids='bitcoin-cash', vs_currencies=['usd'])
-bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']    
+bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']
 USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
 USDCDFIPrice = DFIData['defichain']['usd']/USDCCoinData['usd-coin']['usd']
 
@@ -92,5 +92,5 @@ dfLMPoolData['numberAddresses'] = None
 dfOldLMPoolData = pd.read_csv(filepath, index_col=0)
 dfLMPoolData = dfOldLMPoolData.append(dfLMPoolData, sort=False)
 dfLMPoolData.reset_index(inplace=True, drop=True)
-    
+
 dfLMPoolData.to_csv(filepath)
