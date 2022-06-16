@@ -546,7 +546,8 @@ class defichainAnalyticsModelClass:
 
             df2Add = pd.DataFrame()
             for poolSymbol in volumeData['base_name'].unique():
-                df2Add[poolSymbol + '_'+'VolTotal'] = volumeData[volumeData['base_name']==poolSymbol][['base_volume', 'quote_volume']].sum(axis=1)
+                temp = volumeData[volumeData['base_name']==poolSymbol][['base_volume', 'quote_volume']].sum(axis=1)
+                df2Add[poolSymbol + '_'+'VolTotal'] = temp.groupby(temp.index).max()    # max operation needed for handling stock split, where old pool is still available in the API data
 
             # delete existing information and add new one
             colNames = df2Add.columns
