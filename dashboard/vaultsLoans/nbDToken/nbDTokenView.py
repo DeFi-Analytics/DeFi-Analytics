@@ -6,6 +6,8 @@ from plotly.subplots import make_subplots
 from datetime import datetime
 import dateutil.relativedelta
 
+import pandas as pd
+
 class nbDTokenViewClass:
 
     def getnbDTokenContent(self):
@@ -86,12 +88,14 @@ class nbDTokenViewClass:
             dataFutureBurned = data['DFIPFuture_burned_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0).cummax()
             dataFutureBurned = dataFutureBurned.loc[basisGraph.index]
             dTokenCircAmount = dTokenCircAmount - dataFutureBurned
+        else:
+            dataFutureBurned = basisGraph*0
         if 'burned' + representation + 'DEX' in data.columns:
             dataBurned = data['burned' + representation + 'DEX'].interpolate(method='pad', limit_direction='forward').fillna(0).cummax()
             dataBurned = dataBurned.loc[basisGraph.index]
             dTokenCircAmount = dTokenCircAmount - dataBurned
         if 'DFIPFuture_current_' + representation in data.columns:
-            dataFutureCurrent = data['DFIPFuture_current_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0).cummax()
+            dataFutureCurrent = pd.concat([data['DFIPFuture_current_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0), dataFutureBurned]).max(level=0)
             dataFutureCurrent = dataFutureCurrent.loc[basisGraph.index]
             if 'DFIPFuture_burned_' + representation in data.columns:
                 dTokenLocked = dataFutureCurrent - dataFutureBurned
