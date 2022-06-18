@@ -43,6 +43,7 @@ class generalControllerClass:
             self.defichainAnalyticsModel.loadSnapshotData()
             pageContent = self.overviewView.getOverviewContent(self.defichainAnalyticsModel.snapshotData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["marketcap"]:
+            self.defichainAnalyticsModel.loadCoinPriceList()
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadDailyTradingData()
             self.defichainAnalyticsModel.loadExtractedRichlistData()
