@@ -647,7 +647,11 @@ class defichainAnalyticsModelClass:
         filePath = self.dataPath + 'vaultsData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_vaults:
-            vaultsData = pd.read_csv(filePath, index_col=0)
+            vaultsDataHeader = pd.read_csv(filePath, index_col=0, nrows=0).columns
+            types_dict = {'burnedPayback': str, 'dexfeetokens': str, 'dfipaybacktokens': str}
+            types_dict.update({col: float for col in vaultsDataHeader if col not in types_dict})
+            vaultsData = pd.read_csv(filePath, index_col=0, dtype=types_dict)
+
             vaultsData['timeRounded'] = pd.to_datetime(vaultsData.index).floor('H')
             vaultsData.set_index(['timeRounded'], inplace=True)
 
@@ -662,6 +666,7 @@ class defichainAnalyticsModelClass:
             burnedValues = [item for item in vaultsData.columns if "burned" in item if "DEX" in item]
 
             vaultsData['DUSDpaidDFI'] = vaultsData['dfipaybacktokens'].apply(lambda x: float(str(x)[2:str(x).find('@')]) if isinstance(x,str) else np.nan)
+            vaultsData['burnedPayback'] = vaultsData['burnedPayback'].apply(lambda x: float(str(x)[2:str(x).find('@')]) if isinstance(x, str) else float(x)) # select DFI entry in case of a list
 
             sumValues = [item for item in vaultsData.columns if "sum" in item]
             liveTicker = [item[7:]+'-USD' for item in vaultsData.columns if (("sumLoan") in item) & ~(('sumLoanLiquidation') in item)]

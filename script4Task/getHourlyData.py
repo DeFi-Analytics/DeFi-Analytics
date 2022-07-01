@@ -115,6 +115,7 @@ def getDFIPFuturesData(timeStampData):
 def getVaultsData(timeStampData):
     # generate filepath relative to script location
     filepath = path + 'vaultsData.csv'
+    print('   start vaults/loans data acquisition')
 
     # API request available loan schemes
     link = 'https://ocean.defichain.com/v0/mainnet/loans/schemes?size=200'
@@ -179,7 +180,7 @@ def getVaultsData(timeStampData):
     vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD', 'sumETH']+dfOracle.index.to_list()+['burnedAuction', 'burnedPayback','burnedDFIPayback','dfipaybacktokens', 'dexfeetokens'],
                           data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+[burnedAuction, burnedPayback, burnedDFIPayback, dfipaybacktokens, dexfeetokens])
 
-
+    print('   get all vaults via API')
     # API request current vaults
     newDataAPI = True
     nextPage = ''
@@ -216,7 +217,11 @@ def getVaultsData(timeStampData):
 
     # save file
     # dfOldVaultData = pd.DataFrame()
-    dfOldVaultData = pd.read_csv(filepath, index_col=0)
+    vaultsDataHeader = pd.read_csv(filepath, index_col=0, nrows=0).columns
+    types_dict = {'burnedPayback': str, 'dexfeetokens': str, 'dfipaybacktokens': str}
+    types_dict.update({col: float for col in vaultsDataHeader if col not in types_dict})
+    dfOldVaultData = pd.read_csv(filepath, index_col=0, dtype=types_dict)
+
     dfVaultData = dfOldVaultData.append(vaultData, sort=False)
     dfVaultData.to_csv(filepath)
 
