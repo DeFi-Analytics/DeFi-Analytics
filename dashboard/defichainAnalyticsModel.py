@@ -666,7 +666,7 @@ class defichainAnalyticsModelClass:
             burnedValues = [item for item in vaultsData.columns if "burned" in item if "DEX" in item]
 
             vaultsData['DUSDpaidDFI'] = vaultsData['dfipaybacktokens'].apply(lambda x: float(str(x)[2:str(x).find('@')]) if isinstance(x,str) else np.nan)
-            vaultsData['burnedPayback'] = vaultsData['burnedPayback'].apply(lambda x: float(str(x)[2:str(x).find('@')]) if isinstance(x, str) else float(x)) # select DFI entry in case of a list
+            vaultsData['burnedPayback'] = vaultsData['burnedPayback'].apply(lambda x: float(str(x)[2:str(x).find('@')]) if str(x)[0]=='[' else float(x))  # select DFI entry in case of a list
 
             sumValues = [item for item in vaultsData.columns if "sum" in item]
             liveTicker = [item[7:]+'-USD' for item in vaultsData.columns if (("sumLoan") in item) & ~(('sumLoanLiquidation') in item)]
