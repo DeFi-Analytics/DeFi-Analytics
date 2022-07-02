@@ -217,6 +217,7 @@ def getVaultsData(timeStampData):
 
     # save file
     # dfOldVaultData = pd.DataFrame()
+    print('   saving vaults/loans data')
     vaultsDataHeader = pd.read_csv(filepath, index_col=0, nrows=0).columns
     types_dict = {'burnedPayback': str, 'dexfeetokens': str, 'dfipaybacktokens': str}
     types_dict.update({col: float for col in vaultsDataHeader if col not in types_dict})
@@ -245,9 +246,9 @@ except:
     print('### Error in vaults data acquisition')
 
 # BSC bridge data
-# try:
-getBSCBridgeData()
-print('BSC bridge data saved')
-# except:
-#     print('### Error in BSC bridge data acquisition')
+try:
+    getBSCBridgeData()
+    print('BSC bridge data saved')
+except:
+    print('### Error in BSC bridge data acquisition')
 
