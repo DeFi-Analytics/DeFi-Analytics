@@ -14,6 +14,9 @@ from .premium.premiumCallbacks import premiumCallbacksClass
 from .nbDToken.nbDTokenView import nbDTokenViewClass
 from .nbDToken.nbDTokenCallbacks import nbDTokenCallbacksClass
 
+from .ratioAlgoLoans.ratioAlgoLoansView import ratioAlgoLoansViewClass
+from .ratioAlgoLoans.ratioAlgoLoansCallbacks import  ratioAlgoLoansCallbacksClass
+
 from .interest.interestView import interestViewClass
 from .interest.interestCallbacks import interestCallbacksClass
 
@@ -47,6 +50,10 @@ class vaultsLoansControllerClass:
         self.nbDTokenView = nbDTokenViewClass()
         self.nbDTokenCallbacks = nbDTokenCallbacksClass(self.defichainAnalyticsModel, self.nbDTokenView, app)
 
+        # initialize ratio classes
+        self.ratioAlgoLoansView = ratioAlgoLoansViewClass()
+        self.ratioAlgoLoansCallbacks = ratioAlgoLoansCallbacksClass(self.defichainAnalyticsModel, self.ratioAlgoLoansView, app)
+
         # initialize interest classes
         self.interestView = interestViewClass()
         self.interestCallbacks = interestCallbacksClass(self.defichainAnalyticsModel, self.interestView, app)
@@ -76,6 +83,10 @@ class vaultsLoansControllerClass:
             self.defichainAnalyticsModel.loadVaultData()
             self.defichainAnalyticsModel.loadDFIPFuturesData()
             pageContent = self.nbDTokenView.getnbDTokenContent()
+        elif entry == 'partAlgoCirc':
+            self.defichainAnalyticsModel.loadVaultData()
+            self.defichainAnalyticsModel.loadDFIPFuturesData()
+            pageContent = self.ratioAlgoLoansView.getRatioAlgoLoansContent()
         elif entry == 'interest':
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadVaultData()

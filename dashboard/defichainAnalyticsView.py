@@ -162,6 +162,7 @@ class defichainAnalyticsViewClass:
                     dbc.NavLink("dToken prices", href="/vaultsLoans?entry=dTokenPrices", className="linkstyle", id="dTokenPrices"),
                     dbc.NavLink("dToken premium", href="/vaultsLoans?entry=premium", className="linkstyle", id="premium"),
                     dbc.NavLink("Number dToken", href="/vaultsLoans?entry=nbDToken", className="linkstyle", id="nbDToken"),
+                    dbc.NavLink("Rel. part algo/circ amount", href="/vaultsLoans?entry=partAlgoCirc", className="linkstyle", id="partAlgoCirc"),
                     dbc.NavLink("Open Interest", href="/vaultsLoans?entry=interest", className="linkstyle", id="interest"),
                     dbc.NavLink("DFI Burn", href="/vaultsLoans?entry=burnedDFI", className="linkstyle", id="burnedDFI"),
                     dbc.NavLink("Loan schemes", href="/vaultsLoans?entry=scheme", className="linkstyle", id="scheme"),
