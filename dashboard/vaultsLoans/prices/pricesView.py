@@ -71,15 +71,18 @@ class pricesDTokenViewClass:
 
         if representation =='DUSD':
             dataDEX = (data['DFI-USD']/data['DUSD-DFI_reserveA/reserveB']).dropna()
+            dataDEX_USDT = (data['DUSD-DFI_reserveB/reserveA']*data['USDT-DFI_reserveA/reserveB']).dropna()
             dataOracle = (data['DFI-USD']/data['DFI-USD']).dropna()
             selectionDEX = dataDEX != 0
             figPrices.update_yaxes(range=[0.70, 1.1])
         elif representation =='DFI':
             dataDEX = data['DUSD-DFI_reserveA/reserveB'].dropna()
+            dataDEX_USDT = data['USDT-DFI_reserveA/reserveB'].dropna()
             dataOracle = data['DFI-USD'].dropna()
             selectionDEX = dataDEX != 0
         else:
             dataDEX = data[representation+'-DUSD_reserveB/reserveA'].dropna()
+            dataDEX_USDT = (data[representation+'-DUSD_reserveB/reserveA']*data['DUSD-DFI_reserveB/reserveA']*data['USDT-DFI_reserveA/reserveB']).dropna()
             dataOracle = data[representation+'-USD'].dropna()
             selectionDEX = dataDEX != 0
 
@@ -92,8 +95,12 @@ class pricesDTokenViewClass:
         trace_priceOracle = dict(type='scatter', name='Oracle price in USD', x=dataOracle.index, y=dataOracle,
                               mode='lines', line=dict(color='#ff9fe2'), line_width=3, hovertemplate='%{y:.f}')
 
+        trace_priceDEXUSDT = dict(type='scatter', name='DEX price in dUSDT', x=dataDEX_USDT.index, y=dataDEX_USDT,
+                              mode='lines', line=dict(color='#ff9fe2', dash='dot'), line_width=3, hovertemplate='%{y:.f}')
+
         figPrices.add_trace(trace_priceDEX, 1, 1)
         figPrices.add_trace(trace_priceOracle, 1, 1)
+        figPrices.add_trace(trace_priceDEXUSDT, 1, 1)
 
         figPrices.update_yaxes(title_text='dToken price', gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figPrices.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',
@@ -135,7 +142,8 @@ class pricesDTokenViewClass:
         dTokenPricesCardExplanation = [html.P(['dTokens on DefiChain are tradable on the DEX and the current price is defined by the pool ratio. The token price is not directly linked to the real asset. '
                                                'The only connection to the world outside the blockchain is the price feed of the oracle, which is used in the loan. With the oracle price the '
                                                'current collateralization ratio is determined and defines the liquidation level.'],style={'text-align': 'justify'}),
-                                       html.P(['This graphs shows both price informations - DEX and oracle - over time for the selected ticker symbol.'], style={'text-align': 'justify'}),
+                                       html.P(['This graphs shows both price informations - DEX and oracle - over time for the selected ticker symbol. Additionally the price in dUSDT is shown for a composite swap from '
+                                               'dUSDT to the selected dToken. In this case you have multiple premium/discounts influencing the price.'], style={'text-align': 'justify'}),
                                html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                        ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                                         style={'text-align': 'justify', 'fontSize':'0.7rem','color':'#6c757d'})
