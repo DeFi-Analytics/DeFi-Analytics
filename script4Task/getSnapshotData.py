@@ -98,7 +98,7 @@ while True:
         else:
             burnedDFIFees = np.NaN
 
-        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan) + float(burnedDFIPaybackFee)
+        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan[0][:-4]) + float(burnedDFIPaybackFee)
 
         # get DFI from LiquidityMining
         print('... getting LM and token data')
