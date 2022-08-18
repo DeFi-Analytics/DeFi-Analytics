@@ -494,6 +494,7 @@ class defichainAnalyticsModelClass:
         filePath = self.dataPath + 'LMPoolData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_dexHourly:
+            tStart = time.time()
             # hourlyDEXData = pd.read_csv(filePath, index_col=0,
             #                             dtype={"DFIPrices": float, "DFIPricesBittrex": float, "Time": "string", "commission": float, "customRewards": "string",
             #                                    "idTokenA": int, "idTokenB": int, 'numberAddresses': float, 'reserveA': float, 'reserveA/reserveB': float,
@@ -509,6 +510,7 @@ class defichainAnalyticsModelClass:
             hourlyDEXData.set_index(['timeRounded'], inplace=True)
             hourlyDEXData['reserveA_DFI'] = hourlyDEXData['reserveA'] / hourlyDEXData['DFIPrices']
             for poolSymbol in hourlyDEXData.symbol.dropna().unique():
+
                 df2Add = hourlyDEXData[hourlyDEXData.symbol == poolSymbol]
                 df2Add = df2Add.drop(columns=['Time', 'symbol', 'idTokenA', 'idTokenB'])
 
@@ -533,13 +535,14 @@ class defichainAnalyticsModelClass:
 
             self.hourlyData['Date'] = pd.to_datetime(self.hourlyData.index).strftime('%Y-%m-%d')
             self.updated_dexHourly = fileInfo.stat()
-            print('>>>> Hourly DEX data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+            print('>>>> Hourly DEX data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadDEXVolume(self):
         print('>>>> Start update DEX volume data ... <<<<')
         filePath = self.dataPath + 'DEXVolumeData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_dexVolume:
+            tStart = time.time()
             volumeData = pd.read_csv(filePath, index_col=0)
             volumeData['timeRounded'] = pd.to_datetime(volumeData.Time).dt.floor('H')
             volumeData.set_index(['timeRounded'], inplace=True)
@@ -562,13 +565,14 @@ class defichainAnalyticsModelClass:
 
             self.hourlyData['VolTotalCoingecko'] = volumeData[volumeData['base_name']=='BTC']['coingeckoVolume']
             self.updated_dexVolume = fileInfo.stat()
-            print('>>>> DEX volume data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+            print('>>>> DEX volume data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadHourlyDEXTrades(self):
         print('>>>> Start update hourly DEX trade data ... <<<<')
         filePath = self.dataPath + 'hourlyDEXTrades.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_hourlyDEXTrades:
+            tStart = time.time()
             hourlyTrades = pd.read_csv(filePath, index_col=0)
             hourlyTrades.fillna(0, inplace=True)
             hourlyTrades.index = pd.to_datetime(hourlyTrades.index).tz_localize(None)
@@ -592,15 +596,15 @@ class defichainAnalyticsModelClass:
             self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
             self.hourlyData = self.hourlyData.merge(hourlyTrades[columns2update], how='outer', left_index=True, right_index=True)                                                                   # delete existing columns to add new ones
 
-
             self.updated_hourlyDEXTrades = fileInfo.stat()
-            print('>>>> DEX volume data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+            print('>>>> DEX volume data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadTokenCrypto(self):
         print('>>>> Start update token data ... <<<<')
         filePath = self.dataPath + 'TokenData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_tokenCryptos:
+            tStart = time.time()
             tokenData = pd.read_csv(filePath, index_col=0)
             tokenData['timeRounded'] = pd.to_datetime(tokenData.Time).dt.floor('H')
             tokenData.set_index(['timeRounded'], inplace=True)
@@ -621,13 +625,14 @@ class defichainAnalyticsModelClass:
                 self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
 
             self.updated_tokenCryptos = fileInfo.stat()
-            print('>>>> DAT Cryptos data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+            print('>>>> DAT Cryptos data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadDFXdata(self):
         print('>>>> Start update DFX data ... <<<<')
         filePath = self.dataPath + 'dfxData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_dfx:
+            tStart = time.time()
             dfxData = pd.read_csv(filePath, index_col=0)
             dfxData['timeRounded'] = pd.to_datetime(dfxData.index).floor('H')
             dfxData.set_index(['timeRounded'], inplace=True)
@@ -640,13 +645,14 @@ class defichainAnalyticsModelClass:
             self.hourlyData = self.hourlyData.merge(dfxData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.updated_dfx = fileInfo.stat()
-            print('>>>> DFX data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+            print('>>>> DFX data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadVaultData(self):
         print('>>>> Start update Vault data ... <<<<')
         filePath = self.dataPath + 'vaultsData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_vaults:
+            tStart = time.time()
             vaultsDataHeader = pd.read_csv(filePath, index_col=0, nrows=0).columns
             types_dict = {'burnedPayback': str, 'dexfeetokens': str, 'dfipaybacktokens': str}
             types_dict.update({col: float for col in vaultsDataHeader if col not in types_dict})
@@ -655,18 +661,28 @@ class defichainAnalyticsModelClass:
             vaultsData['timeRounded'] = pd.to_datetime(vaultsData.index).floor('H')
             vaultsData.set_index(['timeRounded'], inplace=True)
 
-            tempDataFormat = pd.DataFrame()
-            # tempDataFormat['dexfeetokensRaw'] = vaultsData[~vaultsData.dexfeetokens.isna()].dexfeetokens.apply(lambda x: literal_eval(str(x)))
-            # tempDataFormat['dfipaybacktokens'] = vaultsData[~vaultsData.dfipaybacktokens.isna()].dfipaybacktokens.apply(lambda x: literal_eval(str(x)))
+            # get list of burned tocken ticker
+            lastString = vaultsData['dexfeetokens'][-1]
+            listTokens = re.findall("@(.+?)'", lastString)
 
-            for index, value in vaultsData[~vaultsData.dexfeetokens.isna()].dexfeetokens.items():
-                colNameFeeTokens = ['burned'+x[x.find('@')+1:]+'DEX' for x in literal_eval(value)]
-                vaultsData.loc[index,colNameFeeTokens] = [float(x[:x.find('@')]) for x in literal_eval(value)]
+            tStart2 = time.time()
+            for tokenSymbol in listTokens:
+                colString = vaultsData['dexfeetokens'][vaultsData['dexfeetokens'].str.contains('@'+tokenSymbol).fillna(False)]
+                burnedToken = colString.str.split('@'+tokenSymbol, expand=True)[0].str.rsplit("'",n=1, expand=True).iloc[:,-1]           # first column contains the number at the end
+                vaultsData['burned' + tokenSymbol + 'DEX'] = pd.to_numeric(burnedToken)
 
-            burnedValues = [item for item in vaultsData.columns if "burned" in item if "DEX" in item]
+            burnedValues = [item for item in vaultsData.columns if "burned" in item if "DEX" in item] # list of all label names for columns2update
 
             vaultsData['DUSDpaidDFI'] = vaultsData['dfipaybacktokens'].apply(lambda x: float(str(x)[2:str(x).find('@')]) if isinstance(x,str) else np.nan)
-            vaultsData['burnedPayback'] = vaultsData['burnedPayback'].apply(lambda x: float(str(x)[2:str(x).find('@')]) if str(x)[0]=='[' else float(x))  # select DFI entry in case of a list
+
+            # extract burned DFI and dUSD via payback function
+            temp = vaultsData['burnedPayback'].str.split(',', expand=True)
+            burnedDFIPayback_Old = pd.to_numeric(temp[~temp[0].str.contains('@DFI').fillna(False)][0])                  # only number in data column
+            burnedDFIPayback_New = pd.to_numeric(temp[temp[0].str.contains('@DFI').fillna(False)][0].str[2:-5])         # list of all tokens in column
+            burneddUSDPayback_New = pd.to_numeric(temp[temp[1].str.contains('@DUSD').fillna(False)][1].str[2:-6])       # dUSD payback only as list available
+            vaultsData['burnedPayback'] = pd.concat([burnedDFIPayback_Old, burnedDFIPayback_New])
+            vaultsData['burnedPaybackDUSD'] = burneddUSDPayback_New
+
 
             sumValues = [item for item in vaultsData.columns if "sum" in item]
             liveTicker = [item[7:]+'-USD' for item in vaultsData.columns if (("sumLoan") in item) & ~(('sumLoanLiquidation') in item)]
@@ -680,15 +696,15 @@ class defichainAnalyticsModelClass:
             ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist
             self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
             self.hourlyData = self.hourlyData.merge(vaultsData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
-
             self.updated_vaults = fileInfo.stat()
-            print('>>>> Vaults data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+            print('>>>> Vaults data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadDFIPFuturesData(self):
         print('>>>> Start update DFIP futures data ... <<<<')
         filePath = self.dataPath + 'DFIPFuturesData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_DFIPFutures:
+            tStart = time.time()
             DFIPFuturesData = pd.read_csv(filePath, index_col=0)
             DFIPFuturesData['timeRounded'] = pd.to_datetime(DFIPFuturesData.index).floor('H')
             DFIPFuturesData.set_index(['timeRounded'], inplace=True)
@@ -699,13 +715,14 @@ class defichainAnalyticsModelClass:
             self.hourlyData = self.hourlyData.merge(DFIPFuturesData, how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.updated_DFIPFutures = fileInfo.stat()
-            print('>>>> DFIP futures data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+            print('>>>> DFIP futures data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadBSCBridgeData(self):
         print('>>>> Start update BSC bridge data ... <<<<')
         filePath = self.dataPath + 'bscDFIBridgeData.csv'
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_BSCBridge:
+            tStart = time.time()
             BSCBridgeData = pd.read_csv(filePath, index_col=0)
             BSCBridgeData.index = pd.to_datetime(BSCBridgeData.index)
 
@@ -715,7 +732,7 @@ class defichainAnalyticsModelClass:
             self.hourlyData = self.hourlyData.merge(BSCBridgeData, how='outer', left_index=True, right_index=True)            # add new columns to daily table
 
             self.updated_BSCBridge = fileInfo.stat()
-            print('>>>> BSC bridge data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index)))
+            print('>>>> BSC bridge data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
 
     #### MINUTELY DATA ####
