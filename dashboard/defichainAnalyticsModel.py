@@ -495,43 +495,44 @@ class defichainAnalyticsModelClass:
         fileInfo = pathlib.Path(filePath)
         if fileInfo.stat() != self.updated_dexHourly:
             tStart = time.time()
-            # hourlyDEXData = pd.read_csv(filePath, index_col=0,
-            #                             dtype={"DFIPrices": float, "DFIPricesBittrex": float, "Time": "string", "commission": float, "customRewards": "string",
-            #                                    "idTokenA": int, "idTokenB": int, 'numberAddresses': float, 'reserveA': float, 'reserveA/reserveB': float,
-            #                                    'reserveB': float, 'reserveB/reserveA':float, 'symbol': "string", 'totalLiquidity': float, 'rewardLoanPct': float})
+
             hourlyDEXData = pd.read_csv(filePath, header=0,
-                                        usecols=["DFIPrices", "DFIPricesBittrex", "Time", "idTokenA", "idTokenB", 'numberAddresses', 'reserveA', 'reserveA/reserveB',
+                                        usecols=["DFIPrices", "DFIPricesBittrex", "Time", 'numberAddresses', 'reserveA', 'reserveA/reserveB',
                                                'reserveB', 'reserveB/reserveA', 'symbol', 'totalLiquidity', '24hrTrading', '30dTrading', 'APRblock', 'APRcommission'],
                                         dtype={"DFIPrices": float, "DFIPricesBittrex": float, "Time": "string",
-                                               "idTokenA": int, "idTokenB": int, 'numberAddresses': float, 'reserveA': float, 'reserveA/reserveB': float,
+                                                'numberAddresses': float, 'reserveA': float, 'reserveA/reserveB': float,
                                                'reserveB': float, 'reserveB/reserveA':float, 'symbol': "string", 'totalLiquidity': float, '24hrTrading': float, '30dTrading': float})
 
             hourlyDEXData['timeRounded'] = pd.to_datetime(hourlyDEXData.Time).dt.floor('H')
             hourlyDEXData.set_index(['timeRounded'], inplace=True)
             hourlyDEXData['reserveA_DFI'] = hourlyDEXData['reserveA'] / hourlyDEXData['DFIPrices']
+
+            priceUSDT = hourlyDEXData[hourlyDEXData.symbol == 'USDT-DFI'].DFIPrices
+            priceBTC = hourlyDEXData[hourlyDEXData.symbol == 'BTC-DFI'].DFIPrices
+
+            dfDataCollecting = pd.DataFrame() # temporary dataframe for iterative merge => less data results in higher speed
             for poolSymbol in hourlyDEXData.symbol.dropna().unique():
-
                 df2Add = hourlyDEXData[hourlyDEXData.symbol == poolSymbol]
-                df2Add = df2Add.drop(columns=['Time', 'symbol', 'idTokenA', 'idTokenB'])
+                df2Add = df2Add.drop(columns=['Time', 'symbol'])
 
-                # calculate locked DFI and corresponding values
-                df2Add = df2Add.assign(lockedDFI=df2Add['reserveB'] + df2Add['reserveA_DFI'])
-                df2Add = df2Add.assign(lockedUSD=df2Add['lockedDFI']*hourlyDEXData[hourlyDEXData.symbol == 'USDT-DFI'].DFIPrices)
-                df2Add = df2Add.assign(lockedBTC=df2Add['lockedDFI'] * hourlyDEXData[hourlyDEXData.symbol == 'BTC-DFI'].DFIPrices)
+                df2Add['lockedDFI'] = df2Add['reserveB'] + df2Add['reserveA_DFI']
+                df2Add['lockedUSD'] = df2Add['lockedDFI'] * priceUSDT
+                df2Add['lockedDFI'] = df2Add['lockedDFI'] * priceBTC
 
                 # calculate relative price deviations
-                df2Add = df2Add.assign(relPriceDevCoingecko=((df2Add['DFIPrices'] - df2Add['reserveA/reserveB'])/df2Add['DFIPrices']))
-                df2Add = df2Add.assign(relPriceDevBittrex=((df2Add['DFIPricesBittrex'] - df2Add['reserveA/reserveB']) / df2Add['DFIPricesBittrex']))
+                df2Add['relPriceDevCoingecko'] = ((df2Add['DFIPrices'] - df2Add['reserveA/reserveB'])/df2Add['DFIPrices'])
+                df2Add['relPriceDevBittrex'] = ((df2Add['DFIPricesBittrex'] - df2Add['reserveA/reserveB']) / df2Add['DFIPricesBittrex'])
 
                 # add prefix to column names for pool identification
                 colNamesOrig = df2Add.columns.astype(str)
                 colNamesNew = poolSymbol+'_' + colNamesOrig
                 df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
 
-                # delete existing information and add new one
-                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
-                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
-                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+                dfDataCollecting = dfDataCollecting.merge(df2Add, how='outer', left_index=True, right_index=True) # merge current ticker with already loaded ones
+
+            ind2Delete = self.hourlyData.columns.intersection(dfDataCollecting.columns)     # columns already available in hourly data set
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                          # deleten old, existing columns
+            self.hourlyData = self.hourlyData.merge(dfDataCollecting, how='outer', left_index=True, right_index=True)  # add new columns to daily table
 
             self.hourlyData['Date'] = pd.to_datetime(self.hourlyData.index).strftime('%Y-%m-%d')
             self.updated_dexHourly = fileInfo.stat()
