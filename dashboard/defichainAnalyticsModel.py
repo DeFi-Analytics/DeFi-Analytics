@@ -517,7 +517,7 @@ class defichainAnalyticsModelClass:
 
                 df2Add['lockedDFI'] = df2Add['reserveB'] + df2Add['reserveA_DFI']
                 df2Add['lockedUSD'] = df2Add['lockedDFI'] * priceUSDT
-                df2Add['lockedDFI'] = df2Add['lockedDFI'] * priceBTC
+                df2Add['lockedBTC'] = df2Add['lockedDFI'] * priceBTC
 
                 # calculate relative price deviations
                 df2Add['relPriceDevCoingecko'] = ((df2Add['DFIPrices'] - df2Add['reserveA/reserveB'])/df2Add['DFIPrices'])
@@ -610,6 +610,7 @@ class defichainAnalyticsModelClass:
             tokenData['timeRounded'] = pd.to_datetime(tokenData.Time).dt.floor('H')
             tokenData.set_index(['timeRounded'], inplace=True)
 
+            dfDataCollecting = pd.DataFrame() # temporary dataframe for iterative merge => less data results in higher speed
             for coinSymbol in tokenData['symbol'].unique():
                 df2Add = tokenData[tokenData['symbol']==coinSymbol][['Burned', 'minted', 'Collateral']]
                 df2Add['tokenDefiChain'] = df2Add['minted'] - df2Add['Burned'].fillna(0)
@@ -620,10 +621,11 @@ class defichainAnalyticsModelClass:
                 colNamesNew = coinSymbol + '_' + colNamesOrig
                 df2Add = df2Add.rename(columns=dict(zip(colNamesOrig, colNamesNew)))
 
-                # delete existing information and add new one
-                ind2Delete = self.hourlyData.columns.intersection(colNamesNew)                                          # check if columns exist
-                self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                          # delete existing columns to add new ones
-                self.hourlyData = self.hourlyData.merge(df2Add, how='outer', left_index=True, right_index=True)           # add new columns to daily table
+                dfDataCollecting = dfDataCollecting.merge(df2Add, how='outer', left_index=True, right_index=True)  # merge current ticker with already loaded ones
+
+            ind2Delete = self.hourlyData.columns.intersection(dfDataCollecting.columns)  # columns already available in hourly data set
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)  # deleten old, existing columns
+            self.hourlyData = self.hourlyData.merge(dfDataCollecting, how='outer', left_index=True, right_index=True)  # add new columns to daily table
 
             self.updated_tokenCryptos = fileInfo.stat()
             print('>>>> DAT Cryptos data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
