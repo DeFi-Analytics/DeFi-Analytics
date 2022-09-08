@@ -43,7 +43,7 @@ class tvlViewClass:
         TVLOverall = (data['BTC-DFI_lockedDFI']+data['ETH-DFI_lockedDFI']+data['USDT-DFI_lockedDFI'] +
                       data['DOGE-DFI_lockedDFI'].fillna(0)+data['LTC-DFI_lockedDFI'].fillna(0) +
                       data['BCH-DFI_lockedDFI'].fillna(0) + data['USDC-DFI_lockedDFI'].fillna(0) +
-                      data['DUSD-DFI_reserveB'].fillna(0)) * DFIPrice  # DFI is USD is highest price of the 3
+                      data['DUSD-DFI_reserveB'].fillna(0) + data['USDT-DUSD_reserveA'].fillna(0) + data['USDC-DUSD_reserveA'].fillna(0)) * DFIPrice
 
         lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
@@ -63,17 +63,26 @@ class tvlViewClass:
         trace_TVLETH = dict(type='scatter', name='ETH', x=data['ETH-DFI_'+columnName].dropna().index, y=data['ETH-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#617dea'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
-        trace_TVLDFI_dUSD = dict(type='scatter', name='dUSD (only DFI part)', x=data['DUSD-DFI_reserveB'].dropna().index, y=(data['DUSD-DFI_reserveB'] * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLDFI_dUSD = dict(type='scatter', name='dUSD-DFI (only DFI part)',
+                                 x=data['DUSD-DFI_reserveB'].dropna().index, y=(data['DUSD-DFI_reserveB'] * DFIPrice).dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#ff9800'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
+        trace_TVLUSDT_dUSD = dict(type='scatter', name='dUSD-USDT (only USDT part)',
+                                  x=data['USDT-DUSD_reserveA'].dropna().index, y=(data['USDT-DUSD_reserveA'] * DFIPrice).dropna(), stackgroup='one',
+                             mode='lines', line=dict(color='#105c29'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_TVLUSDT = dict(type='scatter', name='USDT', x=data['USDT-DFI_'+columnName].dropna().index, y=data['USDT-DFI_'+columnName].dropna(), stackgroup='one',
                              mode='lines', line=dict(color='#22b852'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+
         trace_TVLDOGE = dict(type='scatter', name='DOGE', x=data['DOGE-DFI_'+columnName].dropna().index, y=data['DOGE-DFI_'+columnName].dropna(), stackgroup='one',
                              mode='lines', line=dict(color='#c2a634'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_TVLLTC = dict(type='scatter', name='LTC', x=data['LTC-DFI_'+columnName].dropna().index, y=data['LTC-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_TVLBCH = dict(type='scatter', name='BCH', x=data['BCH-DFI_'+columnName].dropna().index, y=data['BCH-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#410eb2'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+
+        trace_TVLUSDC_dUSD = dict(type='scatter', name='dUSD-USDC (only USDC part)',
+                                  x=data['USDC-DUSD_reserveA'].dropna().index, y=(data['USDC-DUSD_reserveA'] * DFIPrice).dropna(), stackgroup='one',
+                             mode='lines', line=dict(color='#3f2600'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_TVLUSDC = dict(type='scatter', name='USDC', x=data['USDC-DFI_'+columnName].dropna().index, y=data['USDC-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
@@ -84,7 +93,9 @@ class tvlViewClass:
         figTVL.add_trace(trace_TVLBTC, 1, 1)
         figTVL.add_trace(trace_TVLETH, 1, 1)
         figTVL.add_trace(trace_TVLDFI_dUSD, 1, 1)
+        figTVL.add_trace(trace_TVLUSDT_dUSD, 1, 1)
         figTVL.add_trace(trace_TVLUSDT, 1, 1)
+        figTVL.add_trace(trace_TVLUSDC_dUSD, 1, 1)
         figTVL.add_trace(trace_TVLUSDC, 1, 1)
         figTVL.add_trace(trace_TVLLTC, 1, 1)
         figTVL.add_trace(trace_TVLBCH, 1, 1)
