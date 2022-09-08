@@ -82,7 +82,7 @@ class pricesDTokenViewClass:
             dataDEX_USDT = (data['DUSD-DFI_reserveB/reserveA']*data['USDT-DFI_reserveA/reserveB']).dropna()
             dataOracle = (data['DFI-USD']/data['DFI-USD']).dropna()
             selectionDEX = dataDEX != 0
-            figPrices.update_yaxes(range=[0.70, 1.1])
+            figPrices.update_yaxes(range=[0.60, 1.4])
         elif representation =='DFI':
             dataDEX = data['DUSD-DFI_reserveA/reserveB'].dropna()
             dataDEX_USDT = data['USDT-DFI_reserveA/reserveB'].dropna()
@@ -106,9 +106,21 @@ class pricesDTokenViewClass:
         trace_priceDEXUSDT = dict(type='scatter', name='DEX price in dUSDT', x=dataDEX_USDT.index, y=dataDEX_USDT,
                               mode='lines', line=dict(color='#ff9fe2', dash='dot'), line_width=3, hovertemplate='%{y:.f}')
 
+        if representation =='DUSD':
+            trace_priceDEX['name'] = 'DEX price of dUSD-DFI pool'
+            trace_priceDEXUSDT['name'] = 'DEX price of dUSD-DFI pool in USDT'
+            trace_priceDEX_USDTPool = dict(type='scatter', name='DEX price of dUSD-USDT pool', x=data['USDT-DUSD_reserveA/reserveB'].dropna().index, y=data['USDT-DUSD_reserveA/reserveB'].dropna(),
+                                 mode='lines', line=dict(color='#00ac84'), line_width=3, hovertemplate='%{y:.f}')
+            trace_priceDEX_USDCPool = dict(type='scatter', name='DEX price of dUSD-USDC pool', x=data['USDC-DUSD_reserveA/reserveB'].dropna().index, y=data['USDC-DUSD_reserveA/reserveB'].dropna(),
+                                 mode='lines', line=dict(color='#2975ca'), line_width=3, hovertemplate='%{y:.f}')
+
         figPrices.add_trace(trace_priceDEX, 1, 1)
         figPrices.add_trace(trace_priceOracle, 1, 1)
         figPrices.add_trace(trace_priceDEXUSDT, 1, 1)
+
+        if representation =='DUSD':
+            figPrices.add_trace(trace_priceDEX_USDTPool, 1, 1)
+            figPrices.add_trace(trace_priceDEX_USDCPool, 1, 1)
 
         figPrices.update_yaxes(title_text='dToken price', gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figPrices.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',
