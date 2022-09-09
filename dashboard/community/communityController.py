@@ -25,6 +25,7 @@ from .dobby.dobbyViews import dobbyViewClass
 from .dobby.dobbyCallbacks import dobbyCallbacksClass
 
 from .cfp.cfpView import cfpViewClass
+from .cfp.cfpCallbacks import cfpCallbacksClass
 
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -69,6 +70,7 @@ class communityControllerClass:
 
         # initialize cfp classes
         self.cfpView = cfpViewClass()
+        self.cfpViewCallbacks = cfpCallbacksClass(self.defichainAnalyticsModel, self.cfpView, app)
 
     def getContent(self, entry):
         pageContent = None
@@ -80,7 +82,7 @@ class communityControllerClass:
             pageContent = self.followerView.getTwitterFollowerContent()
         elif entry in ['cfp']:
             self.defichainAnalyticsModel.loadCFPData()
-            pageContent = self.cfpView.getCFPContent(self.defichainAnalyticsModel.cfpData)
+            pageContent = self.cfpView.getCFPContent()
         elif entry in ["analytics"]:
             self.defichainAnalyticsModel.loadAnalyticsVisitsData()
             pageContent = self.analyticsView.getAnalyticsContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
