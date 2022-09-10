@@ -42,7 +42,7 @@ class tvlVaultsViewClass:
                       data['sumDFI'] + \
                           data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] + \
                           data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] + \
-                          data['sumDUSD'].fillna(0) / data['DUSD-DFI_reserveA/reserveB'].fillna(0)) * DFIPrice
+                          data['sumDUSD'].fillna(0) / data['USDT-DFI_DFIPrices']) * DFIPrice        # using USDT DFI price to count every dUSD worth $1
 
         lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
@@ -76,8 +76,8 @@ class tvlVaultsViewClass:
                              y=(data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
-        trace_TVLDUSD = dict(type='scatter', name='dUSD', x=(data['sumDUSD'] / data['DUSD-DFI_reserveA/reserveB']).dropna().index,
-                             y=(data['sumDUSD'] / data['DUSD-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLDUSD = dict(type='scatter', name='dUSD', x=(data['sumDUSD'] / data['USDT-DFI_DFIPrices']).dropna().index,
+                             y=(data['sumDUSD'] / data['USDT-DFI_DFIPrices'] * DFIPrice).dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # overall TVL graph

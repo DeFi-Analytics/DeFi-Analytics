@@ -163,6 +163,13 @@ class nbDTokenViewClass:
                                             mode='lines', line=dict(color='#5c0fff'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dTokenFuturesLocked, 1, 1)
 
+        if representation == 'DUSD':
+            nbDUSDNotInVaults = dTokenCircAmount-data['sumDUSD']
+            trace_nbDUSD_NotInVaults = dict(type='scatter', name='number circulating dUSD w/o vaults',
+                                  x=nbDUSDNotInVaults.dropna().index, y=nbDUSDNotInVaults.dropna(),
+                                  mode='lines', line=dict(color='#00ac84'), line_width=3, hovertemplate='%{y:,.f} '+representation, fill='none')
+            figNbDToken.add_trace(trace_nbDUSD_NotInVaults, 1, 1)
+
 
         figNbDToken.update_yaxes(title_text='number dTokens', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figNbDToken.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',
