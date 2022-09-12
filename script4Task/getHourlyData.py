@@ -177,8 +177,30 @@ def getVaultsData(timeStampData):
         burnedPayback = np.NaN
         burnedDFIPayback = np.NaN
 
-    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD', 'sumETH']+dfOracle.index.to_list()+['burnedAuction', 'burnedPayback','burnedDFIPayback','dfipaybacktokens', 'dexfeetokens'],
-                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+[burnedAuction, burnedPayback, burnedDFIPayback, dfipaybacktokens, dexfeetokens])
+    # check burn address
+    linkBurnAddress = 'https://ocean.defichain.com/v0/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm/tokens?size=30'
+    siteContent = requests.get(linkBurnAddress)
+    try:
+        tempData = json.loads(siteContent.text)
+        burnedOverallDUSD = float(tempData['data'][8]['amount'])
+    except:
+        print('### Error burnAddress ###')
+        burnedOverallDUSD = np.NaN
+
+    # get minted value
+    linkBurnAddress = 'https://ocean.defichain.com/v0/mainnet/tokens/15'
+    siteContent = requests.get(linkBurnAddress)
+    try:
+        tempData = json.loads(siteContent.text)
+        mintedDUSD = float(tempData['data']['minted'])
+    except:
+        print('### Error minted token ###')
+        mintedDUSD = np.NaN
+
+    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD', 'sumETH']+dfOracle.index.to_list()+
+                                ['burnedAuction', 'burnedPayback','burnedDFIPayback','dfipaybacktokens', 'dexfeetokens','burnedOverallDUSD', 'mintedDUSD'],
+                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+
+                                [burnedAuction, burnedPayback, burnedDFIPayback, dfipaybacktokens, dexfeetokens, burnedOverallDUSD, mintedDUSD])
 
     print('   get all vaults via API')
     # API request current vaults
