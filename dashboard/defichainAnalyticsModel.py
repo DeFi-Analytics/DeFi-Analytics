@@ -668,7 +668,6 @@ class defichainAnalyticsModelClass:
             lastString = vaultsData['dexfeetokens'][-1]
             listTokens = re.findall("@(.+?)'", lastString)
 
-            tStart2 = time.time()
             for tokenSymbol in listTokens:
                 colString = vaultsData['dexfeetokens'][vaultsData['dexfeetokens'].str.contains('@'+tokenSymbol).fillna(False)]
                 burnedToken = colString.str.split('@'+tokenSymbol, expand=True)[0].str.rsplit("'",n=1, expand=True).iloc[:,-1]           # first column contains the number at the end
@@ -691,8 +690,8 @@ class defichainAnalyticsModelClass:
             liveTicker = [item[7:]+'-USD' for item in vaultsData.columns if (("sumLoan") in item) & ~(('sumLoanLiquidation') in item)]
             liveTicker += ['DFI-USD']
 
-            columns2update = burnedValues + sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'burnedDFIPayback', 'MIN150', 'MIN175',
-                                                       'MIN200', 'MIN350', 'MIN500', 'MIN1000', 'DUSDpaidDFI']
+            columns2update = burnedValues + sumValues + liveTicker + ['nbLiquidation', 'nbLoans', 'nbVaults', 'burnedAuction', 'burnedPayback', 'burnedDFIPayback', 'burnedPaybackDUSD', 'MIN150', 'MIN175',
+                                                       'MIN200', 'MIN350', 'MIN500', 'MIN1000', 'DUSDpaidDFI', 'mintedDUSDnode','burnedOverallDUSD']
             columns2update.remove('DUSD-USD')
 
             # delete existing information and add new one

@@ -84,14 +84,14 @@ class nbDTokenViewClass:
         # calculate circulating amount
         basisGraph = data['sumLoan' + representation].interpolate(method='pad', limit_direction='forward').dropna()
         dTokenCircAmount = basisGraph
+        if 'sumLoanLiquidation' + representation in data.columns:
+            dataLoanLiquidation = data['sumLoanLiquidation' + representation].interpolate(method='linear',limit_direction='forward').fillna(0)
+            dataLoanLiquidation = dataLoanLiquidation.loc[basisGraph.index]
+            dTokenCircAmount = dTokenCircAmount + dataLoanLiquidation
         if 'DFIPFuture_minted_' + representation in data.columns:
             dataFutureMinted = data['DFIPFuture_minted_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0).cummax()
             dataFutureMinted = dataFutureMinted.loc[basisGraph.index]
             dTokenCircAmount = dTokenCircAmount + dataFutureMinted
-        if representation == 'DUSD':
-            dataDUSDpaidDFI = data['DUSDpaidDFI'].interpolate(method='pad', limit_direction='forward').fillna(0).cummax()
-            dataDUSDpaidDFI = dataDUSDpaidDFI.loc[basisGraph.index]
-            dTokenCircAmount = dTokenCircAmount + dataDUSDpaidDFI
         if 'DFIPFuture_burned_' + representation in data.columns:
             dataFutureBurned = data['DFIPFuture_burned_' + representation].interpolate(method='pad', limit_direction='forward').fillna(0).cummax()
             dataFutureBurned = dataFutureBurned.loc[basisGraph.index]
@@ -111,6 +111,23 @@ class nbDTokenViewClass:
                 dTokenLocked = dataFutureCurrent
             dTokenCircAmount = dTokenCircAmount - dTokenLocked
 
+        if representation == 'DUSD':
+            # minted dUSD
+            dataDUSDpaidDFI = data['DUSDpaidDFI'].interpolate(method='pad', limit_direction='forward').fillna(0).cummax() # minted via DFI payback
+            dataDUSDpaidDFI = dataDUSDpaidDFI.loc[basisGraph.index]
+
+            dataDUSDalgoNegInterest = data['mintedDUSDnode'].interpolate(method='pad', limit_direction='forward').fillna(0)                    # minted via negative interest (diff overall minted and rest)
+            dataDUSDalgoNegInterest = dataDUSDalgoNegInterest.subtract(dataLoanLiquidation).subtract(dataDUSDpaidDFI).subtract(dataFutureMinted).  \
+                                      subtract(data['sumLoan' + representation].interpolate(method='linear', limit_direction='forward').fillna(0)).loc[basisGraph.index].clip(lower=0)
+
+            # burned dUSD part
+            dataDUSDpaidInterest = data['burnedPaybackDUSD'].interpolate(method='linear', limit_direction='forward').fillna(0).cummax() # burned via dToken interest payback
+            dataDUSDpaidInterest = dataDUSDpaidInterest.loc[basisGraph.index]
+
+            dataDUSDburnedAuctionAddress = data['burnedOverallDUSD'].interpolate(method='linear', limit_direction='forward').fillna(0) # burned via auction fee & send to burn address
+            dataDUSDburnedAuctionAddress = dataDUSDburnedAuctionAddress.subtract(dataDUSDpaidInterest).subtract(dataBurned).loc[basisGraph.index].clip(lower=0)
+
+            dTokenCircAmount = dTokenCircAmount + dataDUSDpaidDFI + dataDUSDalgoNegInterest - dataDUSDpaidInterest - dataDUSDburnedAuctionAddress
 
         trace_nbDToken = dict(type='scatter', name='number circulating dTokens',
                               x=dTokenCircAmount.dropna().index, y=dTokenCircAmount.dropna(),
@@ -118,24 +135,37 @@ class nbDTokenViewClass:
 
 
         ### minted parts
-        # graph for minted dTokens with a loan
+        # graph for minted dTokens with a loans in liquidation
+        if 'sumLoanLiquidation' + representation in data.columns:
+            trace_dTokenLoanLiquidation = dict(type='scatter', name='dTokens with loans in liquidation', x=dataLoanLiquidation.index, y=dataLoanLiquidation,
+                                mode='lines', line=dict(color='#7c0055'), fillcolor='rgba(124,0,85,0.8)', line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tozeroy')
+            figNbDToken.add_trace(trace_dTokenLoanLiquidation, 1, 1)
+
         trace_dTokenLoan = dict(type='scatter', name='dTokens with loans',
                                 x=data['sumLoan' + representation].interpolate(method='linear',limit_direction='forward').dropna().index,
                                 y=data['sumLoan' + representation].interpolate(method='linear',limit_direction='forward').dropna(),
-                                mode='lines', line=dict(color='#f800aa'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tozeroy')
+                                mode='lines', line=dict(color='#f800aa'),  line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
         figNbDToken.add_trace(trace_dTokenLoan, 1, 1)
 
         # graph for minted dTokens via a futures swap
         if 'DFIPFuture_minted_' + representation in data.columns:
             trace_dTokenFuturesMint = dict(type='scatter', name='dTokens minted via Futures swap', x=dataFutureMinted.index, y=dataFutureMinted,
-                                            mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+                                            mode='lines', line=dict(color='#711714'), fillcolor='rgba(112,23,20,0.7)', line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dTokenFuturesMint, 1, 1)
+
+        # DUSD minted via neg interest rate
+        if representation=='DUSD':
+            trace_dUSDPaid = dict(type='scatter', name='algo dUSD (realized neg. interest)', x=dataDUSDalgoNegInterest.index, y=dataDUSDalgoNegInterest,
+                                  mode='lines', line=dict(color='#ec9b98'), fillcolor='rgba(236,154,151,0.7)', line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dUSDPaid, 1, 1)
 
         # dUSD minted via DFI burn
         if representation=='DUSD':
-            trace_dUSDPaid = dict(type='scatter', name='dUSD without loans (paid with DFI)', x=dataDUSDpaidDFI.index, y=dataDUSDpaidDFI,
-                                  mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            trace_dUSDPaid = dict(type='scatter', name='algo dUSD (DFI payback)', x=dataDUSDpaidDFI.index, y=dataDUSDpaidDFI,
+                                  mode='lines', line=dict(color='#acfffd'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dUSDPaid, 1, 1)
+
+
 
         # plot circulating supply
         figNbDToken.add_trace(trace_nbDToken, 1, 1)
@@ -154,6 +184,16 @@ class nbDTokenViewClass:
             trace_dTokenFuturesBurn = dict(type='scatter', name='dTokens burned via Futures swap', x=dataFutureBurned.index, y=dataFutureBurned,
                                             mode='lines', line=dict(color='#171717'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dTokenFuturesBurn, 1, 1)
+
+        # graph for burned dUSD via paid interest & auction/direct address burn
+        if representation=='DUSD':
+            trace_dUSDinterestBurn = dict(type='scatter', name='dUSD burned via paid interest', x=dataDUSDpaidInterest.index, y=dataDUSDpaidInterest,
+                                            mode='lines', line=dict(color='#000000'), fillcolor='rgba(0,0,0,0.6)', line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dUSDinterestBurn, 1, 1)
+
+            trace_dUSDAuctionAddressBurn = dict(type='scatter', name='dUSD burned via auction fee/sent to burn address', x=dataDUSDburnedAuctionAddress.index, y=dataDUSDburnedAuctionAddress,
+                                            mode='lines', line=dict(color='#000000'), fillcolor='rgba(0,0,0,0.8)', line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dUSDAuctionAddressBurn, 1, 1)
 
         # graph for locked dTokens for next futures swap
         if 'DFIPFuture_current_' + representation in data.columns:
