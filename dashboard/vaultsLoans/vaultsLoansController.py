@@ -26,6 +26,8 @@ from .burnedDFI.burnedDFICallbacks import burnedDFICallbacksClass
 from .scheme.schemeView import schemeViewClass
 from .scheme.schemeCallbacks import schemeCallbacksClass
 
+from .dUSDMeasures.dUSDMeasuresView import dUSDMeasuresViewClass
+
 class vaultsLoansControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -66,6 +68,10 @@ class vaultsLoansControllerClass:
         self.schemeView = schemeViewClass()
         self.schemeCallbacks = schemeCallbacksClass(self.defichainAnalyticsModel, self.schemeView, app)
 
+        # initialize dUSD measures classes
+        self.dUSDMeasuresView = dUSDMeasuresViewClass()
+        # self.schemeCallbacks = schemeCallbacksClass(self.defichainAnalyticsModel, self.schemeView, app)
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "nbVaults"]:
@@ -101,5 +107,9 @@ class vaultsLoansControllerClass:
             self.defichainAnalyticsModel.loadHourlyDEXdata()
             self.defichainAnalyticsModel.loadVaultData()
             pageContent = self.premiumDTokenView.getPremiumDTokenContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
+        elif entry == 'dUSDMeasures':
+            # self.defichainAnalyticsModel.loadHourlyDEXdata()
+            # self.defichainAnalyticsModel.loadVaultData()
+            pageContent = self.dUSDMeasuresView.getdUSDMeasuresContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent

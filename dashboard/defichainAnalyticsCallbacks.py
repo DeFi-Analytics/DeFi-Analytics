@@ -57,6 +57,7 @@ class defichainAnalyticsCallbacksClass:
                                              Input('partAlgoCirc', 'n_clicks_timestamp'),
                                              Input('interest', 'n_clicks_timestamp'),
                                              Input('burnedDFI', 'n_clicks_timestamp'),
+                                             Input('dUSDMeasures', 'n_clicks_timestamp'),
                                              Input('scheme', 'n_clicks_timestamp'),
 
                                              Input('liquidityBridge', 'n_clicks_timestamp'),
@@ -257,6 +258,7 @@ class defichainAnalyticsCallbacksClass:
                                    'partAlgoCirc',
                                    'interest',
                                    'burnedDFI',
+                                   'dUSDMeasures',
                                    'scheme',
 
                                    'liquidityBridge',
@@ -314,6 +316,7 @@ class defichainAnalyticsCallbacksClass:
                                             Output('partAlgoCirc', 'className'),
                                             Output('interest', 'className'),
                                             Output('burnedDFI', 'className'),
+                                            Output('dUSDMeasures', 'className'),
                                             Output('scheme', 'className'),
 
                                             Output('liquidityBridge', 'className'),
