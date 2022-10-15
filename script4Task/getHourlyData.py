@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 import json
 import numpy as np
-
+import ast
 from bscScanCredentials import apiKeyToken
 
 
@@ -161,7 +161,7 @@ def getVaultsData(timeStampData):
             tempDataDict[item['id']] = item['price']['aggregated']['amount']
         dfOracle = dfOracle.append(pd.DataFrame(data=tempDataDict.values(), index=tempDataDict.keys()))
 
-    linkBurninfo = 'http://main.mackchain.de/api/getburninfo'
+    linkBurninfo = 'https://api.mydefichain.com/v1/getburninfo/'
     siteContent = requests.get(linkBurninfo)
     try:
         tempData = json.loads(siteContent.text)
@@ -187,9 +187,9 @@ def getVaultsData(timeStampData):
         print('### Error burnAddress ###')
         burnedOverallDUSD = np.NaN
 
-    # get minted value
-    linkBurnAddress = 'https://ocean.defichain.com/v0/mainnet/tokens/15'
-    siteContent = requests.get(linkBurnAddress)
+    # get minted value from ocean
+    linkMintedOcean = 'https://ocean.defichain.com/v0/mainnet/tokens/15'
+    siteContent = requests.get(linkMintedOcean)
     try:
         tempData = json.loads(siteContent.text)
         mintedDUSD = float(tempData['data']['minted'])
@@ -197,10 +197,20 @@ def getVaultsData(timeStampData):
         print('### Error minted token ###')
         mintedDUSD = np.NaN
 
+    # get minted value from node
+    linkMintedNode = 'https://api.mydefichain.com/v1/gettoken/'
+    siteContent = requests.get(linkMintedNode)
+    try:
+        tempData = json.loads(siteContent.text)
+        mintedDUSDNode = float(tempData['15']['minted'])
+    except:
+        print('### Error minted token from Node ###')
+        mintedDUSDNode = np.NaN
+
     vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD', 'sumETH']+dfOracle.index.to_list()+
-                                ['burnedAuction', 'burnedPayback','burnedDFIPayback','dfipaybacktokens', 'dexfeetokens','burnedOverallDUSD', 'mintedDUSD'],
+                                ['burnedAuction', 'burnedPayback','burnedDFIPayback','dfipaybacktokens', 'dexfeetokens','burnedOverallDUSD', 'mintedDUSD', 'mintedDUSDnode'],
                           data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+
-                                [burnedAuction, burnedPayback, burnedDFIPayback, dfipaybacktokens, dexfeetokens, burnedOverallDUSD, mintedDUSD])
+                                [burnedAuction, burnedPayback, burnedDFIPayback, dfipaybacktokens, dexfeetokens, burnedOverallDUSD, mintedDUSD, mintedDUSDNode])
 
     print('   get all vaults via API')
     # API request current vaults
@@ -250,6 +260,72 @@ def getVaultsData(timeStampData):
 
     print('   finished vaults/loans data acquisition')
 
+def getDUSDBurnBotData():
+    # generate filepath relative to script location
+    filepathTxList = path + 'dUSDBornBotTx.csv'
+    filepathBurnAmount = path + 'dUSDBornBotAmounts.csv'
+    print('   start dUSD burn bot data acquisition')
+
+
+    ######### get all swaps #########
+
+    dfBurnBotOldTxList = pd.read_csv(filepathTxList, index_col=0)
+    dfBurnBotOldTxList.index = pd.to_datetime(dfBurnBotOldTxList.index)
+
+    # get the first 200 entries of burn bot listaccounthistory
+    link = 'https://ocean.defichain.com/v0/mainnet/address/df1qa6qjmtuh8fyzqyjjsrg567surxu43rx3na7yah/history?size=20'
+    siteContent = requests.get(link)
+    apiContentAsDict = ast.literal_eval(siteContent.text)
+    dfBurnBotTxList = pd.DataFrame(apiContentAsDict['data'])
+
+    dfBurnBotTxList = dfBurnBotTxList[~dfBurnBotTxList['txid'].isin(dfBurnBotOldTxList['txid'])]
+
+    if dfBurnBotTxList.shape[0] > 0:
+        # get the rest of listaccounthistory
+        while ('page' in apiContentAsDict) & (dfBurnBotTxList.shape[0].__mod__(20) == 0):
+            link = 'https://ocean.defichain.com/v0/mainnet/address/df1qa6qjmtuh8fyzqyjjsrg567surxu43rx3na7yah/history?size=200&next=' + apiContentAsDict['page']['next']
+            siteContent = requests.get(link)
+            apiContentAsDict = ast.literal_eval(siteContent.text)
+            dfBurnBotTxList = dfBurnBotTxList.append(pd.DataFrame(apiContentAsDict['data']))
+
+        dfBurnBotTxList.reset_index(inplace=True, drop=True)
+        dfBurnBotTxList = pd.concat([dfBurnBotTxList, dfBurnBotTxList['block'].apply(pd.Series)], axis=1)
+        dfBurnBotTxList.drop(columns=['owner', 'txn', 'block', 'hash'], inplace=True)
+        dfBurnBotTxList = dfBurnBotTxList[dfBurnBotTxList['type'] == 'PoolSwap']
+
+        # screen burn address for corresponding dUSD amount
+        # get the first 200 entries of burn bot listaccounthistory
+        link = 'https://ocean.defichain.com/v0/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm/history?size=200'
+        siteContent = requests.get(link)
+        apiContentAsDict = ast.literal_eval(siteContent.text)
+        dfBurnAddressTxList = pd.DataFrame(apiContentAsDict['data'])
+        dfBurnBotTxList = dfBurnBotTxList.merge(dfBurnAddressTxList[['txid', 'amounts']], left_on='txid', right_on='txid', how='left')
+        dfBurnBotTxList['amounts_y'] = pd.to_numeric(dfBurnBotTxList['amounts_y'].astype(str).str[2:-7]).fillna(0)
+
+        # get the rest of listaccounthistory
+        while ('page' in apiContentAsDict) & dfBurnBotTxList['amounts_y'].eq(0).any():
+            link = 'https://ocean.defichain.com/v0/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm/history?size=200&next=' + apiContentAsDict['page']['next']
+            siteContent = requests.get(link)
+            apiContentAsDict = ast.literal_eval(siteContent.text)
+            dfBurnAddressTxList = pd.DataFrame(apiContentAsDict['data'])
+            dfBurnBotTxList = dfBurnBotTxList.merge(dfBurnAddressTxList[['txid', 'amounts']], left_on='txid', right_on='txid', how='left')
+            dfBurnBotTxList['amounts'] = pd.to_numeric(dfBurnBotTxList['amounts'].astype(str).str[2:-7])
+            dfBurnBotTxList['amounts_y'] = dfBurnBotTxList['amounts_y'].fillna(0) + dfBurnBotTxList['amounts'].fillna(0)
+            dfBurnBotTxList.drop(columns=['amounts'], inplace=True)
+
+        dfBurnBotTxList['amounts_x'] = pd.to_numeric(dfBurnBotTxList['amounts_x'].astype(str).str[2:-6])
+        dfBurnBotTxList.set_index(pd.to_datetime(dfBurnBotTxList['time'], utc=True, unit='s'), inplace=True)
+        dfBurnBotTxList.rename(columns={"time": "timeRaw"}, inplace=True)
+    dfBurnBotTxList = dfBurnBotOldTxList.append(dfBurnBotTxList)
+    dfBurnBotTxList.sort_values(by=['height'], ascending=False, inplace=True)
+    dfBurnBotTxList.to_csv(filepathTxList)
+
+    ######### extract burned amount on hourly base #########
+    dfBurnedAmount = pd.DataFrame()
+    dfBurnedAmount['DUSDBurnBot_DFIAmount'] = dfBurnBotTxList['amounts_x'].groupby(pd.Grouper(freq='H')).sum()
+    dfBurnedAmount['DUSDBurnBot_DUSDAmount'] = dfBurnBotTxList['amounts_y'].groupby(pd.Grouper(freq='H')).sum()
+    dfBurnedAmount['DUSDBurnBot_SumDUSDAmount'] = dfBurnedAmount['DUSDBurnBot_DUSDAmount'].cumsum()
+    dfBurnedAmount.to_csv(filepathBurnAmount)
 
 timeStampData = pd.Timestamp.now()
 
@@ -274,3 +350,9 @@ try:
 except:
     print('### Error in BSC bridge data acquisition')
 
+# dUSD Burn Bot data
+try:
+    getDUSDBurnBotData()
+    print('dUSD Burn Bot data saved')
+except:
+    print('### Error in dUSD Burn Bot data acquisition')
