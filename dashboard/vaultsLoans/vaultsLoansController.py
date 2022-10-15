@@ -88,6 +88,7 @@ class vaultsLoansControllerClass:
         elif entry == 'nbDToken':
             self.defichainAnalyticsModel.loadVaultData()
             self.defichainAnalyticsModel.loadDFIPFuturesData()
+            self.defichainAnalyticsModel.loadDUSDBurnBotData()
             pageContent = self.nbDTokenView.getnbDTokenContent()
         elif entry == 'partAlgoCirc':
             self.defichainAnalyticsModel.loadVaultData()
@@ -110,6 +111,7 @@ class vaultsLoansControllerClass:
         elif entry == 'dUSDMeasures':
             # self.defichainAnalyticsModel.loadHourlyDEXdata()
             # self.defichainAnalyticsModel.loadVaultData()
+            self.defichainAnalyticsModel.loadDUSDBurnBotData
             pageContent = self.dUSDMeasuresView.getdUSDMeasuresContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent

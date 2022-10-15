@@ -124,8 +124,12 @@ class nbDTokenViewClass:
             dataDUSDpaidInterest = data['burnedPaybackDUSD'].interpolate(method='linear', limit_direction='forward').fillna(0).cummax() # burned via dToken interest payback
             dataDUSDpaidInterest = dataDUSDpaidInterest.loc[basisGraph.index]
 
+            dataDUSDburnBot = data['DUSDBurnBot_SumDUSDAmount'].interpolate(method='linear', limit_direction='forward').fillna(0) # burned via auction fee & send to burn address
+            dataDUSDburnBot = dataDUSDburnBot.loc[basisGraph.index]
+            dataBurned = dataBurned - dataDUSDburnBot # in case of dUSD the burned amount via bot must be removed from DEX fee burn
+
             dataDUSDburnedAuctionAddress = data['burnedOverallDUSD'].interpolate(method='linear', limit_direction='forward').fillna(0) # burned via auction fee & send to burn address
-            dataDUSDburnedAuctionAddress = dataDUSDburnedAuctionAddress.subtract(dataDUSDpaidInterest).subtract(dataBurned).loc[basisGraph.index].clip(lower=0)
+            dataDUSDburnedAuctionAddress = dataDUSDburnedAuctionAddress.subtract(dataDUSDpaidInterest).subtract(dataBurned).subtract(dataDUSDburnBot).loc[basisGraph.index].clip(lower=0)
 
             dTokenCircAmount = dTokenCircAmount + dataDUSDpaidDFI + dataDUSDalgoNegInterest - dataDUSDpaidInterest - dataDUSDburnedAuctionAddress
 
@@ -174,9 +178,14 @@ class nbDTokenViewClass:
         ### burned parts
 
         # graph for burned dTokens via swap fees
+        if representation=='DUSD':
+            trace_dTokenBurnBot = dict(type='scatter', name='dUSD burned via Bot', x=dataDUSDburnBot.index, y=dataDUSDburnBot,
+                                       mode='lines', line=dict(color='#a3a3a3'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dTokenBurnBot, 1, 1)
+
         if 'burned' + representation + 'DEX' in data.columns:
             trace_dTokenFeeBurn = dict(type='scatter', name='dTokens burned via DEX-Fee', x=dataBurned.index, y=dataBurned,
-                                       mode='lines', line=dict(color='#8d8d8d'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+                                       mode='lines', line=dict(color='#696969'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dTokenFeeBurn, 1, 1)
 
         # graph for burned dTokens via a futures swap

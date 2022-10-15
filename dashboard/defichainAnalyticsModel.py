@@ -60,6 +60,7 @@ class defichainAnalyticsModelClass:
         self.updated_cfpData = None
         self.updated_BSCBridge = None
         self.update_dUSDMeasure = None
+        self.updated_dUSDBurnBot = None
 
 
         # background image for figures
@@ -88,6 +89,7 @@ class defichainAnalyticsModelClass:
         self.loadDobbyDatabase()
         self.loadEmissionRateData()
         self.loadDUSDMeasureData()
+
 
 
 
@@ -506,6 +508,7 @@ class defichainAnalyticsModelClass:
         self.loadVaultData()
         self.loadDFIPFuturesData()
         self.loadBSCBridgeData()
+        self.loadDUSDBurnBotData()
 
 
     def loadHourlyDEXdata(self):
@@ -737,6 +740,24 @@ class defichainAnalyticsModelClass:
 
             self.updated_DFIPFutures = fileInfo.stat()
             print('>>>> DFIP futures data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
+
+    def loadDUSDBurnBotData(self):
+        print('>>>> Start update dUSD burn bot data ... <<<<')
+        filePath = self.dataPath + 'dUSDBornBotAmounts.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_dUSDBurnBot:
+            tStart = time.time()
+            dUSDBurnBot = pd.read_csv(filePath, index_col=0)
+            dUSDBurnBot['timeRounded'] = pd.to_datetime(dUSDBurnBot.index).tz_localize(None).floor('H')
+            dUSDBurnBot.set_index(['timeRounded'], inplace=True, drop=True)
+
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(dUSDBurnBot.columns)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(dUSDBurnBot, how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_dUSDBurnBot = fileInfo.stat()
+            print('>>>> dUSD burn bot data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadBSCBridgeData(self):
         print('>>>> Start update BSC bridge data ... <<<<')
