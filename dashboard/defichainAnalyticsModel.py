@@ -59,6 +59,7 @@ class defichainAnalyticsModelClass:
         self.updated_DFIPFutures = None
         self.updated_cfpData = None
         self.updated_BSCBridge = None
+        self.update_dUSDMeasure = None
 
 
         # background image for figures
@@ -86,6 +87,7 @@ class defichainAnalyticsModelClass:
         self.loadDFIsignalDatabase()
         self.loadDobbyDatabase()
         self.loadEmissionRateData()
+        self.loadDUSDMeasureData()
 
 
 
@@ -476,6 +478,23 @@ class defichainAnalyticsModelClass:
 
             self.update_coinPriceList = fileInfo.stat()
             print('>>>> Coin price list loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
+
+    def loadDUSDMeasureData(self):
+        print('>>>> Start update dUSD measure data ... <<<<')
+        filePath = self.dataPath + 'dUSDDailyData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.update_dUSDMeasure:
+            dUSDMeasureData = pd.read_csv(filePath, index_col=0)
+
+            columns2update = ['sellDUSDFee', 'interestDUSDLoans', 'rewardDUSDBurnBot']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(dUSDMeasureData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.update_dUSDMeasure = fileInfo.stat()
+            print('>>>> dUSD measure data loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
 
     #### HOURLY DATA ####
     def loadHourlyData(self):

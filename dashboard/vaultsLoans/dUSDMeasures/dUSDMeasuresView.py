@@ -19,7 +19,7 @@ class dUSDMeasuresViewClass:
                    dbc.Card(dbc.CardBody([html.H4(['dUSD Measures']),
                                           html.Div(['On this page all introduced measures to move the dUSD value towards 1 USD are evaluated.'], style={'margin-bottom': '30px'}),
                                           html.H5(['DEX stabilizing fee']),
-                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createNbVaultsFig(data, bgImage), config={'displayModeBar': False}, id='figureNbVaults'))),
+                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDUSDStabFeeFig(data, bgImage), config={'displayModeBar': False}, id='figureDUSDStabFee'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfodUSDMeasures")))
                                           ]))]
         return content
@@ -27,8 +27,8 @@ class dUSDMeasuresViewClass:
 
 
     @staticmethod
-    def createNbVaultsFig(data, bgImage):
-        figNbVaults = make_subplots(
+    def createDUSDStabFeeFig(data, bgImage):
+        figDUSDFee = make_subplots(
             rows=1, cols=1,
             vertical_spacing=0.15,
             row_width=[1],  # from bottom to top
@@ -37,32 +37,21 @@ class dUSDMeasuresViewClass:
             subplot_titles=([]))
 
 
-
-        lastValidDate = datetime.utcfromtimestamp(data['nbVaults'].dropna().index.values[-1].tolist()/1e9)
-        date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
-
-
-        trace_nbVaults = dict(type='scatter', name='Vaults',
-                         x=data['nbVaults'].dropna().index, y=data['nbVaults'].dropna(),
-                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.0f}')
-
-        trace_nbLiquiditation = dict(type='scatter', name='In liquidation',x=data['nbLiquidation'].dropna().index, y=data['nbLiquidation'].dropna(),
-                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f}', fill='tozeroy')
-
-        trace_active = dict(type='scatter', name='Active', x=(data['nbVaults']-data['nbLiquidation']).dropna().index, y=(data['nbVaults']-data['nbLiquidation']).dropna(),
-                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f}', fill='tonexty')
-
-        figNbVaults.add_trace(trace_nbLiquiditation, 1, 1)
-        figNbVaults.add_trace(trace_active, 1, 1)
-        figNbVaults.add_trace(trace_nbVaults, 1, 1)
+        lastValidDate = datetime.strptime(data['sellDUSDFee'].dropna().index.values[-1], '%Y-%m-%d')
+        date30DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(months=2)
 
 
-        figNbVaults.update_yaxes(title_text='number vaults', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)  # ,range=[-50, 200]
-        figNbVaults.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
-                            range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
+        trace_dUSDStabFee = dict(type='scatter', name='DEX stabilizing fee',
+                         x=data['sellDUSDFee'].dropna().index, y=data['sellDUSDFee'].dropna()*100,
+                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.2f}%')
+        figDUSDFee.add_trace(trace_dUSDStabFee, 1, 1)
+
+        figDUSDFee.update_yaxes(title_text='DEX stabilizing fee in %', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)  # ,range=[-50, 200]
+        figDUSDFee.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
+                            range=[date30DaysBack, lastValidDate], row=1, col=1)
 
         # Add range slider
-        figNbVaults.update_layout(xaxis=dict(
+        figDUSDFee.update_layout(xaxis=dict(
             rangeselector=dict(
                 buttons=list([dict(count=14, label="14d", step="day", stepmode="backward"),
                               dict(count=30, label="30d", step="day", stepmode="backward"),
@@ -75,9 +64,9 @@ class dUSDMeasuresViewClass:
             type="date"))
 
         # add background picture
-        figNbVaults.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
+        figDUSDFee.add_layout_image(dict(source=bgImage, xref="paper", yref="paper", x=0.5, y=0.5, sizex=0.6, sizey=0.6,  xanchor="center", yanchor="middle", opacity=0.2))
 
-        figNbVaults.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
+        figDUSDFee.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                              hovermode='x unified',
                              hoverlabel=dict(font_color="#6c757d",
                                              bgcolor='#ffffff', ),
@@ -87,11 +76,11 @@ class dUSDMeasuresViewClass:
                                              xanchor="right",
                                              x=1),
                              )
-        figNbVaults.layout.plot_bgcolor = '#ffffff'  # background plotting area
-        figNbVaults.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area
-        figNbVaults.layout.legend.font.color = '#6c757d'  # font color legend
+        figDUSDFee.layout.plot_bgcolor = '#ffffff'  # background plotting area
+        figDUSDFee.layout.paper_bgcolor = 'rgba(0,0,0,0)'  # background around plotting area
+        figDUSDFee.layout.legend.font.color = '#6c757d'  # font color legend
 
-        return figNbVaults
+        return figDUSDFee
 
     @staticmethod
     def getdUSDMeasuresExplanation():
