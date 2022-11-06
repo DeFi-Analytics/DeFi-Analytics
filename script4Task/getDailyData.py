@@ -149,9 +149,43 @@ def getRedditData():
     # writing file
     dfReddit.to_csv(filepath)
 
+def getDUSDfigures():
+    # generate filepath relative to script location
+    filepath = path + 'dUSDDailyData.csv'
+
+    dateTimeObj = datetime.now()
+    strTimestamp = dateTimeObj.strftime("%Y-%m-%d")
+
+    # API request masternode number
+    link='https://api.mydefichain.com/v1/listgovs/'
+    siteContent = requests.get(link)
+    jsonData = json.loads(siteContent.text)
+
+    dfNewData = pd.Series(dtype='float64')
+    dfNewData['sellDUSDFee'] = float(jsonData[8][0]['ATTRIBUTES']['v0/poolpairs/17/token_a_fee_pct'])
+    dfNewData['buyDUSDFee'] = float(jsonData[8][0]['ATTRIBUTES']['v0/poolpairs/17/token_b_fee_pct'])
+    dfNewData['interestDUSDLoans'] = float(jsonData[8][0]['ATTRIBUTES']['v0/token/15/loan_minting_interest'])
+    dfNewData['rewardDUSDBurnBot'] = float(jsonData[2][0]['LP_LOAN_TOKEN_SPLITS']['123'])
+
+    dfNewData.name = strTimestamp
+
+    dfDUSDDailyData = pd.read_csv(filepath, index_col=0)
+    dfDUSDDailyData = dfDUSDDailyData.append(dfNewData)
+
+
+    # writing file
+    dfDUSDDailyData.to_csv(filepath)
 
 
 # call all acquisition functions with error handling
+
+
+# dUSD figures
+try:
+    getDUSDfigures()
+    print('Data dUSD saved')
+except:
+    print('### Error in dUSD data acquisition')
 
 # Allnode Masternodes
 try:

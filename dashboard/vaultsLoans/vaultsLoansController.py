@@ -27,6 +27,7 @@ from .scheme.schemeView import schemeViewClass
 from .scheme.schemeCallbacks import schemeCallbacksClass
 
 from .dUSDMeasures.dUSDMeasuresView import dUSDMeasuresViewClass
+from .dUSDMeasures.dUSDMeasuresCallback import dUSDMeasuresCallbacksClass
 
 class vaultsLoansControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
@@ -70,7 +71,7 @@ class vaultsLoansControllerClass:
 
         # initialize dUSD measures classes
         self.dUSDMeasuresView = dUSDMeasuresViewClass()
-        # self.schemeCallbacks = schemeCallbacksClass(self.defichainAnalyticsModel, self.schemeView, app)
+        self.dUSDMeasuresCallbacks = dUSDMeasuresCallbacksClass(self.defichainAnalyticsModel, self.schemeView, app)
 
     def getContent(self, entry):
         pageContent = None
@@ -109,9 +110,8 @@ class vaultsLoansControllerClass:
             self.defichainAnalyticsModel.loadVaultData()
             pageContent = self.premiumDTokenView.getPremiumDTokenContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry == 'dUSDMeasures':
-            # self.defichainAnalyticsModel.loadHourlyDEXdata()
-            # self.defichainAnalyticsModel.loadVaultData()
-            self.defichainAnalyticsModel.loadDUSDBurnBotData
-            pageContent = self.dUSDMeasuresView.getdUSDMeasuresContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
+            self.defichainAnalyticsModel.loadDUSDMeasureData()
+            self.defichainAnalyticsModel.loadDUSDBurnBotData()
+            pageContent = self.dUSDMeasuresView.getdUSDMeasuresContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
 
         return pageContent
