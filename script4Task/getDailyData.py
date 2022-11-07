@@ -41,6 +41,28 @@ def getMNnodehubio():
     dfMNgetnodeio = dfMNgetnodeio.append(dfDFI)
     dfMNgetnodeio.to_csv(filepath)
 
+def getMNNumbers():
+    # generate filepath relative to script location
+    filepath = path + 'mnNumbers.csv'
+
+    # API request masternode number
+    link='https://api.mydefichain.com/v1/statistics_v2/'
+    siteContent = requests.get(link)
+    jsonData = json.loads(siteContent.text)
+    nbMNCake = int(jsonData['cakedefi']['state']['ENABLED'])
+    nbMNAllnodes = int(jsonData['allnodes']['state']['ENABLED'])
+    nbMNDFX = int(jsonData['dfx']['state']['ENABLED'])
+    nbMNLOCK = int(jsonData['lock']['state']['ENABLED'])
+    nbMNmydefichain = int(jsonData['mydefichain']['state']['ENABLED'])
+
+    dateTimeObj = datetime.now()
+    strTimestamp = dateTimeObj.strftime("%Y-%m-%d")
+    dfMN = pd.Series(index=['date', 'nbMNCake', 'nbMNAllnodes', 'nbMNDFX', 'nbMNLOCK', 'nbMNmydefichain'], data=[strTimestamp, nbMNCake, nbMNAllnodes, nbMNDFX, nbMNLOCK, nbMNmydefichain])
+
+    dfMNNumbers = pd.read_csv(filepath, index_col=0)
+    dfMNNumbers = dfMNNumbers.append(dfMN,ignore_index=True)
+    dfMNNumbers.to_csv(filepath)
+
 def getMNMonitorData():
     # generate filepath relative to script location
     filepath = path + 'masternodeMonitorData.csv'
@@ -179,6 +201,12 @@ def getDUSDfigures():
 
 # call all acquisition functions with error handling
 
+# get DFX masternode numbers
+try:
+    getMNNumbers()
+    print('Data number masternodes saved')
+except:
+    print('### Error in number masternodes data acquisition')
 
 # dUSD figures
 try:
