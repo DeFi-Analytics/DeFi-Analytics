@@ -54,6 +54,10 @@ class premiumDTokenViewClass:
                               x=((data['ARKK-DUSD_reserveB/reserveA']-data['ARKK-USD'])/data['ARKK-USD']).dropna().index,
                               y=((data['ARKK-DUSD_reserveB/reserveA']-data['ARKK-USD'])/data['ARKK-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
+        trace_premiumARKX = dict(type='scatter', name='dARKX',
+                              x=((data['ARKX-DUSD_reserveB/reserveA']-data['ARKX-USD'])/data['ARKX-USD']).dropna().index,
+                              y=((data['ARKX-DUSD_reserveB/reserveA']-data['ARKX-USD'])/data['ARKX-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
         trace_premiumBABA = dict(type='scatter', name='dBABA',
                               x=((data['BABA-DUSD_reserveB/reserveA']-data['BABA-USD'])/data['BABA-USD']).dropna().index,
                               y=((data['BABA-DUSD_reserveB/reserveA']-data['BABA-USD'])/data['BABA-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
@@ -190,6 +194,14 @@ class premiumDTokenViewClass:
                               x=((data['TSLA-DUSD_reserveB/reserveA']-data['TSLA-USD'])/data['TSLA-USD']).dropna().index,
                               y=((data['TSLA-DUSD_reserveB/reserveA']-data['TSLA-USD'])/data['TSLA-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
+        trace_premiumUL = dict(type='scatter', name='dUL',
+                              x=((data['UL-DUSD_reserveB/reserveA']-data['UL-USD'])/data['UL-USD']).dropna().index,
+                              y=((data['UL-DUSD_reserveB/reserveA']-data['UL-USD'])/data['UL-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
+        trace_premiumUNG = dict(type='scatter', name='dUNG',
+                              x=((data['UNG-DUSD_reserveB/reserveA']-data['UNG-USD'])/data['UNG-USD']).dropna().index,
+                              y=((data['UNG-DUSD_reserveB/reserveA']-data['UNG-USD'])/data['UNG-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
         trace_premiumURA = dict(type='scatter', name='dURA',
                               x=((data['URA-DUSD_reserveB/reserveA']-data['URA-USD'])/data['URA-USD']).dropna().index,
                               y=((data['URA-DUSD_reserveB/reserveA']-data['URA-USD'])/data['URA-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
@@ -198,6 +210,14 @@ class premiumDTokenViewClass:
                               x=((data['URTH-DUSD_reserveB/reserveA']-data['URTH-USD'])/data['URTH-USD']).dropna().index,
                               y=((data['URTH-DUSD_reserveB/reserveA']-data['URTH-USD'])/data['URTH-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
+        trace_premiumUSO = dict(type='scatter', name='dUSO',
+                              x=((data['USO-DUSD_reserveB/reserveA']-data['USO-USD'])/data['USO-USD']).dropna().index,
+                              y=((data['USO-DUSD_reserveB/reserveA']-data['USO-USD'])/data['USO-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
+        trace_premiumVBK = dict(type='scatter', name='dVBK',
+                              x=((data['VBK-DUSD_reserveB/reserveA']-data['VBK-USD'])/data['VBK-USD']).dropna().index,
+                              y=((data['VBK-DUSD_reserveB/reserveA']-data['VBK-USD'])/data['VBK-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
         trace_premiumVNQ = dict(type='scatter', name='dVNQ',
                               x=((data['VNQ-DUSD_reserveB/reserveA']-data['VNQ-USD'])/data['VNQ-USD']).dropna().index,
                               y=((data['VNQ-DUSD_reserveB/reserveA']-data['VNQ-USD'])/data['VNQ-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
@@ -205,6 +225,18 @@ class premiumDTokenViewClass:
         trace_premiumVOO = dict(type='scatter', name='dVOO',
                               x=((data['VOO-DUSD_reserveB/reserveA']-data['VOO-USD'])/data['VOO-USD']).dropna().index,
                               y=((data['VOO-DUSD_reserveB/reserveA']-data['VOO-USD'])/data['VOO-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
+        trace_premiumWMT = dict(type='scatter', name='dWMT',
+                              x=((data['WMT-DUSD_reserveB/reserveA']-data['WMT-USD'])/data['WMT-USD']).dropna().index,
+                              y=((data['WMT-DUSD_reserveB/reserveA']-data['WMT-USD'])/data['WMT-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
+        trace_premiumXLE = dict(type='scatter', name='dXLE',
+                              x=((data['XLE-DUSD_reserveB/reserveA']-data['XLE-USD'])/data['XLE-USD']).dropna().index,
+                              y=((data['XLE-DUSD_reserveB/reserveA']-data['XLE-USD'])/data['XLE-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
+
+        trace_premiumXLRE = dict(type='scatter', name='dXLRE',
+                              x=((data['XLRE-DUSD_reserveB/reserveA']-data['XLRE-USD'])/data['XLRE-USD']).dropna().index,
+                              y=((data['XLRE-DUSD_reserveB/reserveA']-data['XLRE-USD'])/data['XLRE-USD']).dropna()*100, mode='lines', line_width=2 , hovertemplate=hoverNumber)
 
         trace_premiumXOM = dict(type='scatter', name='dXOM',
                               x=((data['XOM-DUSD_reserveB/reserveA']-data['XOM-USD'])/data['XOM-USD']).dropna().index,
@@ -215,6 +247,7 @@ class premiumDTokenViewClass:
         figPrices.add_trace(trace_premiumADDYY, 1, 1)
         figPrices.add_trace(trace_premiumAMZN, 1, 1)
         figPrices.add_trace(trace_premiumARKK, 1, 1)
+        figPrices.add_trace(trace_premiumARKX, 1, 1)
         figPrices.add_trace(trace_premiumBABA, 1, 1)
         figPrices.add_trace(trace_premiumBRK, 1, 1)
         figPrices.add_trace(trace_premiumCOIN, 1, 1)
@@ -249,10 +282,17 @@ class premiumDTokenViewClass:
         figPrices.add_trace(trace_premiumTAN, 1, 1)
         figPrices.add_trace(trace_premiumTLT, 1, 1)
         figPrices.add_trace(trace_premiumTSLA, 1, 1)
+        figPrices.add_trace(trace_premiumUL, 1, 1)
+        figPrices.add_trace(trace_premiumUNG, 1, 1)
         figPrices.add_trace(trace_premiumURA, 1, 1)
         figPrices.add_trace(trace_premiumURTH, 1, 1)
+        figPrices.add_trace(trace_premiumUSO, 1, 1)
+        figPrices.add_trace(trace_premiumVBK, 1, 1)
         figPrices.add_trace(trace_premiumVNQ, 1, 1)
         figPrices.add_trace(trace_premiumVOO, 1, 1)
+        figPrices.add_trace(trace_premiumWMT, 1, 1)
+        figPrices.add_trace(trace_premiumXLE, 1, 1)
+        figPrices.add_trace(trace_premiumXLRE, 1, 1)
         figPrices.add_trace(trace_premiumXOM, 1, 1)
 
 
