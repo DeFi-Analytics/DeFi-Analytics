@@ -27,6 +27,9 @@ from .dobby.dobbyCallbacks import dobbyCallbacksClass
 from .cfp.cfpView import cfpViewClass
 from .cfp.cfpCallbacks import cfpCallbacksClass
 
+from .lock.lockViews import lockViewClass
+from .lock.lockCallbacks import lockCallbacksClass
+
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -72,6 +75,10 @@ class communityControllerClass:
         self.cfpView = cfpViewClass()
         self.cfpViewCallbacks = cfpCallbacksClass(self.defichainAnalyticsModel, self.cfpView, app)
 
+        # initialize LOCK classes
+        self.lockView = lockViewClass()
+        self.lockCallbacks = lockCallbacksClass(self.defichainAnalyticsModel, self.lockView, app)
+
     def getContent(self, entry):
         pageContent = None
         if entry in ["", "twitter"]:
@@ -107,5 +114,8 @@ class communityControllerClass:
         elif entry in ["dobby"]:
             self.defichainAnalyticsModel.loadDobbyDatabase()
             pageContent = self.dobbyView.getDobbyContent()
+        elif entry in ["lock"]:
+            self.defichainAnalyticsModel.loadLOCKdata()
+            pageContent = self.lockView.getLOCKContent()
 
         return pageContent

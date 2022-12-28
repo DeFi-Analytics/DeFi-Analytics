@@ -87,6 +87,7 @@
     #figurePromoDatabase {height: 630px}
     #figureMNMonitor {height: 670px}
     #figureDFXdata {height: 620px}
+    #figureLOCKdata {height: 600px}
     #figureDFISignal {height: 625px}
     #figureDobbydata {height: 655px}
 
@@ -156,6 +157,7 @@
         #figurePromoDatabase {height: 600px}
         #figureMNMonitor {height: 600px}
         #figureDFXdata {height: 600px}
+        #figureLOCKdata {height: 600px}
         #figureDFISignal {height: 600px}
         #figureDobbydata {height: 600px}
         #figureMarketcap {height: 600px}
@@ -216,6 +218,7 @@
         #figurePromoDatabase {height: 330px}
         #figureMNMonitor {height: 330px}
         #figureDFXdata {height: 330px}
+        #figureLOCKdata {height: 330px}
         #figureDFISignal {height: 330px}
         #figureDobbydata {height: 330px}
         #figureMarketcap {height: 330px}

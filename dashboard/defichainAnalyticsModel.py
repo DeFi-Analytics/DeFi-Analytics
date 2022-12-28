@@ -61,6 +61,7 @@ class defichainAnalyticsModelClass:
         self.updated_BSCBridge = None
         self.update_dUSDMeasure = None
         self.updated_dUSDBurnBot = None
+        self.updated_lock = None
 
 
         # background image for figures
@@ -509,6 +510,7 @@ class defichainAnalyticsModelClass:
         self.loadDFIPFuturesData()
         self.loadBSCBridgeData()
         self.loadDUSDBurnBotData()
+        self.loadLOCKdata()
 
 
     def loadHourlyDEXdata(self):
@@ -776,6 +778,25 @@ class defichainAnalyticsModelClass:
             self.updated_BSCBridge = fileInfo.stat()
             print('>>>> BSC bridge data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
+    def loadLOCKdata(self):
+        print('>>>> Start update LOCK data ... <<<<')
+        filePath = self.dataPath + 'LOCKData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_lock:
+            tStart = time.time()
+            LOCKData = pd.read_csv(filePath, index_col=0)
+            LOCKData['timeRounded'] = pd.to_datetime(LOCKData.index).floor('H')
+            LOCKData.set_index(['timeRounded'], inplace=True)
+
+            columns2update = ['DFIdepositsLOCK', 'DFIwithdrawalsLOCK','DUSDdepositsLOCK', 'DUSDwithdrawalsLOCK']
+
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(LOCKData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_lock = fileInfo.stat()
+            print('>>>> LOCK data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     #### MINUTELY DATA ####
     def loadMinutelyData(self):

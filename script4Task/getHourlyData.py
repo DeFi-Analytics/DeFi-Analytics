@@ -328,7 +328,63 @@ def getDUSDBurnBotData():
     dfBurnedAmount.index = dfBurnedAmount.index + np.timedelta64(1, 'h') # timeshift of 1h because Grouper is just using the hour information and removes minutes
     dfBurnedAmount.to_csv(filepathBurnAmount)
 
+def getLOCKData():
+    filepathSummary = path + 'LOCKData.csv'
+    filepathComplete = path + 'LOCKAllOrdersData.csv'
+
+    print('   start LOCK data acquisition')
+
+    # API request for complete transaction list of DFX
+    timeStampData = pd.Timestamp.now()-pd.Timedelta(days=1)
+    fromDateAPI = timeStampData.strftime("%Y-%m-%d")
+    link = 'https://api.lock.space/v1/analytics/staking/transactions?dateFrom='+fromDateAPI
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+
+    # load existing list of LOCK orders
+    # dfLOCKorders = pd.DataFrame()
+    dfLOCKorders = pd.read_csv(filepathComplete, index_col=0)
+    dfLOCKorders.index = pd.to_datetime(dfLOCKorders.index)
+
+    tempDataframe = pd.DataFrame(tempData['deposits'])
+    tempDataframe['order'] = 'deposit'
+    tempDataframe['date'] = pd.to_datetime(tempDataframe['date'])
+    tempDataframe.set_index('date', inplace=True)
+    index2Add = ~tempDataframe.index.isin(dfLOCKorders.index)
+    dfLOCKorders = dfLOCKorders.append(tempDataframe[index2Add])
+
+    tempDataframe = pd.DataFrame(tempData['withdrawals'])
+    tempDataframe['order'] = 'withdrawal'
+    tempDataframe['date'] = pd.to_datetime(tempDataframe['date'])
+    tempDataframe.set_index('date', inplace=True)
+    index2Add = ~tempDataframe.index.isin(dfLOCKorders.index)
+    dfLOCKorders = dfLOCKorders.append(tempDataframe[index2Add])
+
+    dfLOCKorders.sort_values(by='date', inplace=True)
+    dfLOCKorders.to_csv(filepathComplete)
+
+    # get hourly data
+    dfLOCKData = pd.DataFrame(columns=['DFIdepositsLOCK', 'DFIwithdrawalsLOCK','DUSDdepositsLOCK', 'DUSDwithdrawalsLOCK'])
+    dfLOCKData['DFIdepositsLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DFI')].amount.groupby(pd.Grouper(freq='H')).sum()
+    dfLOCKData['DFIwithdrawalsLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DFI')].amount.groupby(pd.Grouper(freq='H')).sum()
+    dfLOCKData['DUSDdepositsLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DUSD')].amount.groupby(pd.Grouper(freq='H')).sum()
+    dfLOCKData['DUSDwithdrawalsLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DUSD')].amount.groupby(pd.Grouper(freq='H')).sum()
+    dfLOCKData.fillna(0, inplace=True)
+    dfLOCKData.index = dfLOCKData.index.strftime('%Y-%m-%d %H:%M')
+
+    # writing file
+    dfLOCKData.to_csv(filepathSummary)
+
+
+
 timeStampData = pd.Timestamp.now()
+
+# LOCK data
+try:
+    getLOCKData()
+    print('LOCK data saved')
+except:
+    print('### Error in LOCK data acquisition')
 
 # DFIP Futures data
 try:
