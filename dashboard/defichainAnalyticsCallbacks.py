@@ -76,6 +76,8 @@ class defichainAnalyticsCallbacksClass:
                                              Input('dfx', 'n_clicks_timestamp'),
                                              Input('dfisignal', 'n_clicks_timestamp'),
                                              Input('dobby', 'n_clicks_timestamp'),
+                                             Input('lock', 'n_clicks_timestamp'),
+
                                              Input('changelog', 'n_clicks_timestamp'),
                                              Input('donate', 'n_clicks_timestamp'),
                                              Input('cakereview', 'n_clicks_timestamp'),
@@ -277,6 +279,8 @@ class defichainAnalyticsCallbacksClass:
                                    'dfx',
                                    'dfisignal',
                                    'dobby',
+                                   'lock',
+
                                    'changelog',
                                    'donate',
                                    'cakereview',
@@ -335,6 +339,8 @@ class defichainAnalyticsCallbacksClass:
                                             Output('dfx', 'className'),
                                             Output('dfisignal', 'className'),
                                             Output('dobby', 'className'),
+                                            Output('lock', 'className'),
+
                                             Output('changelog', 'className'),
                                             Output('donate', 'className'),
                                             Output('cakereview', 'className'),
