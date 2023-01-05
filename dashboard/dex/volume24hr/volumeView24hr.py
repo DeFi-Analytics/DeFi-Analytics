@@ -38,17 +38,18 @@ class volume24hrViewClass:
         indTradingVolumesDToken = [element for element in indTradingVolumes if "DUSD" in element]
         indTradingVolumesCrypto = [element for element in indTradingVolumes if ("DUSD" not in element) & ("BURN" not in element)]
 
-        tradingVolumeDToken = data[indTradingVolumesDToken].sum(axis=1, skipna=True)
-        tradingVolumeCrypto = data[indTradingVolumesCrypto].sum(axis=1, skipna=False)
+        tradingVolumeDToken = data[indTradingVolumesDToken].fillna(0).sum(axis=1, skipna=False)
+        tradingVolumeCrypto = data[indTradingVolumesCrypto].fillna(0).sum(axis=1, skipna=False)
 
-        trace_tradingVolumeCrypto = dict(type='scatter', name='Crypto volume', x=tradingVolumeCrypto.dropna().index, y=tradingVolumeCrypto.dropna(),
+        trace_tradingVolumeCrypto = dict(type='scatter', name='Crypto volume', x=tradingVolumeCrypto[~(tradingVolumeCrypto==0)].dropna().index, y=tradingVolumeCrypto[~(tradingVolumeCrypto==0)].dropna(),
                                     mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate=hoverTemplateRepresenation, fill='tozeroy')
 
-        trace_tradingVolumeDToken = dict(type='scatter', name='dToken colume',x=tradingVolumeDToken.dropna().index, y=tradingVolumeDToken.dropna(),
+        trace_tradingVolumeDToken = dict(type='scatter', name='dToken colume',x=tradingVolumeDToken[~(tradingVolumeDToken==0)].dropna().index, y=tradingVolumeDToken[~(tradingVolumeDToken==0)].dropna(),
                                  mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # overall TVL graph
-        trace_VolOverallDEX = dict(type='scatter', name='Overall DEX', x=(tradingVolumeDToken+tradingVolumeCrypto).dropna().index, y=(tradingVolumeDToken+tradingVolumeCrypto).dropna(),
+        tradingVolumeOverall = tradingVolumeDToken + tradingVolumeCrypto
+        trace_VolOverallDEX = dict(type='scatter', name='Overall DEX', x=tradingVolumeOverall[~(tradingVolumeOverall==0)].dropna().index, y=tradingVolumeOverall[~(tradingVolumeOverall==0)].dropna(),
                                 mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate=hoverTemplateRepresenation)
         trace_VolOverallCG = dict(type='scatter', name='Overall Coingecko (only DFI)', x=data['VolTotalCoingecko'].dropna().index, y=data['VolTotalCoingecko'].dropna(),
                                 mode='lines', line=dict(color='#5c0fff'), line_width=3, hovertemplate=hoverTemplateRepresenation)
