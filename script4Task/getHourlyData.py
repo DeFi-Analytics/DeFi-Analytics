@@ -261,70 +261,94 @@ def getVaultsData(timeStampData):
     print('   finished vaults/loans data acquisition')
 
 def getDUSDBurnBotData():
-    # generate filepath relative to script location
-    filepathTxList = path + 'dUSDBornBotTx.csv'
-    filepathBurnAmount = path + 'dUSDBornBotAmounts.csv'
-    print('   start dUSD burn bot data acquisition')
-
-
-    ######### get all swaps #########
-
-    dfBurnBotOldTxList = pd.read_csv(filepathTxList, index_col=0)
-    dfBurnBotOldTxList.index = pd.to_datetime(dfBurnBotOldTxList.index)
-
-    # get the first 200 entries of burn bot listaccounthistory
-    link = 'https://ocean.defichain.com/v0/mainnet/address/df1qa6qjmtuh8fyzqyjjsrg567surxu43rx3na7yah/history?size=20'
-    siteContent = requests.get(link)
-    apiContentAsDict = ast.literal_eval(siteContent.text)
-    dfBurnBotTxList = pd.DataFrame(apiContentAsDict['data'])
-
-    dfBurnBotTxList = dfBurnBotTxList[~dfBurnBotTxList['txid'].isin(dfBurnBotOldTxList['txid'])]
-
-    if dfBurnBotTxList.shape[0] > 0:
-        # get the rest of listaccounthistory
-        while ('page' in apiContentAsDict) & (dfBurnBotTxList.shape[0].__mod__(20) == 0):
-            link = 'https://ocean.defichain.com/v0/mainnet/address/df1qa6qjmtuh8fyzqyjjsrg567surxu43rx3na7yah/history?size=200&next=' + apiContentAsDict['page']['next']
-            siteContent = requests.get(link)
-            apiContentAsDict = ast.literal_eval(siteContent.text)
-            dfBurnBotTxList = dfBurnBotTxList.append(pd.DataFrame(apiContentAsDict['data']))
-
-        dfBurnBotTxList.reset_index(inplace=True, drop=True)
-        dfBurnBotTxList = pd.concat([dfBurnBotTxList, dfBurnBotTxList['block'].apply(pd.Series)], axis=1)
-        dfBurnBotTxList.drop(columns=['owner', 'txn', 'block', 'hash'], inplace=True)
-        dfBurnBotTxList = dfBurnBotTxList[dfBurnBotTxList['type'] == 'PoolSwap']
-
-        # screen burn address for corresponding dUSD amount
+    def acquireTXAdresse(botAddress, dfOldTxList):
         # get the first 200 entries of burn bot listaccounthistory
-        link = 'https://ocean.defichain.com/v0/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm/history?size=200'
+        link = 'https://ocean.defichain.com/v0/mainnet/address/'+botAddress+'/history?size=200'
         siteContent = requests.get(link)
         apiContentAsDict = ast.literal_eval(siteContent.text)
-        dfBurnAddressTxList = pd.DataFrame(apiContentAsDict['data'])
-        dfBurnBotTxList = dfBurnBotTxList.merge(dfBurnAddressTxList[['txid', 'amounts']], left_on='txid', right_on='txid', how='left')
-        dfBurnBotTxList['amounts_y'] = pd.to_numeric(dfBurnBotTxList['amounts_y'].astype(str).str[2:-7]).fillna(0)
+        dfBurnBotTxList = pd.DataFrame(apiContentAsDict['data'])
 
-        # get the rest of listaccounthistory
-        while ('page' in apiContentAsDict) & dfBurnBotTxList['amounts_y'].eq(0).any():
-            link = 'https://ocean.defichain.com/v0/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm/history?size=200&next=' + apiContentAsDict['page']['next']
+        dfBurnBotTxList = dfBurnBotTxList[~dfBurnBotTxList['txid'].isin(dfOldTxList['txid'])]
+
+        if dfBurnBotTxList.shape[0] > 0:
+            # get the rest of listaccounthistory
+            while ('page' in apiContentAsDict) & (dfBurnBotTxList.shape[0].__mod__(20) == 0):
+                link = 'https://ocean.defichain.com/v0/mainnet/address/'+botAddress+'/history?size=200&next=' + apiContentAsDict['page']['next']
+                siteContent = requests.get(link)
+                apiContentAsDict = ast.literal_eval(siteContent.text)
+                dfBurnBotTxList = dfBurnBotTxList.append(pd.DataFrame(apiContentAsDict['data']))
+
+            dfBurnBotTxList.reset_index(inplace=True, drop=True)
+            dfBurnBotTxList = pd.concat([dfBurnBotTxList, dfBurnBotTxList['block'].apply(pd.Series)], axis=1)
+            dfBurnBotTxList.drop(columns=['owner', 'txn', 'block', 'hash'], inplace=True)
+            dfBurnBotTxList = dfBurnBotTxList[dfBurnBotTxList['type'] == 'PoolSwap']
+
+            # screen burn address for corresponding dUSD amount
+            # get the first 200 entries of burn bot listaccounthistory
+            link = 'https://ocean.defichain.com/v0/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm/history?size=200'
             siteContent = requests.get(link)
             apiContentAsDict = ast.literal_eval(siteContent.text)
             dfBurnAddressTxList = pd.DataFrame(apiContentAsDict['data'])
             dfBurnBotTxList = dfBurnBotTxList.merge(dfBurnAddressTxList[['txid', 'amounts']], left_on='txid', right_on='txid', how='left')
-            dfBurnBotTxList['amounts'] = pd.to_numeric(dfBurnBotTxList['amounts'].astype(str).str[2:-7])
-            dfBurnBotTxList['amounts_y'] = dfBurnBotTxList['amounts_y'].fillna(0) + dfBurnBotTxList['amounts'].fillna(0)
-            dfBurnBotTxList.drop(columns=['amounts'], inplace=True)
+            dfBurnBotTxList['amounts_y'] = pd.to_numeric(dfBurnBotTxList['amounts_y'].astype(str).str[2:-7]).fillna(0)
 
-        dfBurnBotTxList['amounts_x'] = pd.to_numeric(dfBurnBotTxList['amounts_x'].astype(str).str[2:-6])
-        dfBurnBotTxList.set_index(pd.to_datetime(dfBurnBotTxList['time'], utc=True, unit='s'), inplace=True)
-        dfBurnBotTxList.rename(columns={"time": "timeRaw"}, inplace=True)
+            # get the rest of listaccounthistory
+            while ('page' in apiContentAsDict) & dfBurnBotTxList['amounts_y'].eq(0).any():
+                link = 'https://ocean.defichain.com/v0/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm/history?size=200&next=' + apiContentAsDict['page']['next']
+                siteContent = requests.get(link)
+                apiContentAsDict = ast.literal_eval(siteContent.text)
+                dfBurnAddressTxList = pd.DataFrame(apiContentAsDict['data'])
+                dfBurnBotTxList = dfBurnBotTxList.merge(dfBurnAddressTxList[['txid', 'amounts']], left_on='txid', right_on='txid', how='left')
+                dfBurnBotTxList['amounts'] = pd.to_numeric(dfBurnBotTxList['amounts'].astype(str).str[2:-7])
+                dfBurnBotTxList['amounts_y'] = dfBurnBotTxList['amounts_y'].fillna(0) + dfBurnBotTxList['amounts'].fillna(0)
+                dfBurnBotTxList.drop(columns=['amounts'], inplace=True)
+
+            dfBurnBotTxList['amounts_x'] = pd.to_numeric(dfBurnBotTxList['amounts_x'].astype(str).str[2:-6])
+            dfBurnBotTxList.set_index(pd.to_datetime(dfBurnBotTxList['time'], utc=True, unit='s'), inplace=True)
+            dfBurnBotTxList.rename(columns={"time": "timeRaw"}, inplace=True)
+
+        return dfBurnBotTxList
+
+    # generate filepath relative to script location
+    filepathTxList = path + 'dUSDBornBotTx.csv'
+    filepathTxList2 = path + 'dUSDBornBot2Tx.csv'
+    print('   start dUSD burn bot data acquisition')
+
+
+    ######### get all swaps from Bot1 und Bot2 #########
+    # Tx list Bot1
+    dfBurnBotOldTxList = pd.read_csv(filepathTxList, index_col=0)
+    dfBurnBotOldTxList.index = pd.to_datetime(dfBurnBotOldTxList.index)
+    dfBurnBotTxList = acquireTXAdresse('df1qa6qjmtuh8fyzqyjjsrg567surxu43rx3na7yah', dfBurnBotOldTxList)
     dfBurnBotTxList = dfBurnBotOldTxList.append(dfBurnBotTxList)
     dfBurnBotTxList.sort_values(by=['height'], ascending=False, inplace=True)
     dfBurnBotTxList.to_csv(filepathTxList)
+    print('   tx list burn bot 1 saved')
+
+    #Tx List Bot2
+    dfBurnBot2OldTxList = pd.read_csv(filepathTxList2, index_col=0)
+    dfBurnBot2OldTxList.index = pd.to_datetime(dfBurnBot2OldTxList.index)
+    # dfBurnBot2OldTxList = pd.DataFrame()
+    dfBurnBot2TxList = acquireTXAdresse('df1qlwvtdrh4a4zln3k56rqnx8chu8t0sqx36syaea', dfBurnBot2OldTxList)
+    dfBurnBot2TxList = dfBurnBot2OldTxList.append(dfBurnBot2TxList)
+    dfBurnBot2TxList.sort_values(by=['height'], ascending=False, inplace=True)
+    dfBurnBot2TxList.to_csv(filepathTxList2)
+    print('   tx list burn bot 2 saved')
+
 
     ######### extract burned amount on hourly base #########
+    filepathBurnAmount = path + 'dUSDBornBotAmounts.csv'
     dfBurnedAmount = pd.DataFrame()
     dfBurnedAmount['DUSDBurnBot_DFIAmount'] = dfBurnBotTxList['amounts_x'].groupby(pd.Grouper(freq='H')).sum()
     dfBurnedAmount['DUSDBurnBot_DUSDAmount'] = dfBurnBotTxList['amounts_y'].groupby(pd.Grouper(freq='H')).sum()
     dfBurnedAmount['DUSDBurnBot_SumDUSDAmount'] = dfBurnedAmount['DUSDBurnBot_DUSDAmount'].cumsum()
+
+    dfBurnedAmount['DUSDBurnBot2_DFIAmount'] = dfBurnBot2TxList['amounts_x'].groupby(pd.Grouper(freq='H')).sum()
+    dfBurnedAmount['DUSDBurnBot2_DUSDAmount'] = dfBurnBot2TxList['amounts_y'].groupby(pd.Grouper(freq='H')).sum()
+    dfBurnedAmount['DUSDBurnBot2_DFIAmount'].fillna(value=0, inplace=True)
+    dfBurnedAmount['DUSDBurnBot2_DUSDAmount'].fillna(value=0, inplace=True)
+    dfBurnedAmount['DUSDBurnBot2_SumDUSDAmount'] = dfBurnedAmount['DUSDBurnBot2_DUSDAmount'].cumsum()
+
     dfBurnedAmount.index = dfBurnedAmount.index + np.timedelta64(1, 'h') # timeshift of 1h because Grouper is just using the hour information and removes minutes
     dfBurnedAmount.to_csv(filepathBurnAmount)
 
@@ -379,13 +403,6 @@ def getLOCKData():
 
 timeStampData = pd.Timestamp.now()
 
-# LOCK data
-try:
-    getLOCKData()
-    print('LOCK data saved')
-except:
-    print('### Error in LOCK data acquisition')
-
 # DFIP Futures data
 try:
     getDFIPFuturesData(timeStampData)
@@ -413,3 +430,10 @@ try:
     print('dUSD Burn Bot data saved')
 except:
     print('### Error in dUSD Burn Bot data acquisition')
+
+# LOCK data
+try:
+    getLOCKData()
+    print('LOCK data saved')
+except:
+    print('### Error in LOCK data acquisition')
