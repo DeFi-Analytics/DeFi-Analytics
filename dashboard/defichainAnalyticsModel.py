@@ -62,6 +62,7 @@ class defichainAnalyticsModelClass:
         self.update_dUSDMeasure = None
         self.updated_dUSDBurnBot = None
         self.updated_lock = None
+        self.updated_redditMember = None
 
 
         # background image for figures
@@ -90,6 +91,7 @@ class defichainAnalyticsModelClass:
         self.loadDobbyDatabase()
         self.loadEmissionRateData()
         self.loadDUSDMeasureData()
+        self.loadRedditMemberData()
 
 
 
@@ -313,6 +315,23 @@ class defichainAnalyticsModelClass:
 
             self.updated_twitterFollower = fileInfo.stat()
             print('>>>> Twitter data loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
+
+    def loadRedditMemberData(self):
+        print('>>>> Start update reddit member data ... <<<<')
+        filePath = self.dataPath + 'redditDefichainData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_redditMember:
+            RedditMemberData = pd.read_csv(filePath, index_col=0)
+
+            columns2update = ['usersReddit']
+
+            # delete existing information and add new one
+            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
+            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.dailyData = self.dailyData.merge(RedditMemberData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_redditMember = fileInfo.stat()
+            print('>>>> Reddit data loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
 
     def loadIncomeVisitsData(self):
         print('>>>> Start update income visits data ... <<<<')

@@ -4,6 +4,9 @@ from .twitter.twitterCallbacks import twitterCallbacksClass
 from .follower.followerView import followerViewClass
 from .follower.followerCallbacks import followerCallbacksClass
 
+from .reddit.redditView import redditViewClass
+from .reddit.redditCallbacks import redditCallbacksClass
+
 from .analytics.analyticsView import analyticsViewClass
 
 from .income.incomeView import incomeViewClass
@@ -30,6 +33,8 @@ from .cfp.cfpCallbacks import cfpCallbacksClass
 from .lock.lockViews import lockViewClass
 from .lock.lockCallbacks import lockCallbacksClass
 
+
+
 class communityControllerClass:
     def __init__(self, app, defichainAnalyticsModel):
         self.defichainAnalyticsModel = defichainAnalyticsModel
@@ -42,6 +47,10 @@ class communityControllerClass:
         # initialize twitter follower classes
         self.followerView = followerViewClass()
         self.followerCallbacks = followerCallbacksClass(self.defichainAnalyticsModel, self.followerView, app)       # create callbacks on top level
+
+        # initialize reddit members classes
+        self.redditView = redditViewClass()
+        self.redditCallbacks = redditCallbacksClass(self.defichainAnalyticsModel, self.redditView, app)
 
         # initialize visits analytics classes
         self.analyticsView = analyticsViewClass()
@@ -87,6 +96,9 @@ class communityControllerClass:
         elif entry in ["follower"]:
             self.defichainAnalyticsModel.loadTwitterFollowerData()
             pageContent = self.followerView.getTwitterFollowerContent()
+        elif entry in ["reddit"]:
+            self.defichainAnalyticsModel.loadRedditMemberData()
+            pageContent = self.redditView.getRedditMembersContent()
         elif entry in ['cfp']:
             self.defichainAnalyticsModel.loadCFPData()
             pageContent = self.cfpView.getCFPContent()
