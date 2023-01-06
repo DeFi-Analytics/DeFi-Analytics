@@ -11,11 +11,11 @@ import pandas as pd
 class nbDTokenViewClass:
 
     def getnbDTokenContent(self):
-        content = [dbc.Modal([dbc.ModalHeader("Info Number dToken with Loans"),
+        content = [dbc.Modal([dbc.ModalHeader("Info Number dToken"),
                               dbc.ModalBody(self.getNbDTokenExplanation()),
                               dbc.ModalFooter(dbc.Button("close", id="closeInfoNbDToken", className="ml-auto"))],
                                     id="modalNbDToken", size='xl'),
-                   dbc.Card(dbc.CardBody([html.H4(['Number dTokens with Loans']),
+                   dbc.Card(dbc.CardBody([html.H4(['Number dTokens']),
                                           html.Table([html.Tr([html.Td('Select dToken for evaluation:'),
                                                                html.Td(dcc.Dropdown(id='vaultsLoansNbDtoken', options=[{'label': 'dUSD', 'value': 'DUSD'},
                                                                                                                          {'label': 'AAPL', 'value': 'AAPL'},
@@ -134,7 +134,10 @@ class nbDTokenViewClass:
 
             dataDUSDburnBot = data['DUSDBurnBot_SumDUSDAmount'].interpolate(method='linear', limit_direction='forward').fillna(0) # burned via auction fee & send to burn address
             dataDUSDburnBot = dataDUSDburnBot.loc[basisGraph.index]
-            dataBurned = dataBurned - dataDUSDburnBot # in case of dUSD the burned amount via bot must be removed from DEX fee burn
+            dataDUSDburnBot2 = data['DUSDBurnBot2_SumDUSDAmount'].interpolate(method='linear', limit_direction='forward').fillna(0)  # burned via auction fee & send to burn address
+            dataDUSDburnBot2 = dataDUSDburnBot2.loc[basisGraph.index]
+
+            dataBurned = dataBurned - dataDUSDburnBot - dataDUSDburnBot2        # in case of dUSD the burned amount via bot must be removed from DEX fee burn
 
             dataDUSDburnedAuctionAddress = data['burnedOverallDUSD'].interpolate(method='linear', limit_direction='forward').fillna(0) # burned via auction fee & send to burn address
             dataDUSDburnedAuctionAddress = dataDUSDburnedAuctionAddress.subtract(dataDUSDpaidInterest).subtract(dataBurned).subtract(dataDUSDburnBot).loc[basisGraph.index].clip(lower=0)
@@ -185,11 +188,16 @@ class nbDTokenViewClass:
 
         ### burned parts
 
-        # graph for burned dTokens via swap fees
+        # graph for burned dTokens via burn bots and swap fees
         if representation=='DUSD':
             trace_dTokenBurnBot = dict(type='scatter', name='dUSD burned via Bot', x=dataDUSDburnBot.index, y=dataDUSDburnBot,
-                                       mode='lines', line=dict(color='#a3a3a3'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+                                       mode='lines', line=dict(color='#711714'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dTokenBurnBot, 1, 1)
+
+        if representation=='DUSD':
+            trace_dTokenBurnBot2 = dict(type='scatter', name='dUSD burned via Bot 2 (free DFI rewards)', x=dataDUSDburnBot2.index, y=dataDUSDburnBot2,
+                                       mode='lines', line=dict(color='#270806'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dTokenBurnBot2, 1, 1)
 
         if 'burned' + representation + 'DEX' in data.columns:
             trace_dTokenFeeBurn = dict(type='scatter', name='dTokens burned via DEX-Fee', x=dataBurned.index, y=dataBurned,
