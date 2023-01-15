@@ -140,7 +140,8 @@ class nbDTokenViewClass:
             dataBurned = dataBurned - dataDUSDburnBot - dataDUSDburnBot2        # in case of dUSD the burned amount via bot must be removed from DEX fee burn
 
             dataDUSDburnedAuctionAddress = data['burnedOverallDUSD'].interpolate(method='linear', limit_direction='forward').fillna(0) # burned via auction fee & send to burn address
-            dataDUSDburnedAuctionAddress = dataDUSDburnedAuctionAddress.subtract(dataDUSDpaidInterest).subtract(dataBurned).subtract(dataDUSDburnBot).loc[basisGraph.index].clip(lower=0)
+            dataDUSDburnedAuctionAddress = dataDUSDburnedAuctionAddress.subtract(dataDUSDpaidInterest).subtract(dataBurned).subtract(dataDUSDburnBot) \
+                                                .subtract(dataDUSDburnBot2).loc[basisGraph.index].clip(lower=0)
 
             dTokenCircAmount = dTokenCircAmount + dataDUSDpaidDFI + dataDUSDalgoNegInterest - dataDUSDpaidInterest - dataDUSDburnedAuctionAddress
 
