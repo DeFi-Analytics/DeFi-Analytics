@@ -807,7 +807,7 @@ class defichainAnalyticsModelClass:
             LOCKData['timeRounded'] = pd.to_datetime(LOCKData.index).floor('H')
             LOCKData.set_index(['timeRounded'], inplace=True)
 
-            columns2update = ['DFIdepositsLOCK', 'DFIwithdrawalsLOCK','DUSDdepositsLOCK', 'DUSDwithdrawalsLOCK']
+            columns2update = ['DFIdepositsMNLOCK', 'DFIwithdrawalsMNLOCK','DFIdepositsYMLOCK', 'DFIwithdrawalsYMLOCK','DUSDdepositsYMLOCK', 'DUSDwithdrawalsYMLOCK']
 
             # delete existing information and add new one
             ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist

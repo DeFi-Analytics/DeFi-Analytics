@@ -374,27 +374,31 @@ def getLOCKData():
     tempDataframe['order'] = 'deposit'
     tempDataframe['date'] = pd.to_datetime(tempDataframe['date'])
     tempDataframe.set_index('date', inplace=True)
-    index2Add = ~tempDataframe.index.isin(dfLOCKorders.index)
+    index2Add = ~tempDataframe.id.isin(dfLOCKorders.id)
     dfLOCKorders = dfLOCKorders.append(tempDataframe[index2Add])
 
     tempDataframe = pd.DataFrame(tempData['withdrawals'])
     tempDataframe['order'] = 'withdrawal'
     tempDataframe['date'] = pd.to_datetime(tempDataframe['date'])
-    tempDataframe.set_index('date', inplace=True)
-    index2Add = ~tempDataframe.index.isin(dfLOCKorders.index)
+    tempDataframe.set_index('date', inplace=True)    # get hourly data
+    dfLOCKData = pd.DataFrame(columns=['DFIdepositsMNLOCK', 'DFIwithdrawalsMNLOCK','DFIdepositsYMLOCK', 'DFIwithdrawalsYMLOCK','DUSDdepositsYMLOCK', 'DUSDwithdrawalsYMLOCK'])
+    dfLOCKData['DFIdepositsMNLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'Masternode')].amount.groupby(pd.Grouper(freq='H')).sum()
+    dfLOCKData['DFIwithdrawalsMNLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'Masternode')].amount.groupby(pd.Grouper(freq='H')).sum()
+
+    dfLOCKData['DFIdepositsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
+    dfLOCKData['DFIwithdrawalsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
+
+    dfLOCKData['DUSDdepositsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DUSD') & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
+    dfLOCKData['DUSDwithdrawalsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DUSD') & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
+    dfLOCKData.fillna(0, inplace=True)
+    dfLOCKData.index = dfLOCKData.index.strftime('%Y-%m-%d %H:%M')
+    index2Add = ~tempDataframe.id.isin(dfLOCKorders.id)
     dfLOCKorders = dfLOCKorders.append(tempDataframe[index2Add])
 
     dfLOCKorders.sort_values(by='date', inplace=True)
     dfLOCKorders.to_csv(filepathComplete)
 
-    # get hourly data
-    dfLOCKData = pd.DataFrame(columns=['DFIdepositsLOCK', 'DFIwithdrawalsLOCK','DUSDdepositsLOCK', 'DUSDwithdrawalsLOCK'])
-    dfLOCKData['DFIdepositsLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DFI')].amount.groupby(pd.Grouper(freq='H')).sum()
-    dfLOCKData['DFIwithdrawalsLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DFI')].amount.groupby(pd.Grouper(freq='H')).sum()
-    dfLOCKData['DUSDdepositsLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DUSD')].amount.groupby(pd.Grouper(freq='H')).sum()
-    dfLOCKData['DUSDwithdrawalsLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DUSD')].amount.groupby(pd.Grouper(freq='H')).sum()
-    dfLOCKData.fillna(0, inplace=True)
-    dfLOCKData.index = dfLOCKData.index.strftime('%Y-%m-%d %H:%M')
+
 
     # writing file
     dfLOCKData.to_csv(filepathSummary)
@@ -402,6 +406,8 @@ def getLOCKData():
 
 
 timeStampData = pd.Timestamp.now()
+
+
 
 # DFIP Futures data
 try:
@@ -430,6 +436,13 @@ try:
     print('dUSD Burn Bot data saved')
 except:
     print('### Error in dUSD Burn Bot data acquisition')
+
+# LOCK data
+try:
+    getLOCKData()
+    print('LOCK data saved')
+except:
+    print('### Error in LOCK data acquisition')
 
 # LOCK data
 try:

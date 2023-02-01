@@ -19,9 +19,10 @@ class lockViewClass:
                                                   html.A('https://lock.space/', href='https://lock.space/', target='_blank', className='defiLink')],
                                                  style={'text-align': 'justify'}),
                                           html.Table([html.Tr([html.Td('Select service:'),
-                                                               html.Td(dcc.Dropdown(id='lockSelectService', options=[{'label': 'DFI staking', 'value': 'DFI'},
-                                                                                                                     {'label': 'dUSD Yield Machine', 'value': 'DUSD'}],
-                                                                                    value='DFI', clearable=False, style=dict(verticalAlign="bottom")))]),
+                                                               html.Td(dcc.Dropdown(id='lockSelectService', options=[{'label': 'DFI Masternode', 'value': 'DFI_MN'},
+                                                                                                                     {'label': 'DFI Yield Machine', 'value': 'DFI_YM'},
+                                                                                                                     {'label': 'dUSD Yield Machine', 'value': 'DUSD_YM'}],
+                                                                                    value='DFI_MN', clearable=False, style=dict(verticalAlign="bottom")))]),
                                                     html.Tr([html.Td('Select graph for evaluation:'),
                                                                html.Td(dcc.Dropdown(id='lockSelectGraph', options=[{'label': 'Total investment', 'value': 'totalInvestment'},
                                                                                                                    {'label': 'Daily change', 'value': 'dailyChange'}],
@@ -39,18 +40,20 @@ class lockViewClass:
             specs=[[{}]],
             shared_xaxes=True,
             subplot_titles=([]))
-        ['DFIdepositsLOCK', 'DFIwithdrawalsLOCK', 'DUSDdepositsLOCK', 'DUSDwithdrawalsLOCK']
+        #['DFIdepositsMNLOCK', 'DFIwithdrawalsMNLOCK','DFIdepositsYMLOCK', 'DFIwithdrawalsYMLOCK','DUSDdepositsYMLOCK', 'DUSDwithdrawalsYMLOCK']
 
         formatHover = '%{y:,.2f}'
+        coinSelect = serviceSelection[:-3]
+        stakeSelect = serviceSelection[-2:]
         if graphSelection=='totalInvestment':
-            ydata = data[serviceSelection+'depositsLOCK'].cumsum()-data[serviceSelection+'withdrawalsLOCK'].cumsum()
+            ydata = data[coinSelect+'deposits'+stakeSelect+'LOCK'].cumsum()-data[coinSelect+'withdrawals'+stakeSelect+'LOCK'].cumsum()
             trace_total = dict(type='scatter', name='TVL', x=ydata.dropna().index, y=ydata.dropna(),
                           mode='lines', line=dict(color='#ff2ebe'), line_width=3, hovertemplate=formatHover)
             figLOCK.add_trace(trace_total, 1, 1)
 
         else:
-            ydataDeposit = data[serviceSelection+'depositsLOCK'].cumsum().groupby(data['dfxBuyVolume'].index.floor('d')).last().diff()
-            ydataWithdrawal = data[serviceSelection+'withdrawalsLOCK'].cumsum().groupby(data['dfxSellVolume'].index.floor('d')).last().diff()
+            ydataDeposit = data[coinSelect+'deposits'+stakeSelect+'LOCK'].cumsum().groupby(data['dfxBuyVolume'].index.floor('d')).last().diff()
+            ydataWithdrawal = data[coinSelect+'withdrawals'+stakeSelect+'LOCK'].cumsum().groupby(data['dfxSellVolume'].index.floor('d')).last().diff()
 
             trace_diff = dict(type='scatter', name='Daily difference', x=(ydataDeposit - ydataWithdrawal).dropna().index, y=(ydataDeposit - ydataWithdrawal).dropna(),
                               mode='lines', line=dict(color='#ff2ebe'), line_width=3, hovertemplate=formatHover)
@@ -63,7 +66,7 @@ class lockViewClass:
             figLOCK.add_trace(trace_withdrawal, 1, 1)
             figLOCK.add_trace(trace_diff, 1, 1)
 
-        lastValidDate = datetime.utcfromtimestamp(data['DFIdepositsLOCK'].dropna().index.values[-1].tolist() / 1e9)
+        lastValidDate = datetime.utcfromtimestamp(data[coinSelect+'deposits'+stakeSelect+'LOCK'].dropna().index.values[-1].tolist() / 1e9)
         dateGoBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
 
