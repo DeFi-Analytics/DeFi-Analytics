@@ -17,6 +17,7 @@ print('Start acquiring data ...')
 
 # Bitcoin-price
 coinInfosCG = cg.get_coin_market_chart_range_by_id(id='bitcoin',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='bitcoin',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCG['prices'])
 temp['BTCPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
@@ -25,10 +26,11 @@ temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
 temp.set_index('Date', inplace=True)
 coinPricesDF = temp
 print('   Bitcoin prices acquired')
-time.sleep(10)
+time.sleep(30)
 
 # Ethereum-price
 coinInfosCGEUR = cg.get_coin_market_chart_range_by_id(id='ethereum',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='ethereum',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCGEUR['prices'])
 temp['ETHPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
@@ -37,10 +39,11 @@ temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
 temp.set_index('Date', inplace=True)
 coinPricesDF[['ETHPriceEUR','ETHPriceUSD']] = temp[['ETHPriceEUR','ETHPriceUSD']]
 print('   Ethereum prices acquired')
-time.sleep(10)
+time.sleep(30)
 
 # defichain-price
 coinInfosCG = cg.get_coin_market_chart_range_by_id(id='defichain',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='defichain',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCG['prices'])
 temp['DFIPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
@@ -51,10 +54,11 @@ coinPricesDF[['DFIPriceEUR','DFIPriceUSD']] = temp[['DFIPriceEUR','DFIPriceUSD']
 coinPricesDF['DFIPriceEUR'].fillna(0.089,inplace=True)
 coinPricesDF['DFIPriceUSD'].fillna(0.1,inplace=True)
 print('   DefiChain prices acquired')
-time.sleep(10)
+time.sleep(30)
 
 # Dash-price
 coinInfosCG = cg.get_coin_market_chart_range_by_id(id='dash',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='dash',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCG['prices'])
 temp['DASHPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
@@ -63,10 +67,11 @@ temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
 temp.set_index('Date', inplace=True)
 coinPricesDF[['DASHPriceEUR','DASHPriceUSD']] = temp[['DASHPriceEUR','DASHPriceUSD']]
 print('   Dash prices acquired')
-time.sleep(10)
+time.sleep(30)
 
 # XZC-price
 coinInfosCG = cg.get_coin_market_chart_range_by_id(id='zcoin',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='zcoin',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCG['prices'])
 temp['XZCPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
@@ -75,22 +80,11 @@ temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
 temp.set_index('Date', inplace=True)
 coinPricesDF[['XZCPriceEUR','XZCPriceUSD']] = temp[['XZCPriceEUR','XZCPriceUSD']]
 print('   ZCoin prices acquired')
-time.sleep(10)
-
-# PIVX-price
-coinInfosCG = cg.get_coin_market_chart_range_by_id(id='pivx',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
-coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='pivx',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
-temp = pd.DataFrame(coinInfosCG['prices'])
-temp['PIVXPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
-temp = temp.rename(columns={0:'Date',1:'PIVXPriceEUR',2:'PIVXPriceUSD'})
-temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
-temp.set_index('Date', inplace=True)
-coinPricesDF[['PIVXPriceEUR','PIVXPriceUSD']] = temp[['PIVXPriceEUR','PIVXPriceUSD']]
-print('   PIVX prices acquired')
-time.sleep(10)
+time.sleep(30)
 
 # USDT-price
 coinInfosCG = cg.get_coin_market_chart_range_by_id(id='tether',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='tether',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCG['prices'])
 temp['USDTPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
@@ -99,10 +93,11 @@ temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
 temp.set_index('Date', inplace=True)
 coinPricesDF[['USDTPriceEUR','USDTPriceUSD']] = temp[['USDTPriceEUR','USDTPriceUSD']]
 print('   USDT prices acquired')
-time.sleep(10)
+time.sleep(30)
 
 # DOGE-price
 coinInfosCG = cg.get_coin_market_chart_range_by_id(id='dogecoin',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='dogecoin',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCG['prices'])
 temp['DOGEPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
@@ -111,10 +106,11 @@ temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
 temp.set_index('Date', inplace=True)
 coinPricesDF[['DOGEPriceEUR','DOGEPriceUSD']] = temp[['DOGEPriceEUR','DOGEPriceUSD']]
 print('   Dogecoin prices acquired')
-time.sleep(10)
+time.sleep(30)
 
 # LTC-price
 coinInfosCG = cg.get_coin_market_chart_range_by_id(id='litecoin',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='litecoin',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCG['prices'])
 temp['LTCPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
@@ -123,10 +119,11 @@ temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
 temp.set_index('Date', inplace=True)
 coinPricesDF[['LTCPriceEUR','LTCPriceUSD']] = temp[['LTCPriceEUR','LTCPriceUSD']]
 print('   LTC prices acquired')
-time.sleep(10)
+time.sleep(30)
 
 # BCH-price
 coinInfosCG = cg.get_coin_market_chart_range_by_id(id='bitcoin-cash',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='bitcoin-cash',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCG['prices'])
 temp['BCHPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
@@ -135,10 +132,11 @@ temp['Date'] = pd.to_datetime(temp['Date'], unit='ms').dt.date
 temp.set_index('Date', inplace=True)
 coinPricesDF[['BCHPriceEUR','BCHPriceUSD']] = temp[['BCHPriceEUR','BCHPriceUSD']]
 print('   BCH prices acquired')
-time.sleep(10)
+time.sleep(30)
 
 # USDC-price
 coinInfosCG = cg.get_coin_market_chart_range_by_id(id='usd-coin',vs_currency='eur',from_timestamp=startDate,to_timestamp=endDate)
+time.sleep(30)
 coinInfosCGUSD = cg.get_coin_market_chart_range_by_id(id='usd-coin',vs_currency='usd',from_timestamp=startDate,to_timestamp=endDate)
 temp = pd.DataFrame(coinInfosCG['prices'])
 temp['USDCPriceUSD'] = pd.DataFrame(coinInfosCGUSD['prices'])[1]
