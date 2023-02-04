@@ -19,7 +19,7 @@ class dUSDMeasuresViewClass:
                    html.Div(id='hidden', style = {'display':'none'}),
                    dbc.Card(dbc.CardBody([html.H4(['dUSD Measures']),
                                           html.Div(['On this page all introduced measures to move the dUSD value towards 1 USD are evaluated.'], style={'margin-bottom': '30px'}),
-                                          html.H5(['Daily dUSD burn']),
+                                          html.H5(['dUSD burn rate']),
                                           html.Table([html.Tr([html.Td('Select time base for representation:'),
                                                                html.Td(dcc.Dropdown(id='dUSDBurnTimeSelection',
                                                                                     options=[{'label': 'Hourly burn rate', 'value': 'H'},
