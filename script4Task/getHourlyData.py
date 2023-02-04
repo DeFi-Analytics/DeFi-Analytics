@@ -374,14 +374,21 @@ def getLOCKData():
     tempDataframe['order'] = 'deposit'
     tempDataframe['date'] = pd.to_datetime(tempDataframe['date'])
     tempDataframe.set_index('date', inplace=True)
-    index2Add = ~tempDataframe.id.isin(dfLOCKorders.id)
+    index2Add = ~tempDataframe.index.isin(dfLOCKorders.index)
     dfLOCKorders = dfLOCKorders.append(tempDataframe[index2Add])
 
     tempDataframe = pd.DataFrame(tempData['withdrawals'])
     tempDataframe['order'] = 'withdrawal'
     tempDataframe['date'] = pd.to_datetime(tempDataframe['date'])
-    tempDataframe.set_index('date', inplace=True)    # get hourly data
-    dfLOCKData = pd.DataFrame(columns=['DFIdepositsMNLOCK', 'DFIwithdrawalsMNLOCK','DFIdepositsYMLOCK', 'DFIwithdrawalsYMLOCK','DUSDdepositsYMLOCK', 'DUSDwithdrawalsYMLOCK'])
+    tempDataframe.set_index('date', inplace=True)
+    index2Add = ~tempDataframe.index.isin(dfLOCKorders.index)
+    dfLOCKorders = dfLOCKorders.append(tempDataframe[index2Add])
+
+
+    # get hourly data
+    dfLOCKData = pd.DataFrame(columns=['DFIdepositsMNLOCK', 'DFIwithdrawalsMNLOCK','DFIdepositsYMLOCK', 'DFIwithdrawalsYMLOCK','DUSDdepositsYMLOCK', 'DUSDwithdrawalsYMLOCK'],
+                              index=dfLOCKorders.amount.groupby(pd.Grouper(freq='H')).sum().index)
+    dfLOCKData.index = dfLOCKorders.amount.groupby(pd.Grouper(freq='H')).sum().index
     dfLOCKData['DFIdepositsMNLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'Masternode')].amount.groupby(pd.Grouper(freq='H')).sum()
     dfLOCKData['DFIwithdrawalsMNLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'Masternode')].amount.groupby(pd.Grouper(freq='H')).sum()
 
@@ -406,7 +413,6 @@ def getLOCKData():
 
 
 timeStampData = pd.Timestamp.now()
-
 
 
 # DFIP Futures data
@@ -444,9 +450,4 @@ try:
 except:
     print('### Error in LOCK data acquisition')
 
-# LOCK data
-try:
-    getLOCKData()
-    print('LOCK data saved')
-except:
-    print('### Error in LOCK data acquisition')
+
