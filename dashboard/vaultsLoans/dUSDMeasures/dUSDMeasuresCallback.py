@@ -1,7 +1,13 @@
 from dash.dependencies import Input, Output, State
 
 class dUSDMeasuresCallbacksClass:
-    def __init__(self, defichainAnalyticsModel, overviewView, app):
+    def __init__(self, defichainAnalyticsModel, dUSDMeasuresView, app):
+
+        @app.callback(Output('figureDUSDBurn', 'figure'),
+                      [Input('dUSDBurnTimeSelection', 'value')])
+        def updateDUSDBurnGraph(selectedGraph):
+            figDUSDBurn = dUSDMeasuresView.createDUSDBurnFig(defichainAnalyticsModel.hourlyData, defichainAnalyticsModel.figBackgroundImage, selectedGraph)
+            return figDUSDBurn
 
         @app.callback(
             Output("modaldUSDMeasures", "is_open"),

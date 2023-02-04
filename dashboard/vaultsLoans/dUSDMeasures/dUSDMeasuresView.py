@@ -19,14 +19,19 @@ class dUSDMeasuresViewClass:
                    html.Div(id='hidden', style = {'display':'none'}),
                    dbc.Card(dbc.CardBody([html.H4(['dUSD Measures']),
                                           html.Div(['On this page all introduced measures to move the dUSD value towards 1 USD are evaluated.'], style={'margin-bottom': '30px'}),
-                                          html.H5(['DEX stabilizing fee']),
+                                          html.H5(['Daily dUSD burn']),
+                                          html.Table([html.Tr([html.Td('Select time base for representation:'),
+                                                               html.Td(dcc.Dropdown(id='dUSDBurnTimeSelection',
+                                                                                    options=[{'label': 'Hourly burn rate', 'value': 'H'},
+                                                                                             {'label': 'Daily burn rate', 'value': 'D'}],
+                                                                                    value='D', clearable=False, style=dict(width='200px', verticalAlign="bottom")))])]),
+                                          dbc.Row(dbc.Col(dcc.Graph(config={'displayModeBar': False}, id='figureDUSDBurn'))),
+                                          html.H5(['DEX stabilizing fee'], style={'margin-top': '30px'}),
                                           dbc.Row(dbc.Col(dcc.Graph(figure=self.createDUSDStabFeeFig(dailyData, bgImage), config={'displayModeBar': False}, id='figureDUSDStabFee'))),
                                           html.H5(['dUSD Negative interest rate'], style={'margin-top': '30px'}),
                                           dbc.Row(dbc.Col(dcc.Graph(figure=self.createDUSDNegativeInterestFig(dailyData, bgImage), config={'displayModeBar': False}, id='figureDUSDNegInterest'))),
                                           html.H5(['Block reward dUSD burn bot'], style={'margin-top': '30px'}),
                                           dbc.Row(dbc.Col(dcc.Graph(figure=self.createDUSDBurnBlockRewardFig(dailyData, bgImage), config={'displayModeBar': False}, id='figureDUSDBurnBlockReward'))),
-                                          html.H5(['Daily dUSD burn via bot'], style={'margin-top': '30px'}),
-                                          dbc.Row(dbc.Col(dcc.Graph(figure=self.createDUSDBurnedBotFig(hourlyData, bgImage), config={'displayModeBar': False}, id='figureDUSDBurnBlockReward'))),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfodUSDMeasures")))
                                           ]))]
         return content
@@ -204,7 +209,7 @@ class dUSDMeasuresViewClass:
         return figDUSDBurnBlockReward
 
     @staticmethod
-    def createDUSDBurnedBotFig(data, bgImage):
+    def createDUSDBurnFig(data, bgImage, selectedGraph):
         figDUSDBurnedBot = make_subplots(
             rows=1, cols=1,
             vertical_spacing=0.15,
@@ -212,18 +217,35 @@ class dUSDMeasuresViewClass:
             specs=[[{}]],
             shared_xaxes=True,
             subplot_titles=([]))
-        burnedBotData = data['DUSDBurnBot_DUSDAmount'].groupby(pd.Grouper(freq='D')).sum()
+        dataSumDEXBurn = data['burnedDUSDDEX'] - data['DUSDBurnBot_SumDUSDAmount'] - data['DUSDBurnBot2_SumDUSDAmount']
+
+        burnedBotData = data['DUSDBurnBot_SumDUSDAmount'].groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
+        burnedBot2Data = data['DUSDBurnBot2_SumDUSDAmount'].groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
+        burnedDEXData = dataSumDEXBurn.groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
+
+        dataOverallBurned = burnedBotData+burnedBot2Data+burnedDEXData
 
 
         lastValidDate = datetime.strptime(str(burnedBotData.dropna().index.values[-1])[:10], '%Y-%m-%d')
         date30DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(months=2)
 
-        trace_dUSDBurnedBot = dict(type='scatter', name='dUSD burned via Bot',
-                                         x=burnedBotData.dropna().index, y=burnedBotData.dropna(),
-                                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.2f} dUSD')
-        figDUSDBurnedBot.add_trace(trace_dUSDBurnedBot, 1, 1)
+        trace_dTokenBurnBot = dict(type='scatter', name='dUSD burned via Bot', x=burnedBotData.dropna().index, y=burnedBotData.dropna(),
+                                   mode='lines', line=dict(color='#711714'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tozeroy')
+        figDUSDBurnedBot.add_trace(trace_dTokenBurnBot, 1, 1)
+        trace_dTokenBurnBot2 = dict(type='scatter', name='dUSD burned via Bot 2 (free DFI rewards)', x=burnedBot2Data.dropna().index, y=burnedBot2Data.dropna(),
+                                   mode='lines', line=dict(color='#270806'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
+        figDUSDBurnedBot.add_trace(trace_dTokenBurnBot2, 1, 1)
+        trace_dTokenFeeBurn = dict(type='scatter', name='dUSD burned via DEX-Fee', x=burnedDEXData.dropna().index, y=burnedDEXData.dropna(),
+                                   mode='lines', line=dict(color='#696969'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
+        figDUSDBurnedBot.add_trace(trace_dTokenFeeBurn, 1, 1)
 
-        figDUSDBurnedBot.update_yaxes(title_text='Daily dUSD burn via Bot', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
+
+        trace_overallBurned = dict(type='scatter', name='Overall burned dUSD',
+                                         x=dataOverallBurned.dropna().index, y=dataOverallBurned.dropna(),
+                                         mode='lines', line=dict(color='#ff00af'), line_width=2, hovertemplate='%{y:,.2f} dUSD')
+        figDUSDBurnedBot.add_trace(trace_overallBurned, 1, 1)
+
+        figDUSDBurnedBot.update_yaxes(title_text='Daily dUSD burn', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
                                             zerolinecolor='#6c757d', row=1, col=1)  # ,range=[-50, 200]
         figDUSDBurnedBot.update_xaxes(title_text="Date", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d',
                                             range=[date30DaysBack, lastValidDate], row=1, col=1)

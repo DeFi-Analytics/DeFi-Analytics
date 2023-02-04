@@ -71,7 +71,7 @@ class vaultsLoansControllerClass:
 
         # initialize dUSD measures classes
         self.dUSDMeasuresView = dUSDMeasuresViewClass()
-        self.dUSDMeasuresCallbacks = dUSDMeasuresCallbacksClass(self.defichainAnalyticsModel, self.schemeView, app)
+        self.dUSDMeasuresCallbacks = dUSDMeasuresCallbacksClass(self.defichainAnalyticsModel, self.dUSDMeasuresView, app)
 
     def getContent(self, entry):
         pageContent = None
