@@ -46,7 +46,6 @@ class defichainAnalyticsModelClass:
         self.update_changelogData = None
         self.update_incomeVisits = None
         self.update_portfolioDownloads = None
-        self.update_promoDatabase = None
         self.update_analyticsVisits = None
         self.updated_hourlyDEXTrades = None
         self.update_MNmonitor = None
@@ -84,7 +83,6 @@ class defichainAnalyticsModelClass:
         self.loadTwitterFollowerData()
         self.loadIncomeVisitsData()
         self.loadPortfolioDownloads()
-        self.loadPromoDatabase()
         self.loadMNMonitorDatabase()
         self.loadAnalyticsVisitsData()
         self.loadDFIsignalDatabase()
@@ -372,23 +370,6 @@ class defichainAnalyticsModelClass:
 
             self.update_portfolioDownloads = fileInfo.stat()
             print('>>>> Portfolio downloads data loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
-
-    def loadPromoDatabase(self):
-        print('>>>> Start update DefiChain promo database ... <<<<')
-        filePath = self.dataPath + 'defichainPromoData.csv'
-        fileInfo = pathlib.Path(filePath)
-        if fileInfo.stat() != self.update_promoDatabase:
-            promoRawData = pd.read_csv(filePath, index_col=0)
-
-            columns2update = ['postActive', 'mediaActive', 'incentivePointsToday', 'incentiveUsers']
-
-            # delete existing information and add new one
-            ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
-            self.dailyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
-            self.dailyData = self.dailyData.merge(promoRawData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
-
-            self.update_promoDatabase = fileInfo.stat()
-            print('>>>> DefiChain promo database loaded from csv-file <<<< ==== Columns: '+str(len(self.dailyData.columns))+'  Rows: '+str(len(self.dailyData.index)))
 
     def loadMNMonitorDatabase(self):
         print('>>>> Start update masternode monitor database ... <<<<')

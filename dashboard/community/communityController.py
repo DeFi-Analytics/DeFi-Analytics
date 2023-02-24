@@ -13,9 +13,6 @@ from .income.incomeView import incomeViewClass
 
 from .portfolio.portfolioView import portfolioViewClass
 
-from .promo.promoView import promoViewClass
-from .promo.promoCallbacks import promoCallbacksClass
-
 from .mnMonitor.mnMonitorView import mnMonitorViewClass
 
 from .dfx.dfxViews import dfxViewClass
@@ -60,10 +57,6 @@ class communityControllerClass:
 
         # initialize portfolio downloads classes
         self.portfolioView = portfolioViewClass()
-
-        # initialize defichain promo classes
-        self.promoView = promoViewClass()
-        self.promoCallbacks = promoCallbacksClass(self.defichainAnalyticsModel, self.promoView, app)
 
         # initialize MN monitor classes
         self.mnMonitorView = mnMonitorViewClass()
@@ -111,9 +104,6 @@ class communityControllerClass:
         elif entry in ["portfolio"]:
             self.defichainAnalyticsModel.loadPortfolioDownloads()
             pageContent = self.portfolioView.getPortfolioContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
-        elif entry in ["promo"]:
-            self.defichainAnalyticsModel.loadPromoDatabase()
-            pageContent = self.promoView.getPromoContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry in ["mnmonitor"]:
             self.defichainAnalyticsModel.loadMNMonitorDatabase()
             pageContent = self.mnMonitorView.getmnMonitorContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
