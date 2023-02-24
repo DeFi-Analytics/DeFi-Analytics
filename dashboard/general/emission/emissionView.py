@@ -67,6 +67,8 @@ class emissionViewClass:
                              mode='lines', line=dict(color='#c2a634'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_Burn = dict(type='scatter', name='Burned (unused)', x=data['burnedEmission'].dropna().index, y=data['burnedEmission'].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#5d5d5d'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+        trace_dUSDBot = dict(type='scatter', name='dUSD burn bot 2', x=data['dUSDBurnBotEmission'].dropna().index, y=data['dUSDBurnBotEmission'].dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # line graph
         trace_Line = dict(type='scatter', name=lineName, x=lineData.dropna().index, y=lineData.dropna(),
@@ -79,7 +81,7 @@ class emissionViewClass:
             figEmission.add_trace(trace_Fund, 1, 1)
             figEmission.add_trace(trace_Anchor, 1, 1)
             figEmission.add_trace(trace_Burn, 1, 1)
-
+            figEmission.add_trace(trace_dUSDBot, 1, 1)
 
         figEmission.add_trace(trace_Line, 1, 1)
 

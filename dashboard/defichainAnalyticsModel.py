@@ -474,7 +474,14 @@ class defichainAnalyticsModelClass:
                                     'dex': 'dexEmission',
                                     'masternode': 'masternodeEmission',
                                     'total': 'totalEmission' }, axis=1, inplace=True)
-            columns2update = ['anchorEmission', 'burnedEmission', 'communityEmission', 'dTokenEmission', 'dexEmission', 'masternodeEmission', 'totalEmission' ]
+            dateOfBurnBotActivation = '2022-12-08'
+            # set burn bot emission based on burnd DFI emission
+            emissionRawData['dUSDBurnBotEmission'] = emissionRawData.loc[pd.to_datetime(emissionRawData.index)>=pd.to_datetime(dateOfBurnBotActivation),'burnedEmission']
+            emissionRawData['dUSDBurnBotEmission'].fillna(0, inplace=True)
+            # set burnEmission to zero after dUSD burn bot activation
+            emissionRawData.loc[pd.to_datetime(emissionRawData.index) >= pd.to_datetime(dateOfBurnBotActivation), 'burnedEmission'] = 0
+
+            columns2update = ['anchorEmission', 'burnedEmission', 'communityEmission', 'dTokenEmission', 'dexEmission', 'masternodeEmission', 'totalEmission', 'dUSDBurnBotEmission' ]
 
             # delete existing information and add new one
             ind2Delete = self.dailyData.columns.intersection(columns2update)                                                               # check if columns exist
