@@ -110,6 +110,7 @@ class vaultsLoansControllerClass:
             self.defichainAnalyticsModel.loadVaultData()
             pageContent = self.premiumDTokenView.getPremiumDTokenContent(self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
         elif entry == 'dUSDMeasures':
+            self.defichainAnalyticsModel.loadVaultData()
             self.defichainAnalyticsModel.loadDUSDMeasureData()
             self.defichainAnalyticsModel.loadDUSDBurnBotData()
             pageContent = self.dUSDMeasuresView.getdUSDMeasuresContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.hourlyData, self.defichainAnalyticsModel.figBackgroundImage)
