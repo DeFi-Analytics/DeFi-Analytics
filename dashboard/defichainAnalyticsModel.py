@@ -190,9 +190,19 @@ class defichainAnalyticsModelClass:
         self.loadMNnodehub()
         self.loadMNAllnodes()
 
+        # load MN number data from mydefichain-API (used since 11/2022)
+        filePath = self.dataPath + 'mnNumbers.csv'
+        mnNumbersMydefichain = pd.read_csv(filePath, index_col=1)
+        mnNumbersMydefichain.fillna(0, inplace=True)
+
+        self.dailyData.loc[mnNumbersMydefichain.index, 'nbMnCakeId'] = mnNumbersMydefichain['nbMNCake']
+        self.dailyData.loc[mnNumbersMydefichain.index, 'nbMydefichainId'] = mnNumbersMydefichain['nbMNmydefichain']
+        self.dailyData.loc[mnNumbersMydefichain.index, 'nbMNAllnode'] = mnNumbersMydefichain['nbMNAllnodes']
+        self.dailyData.loc[mnNumbersMydefichain.index, 'nbMNLOCK'] = mnNumbersMydefichain['nbMNLOCK']
+
         # calculate missing information
-        self.dailyData['nbMNOther'] = self.dailyData['nbMnId'] - self.dailyData['nbMnCakeId'] - self.dailyData['nbMydefichainId'].fillna(method="ffill") - self.dailyData['nbMNNodehub'].fillna(method="ffill") - \
-                                      self.dailyData['nbMNAllnode'].fillna(method="ffill")
+        self.dailyData['nbMNOther'] = self.dailyData['nbMnId'] - self.dailyData['nbMnCakeId'] - self.dailyData['nbMydefichainId'].fillna(0) - self.dailyData['nbMNNodehub'].fillna(0) - \
+                                      self.dailyData['nbMNAllnode'].fillna(0) - self.dailyData['nbMNLOCK'].fillna(0)
         self.dailyData['nbMNnonCake'] = self.dailyData['nbMnId'] - self.dailyData['nbMnCakeId']
 
         self.dailyData['nbMnCakeIdRelative'] = self.dailyData['nbMnCakeId'] / self.dailyData['nbMnId'] * 100
@@ -200,6 +210,7 @@ class defichainAnalyticsModelClass:
         self.dailyData['nbMydefichainRelative'] = self.dailyData['nbMydefichainId'] / self.dailyData['nbMnId'] * 100
         self.dailyData['nbMNNodehubRelative'] = self.dailyData['nbMNNodehub'] / self.dailyData['nbMnId'] * 100
         self.dailyData['nbMNAllnodeRelative'] = self.dailyData['nbMNAllnode'] / self.dailyData['nbMnId'] * 100
+        self.dailyData['nbMNLOCKRelative'] = self.dailyData['nbMNLOCK'] / self.dailyData['nbMnId'] * 100
 
         self.dailyData['nbMNlocked10Relative'] = self.dailyData['nbMNlocked10'] / self.dailyData['nbMnId'] * 100
         self.dailyData['nbMNlocked5Relative'] = self.dailyData['nbMNlocked5'] / self.dailyData['nbMnId'] * 100

@@ -39,6 +39,7 @@ class masternodesViewClass:
             sigNameMydefichain = 'nbMydefichainRelative'
             sigNameNodehub = 'nbMNNodehubRelative'
             sigNameAllnodes = 'nbMNAllnodeRelative'
+            sigNameLOCK = 'nbMNLOCKRelative'
             sigNameFreezer10 = 'nbMNlocked10Relative'
             sigNameFreezer5 = 'nbMNlocked5Relative'
             hoverTemplateRepresenation = '%{y:,.3f}%'
@@ -50,6 +51,7 @@ class masternodesViewClass:
             sigNameMydefichain = 'nbMydefichainId'
             sigNameNodehub = 'nbMNNodehub'
             sigNameAllnodes = 'nbMNAllnode'
+            sigNameLOCK = 'nbMNLOCK'
             sigNameFreezer10 = 'nbMNlocked10'
             sigNameFreezer5 = 'nbMNlocked5'
             hoverTemplateRepresenation = '%{y:,.0f}'
@@ -67,6 +69,8 @@ class masternodesViewClass:
                                    stackgroup='one', mode='lines', line=dict(color='#da3832'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_MNMydefichain = dict(type='scatter', name='MyDefichain', x=data[sigNameMydefichain].fillna(method="ffill").index, y=data[sigNameMydefichain].fillna(method="ffill"),
                              stackgroup='one', mode='lines', line=dict(color='#ff9800'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+        trace_MNLOCK = dict(type='scatter', name='LOCK', x=data[sigNameLOCK].fillna(method="ffill").index, y=data[sigNameLOCK].fillna(method="ffill"),
+                             stackgroup='one', mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_MNCake = dict(type='scatter', name='Cake', x=data[sigNameMNCake].fillna(method="ffill").index, y=data[sigNameMNCake].fillna(method="ffill"),
                             stackgroup='one', mode='lines', line=dict(color='#5b10ff'), line_width=0, hovertemplate=hoverTemplateRepresenation, visible='legendonly',
                             fill='tonexty')
@@ -83,6 +87,7 @@ class masternodesViewClass:
                                 mode='lines', line=dict(color='#0000ff', dash='dot'), line_width=3, hovertemplate=hoverTemplateRepresenation)
 
         figMN.add_trace(trace_MNOther, 1, 1)
+        figMN.add_trace(trace_MNLOCK, 1, 1)
         figMN.add_trace(trace_MNMydefichain, 1, 1)
         figMN.add_trace(trace_MNAllnode, 1, 1)
         figMN.add_trace(trace_MNNodehub, 1, 1)
