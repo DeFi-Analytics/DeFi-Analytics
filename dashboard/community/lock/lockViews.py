@@ -21,7 +21,11 @@ class lockViewClass:
                                           html.Table([html.Tr([html.Td('Select service:'),
                                                                html.Td(dcc.Dropdown(id='lockSelectService', options=[{'label': 'DFI Masternode', 'value': 'DFI_MN'},
                                                                                                                      {'label': 'DFI Yield Machine', 'value': 'DFI_YM'},
-                                                                                                                     {'label': 'dUSD Yield Machine', 'value': 'DUSD_YM'}],
+                                                                                                                     {'label': 'dUSD Yield Machine', 'value': 'DUSD_YM'},
+                                                                                                                     {'label': 'dBTC Yield Machine', 'value': 'dBTC_YM'},
+                                                                                                                     {'label': 'dETH Yield Machine', 'value': 'dETH_YM'},
+                                                                                                                     {'label': 'dUSDT Yield Machine', 'value': 'dUSDT_YM'},
+                                                                                                                     {'label': 'dUSDC Yield Machine', 'value': 'dUSDC_YM'}],
                                                                                     value='DFI_MN', clearable=False, style=dict(verticalAlign="bottom")))]),
                                                     html.Tr([html.Td('Select graph for evaluation:'),
                                                                html.Td(dcc.Dropdown(id='lockSelectGraph', options=[{'label': 'Total investment', 'value': 'totalInvestment'},
@@ -40,14 +44,14 @@ class lockViewClass:
             specs=[[{}]],
             shared_xaxes=True,
             subplot_titles=([]))
-        #['DFIdepositsMNLOCK', 'DFIwithdrawalsMNLOCK','DFIdepositsYMLOCK', 'DFIwithdrawalsYMLOCK','DUSDdepositsYMLOCK', 'DUSDwithdrawalsYMLOCK']
+
 
         formatHover = '%{y:,.2f}'
         coinSelect = serviceSelection[:-3]
         stakeSelect = serviceSelection[-2:]
         if graphSelection=='totalInvestment':
             ydata = data[coinSelect+'deposits'+stakeSelect+'LOCK'].cumsum()-data[coinSelect+'withdrawals'+stakeSelect+'LOCK'].cumsum()
-            trace_total = dict(type='scatter', name='TVL', x=ydata.dropna().index, y=ydata.dropna(),
+            trace_total = dict(type='scatter', name='Locked '+coinSelect, x=ydata.dropna().index, y=ydata.dropna(),
                           mode='lines', line=dict(color='#ff2ebe'), line_width=3, hovertemplate=formatHover)
             figLOCK.add_trace(trace_total, 1, 1)
 

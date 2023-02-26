@@ -392,11 +392,11 @@ def getLOCKData():
     dfLOCKData['DFIdepositsMNLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'Masternode')].amount.groupby(pd.Grouper(freq='H')).sum()
     dfLOCKData['DFIwithdrawalsMNLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'Masternode')].amount.groupby(pd.Grouper(freq='H')).sum()
 
-    dfLOCKData['DFIdepositsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
-    dfLOCKData['DFIwithdrawalsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DFI') & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
+    coinsYM = dfLOCKorders.asset.unique()
+    for key in coinsYM:
+        dfLOCKData[key+'depositsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == key) & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
+        dfLOCKData[key+'withdrawalsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == key) & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
 
-    dfLOCKData['DUSDdepositsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'deposit') & (dfLOCKorders.asset == 'DUSD') & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
-    dfLOCKData['DUSDwithdrawalsYMLOCK'] = dfLOCKorders[(dfLOCKorders.order == 'withdrawal') & (dfLOCKorders.asset == 'DUSD') & (dfLOCKorders.stakingStrategy == 'LiquidityMining')].amount.groupby(pd.Grouper(freq='H')).sum()
     dfLOCKData.fillna(0, inplace=True)
     dfLOCKData.index = dfLOCKData.index.strftime('%Y-%m-%d %H:%M')
     index2Add = ~tempDataframe.id.isin(dfLOCKorders.id)
@@ -413,7 +413,6 @@ def getLOCKData():
 
 
 timeStampData = pd.Timestamp.now()
-
 
 # DFIP Futures data
 try:
