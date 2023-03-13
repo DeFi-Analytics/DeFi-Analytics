@@ -460,6 +460,17 @@ def getDFXData():
     # writing file
     dfDFXData.to_csv(filepathSummary)
 
+
+def getChainReportData():
+    auth_token = 'd_ewE9AcXsqMYWPaLFJZR4mhZ_pBrG4JMlF9gldwGyVfkWKQaOOpQa1RsXJB--W0'
+    hed = {'Authorization': 'Bearer ' + auth_token}
+
+    link = 'https://plausible.io/api/v1/stats/timeseries?site_id=chain.report&metrics=pageviews&period=30d'
+    siteContent = requests.get(link, headers=hed)
+
+    tempData = json.loads(siteContent.text)
+    dfChainReport = pd.DataFrame(tempData['results'])
+
 def getQuantumLiquidity(timeStampData):
     # defichain side:
     # Cold: df1q9ctssszdr7taa8yt609v5fyyqundkxu0k4se9ry8lsgns8yxgfsqcsscmr
