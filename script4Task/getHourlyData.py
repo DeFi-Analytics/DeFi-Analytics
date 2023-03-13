@@ -460,8 +460,87 @@ def getDFXData():
     # writing file
     dfDFXData.to_csv(filepathSummary)
 
+def getQuantumLiquidity(timeStampData):
+    # defichain side:
+    # Cold: df1q9ctssszdr7taa8yt609v5fyyqundkxu0k4se9ry8lsgns8yxgfsqcsscmr
+    # Hot: df1qgq0rjw09hr6vr7sny2m55hkr5qgze5l9hcm0lg
+    #
+    # Ethereum side,
+    # 0x8D8cbEdf12F248Dfb0449BDD42Ce9d47deF092D0
+    # hot would be the smart contract: 0x54346D39976629B65bA54EaC1C9Ef0af3be1921b
+
+    filepath = path + 'QuantumLiquidityData.csv'
+    newData = pd.Series(name=timeStampData, dtype=object,
+                        index=['QuantumLiqu_Hot_ETH', 'QuantumLiqu_Hot_WBTC', 'QuantumLiqu_Hot_USDT', 'QuantumLiqu_Hot_USDC', 'QuantumLiqu_Hot_DFI', 'QuantumLiqu_Hot_EUROC',
+                               'QuantumLiqu_Cold_ETH', 'QuantumLiqu_Cold_WBTC', 'QuantumLiqu_Cold_USDT', 'QuantumLiqu_Cold_USDC', 'QuantumLiqu_Cold_DFI', 'QuantumLiqu_Cold_EUROC',])
+
+    #Ethereum holdings - hot wallet
+    hotWalletAddress = '0x54346D39976629B65bA54EaC1C9Ef0af3be1921b'
+    coldWalletAddress = '0x8D8cbEdf12F248Dfb0449BDD42Ce9d47deF092D0'
+
+    contractWBTC = '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599'
+    contractUSDT = '0xdac17f958d2ee523a2206206994597c13d831ec7'
+    contractUSDC = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+    contractDFI = '0x8Fc8f8269ebca376D046Ce292dC7eaC40c8D358A'
+    contractEUROC = '0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c'
+
+    # ETH holding - hot wallet
+    link = 'https://api.etherscan.io/api?module=account' \
+           '&action=balance' \
+           '&address=' +hotWalletAddress+\
+           '&tag=latest' \
+           '&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    newData['QuantumLiqu_Hot_ETH'] = float(tempData['result']) * 1e-18
+
+    # ETH holding - cold wallet
+    link = 'https://api.etherscan.io/api?module=account' \
+           '&action=balance' \
+           '&address=' +coldWalletAddress+\
+           '&tag=latest' \
+           '&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    newData['QuantumLiqu_Cold_ETH'] = float(tempData['result']) * 1e-18
+
+
+    availableToken = {'WBTC': contractWBTC, 'USDT': contractUSDT, 'USDC': contractUSDC, 'DFI':contractDFI, 'EUROC': contractEUROC}
+    availableTokenFactor = {'WBTC': 1e-8, 'USDT': 1e-6, 'USDC': 1e-6, 'DFI': 1e-8, 'EUROC': 1e-6}
+    for key in availableToken:
+        # hot wallet holdings
+        link = 'https://api.etherscan.io/api?module=account' \
+               '&action=tokenbalance' \
+               '&contractaddress='+availableToken.get(key)+ \
+               '&address='+hotWalletAddress+ \
+               '&tag=latest' \
+               '&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+        siteContent = requests.get(link)
+        tempData = json.loads(siteContent.text)
+        newData['QuantumLiqu_Hot_'+key] = float(tempData['result'])*availableTokenFactor.get(key)
+
+        # cold wallet holdings
+        link = 'https://api.etherscan.io/api?module=account' \
+               '&action=tokenbalance' \
+               '&contractaddress='+availableToken.get(key)+ \
+               '&address='+coldWalletAddress+ \
+               '&tag=latest' \
+               '&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+        siteContent = requests.get(link)
+        tempData = json.loads(siteContent.text)
+        newData['QuantumLiqu_Cold_'+key] = float(tempData['result'])*availableTokenFactor.get(key)
+
+    dfQuantumLiquidity = pd.read_csv(filepath, index_col=0)
+    #dfQuantumLiquidity = pd.DataFrame()
+    dfQuantumLiquidity = dfQuantumLiquidity.append(newData, sort=False)
+    dfQuantumLiquidity.to_csv(filepath)
+
+    print('endOfFunction')
+
 
 timeStampData = pd.Timestamp.now()
+
+
 
 # DFIP Futures data
 try:
@@ -476,6 +555,13 @@ try:
     print('Vaults data saved')
 except:
     print('### Error in vaults data acquisition')
+
+# Quantum bridge data
+try:
+    getQuantumLiquidity(timeStampData)
+    print('Quantum bridge data saved')
+except:
+    print('### Error in Quantum bridge data acquisition')
 
 # BSC bridge data
 try:
