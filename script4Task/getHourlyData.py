@@ -207,9 +207,9 @@ def getVaultsData(timeStampData):
         print('### Error minted token from Node ###')
         mintedDUSDNode = np.NaN
 
-    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD', 'sumETH']+dfOracle.index.to_list()+
+    vaultData = pd.Series(index=listAvailableTokens+listAvailableSchemes+['nbVaults', 'nbLoans', 'nbLiquidation', 'sumInterest', 'sumDFI', 'sumBTC', 'sumUSDC', 'sumUSDT', 'sumDUSD', 'sumETH', 'sumEUROC']+dfOracle.index.to_list()+
                                 ['burnedAuction', 'burnedPayback','burnedDFIPayback','dfipaybacktokens', 'dexfeetokens','burnedOverallDUSD', 'mintedDUSD', 'mintedDUSDnode'],
-                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+
+                          data=len(listAvailableTokens)*[0] + len(listAvailableSchemes)*[0] + [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]+dfOracle.iloc[:,0].tolist()+
                                 [burnedAuction, burnedPayback, burnedDFIPayback, dfipaybacktokens, dexfeetokens, burnedOverallDUSD, mintedDUSD, mintedDUSDNode])
 
     print('   get all vaults via API')
@@ -460,7 +460,6 @@ def getDFXData():
     # writing file
     dfDFXData.to_csv(filepathSummary)
 
-
 def getChainReportData():
     auth_token = 'd_ewE9AcXsqMYWPaLFJZR4mhZ_pBrG4JMlF9gldwGyVfkWKQaOOpQa1RsXJB--W0'
     hed = {'Authorization': 'Bearer ' + auth_token}
@@ -482,12 +481,15 @@ def getQuantumLiquidity(timeStampData):
 
     filepath = path + 'QuantumLiquidityData.csv'
     newData = pd.Series(name=timeStampData, dtype=object,
-                        index=['QuantumLiqu_Hot_ETH', 'QuantumLiqu_Hot_WBTC', 'QuantumLiqu_Hot_USDT', 'QuantumLiqu_Hot_USDC', 'QuantumLiqu_Hot_DFI', 'QuantumLiqu_Hot_EUROC',
-                               'QuantumLiqu_Cold_ETH', 'QuantumLiqu_Cold_WBTC', 'QuantumLiqu_Cold_USDT', 'QuantumLiqu_Cold_USDC', 'QuantumLiqu_Cold_DFI', 'QuantumLiqu_Cold_EUROC',])
+                        index=['QuantumLiquEthereum_Hot_ETH', 'QuantumLiquEthereum_Hot_WBTC', 'QuantumLiquEthereum_Hot_USDT', 'QuantumLiquEthereum_Hot_USDC', 'QuantumLiquEthereum_Hot_DFI', 'QuantumLiquEthereum_Hot_EUROC',
+                               'QuantumLiquEthereum_Cold_ETH', 'QuantumLiquEthereum_Cold_WBTC', 'QuantumLiquEthereum_Cold_USDT', 'QuantumLiquEthereum_Cold_USDC', 'QuantumLiquEthereum_Cold_DFI', 'QuantumLiquEthereum_Cold_EUROC',
+                               'QuantumLiquDefichain_Hot_ETH', 'QuantumLiquDefichain_Hot_BTC', 'QuantumLiquDefichain_Hot_USDT', 'QuantumLiquDefichain_Hot_USDC', 'QuantumLiquDefichain_Hot_DFI', 'QuantumLiquDefichain_Hot_EUROC',
+                               'QuantumLiquDefichain_Cold_ETH', 'QuantumLiquDefichain_Cold_BTC', 'QuantumLiquDefichain_Cold_USDT', 'QuantumLiquDefichain_Cold_USDC', 'QuantumLiquDefichain_Cold_DFI', 'QuantumLiquDefichain_Cold_EUROC',
+                               ])
 
-    #Ethereum holdings - hot wallet
+    # Ethereum holdings
     hotWalletAddress = '0x54346D39976629B65bA54EaC1C9Ef0af3be1921b'
-    coldWalletAddress = '0x8D8cbEdf12F248Dfb0449BDD42Ce9d47deF092D0'
+    coldWalletAddress = '0x11901Fd641F3A2D3A986D6745A2Ff1d5FEA988eB'
 
     contractWBTC = '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599'
     contractUSDT = '0xdac17f958d2ee523a2206206994597c13d831ec7'
@@ -503,7 +505,7 @@ def getQuantumLiquidity(timeStampData):
            '&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
     siteContent = requests.get(link)
     tempData = json.loads(siteContent.text)
-    newData['QuantumLiqu_Hot_ETH'] = float(tempData['result']) * 1e-18
+    newData['QuantumLiquEthereum_Hot_ETH'] = float(tempData['result']) * 1e-18
 
     # ETH holding - cold wallet
     link = 'https://api.etherscan.io/api?module=account' \
@@ -513,7 +515,7 @@ def getQuantumLiquidity(timeStampData):
            '&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
     siteContent = requests.get(link)
     tempData = json.loads(siteContent.text)
-    newData['QuantumLiqu_Cold_ETH'] = float(tempData['result']) * 1e-18
+    newData['QuantumLiquEthereum_Cold_ETH'] = float(tempData['result']) * 1e-18
 
 
     availableToken = {'WBTC': contractWBTC, 'USDT': contractUSDT, 'USDC': contractUSDC, 'DFI':contractDFI, 'EUROC': contractEUROC}
@@ -528,7 +530,7 @@ def getQuantumLiquidity(timeStampData):
                '&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
         siteContent = requests.get(link)
         tempData = json.loads(siteContent.text)
-        newData['QuantumLiqu_Hot_'+key] = float(tempData['result'])*availableTokenFactor.get(key)
+        newData['QuantumLiquEthereum_Hot_'+key] = float(tempData['result'])*availableTokenFactor.get(key)
 
         # cold wallet holdings
         link = 'https://api.etherscan.io/api?module=account' \
@@ -539,7 +541,39 @@ def getQuantumLiquidity(timeStampData):
                '&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
         siteContent = requests.get(link)
         tempData = json.loads(siteContent.text)
-        newData['QuantumLiqu_Cold_'+key] = float(tempData['result'])*availableTokenFactor.get(key)
+        newData['QuantumLiquEthereum_Cold_'+key] = float(tempData['result'])*availableTokenFactor.get(key)
+
+    # Defichain holdings
+    hotWalletAddress = 'df1qgq0rjw09hr6vr7sny2m55hkr5qgze5l9hcm0lg'
+    coldWalletAddress = 'df1q9ctssszdr7taa8yt609v5fyyqundkxu0k4se9ry8lsgns8yxgfsqcsscmr'
+
+
+
+    # DFI holding - hot wallet
+    link = 'https://ocean.defichain.com/v0/mainnet/address/'+ hotWalletAddress + '/balance'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    newData['QuantumLiquDefichain_Hot_DFI'] = float(tempData['data'])
+
+    # DFI holding - cold wallet
+    link = 'https://ocean.defichain.com/v0/mainnet/address/'+ coldWalletAddress + '/balance'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    newData['QuantumLiquDefichain_Cold_DFI'] = float(tempData['data'])
+
+    # Token holding - hot wallet
+    link = 'https://ocean.defichain.com/v0/mainnet/address/'+ hotWalletAddress + '/tokens'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    for element in tempData['data']:
+        newData['QuantumLiquDefichain_Hot_'+element['symbol']] = float(element['amount'])
+
+    # Token holding - cold wallet
+    link = 'https://ocean.defichain.com/v0/mainnet/address/'+ coldWalletAddress + '/tokens'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    for element in tempData['data']:
+        newData['QuantumLiquDefichain_Cold_'+element['symbol']] = float(element['amount'])
 
     dfQuantumLiquidity = pd.read_csv(filepath, index_col=0)
     #dfQuantumLiquidity = pd.DataFrame()
@@ -548,10 +582,50 @@ def getQuantumLiquidity(timeStampData):
 
     print('endOfFunction')
 
+def getQuantumTxData():
+    def acquireTXAdresse(botAddress, dfOldTxList):
+        # get the first 200 entries of burn bot listaccounthistory
+        link = 'https://ocean.defichain.com/v0/mainnet/address/'+botAddress+'/history?size=200'
+        siteContent = requests.get(link)
+        apiContentAsDict = ast.literal_eval(siteContent.text)
+        dfQuantumTxList = pd.DataFrame(apiContentAsDict['data'])
+
+        dfQuantumTxList = dfQuantumTxList[~dfQuantumTxList['txid'].isin(dfOldTxList['txid'])]
+
+        if dfQuantumTxList.shape[0] > 0:
+            # get the rest of listaccounthistory
+            while ('page' in apiContentAsDict) & (dfQuantumTxList.shape[0].__mod__(200) == 0):
+                link = 'https://ocean.defichain.com/v0/mainnet/address/'+botAddress+'/history?size=200&next=' + apiContentAsDict['page']['next']
+                siteContent = requests.get(link)
+                apiContentAsDict = ast.literal_eval(siteContent.text)
+                dfQuantumTxList = dfQuantumTxList.append(pd.DataFrame(apiContentAsDict['data']))
+
+            dfQuantumTxList.reset_index(inplace=True, drop=True)
+            dfQuantumTxList = pd.concat([dfQuantumTxList, dfQuantumTxList['block'].apply(pd.Series)], axis=1)
+            dfQuantumTxList.drop(columns=['owner', 'txn', 'hash'], inplace=True)
+
+
+
+
+        return dfQuantumTxList
+
+    # generate filepath relative to script location
+    filepathTxList = path + 'QuantumTxData.csv'
+    print('   start Quantum Tx data acquisition')
+
+    #dfQuantumOldTxList = pd.read_csv(filepathTxList, index_col=0)
+    dfQuantumOldTxList = pd.DataFrame(columns=['owner', 'txid', 'txn', 'type', 'amounts', 'block', 'receiver'])
+    dfQuantumOldTxList.index = pd.to_datetime(dfQuantumOldTxList.index)
+    dfQuantumTxList = acquireTXAdresse('df1qgq0rjw09hr6vr7sny2m55hkr5qgze5l9hcm0lg', dfQuantumOldTxList)
+    dfQuantumTxList = dfQuantumOldTxList.append(dfQuantumTxList)
+    dfQuantumTxList.sort_values(by=['height'], ascending=False, inplace=True)
+    dfQuantumTxList.to_csv(filepathTxList)
+    print('   tx list Quantum bridge saved')
+
 
 timeStampData = pd.Timestamp.now()
-
-
+#getQuantumTxData()
+# getQuantumLiquidity(timeStampData)
 
 # DFIP Futures data
 try:
