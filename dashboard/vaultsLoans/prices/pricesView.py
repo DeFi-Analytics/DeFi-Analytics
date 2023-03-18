@@ -121,14 +121,21 @@ class pricesDTokenViewClass:
                                  mode='lines', line=dict(color='#00ac84'), line_width=3, hovertemplate='%{y:.f}')
             trace_priceDEX_USDCPool = dict(type='scatter', name='DEX price of dUSD-USDC pool', x=data['USDC-DUSD_reserveA/reserveB'].dropna().index, y=data['USDC-DUSD_reserveA/reserveB'].dropna(),
                                  mode='lines', line=dict(color='#2975ca'), line_width=3, hovertemplate='%{y:.f}')
+            dataEUROC_DUSD = (data['EUROC-DUSD_reserveA/reserveB']*data['USDT-DFI_reserveA/reserveB']/data['EUROC-DFI_reserveA/reserveB']).dropna()
+            dataEUROC_DUSD = dataEUROC_DUSD[dataEUROC_DUSD.index > '2023-03-16 12:00:00']
+            trace_priceDEX_EUROCPool = dict(type='scatter', name='DEX price of dUSD-EUROC pool',
+                                            x=dataEUROC_DUSD.index, y=dataEUROC_DUSD,
+                                 mode='lines', line=dict(color='#07bfff'), line_width=3, hovertemplate='%{y:.f}')
 
         figPrices.add_trace(trace_priceDEX, 1, 1)
         figPrices.add_trace(trace_priceOracle, 1, 1)
         figPrices.add_trace(trace_priceDEXUSDT, 1, 1)
 
+
         if representation =='DUSD':
             figPrices.add_trace(trace_priceDEX_USDTPool, 1, 1)
             figPrices.add_trace(trace_priceDEX_USDCPool, 1, 1)
+            figPrices.add_trace(trace_priceDEX_EUROCPool, 1, 1)
 
         figPrices.update_yaxes(title_text='dToken price', gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figPrices.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',

@@ -223,9 +223,14 @@ class defichainAnalyticsModelClass:
         dexLockedDFI = (self.hourlyData['BTC-DFI_lockedDFI']+self.hourlyData['ETH-DFI_lockedDFI']+self.hourlyData['USDT-DFI_lockedDFI'] +
                       self.hourlyData['DOGE-DFI_lockedDFI'].fillna(0)+self.hourlyData['LTC-DFI_lockedDFI'].fillna(0) +
                       self.hourlyData['BCH-DFI_lockedDFI'].fillna(0) + self.hourlyData['USDC-DFI_lockedDFI'].fillna(0) +
-                      self.hourlyData['DUSD-DFI_reserveB'].fillna(0))
+                      self.hourlyData['DUSD-DFI_reserveB'].fillna(0) +
+                      self.hourlyData['EUROC-DFI_lockedDFI'].fillna(0) +
+                      self.hourlyData['USDT-DUSD_reserveA'].fillna(0) / self.hourlyData['USDT-DFI_DFIPrices'].fillna(0) +
+                      self.hourlyData['USDC-DUSD_reserveA'].fillna(0) / self.hourlyData['USDT-DFI_DFIPrices'].fillna(0) )
+
         dexLockedDFI.index = dexLockedDFI.index.floor('D').astype(str) # remove time information, only date is needed
         self.dailyData['tvlDEXDFI'] = dexLockedDFI.groupby(level=0).first()
+
 
         vaultsLockedDFI = self.hourlyData.sumBTC / self.hourlyData['BTC-DFI_reserveA/reserveB'] + \
                             self.hourlyData.sumETH.fillna(0) / self.hourlyData['ETH-DFI_reserveA/reserveB'].fillna(0) + \

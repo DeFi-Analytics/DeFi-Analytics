@@ -25,7 +25,7 @@ class tvlVaultsViewClass:
     @staticmethod
     def createTVLGraph(data, currencySelection, bgImage):
         if currencySelection == 'BTC':
-            DFIPrice = data['BTC-DFI_DFIPrices'].fillna(0)       # choose BTC-pool DFI-price in BTC
+            DFIPrice = data['BTC-DFI_DFIPrices']       # choose BTC-pool DFI-price in BTC
             yAxisLabel = 'Value in BTC'
             hoverTemplateRepresenation = '%{y:,.3f}BTC'
         elif currencySelection == 'DFI':
@@ -33,16 +33,17 @@ class tvlVaultsViewClass:
             yAxisLabel = 'Value in DFI'
             hoverTemplateRepresenation = '%{y:,.0f}DFI'
         else:
-            DFIPrice = data['USDT-DFI_DFIPrices'].fillna(0)       # choose USDT-pool for DFI-price in BTC
+            DFIPrice = data['USDT-DFI_DFIPrices']       # choose USDT-pool for DFI-price in BTC
             yAxisLabel = 'Value in $'
             hoverTemplateRepresenation = '$%{y:,.0f}'
 
-        TVLOverall = (data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'] + \
-                      data['sumETH'].fillna(0) / data['ETH-DFI_reserveA/reserveB'] + \
-                      data['sumDFI'] + \
-                          data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] + \
-                          data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] + \
-                          data['sumDUSD'].fillna(0) / data['USDT-DFI_DFIPrices']) * DFIPrice        # using USDT DFI price to count every dUSD worth $1
+        TVLOverall = (data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'] +
+                      data['sumETH'].fillna(0) / data['ETH-DFI_reserveA/reserveB'] +
+                      data['sumDFI'] +
+                      data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] +
+                      data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] +
+                      data['sumDUSD'].fillna(0) / data['USDT-DFI_DFIPrices'] +
+                      (data['sumEUROC'] / data['EUROC-DFI_reserveA/reserveB']).fillna(0)) * DFIPrice        # using USDT DFI price to count every dUSD worth $1
 
         lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
@@ -57,7 +58,7 @@ class tvlVaultsViewClass:
             subplot_titles=([]))
 
         # single TVL graphs
-        trace_TVLDFI = dict(type='scatter', name='DFI', x=data['sumDFI'].dropna().index, y=(data['sumDFI'] * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLDFI = dict(type='scatter', name='DFI', x=(data['sumDFI'] * DFIPrice).dropna().index, y=(data['sumDFI'] * DFIPrice).dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#ff9800'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tozeroy')
 
         trace_TVLBTC = dict(type='scatter', name='BTC', x=(data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'] * DFIPrice).dropna().index,
@@ -76,6 +77,10 @@ class tvlVaultsViewClass:
                              y=(data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
+        trace_TVLEUROC = dict(type='scatter', name='EUROC', x=(data['sumEUROC'] / data['EUROC-DFI_reserveA/reserveB']).dropna().index,
+                             y=(data['sumEUROC'] / data['EUROC-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#07bfff'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+
         trace_TVLDUSD = dict(type='scatter', name='dUSD', x=(data['sumDUSD'] / data['USDT-DFI_DFIPrices']).dropna().index,
                              y=(data['sumDUSD'] / data['USDT-DFI_DFIPrices'] * DFIPrice).dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
@@ -89,6 +94,7 @@ class tvlVaultsViewClass:
         figTVL.add_trace(trace_TVLETH, 1, 1)
         figTVL.add_trace(trace_TVLUSDT, 1, 1)
         figTVL.add_trace(trace_TVLUSDC, 1, 1)
+        figTVL.add_trace(trace_TVLEUROC, 1, 1)
         figTVL.add_trace(trace_TVLDUSD, 1, 1)
 
         figTVL.add_trace(trace_TVLOverall, 1, 1)
