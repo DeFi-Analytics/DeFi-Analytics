@@ -22,7 +22,8 @@ class coinpricesViewClass:
                                                                                             {'label': 'LTC', 'value': 'LTC'},
                                                                                             {'label': 'DOGE', 'value': 'DOGE'},
                                                                                             {'label': 'BCH', 'value': 'BCH'},
-                                                                                            {'label': 'USDC', 'value': 'USDC'}],
+                                                                                            {'label': 'USDC', 'value': 'USDC'},
+                                                                                            {'label': 'EUROC', 'value': 'EUROC'}],
                                                                                     value='BTC', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
                                           dcc.Graph(id='figureCoinprices', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinprices")))]))
@@ -72,6 +73,10 @@ class coinpricesViewClass:
             tickFormatYAxis = ",.2f"
             lineColor = '#7f4c00'
             priceCurrency = 'USDC/DFI'
+        elif selectedCoin == 'EUROC':
+            tickFormatYAxis = ",.2f"
+            lineColor = '#07bfff'
+            priceCurrency = 'EUROC/DFI'
         else:
             tickFormatYAxis = ",.7f"
             lineColor = '#da3832'
