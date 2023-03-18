@@ -42,12 +42,18 @@ DFIData = cg.get_price(ids='defichain', vs_currencies=['btc','eth','usd'])
 
 DogeCoinData = cg.get_price(ids='dogecoin', vs_currencies=['usd'])
 dogeDFIPrice = DFIData['defichain']['usd']/DogeCoinData['dogecoin']['usd']
+
 LiteCoinData = cg.get_price(ids='litecoin', vs_currencies=['usd'])
 ltcDFIPrice = DFIData['defichain']['usd']/LiteCoinData['litecoin']['usd']
+
 BCHCoinData = cg.get_price(ids='bitcoin-cash', vs_currencies=['usd'])
 bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']
+
 USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
 USDCDFIPrice = DFIData['defichain']['usd']/USDCCoinData['usd-coin']['usd']
+
+EUROCCoinData = cg.get_price(ids='euro-coin', vs_currencies=['usd'])
+EUROCDFIPrice = DFIData['defichain']['usd']/EUROCCoinData['euro-coin']['usd']
 
 dfLMPoolData['DFIPrices'] = None
 dfLMPoolData.loc[0,'DFIPrices'] = DFIData['defichain']['eth']
@@ -57,6 +63,7 @@ dfLMPoolData.loc[3,'DFIPrices'] = dogeDFIPrice
 dfLMPoolData.loc[4,'DFIPrices'] = ltcDFIPrice
 dfLMPoolData.loc[5,'DFIPrices'] = bchDFIPrice
 dfLMPoolData.loc[6,'DFIPrices'] = USDCDFIPrice
+dfLMPoolData.loc[70,'DFIPrices'] = EUROCDFIPrice
 dfLMPoolData['Time'] = pd.Timestamp.now()
 
 # prices from Bittrex
