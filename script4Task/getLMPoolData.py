@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from pycoingecko import CoinGeckoAPI
 import json
+import time
 
 scriptPath = __file__
 path = scriptPath[:-28] + '/data/'
@@ -40,18 +41,23 @@ dfLMPoolData = pd.DataFrame(data = {'symbol': [item['symbol'] for item in dfLMPo
 cg = CoinGeckoAPI()
 DFIData = cg.get_price(ids='defichain', vs_currencies=['btc','eth','usd'])
 
+time.sleep(5)
 DogeCoinData = cg.get_price(ids='dogecoin', vs_currencies=['usd'])
 dogeDFIPrice = DFIData['defichain']['usd']/DogeCoinData['dogecoin']['usd']
 
+time.sleep(5)
 LiteCoinData = cg.get_price(ids='litecoin', vs_currencies=['usd'])
 ltcDFIPrice = DFIData['defichain']['usd']/LiteCoinData['litecoin']['usd']
 
+time.sleep(5)
 BCHCoinData = cg.get_price(ids='bitcoin-cash', vs_currencies=['usd'])
 bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']
 
+time.sleep(5)
 USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
 USDCDFIPrice = DFIData['defichain']['usd']/USDCCoinData['usd-coin']['usd']
 
+time.sleep(5)
 EUROCCoinData = cg.get_price(ids='euro-coin', vs_currencies=['usd'])
 EUROCDFIPrice = DFIData['defichain']['usd']/EUROCCoinData['euro-coin']['usd']
 

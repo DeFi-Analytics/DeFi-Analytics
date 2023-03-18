@@ -624,7 +624,7 @@ def getQuantumTxData():
 
 
 timeStampData = pd.Timestamp.now()
-#getQuantumTxData()
+getQuantumTxData()
 # getQuantumLiquidity(timeStampData)
 
 # DFIP Futures data

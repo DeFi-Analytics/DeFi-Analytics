@@ -4,3 +4,6 @@ __pycache__
 .gitignore
 /script4Task/githubSettings.py
 /data/rawDataUserVisit.csv
+/script4Task/bscScanCredentials.py
+/data/OldTwitterData/
+copied*

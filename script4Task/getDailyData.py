@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+import numpy as np
 from datetime import datetime
 import json
 
@@ -49,11 +50,37 @@ def getMNNumbers():
     link='https://api.mydefichain.com/v1/statistics_v2/'
     siteContent = requests.get(link)
     jsonData = json.loads(siteContent.text)
-    nbMNCake = int(jsonData['cakedefi']['state']['ENABLED'])
-    nbMNAllnodes = int(jsonData['allnodes']['state']['ENABLED'])
-    nbMNDFX = int(jsonData['dfx']['state']['ENABLED'])
-    nbMNLOCK = int(jsonData['lock']['state']['ENABLED'])
-    nbMNmydefichain = int(jsonData['mydefichain']['state']['ENABLED'])
+
+    try:
+        nbMNCake = int(jsonData['cakedefi']['state']['ENABLED'])
+    except:
+        nbMNCake = np.nan
+        print('### Error in number masternodes data acquisition ==> Cake data')
+
+    try:
+        nbMNAllnodes = int(jsonData['allnodes']['state']['ENABLED'])
+    except:
+        nbMNAllnodes = np.nan
+        print('### Error in number masternodes data acquisition ==> Allnodes data')
+
+    try:
+        nbMNDFX = int(jsonData['dfx']['state']['ENABLED'])
+    except:
+        nbMNDFX = np.nan
+        print('### Error in number masternodes data acquisition ==> DFX data')
+
+    try:
+        nbMNLOCK = int(jsonData['lock']['state']['ENABLED'])
+    except:
+        nbMNLOCK = np.nan
+        print('### Error in number masternodes data acquisition ==> LOCK data')
+
+    try:
+        nbMNmydefichain = int(jsonData['mydefichain']['state']['ENABLED'])
+    except:
+        nbMNmydefichain = np.nan
+        print('### Error in number masternodes data acquisition ==> mydefichain data')
+
 
     dateTimeObj = datetime.now()
     strTimestamp = dateTimeObj.strftime("%Y-%m-%d")

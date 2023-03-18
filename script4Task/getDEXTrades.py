@@ -14,7 +14,7 @@ filepathTradingResults = path + 'dailyTradingResultsDEX.csv'
 
 
 availablePools = {'ETH':4,'BTC':5,'USDT':6,'DOGE':8,'LTC':10,'BCH':12,'USDC':14}
-availablePools = {'BTC':5,'USDT':6,'DOGE':8,'LTC':10,'BCH':12,'USDC':14}
+availablePools =         {'BTC':5,'USDT':6,'DOGE':8,'LTC':10,'BCH':12,'USDC':14}
 dfTradeResult = pd.DataFrame()
 
 for key in availablePools:
@@ -44,7 +44,7 @@ for key in availablePools:
         tempDataframe = pd.DataFrame(tempData['data'])
         tempDataframe['Time'] = [datetime.utcfromtimestamp(element.get('medianTime')).strftime('%Y-%m-%d %H:%M:%S')  for element in tempDataframe['block'] ]
         tempDataframe['blockNb'] = [element.get('medianTime') for element in tempDataframe['block'] ]
-        tempDataframe['fromSymbol'] = [element.get('symbol') for element in tempDataframe['from']]
+        tempDataframe['fromSymbol'] = [element.get('symbol') if element is not np.nan else np.nan for element in tempDataframe['from']]
         tempDataframe['toAmount'] = [element.get('amount') if element is not np.nan else np.nan for element in tempDataframe['to']]
         tempDataframe['toSymbol'] = [element.get('symbol') if element is not np.nan else np.nan for element in tempDataframe['to']]
         tempDataframe.drop(['id', 'sort', 'fromTokenId', 'block', 'from', 'to'], axis=1, inplace=True)
@@ -52,11 +52,13 @@ for key in availablePools:
 
         listNewSwaps = tempDataframe.index.difference(dfSwaplist.index)
         listOldSwaps = tempDataframe.index.intersection(dfSwaplist.index)
-        tempDataframe.loc[listNewSwaps]
+        # tempDataframe.loc[listNewSwaps]
         newData = listOldSwaps.empty
         print(nextPage + ' ' + str(newData))
         dfSwaplist = dfSwaplist.append(tempDataframe.loc[listNewSwaps], verify_integrity=True)
+        # time.sleep(0.2)
 
+    dfSwaplist.to_csv(path+'ListSwaps_'+key+'-pool.csv')
     #     # evaluate the data inside the vaults
     #     for item in tempData['data']:
     #         vaultData['nbVaults'] += 1
