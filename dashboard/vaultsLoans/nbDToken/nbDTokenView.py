@@ -140,8 +140,10 @@ class nbDTokenViewClass:
             dataDUSDburnBot = dataDUSDburnBot.loc[basisGraph.index]
             dataDUSDburnBot2 = data['DUSDBurnBot2_SumDUSDAmount'].interpolate(method='linear', limit_direction='forward').fillna(0)  # burned via auction fee & send to burn address
             dataDUSDburnBot2 = dataDUSDburnBot2.loc[basisGraph.index]
+            dataDUSDburnBot3 = data['DUSDBurnBot3_SumDUSDAmount'].interpolate(method='linear', limit_direction='forward').fillna(0)  # burned via auction fee & send to burn address
+            dataDUSDburnBot3 = dataDUSDburnBot3.loc[basisGraph.index]
 
-            dataBurned = dataBurned - dataDUSDburnBot - dataDUSDburnBot2        # in case of dUSD the burned amount via bot must be removed from DEX fee burn
+            dataBurned = dataBurned - dataDUSDburnBot - dataDUSDburnBot2 - dataDUSDburnBot3       # in case of dUSD the burned amount via bot must be removed from DEX fee burn
 
             dataDUSDburnedAuctionAddress = data['burnedOverallDUSD'].interpolate(method='linear', limit_direction='forward').fillna(0) # burned via auction fee & send to burn address
             dataDUSDburnedAuctionAddress = dataDUSDburnedAuctionAddress.subtract(dataDUSDpaidInterest).subtract(dataBurned).subtract(dataDUSDburnBot) \
@@ -199,10 +201,13 @@ class nbDTokenViewClass:
                                        mode='lines', line=dict(color='#711714'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dTokenBurnBot, 1, 1)
 
-        if representation=='DUSD':
             trace_dTokenBurnBot2 = dict(type='scatter', name='dUSD burned via Bot 2 (free DFI rewards)', x=dataDUSDburnBot2.index, y=dataDUSDburnBot2,
-                                       mode='lines', line=dict(color='#270806'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+                                       mode='lines', line=dict(color='#380b0a'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
             figNbDToken.add_trace(trace_dTokenBurnBot2, 1, 1)
+
+            trace_dTokenBurnBot3 = dict(type='scatter', name='dUSD burned via Bot 3 (w/o negative interest)', x=dataDUSDburnBot3.index, y=dataDUSDburnBot3,
+                                       mode='lines', line=dict(color='#130303'), line_width=0, stackgroup='two', hovertemplate='%{y:,.f} '+representation, fill='tonexty')
+            figNbDToken.add_trace(trace_dTokenBurnBot3, 1, 1)
 
         if 'burned' + representation + 'DEX' in data.columns:
             trace_dTokenFeeBurn = dict(type='scatter', name='dTokens burned via DEX-Fee', x=dataBurned.index, y=dataBurned,

@@ -312,10 +312,11 @@ def getDUSDBurnBotData():
     # generate filepath relative to script location
     filepathTxList = path + 'dUSDBornBotTx.csv'
     filepathTxList2 = path + 'dUSDBornBot2Tx.csv'
+    filepathTxList3 = path + 'dUSDBornBot3Tx.csv'
     print('   start dUSD burn bot data acquisition')
 
 
-    ######### get all swaps from Bot1 und Bot2 #########
+    ######### get all swaps from Bot1 + Bot2 + Bot3 #########
     # Tx list Bot1
     dfBurnBotOldTxList = pd.read_csv(filepathTxList, index_col=0)
     dfBurnBotOldTxList.index = pd.to_datetime(dfBurnBotOldTxList.index)
@@ -335,6 +336,15 @@ def getDUSDBurnBotData():
     dfBurnBot2TxList.to_csv(filepathTxList2)
     print('   tx list burn bot 2 saved')
 
+    #Tx List Bot3
+    dfBurnBot3OldTxList = pd.read_csv(filepathTxList3, index_col=0)
+    dfBurnBot3OldTxList.index = pd.to_datetime(dfBurnBot3OldTxList.index)
+    # dfBurnBot3OldTxList = pd.DataFrame(columns=['txid', 'type', 'amount_x', 'height', 'timeRaw','amounts_y'])
+    dfBurnBot3TxList = acquireTXAdresse('df1q0ulwgygkg0lwk5aaqfkmkx7jrvf4zymj0yyfef', dfBurnBot3OldTxList)
+    dfBurnBot3TxList = dfBurnBot3OldTxList.append(dfBurnBot3TxList)
+    dfBurnBot3TxList.sort_values(by=['height'], ascending=False, inplace=True)
+    dfBurnBot3TxList.to_csv(filepathTxList3)
+    print('   tx list burn bot 3 saved')
 
     ######### extract burned amount on hourly base #########
     filepathBurnAmount = path + 'dUSDBornBotAmounts.csv'
@@ -348,6 +358,12 @@ def getDUSDBurnBotData():
     dfBurnedAmount['DUSDBurnBot2_DFIAmount'].fillna(value=0, inplace=True)
     dfBurnedAmount['DUSDBurnBot2_DUSDAmount'].fillna(value=0, inplace=True)
     dfBurnedAmount['DUSDBurnBot2_SumDUSDAmount'] = dfBurnedAmount['DUSDBurnBot2_DUSDAmount'].cumsum()
+
+    dfBurnedAmount['DUSDBurnBot3_DFIAmount'] = dfBurnBot3TxList['amounts_x'].groupby(pd.Grouper(freq='H')).sum()
+    dfBurnedAmount['DUSDBurnBot3_DUSDAmount'] = dfBurnBot3TxList['amounts_y'].groupby(pd.Grouper(freq='H')).sum()
+    dfBurnedAmount['DUSDBurnBot3_DFIAmount'].fillna(value=0, inplace=True)
+    dfBurnedAmount['DUSDBurnBot3_DUSDAmount'].fillna(value=0, inplace=True)
+    dfBurnedAmount['DUSDBurnBot3_SumDUSDAmount'] = dfBurnedAmount['DUSDBurnBot3_DUSDAmount'].cumsum()
 
     dfBurnedAmount.index = dfBurnedAmount.index + np.timedelta64(1, 'h') # timeshift of 1h because Grouper is just using the hour information and removes minutes
     dfBurnedAmount.to_csv(filepathBurnAmount)
@@ -624,8 +640,9 @@ def getQuantumTxData():
 
 
 timeStampData = pd.Timestamp.now()
-getQuantumTxData()
+# getQuantumTxData()
 # getQuantumLiquidity(timeStampData)
+
 
 # DFIP Futures data
 try:

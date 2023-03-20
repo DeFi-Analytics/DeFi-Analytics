@@ -218,13 +218,14 @@ class dUSDMeasuresViewClass:
             specs=[[{}]],
             shared_xaxes=True,
             subplot_titles=([]))
-        dataSumDEXBurn = data['burnedDUSDDEX'] - data['DUSDBurnBot_SumDUSDAmount'] - data['DUSDBurnBot2_SumDUSDAmount']
+        dataSumDEXBurn = data['burnedDUSDDEX'] - data['DUSDBurnBot_SumDUSDAmount'] - data['DUSDBurnBot2_SumDUSDAmount'] - data['DUSDBurnBot3_SumDUSDAmount']
 
         burnedBotData = data['DUSDBurnBot_SumDUSDAmount'].groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
         burnedBot2Data = data['DUSDBurnBot2_SumDUSDAmount'].groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
+        burnedBot3Data = data['DUSDBurnBot3_SumDUSDAmount'].groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
         burnedDEXData = dataSumDEXBurn.groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
 
-        dataOverallBurned = burnedBotData+burnedBot2Data+burnedDEXData
+        dataOverallBurned = burnedBot3Data+burnedBotData+burnedBot2Data+burnedDEXData
 
 
         lastValidDate = datetime.strptime(str(burnedBotData.dropna().index.values[-1])[:10], '%Y-%m-%d')
@@ -234,8 +235,11 @@ class dUSDMeasuresViewClass:
                                    mode='lines', line=dict(color='#711714'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tozeroy')
         figDUSDBurnedBot.add_trace(trace_dTokenBurnBot, 1, 1)
         trace_dTokenBurnBot2 = dict(type='scatter', name='dUSD burned via Bot 2 (free DFI rewards)', x=burnedBot2Data.dropna().index, y=burnedBot2Data.dropna(),
-                                   mode='lines', line=dict(color='#270806'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
+                                   mode='lines', line=dict(color='#380b0a'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
         figDUSDBurnedBot.add_trace(trace_dTokenBurnBot2, 1, 1)
+        trace_dTokenBurnBot3 = dict(type='scatter', name='dUSD burned via Bot 3 (w/o negative interest)', x=burnedBot3Data.dropna().index, y=burnedBot3Data.dropna(),
+                                    mode='lines', line=dict(color='#130303'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
+        figDUSDBurnedBot.add_trace(trace_dTokenBurnBot3, 1, 1)
         trace_dTokenFeeBurn = dict(type='scatter', name='dUSD burned via DEX-Fee', x=burnedDEXData.dropna().index, y=burnedDEXData.dropna(),
                                    mode='lines', line=dict(color='#696969'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f} dUSD', fill='tonexty')
         figDUSDBurnedBot.add_trace(trace_dTokenFeeBurn, 1, 1)
