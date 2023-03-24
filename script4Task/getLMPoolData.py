@@ -38,39 +38,47 @@ dfLMPoolData = pd.DataFrame(data = {'symbol': [item['symbol'] for item in dfLMPo
 #                    'blockCommissionB','rewardPct','creationTx','creationHeight'], axis=1,inplace=True)
 
 # prices from Coingecko
-cg = CoinGeckoAPI()
-DFIData = cg.get_price(ids='defichain', vs_currencies=['btc','eth','usd'])
-
-time.sleep(5)
-DogeCoinData = cg.get_price(ids='dogecoin', vs_currencies=['usd'])
-dogeDFIPrice = DFIData['defichain']['usd']/DogeCoinData['dogecoin']['usd']
-
-time.sleep(5)
-LiteCoinData = cg.get_price(ids='litecoin', vs_currencies=['usd'])
-ltcDFIPrice = DFIData['defichain']['usd']/LiteCoinData['litecoin']['usd']
-
-time.sleep(5)
-BCHCoinData = cg.get_price(ids='bitcoin-cash', vs_currencies=['usd'])
-bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']
-
-time.sleep(5)
-USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
-USDCDFIPrice = DFIData['defichain']['usd']/USDCCoinData['usd-coin']['usd']
-
-time.sleep(5)
-EUROCCoinData = cg.get_price(ids='euro-coin', vs_currencies=['usd'])
-EUROCDFIPrice = DFIData['defichain']['usd']/EUROCCoinData['euro-coin']['usd']
-
-dfLMPoolData['DFIPrices'] = None
-dfLMPoolData.loc[0,'DFIPrices'] = DFIData['defichain']['eth']
-dfLMPoolData.loc[1,'DFIPrices'] = DFIData['defichain']['btc']
-dfLMPoolData.loc[2,'DFIPrices'] = DFIData['defichain']['usd']
-dfLMPoolData.loc[3,'DFIPrices'] = dogeDFIPrice
-dfLMPoolData.loc[4,'DFIPrices'] = ltcDFIPrice
-dfLMPoolData.loc[5,'DFIPrices'] = bchDFIPrice
-dfLMPoolData.loc[6,'DFIPrices'] = USDCDFIPrice
-dfLMPoolData.loc[70,'DFIPrices'] = EUROCDFIPrice
 dfLMPoolData['Time'] = pd.Timestamp.now()
+dfLMPoolData['DFIPrices'] = None
+cg = CoinGeckoAPI()
+
+try:
+    time.sleep(10)
+    DFIData = cg.get_price(ids='defichain', vs_currencies=['btc','eth','usd'])
+
+    time.sleep(10)
+    DogeCoinData = cg.get_price(ids='dogecoin', vs_currencies=['usd'])
+    dogeDFIPrice = DFIData['defichain']['usd']/DogeCoinData['dogecoin']['usd']
+
+    time.sleep(10)
+    LiteCoinData = cg.get_price(ids='litecoin', vs_currencies=['usd'])
+    ltcDFIPrice = DFIData['defichain']['usd']/LiteCoinData['litecoin']['usd']
+
+    time.sleep(10)
+    BCHCoinData = cg.get_price(ids='bitcoin-cash', vs_currencies=['usd'])
+    bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']
+
+    time.sleep(10)
+    USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
+    USDCDFIPrice = DFIData['defichain']['usd']/USDCCoinData['usd-coin']['usd']
+
+    time.sleep(10)
+    EUROCCoinData = cg.get_price(ids='euro-coin', vs_currencies=['usd'])
+    EUROCDFIPrice = DFIData['defichain']['usd']/EUROCCoinData['euro-coin']['usd']
+
+    dfLMPoolData.loc[0,'DFIPrices'] = DFIData['defichain']['eth']
+    dfLMPoolData.loc[1,'DFIPrices'] = DFIData['defichain']['btc']
+    dfLMPoolData.loc[2,'DFIPrices'] = DFIData['defichain']['usd']
+    dfLMPoolData.loc[3,'DFIPrices'] = dogeDFIPrice
+    dfLMPoolData.loc[4,'DFIPrices'] = ltcDFIPrice
+    dfLMPoolData.loc[5,'DFIPrices'] = bchDFIPrice
+    dfLMPoolData.loc[6,'DFIPrices'] = USDCDFIPrice
+    dfLMPoolData.loc[70,'DFIPrices'] = EUROCDFIPrice
+
+except:
+    print('### Error Coingecko API')
+
+
 
 # prices from Bittrex
 try:
