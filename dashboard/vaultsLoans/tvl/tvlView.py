@@ -25,7 +25,7 @@ class tvlVaultsViewClass:
     @staticmethod
     def createTVLGraph(data, currencySelection, bgImage):
         if currencySelection == 'BTC':
-            DFIPrice = data['BTC-DFI_DFIPrices']       # choose BTC-pool DFI-price in BTC
+            DFIPrice = data['BTC-DFI_DFIPrices'].interpolate(method='linear',limit_area='inside')       # choose BTC-pool DFI-price in BTC
             yAxisLabel = 'Value in BTC'
             hoverTemplateRepresenation = '%{y:,.3f}BTC'
         elif currencySelection == 'DFI':
@@ -33,17 +33,25 @@ class tvlVaultsViewClass:
             yAxisLabel = 'Value in DFI'
             hoverTemplateRepresenation = '%{y:,.0f}DFI'
         else:
-            DFIPrice = data['USDT-DFI_DFIPrices']       # choose USDT-pool for DFI-price in BTC
+            DFIPrice = data['USDT-DFI_DFIPrices'].interpolate(method='linear',limit_area='inside')       # choose USDT-pool for DFI-price in BTC
             yAxisLabel = 'Value in $'
             hoverTemplateRepresenation = '$%{y:,.0f}'
 
-        TVLOverall = (data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'] +
-                      data['sumETH'].fillna(0) / data['ETH-DFI_reserveA/reserveB'] +
-                      data['sumDFI'] +
-                      data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] +
-                      data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] +
-                      data['sumDUSD'].fillna(0) / data['USDT-DFI_DFIPrices'] +
-                      (data['sumEUROC'] / data['EUROC-DFI_reserveA/reserveB']).fillna(0)) * DFIPrice        # using USDT DFI price to count every dUSD worth $1
+        # using USDT DFI price to count every dUSD worth $1
+
+        BTCData = (data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside') * DFIPrice).dropna()
+        ETHData = (data['sumETH'] / data['ETH-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside') * DFIPrice).dropna()
+        USDTData = (data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside') * DFIPrice).dropna()
+        USDCData = (data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside') * DFIPrice).dropna()
+        EUROCData = (data['sumEUROC'] / data['EUROC-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside') * DFIPrice)
+        DUSDData = (data['sumDUSD'] / data['USDT-DFI_DFIPrices'].interpolate(method='linear', limit_area='inside') * DFIPrice).dropna()
+
+
+        EUROCData = EUROCData[EUROCData.index.intersection(BTCData.index)].fillna(0)
+
+
+        TVLOverall = BTCData + ETHData + data['sumDFI'] * DFIPrice + USDCData + USDTData + DUSDData + EUROCData
+
 
         lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
@@ -57,32 +65,27 @@ class tvlVaultsViewClass:
             shared_xaxes=True,
             subplot_titles=([]))
 
+
         # single TVL graphs
         trace_TVLDFI = dict(type='scatter', name='DFI', x=(data['sumDFI'] * DFIPrice).dropna().index, y=(data['sumDFI'] * DFIPrice).dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#ff9800'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tozeroy')
 
-        trace_TVLBTC = dict(type='scatter', name='BTC', x=(data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'] * DFIPrice).dropna().index,
-                            y=(data['sumBTC'] / data['BTC-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLBTC = dict(type='scatter', name='BTC', x=BTCData.index, y=BTCData, stackgroup='one',
                             mode='lines', line=dict(color='#da3832'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
-        trace_TVLETH = dict(type='scatter', name='ETH', x=(data['sumETH'] / data['ETH-DFI_reserveA/reserveB'] * DFIPrice).dropna().index,
-                            y=(data['sumETH'] / data['ETH-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLETH = dict(type='scatter', name='ETH', x=ETHData.index,  y=ETHData, stackgroup='one',
                             mode='lines', line=dict(color='#617dea'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
-        trace_TVLUSDT = dict(type='scatter', name='USDT', x=(data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] * DFIPrice).dropna().index,
-                             y=(data['sumUSDT'] / data['USDT-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLUSDT = dict(type='scatter', name='USDT', x=USDTData.index, y=USDTData, stackgroup='one',
                              mode='lines', line=dict(color='#22b852'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
-        trace_TVLUSDC = dict(type='scatter', name='USDC', x=(data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB']).dropna().index,
-                             y=(data['sumUSDC'] / data['USDC-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLUSDC = dict(type='scatter', name='USDC', x=USDCData.index, y=USDCData, stackgroup='one',
                             mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
-        trace_TVLEUROC = dict(type='scatter', name='EUROC', x=(data['sumEUROC'] / data['EUROC-DFI_reserveA/reserveB']).dropna().index,
-                             y=(data['sumEUROC'] / data['EUROC-DFI_reserveA/reserveB'] * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLEUROC = dict(type='scatter', name='EUROC', x=EUROCData.index, y=EUROCData, stackgroup='one',
                             mode='lines', line=dict(color='#07bfff'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
-        trace_TVLDUSD = dict(type='scatter', name='dUSD', x=(data['sumDUSD'] / data['USDT-DFI_DFIPrices']).dropna().index,
-                             y=(data['sumDUSD'] / data['USDT-DFI_DFIPrices'] * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLDUSD = dict(type='scatter', name='dUSD', x=DUSDData.index, y=DUSDData, stackgroup='one',
                             mode='lines', line=dict(color='#ff2ebe'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
         # overall TVL graph
