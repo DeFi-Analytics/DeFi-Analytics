@@ -27,8 +27,19 @@ for id in idTokens:
     dfTokenData.loc[id, 'creationTx'] = tempData['data'][id]['creation']['tx']
     dfTokenData.loc[id, 'creationHeight'] = tempData['data'][id]['creation']['height']
     dfTokenData.loc[id, 'collateralAddress'] = tempData['data'][id]['collateralAddress']
+
+#EUROC token is on the 2nd page
+link='https://ocean.defichain.com/v0/mainnet/tokens?size=200&next=199'
+siteContent = requests.get(link)
+tempData = json.loads(siteContent.text)
+dfTokenData.loc[216, 'symbol'] = tempData['data'][16]['symbol']
+dfTokenData.loc[216, 'minted'] = tempData['data'][16]['minted']
+dfTokenData.loc[216, 'creationTx'] = tempData['data'][16]['creation']['tx']
+dfTokenData.loc[216, 'creationHeight'] = tempData['data'][16]['creation']['height']
+dfTokenData.loc[216, 'collateralAddress'] = tempData['data'][16]['collateralAddress']
+
 dfTokenData['Time'] = pd.Timestamp.now()
-    
+
 # burned token on defichain
 print('Get burned tokens on defichain ...')
 link='https://ocean.defichain.com/v0/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm/tokens'
@@ -125,7 +136,19 @@ except:
     USDCamount = np.nan
     print('### Error in USDC API')
 
-dfTokenData['Collateral'] =[ETHamount,BTCamount, USDTamount,DOGEamount,LTCamount,BCHamount,USDCamount]
+
+#EUROC
+print('... EUROC ...')
+try:
+    link='https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c&address=0x94fa70d079d76279e1815ce403e9b985bccc82ac&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+    siteContent = requests.get(link)
+    apiContentAsDict=ast.literal_eval(siteContent.text)
+    EUROCamount = float(apiContentAsDict['result'])*1e-6
+except:
+    EUROCamount = np.nan
+    print('### Error in EUROC API')
+
+dfTokenData['Collateral'] =[ETHamount,BTCamount, USDTamount,DOGEamount,LTCamount,BCHamount,USDCamount, EUROCamount]
     
 dfOldTokenData = pd.read_csv(filepath,index_col=0)
 dfTokenData = dfOldTokenData.append(dfTokenData, sort=False)
