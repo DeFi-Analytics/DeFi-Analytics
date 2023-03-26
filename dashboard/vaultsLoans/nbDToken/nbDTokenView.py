@@ -151,6 +151,8 @@ class nbDTokenViewClass:
 
             dTokenCircAmount = dTokenCircAmount + dataDUSDpaidDFI + dataDUSDalgoNegInterest - dataDUSDpaidInterest - dataDUSDburnedAuctionAddress
 
+        dTokenCircAlgoAmount = dTokenCircAmount - basisGraph - dataLoanLiquidation
+
         trace_nbDToken = dict(type='scatter', name='number circulating dTokens',
                               x=dTokenCircAmount.dropna().index, y=dTokenCircAmount.dropna(),
                               mode='lines', line=dict(color='#ff00af'), stackgroup='two', line_width=3, hovertemplate='%{y:,.f} '+representation, fill='none')
@@ -241,10 +243,15 @@ class nbDTokenViewClass:
         if representation == 'DUSD':
             nbDUSDNotInVaults = dTokenCircAmount-data['sumDUSD']
             trace_nbDUSD_NotInVaults = dict(type='scatter', name='number circulating dUSD w/o vaults',
-                                  x=nbDUSDNotInVaults.dropna().index, y=nbDUSDNotInVaults.dropna(),
+                                  x=nbDUSDNotInVaults.dropna().index, y=nbDUSDNotInVaults.dropna(), visible='legendonly',
                                   mode='lines', line=dict(color='#00ac84'), line_width=3, hovertemplate='%{y:,.f} '+representation, fill='none')
             figNbDToken.add_trace(trace_nbDUSD_NotInVaults, 1, 1)
 
+        # plot circu algo dToken
+        trace_nbCircAlgo = dict(type='scatter', name='number circulating algo dToken',
+                              x=dTokenCircAlgoAmount.dropna().index, y=dTokenCircAlgoAmount.dropna(),
+                              mode='lines', line=dict(color='#5c0fff'), line_width=3, hovertemplate='%{y:,.f} '+representation, fill='none')
+        figNbDToken.add_trace(trace_nbCircAlgo, 1, 1)
 
         figNbDToken.update_yaxes(title_text='number dTokens', tickformat=",.0f", gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
         figNbDToken.update_xaxes(title_text="Date", gridcolor='#6c757d', zerolinecolor='#6c757d', color='#6c757d',
