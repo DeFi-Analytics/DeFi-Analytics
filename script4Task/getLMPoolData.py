@@ -42,41 +42,92 @@ dfLMPoolData['Time'] = pd.Timestamp.now()
 dfLMPoolData['DFIPrices'] = None
 cg = CoinGeckoAPI()
 
+cg = CoinGeckoAPI()
+
+#DFI prices
 try:
-    time.sleep(10)
-    DFIData = cg.get_price(ids='defichain', vs_currencies=['btc','eth','usd'])
-
-    time.sleep(10)
-    DogeCoinData = cg.get_price(ids='dogecoin', vs_currencies=['usd'])
-    dogeDFIPrice = DFIData['defichain']['usd']/DogeCoinData['dogecoin']['usd']
-
-    time.sleep(10)
-    LiteCoinData = cg.get_price(ids='litecoin', vs_currencies=['usd'])
-    ltcDFIPrice = DFIData['defichain']['usd']/LiteCoinData['litecoin']['usd']
-
-    time.sleep(10)
-    BCHCoinData = cg.get_price(ids='bitcoin-cash', vs_currencies=['usd'])
-    bchDFIPrice = DFIData['defichain']['usd']/BCHCoinData['bitcoin-cash']['usd']
-
-    time.sleep(10)
-    USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
-    USDCDFIPrice = DFIData['defichain']['usd']/USDCCoinData['usd-coin']['usd']
-
-    time.sleep(10)
-    EUROCCoinData = cg.get_price(ids='euro-coin', vs_currencies=['usd'])
-    EUROCDFIPrice = DFIData['defichain']['usd']/EUROCCoinData['euro-coin']['usd']
-
-    dfLMPoolData.loc[0,'DFIPrices'] = DFIData['defichain']['eth']
-    dfLMPoolData.loc[1,'DFIPrices'] = DFIData['defichain']['btc']
-    dfLMPoolData.loc[2,'DFIPrices'] = DFIData['defichain']['usd']
-    dfLMPoolData.loc[3,'DFIPrices'] = dogeDFIPrice
-    dfLMPoolData.loc[4,'DFIPrices'] = ltcDFIPrice
-    dfLMPoolData.loc[5,'DFIPrices'] = bchDFIPrice
-    dfLMPoolData.loc[6,'DFIPrices'] = USDCDFIPrice
-    dfLMPoolData.loc[70,'DFIPrices'] = EUROCDFIPrice
-
+    DFIData = cg.get_price(ids='defichain', vs_currencies=['btc', 'eth', 'usd'])
+    DFIPrice_ETH = DFIData['defichain']['eth']
+    DFIPrice_BTC = DFIData['defichain']['btc']
+    DFIPrice_USD = DFIData['defichain']['usd']
 except:
-    print('### Error Coingecko API')
+    print('###  Error in Coingecko-API')
+    link = 'https://api.coinpaprika.com/v1/tickers/dfi-defi-chain?quotes=BTC,ETH,USD'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    DFIPrice_ETH = tempData['quotes']['ETH']['price']
+    DFIPrice_BTC = tempData['quotes']['BTC']['price']
+    DFIPrice_USD = tempData['quotes']['USD']['price']
+
+#DOGE
+try:
+    DogeCoinData = cg.get_price(ids='dogecoin', vs_currencies=['usd'])
+    DogePrice_USD = DogeCoinData['dogecoin']['usd']
+except:
+    print('###  Error in Coingecko-API')
+    link = 'https://api.coinpaprika.com/v1/tickers/doge-dogecoin?quotes=USD'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    DogePrice_USD = tempData['quotes']['USD']['price']
+dogeDFIPrice = DFIPrice_USD / DogePrice_USD
+
+#LTC
+try:
+    LiteCoinData = cg.get_price(ids='litecoin', vs_currencies=['usd'])
+    LTCPrice_USD = LiteCoinData['litecoin']['usd']
+except:
+    print('###  Error in Coingecko-API')
+    link = 'https://api.coinpaprika.com/v1/tickers/ltc-litecoin?quotes=USD'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    LTCPrice_USD = tempData['quotes']['USD']['price']
+ltcDFIPrice = DFIPrice_USD / LTCPrice_USD
+
+#BCH
+try:
+    BCHCoinData = cg.get_price(ids='bitcoin-cash', vs_currencies=['usd'])
+    BCHPrice_USD = BCHCoinData['bitcoin-cash']['usd']
+except:
+    print('###  Error in Coingecko-API')
+    link = 'https://api.coinpaprika.com/v1/tickers/bch-bitcoin-cash?quotes=USD'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    BCHPrice_USD = tempData['quotes']['USD']['price']
+bchDFIPrice = DFIPrice_USD / BCHPrice_USD
+
+#USDC
+try:
+    USDCCoinData = cg.get_price(ids='usd-coin', vs_currencies=['usd'])
+    USDCPrice_USD = USDCCoinData['usd-coin']['usd']
+except:
+    print('###  Error in Coingecko-API')
+    link = 'https://api.coinpaprika.com/v1/tickers/usdce-usd-coine?quotes=USD'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    USDCPrice_USD = tempData['quotes']['USD']['price']
+USDCDFIPrice = DFIPrice_USD / USDCPrice_USD
+
+#EUROC
+try:
+    EUROCCoinData = cg.get_price(ids='euro-coin', vs_currencies=['usd'])
+    EUROCPrice_USD = EUROCCoinData['euro-coin']['usd']
+except:
+    print('###  Error in Coingecko-API')
+    link = 'https://api.coinpaprika.com/v1/tickers/euroc-euro-coin?quotes=USD'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+    EUROCPrice_USD = tempData['quotes']['USD']['price']
+EUROCDFIPrice = DFIPrice_USD / EUROCPrice_USD
+
+
+dfLMPoolData.loc[0, 'DFIPrices'] = DFIPrice_ETH
+dfLMPoolData.loc[1, 'DFIPrices'] = DFIPrice_BTC
+dfLMPoolData.loc[2, 'DFIPrices'] = DFIPrice_USD
+dfLMPoolData.loc[3,'DFIPrices'] = dogeDFIPrice
+dfLMPoolData.loc[4,'DFIPrices'] = ltcDFIPrice
+dfLMPoolData.loc[5,'DFIPrices'] = bchDFIPrice
+dfLMPoolData.loc[6,'DFIPrices'] = USDCDFIPrice
+dfLMPoolData.loc[70,'DFIPrices'] = EUROCDFIPrice
 
 
 
