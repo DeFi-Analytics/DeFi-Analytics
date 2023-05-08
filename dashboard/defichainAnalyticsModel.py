@@ -231,13 +231,17 @@ class defichainAnalyticsModelClass:
         dexLockedDFI.index = dexLockedDFI.index.floor('D').astype(str) # remove time information, only date is needed
         self.dailyData['tvlDEXDFI'] = dexLockedDFI.groupby(level=0).first()
 
+        # EUROC was added later and must be handled in a separate way
+        EUROCData = self.hourlyData.sumEUROC / self.hourlyData['EUROC-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside')
+        EUROCData = EUROCData[EUROCData.index.intersection(self.hourlyData.sumBTC.index)].fillna(0)
 
-        vaultsLockedDFI = self.hourlyData.sumBTC / self.hourlyData['BTC-DFI_reserveA/reserveB'] + \
-                            self.hourlyData.sumETH.fillna(0) / self.hourlyData['ETH-DFI_reserveA/reserveB'].fillna(0) + \
-                            self.hourlyData.sumDFI + \
-                            self.hourlyData.sumUSDC / self.hourlyData['USDC-DFI_reserveA/reserveB'] + \
-                            self.hourlyData.sumUSDT / self.hourlyData['USDT-DFI_reserveA/reserveB'] + \
-                            self.hourlyData.sumDUSD.fillna(0) / self.hourlyData['DUSD-DFI_reserveA/reserveB'].fillna(0)
+        vaultsLockedDFI = self.hourlyData.sumBTC            / self.hourlyData['BTC-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside') + \
+                          self.hourlyData.sumETH.fillna(0)  / self.hourlyData['ETH-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside') + \
+                          self.hourlyData.sumDFI + \
+                          self.hourlyData.sumUSDC           / self.hourlyData['USDC-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside') + \
+                          self.hourlyData.sumUSDT           / self.hourlyData['USDT-DFI_reserveA/reserveB'].interpolate(method='linear', limit_area='inside') + \
+                          self.hourlyData.sumDUSD.fillna(0) / self.hourlyData['USDT-DFI_DFIPrices'].interpolate(method='linear', limit_area='inside') + \
+                          EUROCData
 
         vaultsLockedDFI.index = vaultsLockedDFI.index.floor('D').astype(str) # remove time information, only date is needed
         self.dailyData['tvlVaultsDFI'] = vaultsLockedDFI[(vaultsLockedDFI!=0.0) & (vaultsLockedDFI.notnull())].groupby(level=0).first()
