@@ -25,7 +25,7 @@ class tvlViewClass:
     @staticmethod
     def createTVLGraph(data, currencySelection, bgImage):
         if currencySelection == 'BTC':
-            DFIPrice = data['BTC-DFI_DFIPrices'].fillna(0)       # choose BTC-pool DFI-price in BTC
+            DFIPrice = data['BTC-DFI_DFIPrices']       # choose BTC-pool DFI-price in BTC
             columnName = 'lockedBTC'
             yAxisLabel = 'Value in BTC'
             hoverTemplateRepresenation = '%{y:,.3f}BTC'
@@ -35,7 +35,7 @@ class tvlViewClass:
             yAxisLabel = 'Value in DFI'
             hoverTemplateRepresenation = '%{y:,.0f}DFI'
         else:
-            DFIPrice = data['USDT-DFI_DFIPrices'].fillna(0)       # choose USDT-pool for DFI-price in BTC
+            DFIPrice = data['USDT-DFI_DFIPrices']       # choose USDT-pool for DFI-price in BTC
             columnName = 'lockedUSD'
             yAxisLabel = 'Value in $'
             hoverTemplateRepresenation = '$%{y:,.0f}'
@@ -46,6 +46,11 @@ class tvlViewClass:
                       data['EUROC-DFI_lockedDFI'].fillna(0) +
                       data['DUSD-DFI_reserveB'].fillna(0) +
                       data['USDT-DUSD_reserveA'].fillna(0)/data['USDT-DFI_DFIPrices'].fillna(0) + data['USDC-DUSD_reserveA'].fillna(0)/data['USDT-DFI_DFIPrices'].fillna(0) ) * DFIPrice
+
+        DFIAmountdUSDPool = (data['DUSD-DFI_reserveB'] * DFIPrice).dropna()                                               # DFI amount in dUSD-DFI pool
+        dUSDTAmountInDFI = (data['USDT-DUSD_reserveA'] / data['USDT-DFI_DFIPrices'].fillna(0) * DFIPrice).dropna()      # USDT amount in dUSDT-dUSD pool in DFI
+        dUSDCAmountInDFI = (data['USDC-DUSD_reserveA'] / data['USDT-DFI_DFIPrices'].fillna(0) * DFIPrice).dropna()      # USDC amount in dUSDC-dUSD pool in DFI
+
 
         lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
@@ -65,12 +70,12 @@ class tvlViewClass:
         trace_TVLETH = dict(type='scatter', name='ETH', x=data['ETH-DFI_'+columnName].dropna().index, y=data['ETH-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#617dea'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
+
         trace_TVLDFI_dUSD = dict(type='scatter', name='dUSD-DFI (only DFI part)',
-                                 x=data['DUSD-DFI_reserveB'].dropna().index, y=(data['DUSD-DFI_reserveB'] * DFIPrice).dropna(), stackgroup='one',
+                                 x=DFIAmountdUSDPool.index, y=DFIAmountdUSDPool, stackgroup='one',
                             mode='lines', line=dict(color='#ff9800'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
-        trace_TVLUSDT_dUSD = dict(type='scatter', name='dUSD-USDT (only USDT part)', x=data['USDT-DUSD_reserveA'].dropna().index,
-                                  y=(data['USDT-DUSD_reserveA']/data['USDT-DFI_DFIPrices'].fillna(0) * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLUSDT_dUSD = dict(type='scatter', name='dUSD-USDT (only USDT part)', x=dUSDTAmountInDFI.index, y=dUSDTAmountInDFI, stackgroup='one',
                              mode='lines', line=dict(color='#105c29'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_TVLUSDT = dict(type='scatter', name='USDT', x=data['USDT-DFI_'+columnName].dropna().index, y=data['USDT-DFI_'+columnName].dropna(), stackgroup='one',
                              mode='lines', line=dict(color='#22b852'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
@@ -82,8 +87,7 @@ class tvlViewClass:
         trace_TVLBCH = dict(type='scatter', name='BCH', x=data['BCH-DFI_'+columnName].dropna().index, y=data['BCH-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#410eb2'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
-        trace_TVLUSDC_dUSD = dict(type='scatter', name='dUSD-USDC (only USDC part)', x=data['USDC-DUSD_reserveA'].dropna().index,
-                                  y=(data['USDC-DUSD_reserveA']/data['USDT-DFI_DFIPrices'].fillna(0) * DFIPrice).dropna(), stackgroup='one',
+        trace_TVLUSDC_dUSD = dict(type='scatter', name='dUSD-USDC (only USDC part)', x=dUSDCAmountInDFI.index, y=dUSDCAmountInDFI, stackgroup='one',
                              mode='lines', line=dict(color='#3f2600'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
         trace_TVLUSDC = dict(type='scatter', name='USDC', x=data['USDC-DFI_'+columnName].dropna().index, y=data['USDC-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#7f4c00'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
