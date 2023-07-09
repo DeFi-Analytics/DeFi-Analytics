@@ -63,10 +63,10 @@ except:
 # get list of masternodes hosted by Cake
 headers = { 'User-Agent': 'Safari/537.36'}
 try:
-    link = 'https://poolapi.cakedefi.com/nodes?order=status&orderBy=DESC'
+    link = 'https://api.bake.io/nodes?order=status&orderBy=DESC'
     siteContent = requests.get(link, headers=headers)
     dfMNListCake = pd.read_json(siteContent.text)
-    dfRichList['mnAddressCakeAPI'] = dfRichList['address'].isin(dfMNListCake[dfMNListCake.coin=='DeFi'].address)
+    dfRichList['mnAddressCakeAPI'] = dfRichList['address'].isin(dfMNListCake[dfMNListCake.coin=='DeFiChain'].address)
     print('Finished getting Cake masternode list')
 except:
     print('Error with API of Cake masternode list')

@@ -144,7 +144,7 @@ class masternodesViewClass:
             html.P(['A list of all masternodes can be get with a full-node and the command line interface. This is routed to an API by Bernd Mack and used here.', html.Br(),
                 html.A('http://api.mydefichain.com/v1/listmasternodes/?state=ENABLED', href='http://api.mydefichain.com/v1/listmasternodes/?state=ENABLED', target='_blank', className='defiLink')]),
             html.P(['The second data source is a cake API giving me the addresses of masternodes hosted on their side.', html.Br(),
-                         html.A('https://poolapi.cakedefi.com/nodes?order=status&orderBy=DESC', href='https://poolapi.cakedefi.com/nodes?order=status&orderBy=DESC', target='_blank', className='defiLink')]),
+                         html.A('https://api.bake.io/nodes?order=status&orderBy=DESC', href='https://api.bake.io/nodes?order=status&orderBy=DESC', target='_blank', className='defiLink')]),
             html.P([html.B('Hint:'), ' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
                                      ' For specific questions it could be helpful to only show a selection of the available data. To exclude entries from the graph click on the corresponding legend entry.'],
                    style={'text-align': 'justify', 'fontSize': '0.7rem', 'color': '#6c757d'})

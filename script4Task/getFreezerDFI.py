@@ -11,7 +11,7 @@ filepath = path + 'frozenDFICake.csv'
 
 
 # API request for freezer DFI
-link='https://poolapi.cakedefi.com/freezer-page'
+link='https://api.bake.io/freezer-page'
 siteContent = requests.get(link)
 allFrozenCoins = pd.read_json(siteContent.text, orient='colums')
 
