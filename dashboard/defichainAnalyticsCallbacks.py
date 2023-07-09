@@ -80,7 +80,6 @@ class defichainAnalyticsCallbacksClass:
 
                                              Input('changelog', 'n_clicks_timestamp'),
                                              Input('donate', 'n_clicks_timestamp'),
-                                             Input('cakereview', 'n_clicks_timestamp'),
                                              Input('imprint', 'n_clicks_timestamp')]
 
         sidebar_toggle_menu_button_states = [State("menuResponsiveCollapse", "is_open")]
@@ -283,7 +282,6 @@ class defichainAnalyticsCallbacksClass:
 
                                    'changelog',
                                    'donate',
-                                   'cakereview',
                                    'imprint']
         # define callback sidebar_link_state output array
         sidebar_active_link_array_output = [Output('overview', 'className'),
@@ -343,7 +341,6 @@ class defichainAnalyticsCallbacksClass:
 
                                             Output('changelog', 'className'),
                                             Output('donate', 'className'),
-                                            Output('cakereview', 'className'),
                                             Output('imprint', 'className')
                                             ]
 

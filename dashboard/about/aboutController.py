@@ -1,7 +1,5 @@
 from .imprint.imprintView import imprintViewClass
-from .cakereview.cakereviewView import cakereviewViewClass
 from .changelog.changelogView import changelogViewClass
-
 from .donate.donateView import donateViewClass
 from .donate.donateCallbacks import donateCallbacksClass
 
@@ -12,7 +10,6 @@ class aboutControllerClass:
 
         # initialize overview classes
         self.imprintView = imprintViewClass()
-        self.cakereviewView = cakereviewViewClass()
         self.changelogView = changelogViewClass()
 
         self.donateView = donateViewClass()
@@ -23,8 +20,6 @@ class aboutControllerClass:
 
         if entry in ['', 'changelog']:
             pageContent = self.changelogView.getChangelogContent(self.defichainAnalyticsModel.changelogData)
-        elif entry in ['cakereview']:
-            pageContent = self.cakereviewView.getCakereviewContent()
         elif entry in ["imprint"]:
             pageContent = self.imprintView.getImprintContent()
         elif entry in ["donate"]:

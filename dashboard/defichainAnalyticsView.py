@@ -283,7 +283,6 @@ class defichainAnalyticsViewClass:
                 [
                     dbc.NavLink("Changelog", href="/about?entry=changelog", className="linkstyle", id="changelog"),
                     dbc.NavLink("Donation", href="/about?entry=donate", className="linkstyle", id="donate"),
-                    dbc.NavLink("CakeDefi-Review", href="/about?entry=cakereview", className="linkstyle", id="cakereview"),
                     dbc.NavLink("Imprint", href="/about?entry=imprint", className="linkstyle", id="imprint")
                 ],
                 id="submenu-about-collapse"
@@ -312,14 +311,15 @@ class defichainAnalyticsViewClass:
 
         sidebar_footer = dbc.Row([dbc.NavLink(html.Div(id='idLogoDonate'), href='/about?entry=donate')], justify="center", align="center", style={'margin-top': '40px'})
 
-        refLink = html.Div(html.Marquee([
-                      'You want to support me? You want to get 5 DFI? Sign up (after 17th April 2022) with my ',
-                      html.A('Ref-Link', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' on CakeDefi and get $30 sign-up bonus in DFI after fullfilling Cakes requirements. If you are a ',
-                      html.A('Referral', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' of me (sign-up after 17th April 2022), I give you additional 5 DFI after you and me got the sign-up bonus. Reveal your information, send me your name, screenshot of sign-up bonus transaction and a DFI deposit address. ',
-                      html.A('Cake', href='https://app.cakedefi.com/?ref=476728', target='_blank', className='defiLink'),
-                      ' is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet.']), className='refLinkMarquee')
+        refLink = html.Div()
+            # html.Div(html.Marquee([
+            #           'You want to support me? You want to get 5 DFI? Sign up (after 17th April 2022) with my ',
+            #           html.A('Ref-Link', href='https://bake.io/?ref=476728', target='_blank', className='defiLink'),
+            #           ' on CakeDefi and get $30 sign-up bonus in DFI after fullfilling Cakes requirements. If you are a ',
+            #           html.A('Referral', href='https://bake.io/?ref=476728', target='_blank', className='defiLink'),
+            #           ' of me (sign-up after 17th April 2022), I give you additional 5 DFI after you and me got the sign-up bonus. Reveal your information, send me your name, screenshot of sign-up bonus transaction and a DFI deposit address. ',
+            #           html.A('Cake', href='https://bake.io/?ref=476728', target='_blank', className='defiLink'),
+            #           ' is also gateway for your BTC, ETH and USDT to the DeFiChain-Wallet.']), className='refLinkMarquee')
 
         sidebar = html.Div(
             [
