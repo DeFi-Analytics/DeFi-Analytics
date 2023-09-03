@@ -23,7 +23,11 @@ class coinpricesViewClass:
                                                                                             {'label': 'DOGE', 'value': 'DOGE'},
                                                                                             {'label': 'BCH', 'value': 'BCH'},
                                                                                             {'label': 'USDC', 'value': 'USDC'},
-                                                                                            {'label': 'EUROC', 'value': 'EUROC'}],
+                                                                                            {'label': 'EUROC', 'value': 'EUROC'},
+                                                                                            {'label': 'SOL', 'value': 'SOL'},
+                                                                                            {'label': 'DOT', 'value': 'DOT'},
+                                                                                            {'label': 'MATIC', 'value': 'MATIC'},
+                                                                                            {'label': 'SUI', 'value': 'SUI'},],
                                                                                     value='BTC', clearable=False, style=dict(width='200px',verticalAlign="bottom")))])]),
                                           dcc.Graph(id='figureCoinprices', config={'displayModeBar': False}),
                                           dbc.Row(dbc.Col(dbc.Button("Info/Explanation", id="openInfoCoinprices")))]))
@@ -77,6 +81,24 @@ class coinpricesViewClass:
             tickFormatYAxis = ",.2f"
             lineColor = '#07bfff'
             priceCurrency = 'EUROC/DFI'
+        # staking coins
+        elif selectedCoin == 'SOL':
+            tickFormatYAxis = ",.5f"
+            lineColor = '#ffd703'
+            priceCurrency = 'SOL/DFI'
+        elif selectedCoin == 'DOT':
+            tickFormatYAxis = ",.5f"
+            lineColor = '#8a4514'
+            priceCurrency = 'DOT/DFI'
+        elif selectedCoin == 'MATIC':
+            tickFormatYAxis = ",.4f"
+            lineColor = '#7cfc03'
+            priceCurrency = 'MATIC/DFI'
+        elif selectedCoin == 'SUI':
+            tickFormatYAxis = ",.4f"
+            lineColor = '#f08080'
+            priceCurrency = 'SUI/DFI'
+
         else:
             tickFormatYAxis = ",.7f"
             lineColor = '#da3832'
@@ -115,7 +137,7 @@ class coinpricesViewClass:
 
         figPrice.update_layout(margin={"t": 60, "l": 0, "b": 0, 'r': 0},
                                hovermode='x unified',
-                               hoverlabel=dict(font_color="#6c757d"),
+                               hoverlabel=dict(font_color="#6c757d", bgcolor='#ffffff'),
                                legend=dict(orientation="h",
                                                    yanchor="top",
                                                    y=-0.12,
