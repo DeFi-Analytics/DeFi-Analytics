@@ -558,6 +558,9 @@ class defichainAnalyticsModelClass:
             hourlyDEXData.set_index(['timeRounded'], inplace=True)
             hourlyDEXData['reserveA_DFI'] = hourlyDEXData['reserveA'] / hourlyDEXData['DFIPrices']
 
+            # staking coins
+            stakingCoinPools = ['SOL-DFI', 'MATIC-DFI', 'DOT-DFI', 'SUI-DFI']
+
             priceUSDT = hourlyDEXData[hourlyDEXData.symbol == 'USDT-DFI'].DFIPrices
             priceBTC = hourlyDEXData[hourlyDEXData.symbol == 'BTC-DFI'].DFIPrices
 
@@ -565,6 +568,10 @@ class defichainAnalyticsModelClass:
             for poolSymbol in hourlyDEXData.symbol.dropna().unique():
                 df2Add = hourlyDEXData[hourlyDEXData.symbol == poolSymbol]
                 df2Add = df2Add.drop(columns=['Time', 'symbol'])
+
+                # calc corresponding DFI amount of staked coins
+                if poolSymbol in stakingCoinPools:
+                    df2Add['reserveA_DFI'] = df2Add['reserveB']
 
                 df2Add['lockedDFI'] = df2Add['reserveB'] + df2Add['reserveA_DFI']
                 df2Add['lockedUSD'] = df2Add['lockedDFI'] * priceUSDT

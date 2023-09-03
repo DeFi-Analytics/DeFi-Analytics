@@ -44,6 +44,8 @@ class tvlViewClass:
                       data['DOGE-DFI_lockedDFI'].fillna(0)+data['LTC-DFI_lockedDFI'].fillna(0) +
                       data['BCH-DFI_lockedDFI'].fillna(0) + data['USDC-DFI_lockedDFI'].fillna(0) +
                       data['EUROC-DFI_lockedDFI'].fillna(0) +
+                      data['SOL-DFI_lockedDFI'].fillna(0) + data['MATIC-DFI_lockedDFI'].fillna(0) +
+                      data['DOT-DFI_lockedDFI'].fillna(0) + data['SUI-DFI_lockedDFI'].fillna(0) +
                       data['DUSD-DFI_reserveB'].fillna(0) +
                       data['USDT-DUSD_reserveA'].fillna(0)/data['USDT-DFI_DFIPrices'].fillna(0) + data['USDC-DUSD_reserveA'].fillna(0)/data['USDT-DFI_DFIPrices'].fillna(0) ) * DFIPrice
 
@@ -95,6 +97,16 @@ class tvlViewClass:
         trace_TVLEUROC = dict(type='scatter', name='EUROC', x=data['EUROC-DFI_'+columnName].dropna().index, y=data['EUROC-DFI_'+columnName].dropna(), stackgroup='one',
                             mode='lines', line=dict(color='#07bfff'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
 
+        trace_TVLSOL = dict(type='scatter', name='SOL', x=data['SOL-DFI_'+columnName].dropna().index, y=data['SOL-DFI_'+columnName].dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#ffd703'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+        trace_TVLDOT = dict(type='scatter', name='DOT', x=data['DOT-DFI_'+columnName].dropna().index, y=data['DOT-DFI_'+columnName].dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#8a4514'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+        trace_TVLMATIC = dict(type='scatter', name='MATIC', x=data['MATIC-DFI_'+columnName].dropna().index, y=data['MATIC-DFI_'+columnName].dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#7cfc03'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+        trace_TVLSUI = dict(type='scatter', name='SUI', x=data['SUI-DFI_'+columnName].dropna().index, y=data['SUI-DFI_'+columnName].dropna(), stackgroup='one',
+                            mode='lines', line=dict(color='#f08080'), line_width=0, hovertemplate=hoverTemplateRepresenation, fill='tonexty')
+
+
         # overall TVL graph
         trace_TVLOverall = dict(type='scatter', name='Overall', x=TVLOverall.dropna().index, y=TVLOverall.dropna(),
                                 mode='lines', line=dict(color='#410eb2'), line_width=3, hovertemplate=hoverTemplateRepresenation)
@@ -110,6 +122,11 @@ class tvlViewClass:
         figTVL.add_trace(trace_TVLLTC, 1, 1)
         figTVL.add_trace(trace_TVLBCH, 1, 1)
         figTVL.add_trace(trace_TVLDOGE, 1, 1)
+        # new staking coins
+        figTVL.add_trace(trace_TVLSOL, 1, 1)
+        figTVL.add_trace(trace_TVLDOT, 1, 1)
+        figTVL.add_trace(trace_TVLMATIC, 1, 1)
+        figTVL.add_trace(trace_TVLSUI, 1, 1)
 
 
         figTVL.add_trace(trace_TVLOverall, 1, 1)
