@@ -218,11 +218,12 @@ class dUSDMeasuresViewClass:
             specs=[[{}]],
             shared_xaxes=True,
             subplot_titles=([]))
-        dataSumDEXBurn = data['burnedDUSDDEX'] - data['DUSDBurnBot_SumDUSDAmount'] - data['DUSDBurnBot2_SumDUSDAmount'] - data['DUSDBurnBot3_SumDUSDAmount']
+        dataSumDEXBurn = data['burnedDUSDDEX'] - data['DUSDBurnBot_SumDUSDAmount'].ffill() \
+                         - data['DUSDBurnBot2_SumDUSDAmount'].ffill() - data['DUSDBurnBot3_SumDUSDAmount'].ffill()
 
-        burnedBotData = data['DUSDBurnBot_SumDUSDAmount'].groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
-        burnedBot2Data = data['DUSDBurnBot2_SumDUSDAmount'].groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
-        burnedBot3Data = data['DUSDBurnBot3_SumDUSDAmount'].groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
+        burnedBotData = data['DUSDBurnBot_SumDUSDAmount'].ffill().groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
+        burnedBot2Data = data['DUSDBurnBot2_SumDUSDAmount'].ffill().groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
+        burnedBot3Data = data['DUSDBurnBot3_SumDUSDAmount'].ffill().groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
         burnedDEXData = dataSumDEXBurn.groupby(pd.Grouper(freq=selectedGraph)).first().diff().shift(-1)
 
         dataOverallBurned = burnedBot3Data+burnedBotData+burnedBot2Data+burnedDEXData
