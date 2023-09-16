@@ -143,10 +143,21 @@ class defichainAnalyticsModelClass:
             lmCoins['USDT_pool'] = self.hourlyData.groupby('Date')['USDT-DFI_reserveB'].first()
             lmCoins['DOGE_pool'] = self.hourlyData.groupby('Date')['DOGE-DFI_reserveB'].first()
             lmCoins['LTC_pool'] = self.hourlyData.groupby('Date')['LTC-DFI_reserveB'].first()
+            lmCoins['BCH_pool'] = self.hourlyData.groupby('Date')['BCH-DFI_reserveB'].first()
             lmCoins['USDC_pool'] = self.hourlyData.groupby('Date')['USDC-DFI_reserveB'].first()
             lmCoins['dUSD_pool'] = self.hourlyData.groupby('Date')['DUSD-DFI_reserveB'].first()
-            lmCoins['overall'] = lmCoins['BTC_pool'] + lmCoins['ETH_pool'] + lmCoins['USDT_pool'] + lmCoins['DOGE_pool'].fillna(0) + lmCoins['LTC_pool'].fillna(0) \
-                                 + lmCoins['USDC_pool'] .fillna(0) + lmCoins['dUSD_pool'].fillna(0)
+
+            lmCoins['EUROC_pool'] = self.hourlyData.groupby('Date')['EUROC-DFI_reserveB'].first()
+            lmCoins['XCHF_pool'] = self.hourlyData.groupby('Date')['XCHF-DFI_reserveB'].first()
+
+            lmCoins['SOL_pool'] = self.hourlyData.groupby('Date')['SOL-DFI_reserveB'].first()
+            lmCoins['DOT_pool'] = self.hourlyData.groupby('Date')['DOT-DFI_reserveB'].first()
+            lmCoins['MATIC_pool'] = self.hourlyData.groupby('Date')['MATIC-DFI_reserveB'].first()
+            lmCoins['SUI_pool'] = self.hourlyData.groupby('Date')['SUI-DFI_reserveB'].first()
+
+            lmCoins['overall'] = lmCoins['BTC_pool'] + lmCoins['ETH_pool'] + lmCoins['USDT_pool'] + lmCoins['DOGE_pool'].fillna(0) + lmCoins['LTC_pool'].fillna(0) + lmCoins['BCH_pool'].fillna(0)\
+                                 + lmCoins['USDC_pool'] .fillna(0) + lmCoins['dUSD_pool'].fillna(0) + lmCoins['EUROC_pool'].fillna(0) + lmCoins['XCHF_pool'].fillna(0) \
+                                 + lmCoins['SOL_pool'].fillna(0) + lmCoins['DOT_pool'].fillna(0) + lmCoins['MATIC_pool'].fillna(0) + lmCoins['SUI_pool'].fillna(0)
             self.dailyData['lmDFI'] = lmCoins['overall']
 
             # getting DFI in vaults
@@ -155,12 +166,12 @@ class defichainAnalyticsModelClass:
 
             # sum of addresses and DFI
             self.dailyData['nbOverall'] = self.dailyData['nbMnId'] + self.dailyData['nbOtherId']
-            self.dailyData['circDFI'] = self.dailyData['mnDFI'] + self.dailyData['otherDFI'] + self.dailyData['vaultDFI'].fillna(method='ffill')\
-                                        + self.dailyData['tokenDFI'].fillna(0) + self.dailyData['lmDFI'].fillna(method='ffill') + self.dailyData['erc20DFI'].fillna(0) \
+            self.dailyData['circDFI'] = self.dailyData['mnDFI'] + self.dailyData['otherDFI'] + self.dailyData['vaultDFI'].fillna(method='ffill').fillna(0) \
+                                        + self.dailyData['tokenDFI'].fillna(0) + self.dailyData['lmDFI'].fillna(method='ffill').fillna(0) + self.dailyData['erc20DFI'].fillna(0) \
                                         - (self.dailyData['nbMNlocked10']+self.dailyData['nbMNlocked5']).fillna(0)*20000 + self.dailyData['fundDFI'] \
                                         + (self.dailyData['nbMNlocked10'] + self.dailyData['nbMNlocked5']).fillna(0) * 20000
             self.dailyData['totalDFI'] = self.dailyData['circDFI'] + self.dailyData['foundationDFI'].fillna(0) \
-                                        + self.dailyData['burnedDFI'].fillna(method="ffill")
+                                        + self.dailyData['burnedDFI'].fillna(method="ffill").fillna(0)
 
             # calc market cap data in USD and BTC
             print('>>>>>>>> Update market cap in loadExtractedRichlistData...  <<<<<<<<')
