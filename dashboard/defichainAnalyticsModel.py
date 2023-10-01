@@ -56,6 +56,7 @@ class defichainAnalyticsModelClass:
         self.update_emissionRate=None
         self.update_coinPriceList = None
         self.updated_DFIPFutures = None
+        self.updated_FSValue = None
         self.updated_cfpData = None
         self.updated_BSCBridge = None
         self.update_dUSDMeasure = None
@@ -549,6 +550,7 @@ class defichainAnalyticsModelClass:
         self.loadBSCBridgeData()
         self.loadDUSDBurnBotData()
         self.loadLOCKdata()
+        self.loadFSValueData()
 
 
     def loadHourlyDEXdata(self):
@@ -787,6 +789,24 @@ class defichainAnalyticsModelClass:
 
             self.updated_DFIPFutures = fileInfo.stat()
             print('>>>> DFIP futures data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
+
+    def loadFSValueData(self):
+        print('>>>> Start update FS value data ... <<<<')
+        filePath = self.dataPath + 'FuturesSwapValueData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_FSValue:
+            tStart = time.time()
+            FSValueData = pd.read_csv(filePath, index_col=0)
+            FSValueData['timeRounded'] = pd.to_datetime(FSValueData.index).floor('H')
+            FSValueData.set_index(['timeRounded'], inplace=True)
+
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(FSValueData.columns)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(FSValueData, how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_FSValue = fileInfo.stat()
+            print('>>>> FS value data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadDUSDBurnBotData(self):
         print('>>>> Start update dUSD burn bot data ... <<<<')

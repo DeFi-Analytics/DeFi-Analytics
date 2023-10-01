@@ -426,56 +426,6 @@ def getLOCKData():
     # writing file
     dfLOCKData.to_csv(filepathSummary)
 
-def getDFXData():
-    filepathSummary = path + 'dfxData.csv'
-    filepathComplete = path + 'dfxAllOrdersData.csv'
-
-    print('   start DFX data acquisition')
-
-    # API request for complete transaction list of DFX
-    timeStampData = pd.Timestamp.now() - pd.Timedelta(days=2)
-    fromDateAPI = timeStampData.strftime("%Y-%m-%d")
-    link='https://api.dfx.swiss/v1/statistic/transactions?dateFrom='+fromDateAPI
-    siteContent = requests.get(link)
-    tempData= json.loads(siteContent.text)
-
-    # load existing list of orders
-    dfDFXorders = pd.read_csv(filepathComplete, index_col=0)
-    dfDFXorders.index = pd.to_datetime(dfDFXorders.index)
-
-
-    # get all new buy orders and add them to existing dataframe
-    tempDataframe = pd.DataFrame(tempData['buy'])
-    tempDataframe['order'] = 'buy'
-    tempDataframe['date'] = pd.to_datetime(tempDataframe['date'])
-    tempDataframe.set_index('date', inplace=True)
-    index2Add = ~tempDataframe.index.isin(dfDFXorders.index)
-    dfDFXorders = dfDFXorders.append(tempDataframe[index2Add])
-
-
-    # get all new sell orders and add them to existing dataframe
-    tempDataframe = pd.DataFrame(tempData['sell'])
-    tempDataframe['order'] = 'sell'
-    tempDataframe['date'] = pd.to_datetime(tempDataframe['date'])
-    tempDataframe.set_index('date', inplace=True)
-    index2Add = ~tempDataframe.index.isin(dfDFXorders.index)
-    dfDFXorders = dfDFXorders.append(tempDataframe[index2Add])
-
-    dfDFXorders.sort_values(by='date', inplace=True)
-    dfDFXorders.to_csv(filepathComplete)
-
-
-    # get hourly data
-    dfDFXData = pd.DataFrame(columns=['dfxBuyVolume', 'dfxSellVolume'])
-    dfDFXData['dfxBuyVolume'] = dfDFXorders[dfDFXorders.order == 'buy'].fiatAmount.groupby(pd.Grouper(freq='H')).sum()
-    dfDFXData['dfxBuyVolume'] = dfDFXData['dfxBuyVolume'].fillna(0).cumsum()
-    dfDFXData['dfxSellVolume'] = dfDFXorders[dfDFXorders.order == 'sell'].fiatAmount.groupby(pd.Grouper(freq='H')).sum()
-    dfDFXData['dfxSellVolume'] = dfDFXData['dfxSellVolume'].fillna(0).cumsum()
-
-    dfDFXData.index = dfDFXData.index.strftime('%Y-%m-%d %H:%M')
-    # writing file
-    dfDFXData.to_csv(filepathSummary)
-
 def getChainReportData():
     auth_token = 'd_ewE9AcXsqMYWPaLFJZR4mhZ_pBrG4JMlF9gldwGyVfkWKQaOOpQa1RsXJB--W0'
     hed = {'Authorization': 'Bearer ' + auth_token}
@@ -638,11 +588,78 @@ def getQuantumTxData():
     dfQuantumTxList.to_csv(filepathTxList)
     print('   tx list Quantum bridge saved')
 
+def calcFuturesSwapDiff():
+    print('   start calculation FuturesSwap difference')
+    filepath = path + 'vaultsData.csv'
+    dfVaultsData = pd.read_csv(filepath, index_col=0, low_memory=False)
+    dfVaultsData['timeRounded'] = pd.to_datetime(dfVaultsData.index).round(freq='H')
+    dfVaultsData.set_index(['timeRounded'], inplace=True)
+
+    filepath = path + 'DFIPFuturesData.csv'
+    dfFuturesSwapData = pd.read_csv(filepath, index_col=0, low_memory=False)
+    dfFuturesSwapData['timeRounded'] = pd.to_datetime(dfFuturesSwapData.index).round(freq='H')
+    dfFuturesSwapData.set_index(['timeRounded'], inplace=True)
+
+    filepath = path + 'FuturesSwapValueData.csv'
+
+    # add FS-minted burned stock split part
+    rowIndex = dfFuturesSwapData.index[2351:7538]
+    dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_minted_GME'] = dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_minted_GME'].fillna(0) + 9743.50399647 * 4
+    dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_burned_GME'] = dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_burned_GME'].fillna(0) + 208.54696606 * 4
+
+    rowIndex = dfFuturesSwapData.index[2255:7538]
+    dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_minted_GOOGL'] = dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_minted_GOOGL'].fillna(0) + 742.24502732 * 20
+    dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_burned_GOOGL'] = dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_burned_GOOGL'].fillna(0) + 32.08287901 * 20
+
+    rowIndex = dfFuturesSwapData.index[1249:7538]
+    dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_minted_AMZN'] = dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_minted_AMZN'].fillna(0) + 1052.47905041 * 20
+    dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_burned_AMZN'] = dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_burned_AMZN'].fillna(0) + 0 * 20
+
+    rowIndex = dfFuturesSwapData.index[3167:7538]
+    dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_minted_TSLA'] = dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_minted_TSLA'].fillna(0) + 7895.14281357 * 3
+    dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_burned_TSLA'] = dfFuturesSwapData.loc[rowIndex, 'DFIPFuture_burned_TSLA'].fillna(0) + 2.30248257 * 3
+
+
+
+    # get Ticker names
+    burnedDTokenNames = dfFuturesSwapData.columns[dfFuturesSwapData.columns.str.contains('burned')].str[18:]
+    mintedDTokenNames = dfFuturesSwapData.columns[dfFuturesSwapData.columns.str.contains('minted')].str[18:]
+    dTokenNames = burnedDTokenNames.union(mintedDTokenNames)
+    dTokenNames = dTokenNames[~dTokenNames.str.contains('/v1')] # remove stock split names
+
+    # create missing values for minted/burned and not burned/minted
+    dfFuturesSwapData['DFIPFuture_burned_' + mintedDTokenNames.difference((burnedDTokenNames)).values] = 0
+    dfFuturesSwapData['DFIPFuture_minted_' + burnedDTokenNames.difference(mintedDTokenNames).values] = 0
+
+    dfOracle = dfVaultsData[dfVaultsData.columns[dfVaultsData.columns.str.contains('-USD')]].copy()
+
+    # generate dUSD oracle value
+    dfOracle.loc[:, 'DUSD-USD'] = 1
+
+    # calc difference between minted and burned and multiply with oracle value
+    dTokenRemainingValue = pd.DataFrame()
+    for element in dTokenNames:
+        dTokenRemainingValue['FSMinted_USD_'+element] = dfFuturesSwapData['DFIPFuture_minted_'+element] * dfOracle[element+'-USD']
+        dTokenRemainingValue['FSBurned_USD_' + element] = dfFuturesSwapData['DFIPFuture_burned_' + element] * dfOracle[element + '-USD']
+
+    dfFSValue = pd.DataFrame()
+    dfFSValue['FSMinted_USD_DUSD'] = dTokenRemainingValue['FSMinted_USD_DUSD']
+    dfFSValue['FSBurned_USD_DUSD'] = dTokenRemainingValue['FSBurned_USD_DUSD']
+    colNames = dTokenRemainingValue.columns[dTokenRemainingValue.columns.str.contains('FSMinted')]
+    dfFSValue['FSMinted_USD_dToken'] = dTokenRemainingValue[colNames].sum(axis=1) - dTokenRemainingValue['FSMinted_USD_DUSD']
+    colNames = dTokenRemainingValue.columns[dTokenRemainingValue.columns.str.contains('FSBurned')]
+    dfFSValue['FSBurned_USD_dToken'] = dTokenRemainingValue[colNames].sum(axis=1) - dTokenRemainingValue['FSBurned_USD_DUSD']
+
+    dfFSValue.to_csv(filepath)
+
+    print('   finished calculation FuturesSwap difference')
+
 
 timeStampData = pd.Timestamp.now()
 # getQuantumTxData()
 # getQuantumLiquidity(timeStampData)
 
+calcFuturesSwapDiff()
 
 # DFIP Futures data
 try:
@@ -686,9 +703,3 @@ try:
 except:
     print('### Error in LOCK data acquisition')
 
-# DFX data
-try:
-    getDFXData()
-    print('DFX data saved')
-except:
-    print('### Error in DFX data acquisition')

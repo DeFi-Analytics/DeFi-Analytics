@@ -14,6 +14,9 @@ from .premium.premiumCallbacks import premiumCallbacksClass
 from .nbDToken.nbDTokenView import nbDTokenViewClass
 from .nbDToken.nbDTokenCallbacks import nbDTokenCallbacksClass
 
+from .FS.FSView import fsValueViewClass
+from .FS.FSCallbacks import fsValueCallbacksClass
+
 from .ratioAlgoLoans.ratioAlgoLoansView import ratioAlgoLoansViewClass
 from .ratioAlgoLoans.ratioAlgoLoansCallbacks import  ratioAlgoLoansCallbacksClass
 
@@ -53,6 +56,10 @@ class vaultsLoansControllerClass:
         self.nbDTokenView = nbDTokenViewClass()
         self.nbDTokenCallbacks = nbDTokenCallbacksClass(self.defichainAnalyticsModel, self.nbDTokenView, app)
 
+        # initialize FS Value classes
+        self.fsValueView = fsValueViewClass()
+        self.fsValueCallbacks = fsValueCallbacksClass(self.defichainAnalyticsModel, self.fsValueView, app)
+
         # initialize ratio classes
         self.ratioAlgoLoansView = ratioAlgoLoansViewClass()
         self.ratioAlgoLoansCallbacks = ratioAlgoLoansCallbacksClass(self.defichainAnalyticsModel, self.ratioAlgoLoansView, app)
@@ -91,6 +98,9 @@ class vaultsLoansControllerClass:
             self.defichainAnalyticsModel.loadDFIPFuturesData()
             self.defichainAnalyticsModel.loadDUSDBurnBotData()
             pageContent = self.nbDTokenView.getnbDTokenContent()
+        elif entry == 'fsValue':
+            self.defichainAnalyticsModel.loadFSValueData()
+            pageContent = self.fsValueView.getFSValueContent()
         elif entry == 'partAlgoCirc':
             self.defichainAnalyticsModel.loadVaultData()
             self.defichainAnalyticsModel.loadDFIPFuturesData()

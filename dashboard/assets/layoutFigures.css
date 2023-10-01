@@ -63,6 +63,7 @@
     #figurePricesDToken {height: 705px}
     #figurePremiumDToken {height: 745px}
     #figureNbDToken {height: 705px}
+    #figureFSValue {height: 705px}
     #figureAlgoRatioLoans {height: 705px}
     #figureInterest {height: 705px}
     #figureDUSDBurn {height: 600px}
@@ -169,6 +170,7 @@
         #figureTVLVaults {height: 600px}
         #figurePricesDToken {height: 600px}
         #figureNbDToken {height: 600px}
+        #figureFSValue {height: 600px}
         #figureAlgoRatioLoans {height: 600px}
         #figureInterest {height: 600px}
         #figureDUSDBurn {height: 500px}
@@ -230,6 +232,7 @@
         #figureTVLVaults {height: 330px}
         #figurePricesDToken {height: 330px}
         #figureNbDToken {height: 330px}
+        #figureFSValue {height: 330px}
         #figureAlgoRatioLoans {height: 330px}
         #figureInterest {height: 330px}
         #figureDUSDBurn {height: 330px}
