@@ -15,9 +15,6 @@ from .portfolio.portfolioView import portfolioViewClass
 
 from .mnMonitor.mnMonitorView import mnMonitorViewClass
 
-from .dfx.dfxViews import dfxViewClass
-from .dfx.dfxCallbacks import dfxCallbacksClass
-
 from .dfiSignal.dfiSignalView import dfiSignalViewClass
 from .dfiSignal.dfiSignalCallbacks import dfiSignalCallbacksClass
 
@@ -61,10 +58,6 @@ class communityControllerClass:
         # initialize MN monitor classes
         self.mnMonitorView = mnMonitorViewClass()
 
-        # initialize DFX classes
-        self.dfxView = dfxViewClass()
-        self.dfxCallbacks = dfxCallbacksClass(self.defichainAnalyticsModel, self.dfxView, app)
-
         # initialize DFI-signal class
         self.dfiSignalView = dfiSignalViewClass()
         self.dfiSignalCallbacks = dfiSignalCallbacksClass(self.defichainAnalyticsModel, self.dfiSignalView, app)
@@ -107,9 +100,6 @@ class communityControllerClass:
         elif entry in ["mnmonitor"]:
             self.defichainAnalyticsModel.loadMNMonitorDatabase()
             pageContent = self.mnMonitorView.getmnMonitorContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)
-        elif entry in ["dfx"]:
-            self.defichainAnalyticsModel.loadDFXdata()
-            pageContent = self.dfxView.getDFXContent()
         elif entry in ["dfisignal"]:
             self.defichainAnalyticsModel.loadDFIsignalDatabase()
             pageContent = self.dfiSignalView.getDFISignalContent(self.defichainAnalyticsModel.dailyData, self.defichainAnalyticsModel.figBackgroundImage)

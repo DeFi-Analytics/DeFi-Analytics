@@ -49,7 +49,6 @@ class defichainAnalyticsModelClass:
         self.update_analyticsVisits = None
         self.updated_hourlyDEXTrades = None
         self.update_MNmonitor = None
-        self.updated_dfx = None
         self.updated_dobby = None
         self.update_DFIsignal = None
         self.updated_vaults = None
@@ -544,7 +543,6 @@ class defichainAnalyticsModelClass:
         self.loadDEXVolume()
         self.loadTokenCrypto()
         self.loadHourlyDEXTrades()
-        self.loadDFXdata()
         self.loadVaultData()
         self.loadDFIPFuturesData()
         self.loadBSCBridgeData()
@@ -700,26 +698,6 @@ class defichainAnalyticsModelClass:
 
             self.updated_tokenCryptos = fileInfo.stat()
             print('>>>> DAT Cryptos data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
-
-    def loadDFXdata(self):
-        print('>>>> Start update DFX data ... <<<<')
-        filePath = self.dataPath + 'dfxData.csv'
-        fileInfo = pathlib.Path(filePath)
-        if fileInfo.stat() != self.updated_dfx:
-            tStart = time.time()
-            dfxData = pd.read_csv(filePath, index_col=0)
-            dfxData['timeRounded'] = pd.to_datetime(dfxData.index).floor('H')
-            dfxData.set_index(['timeRounded'], inplace=True)
-
-            columns2update = ['dfxBuyVolume', 'dfxSellVolume']
-
-            # delete existing information and add new one
-            ind2Delete = self.hourlyData.columns.intersection(columns2update)                                                               # check if columns exist
-            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
-            self.hourlyData = self.hourlyData.merge(dfxData[columns2update], how='outer', left_index=True, right_index=True)            # add new columns to daily table
-
-            self.updated_dfx = fileInfo.stat()
-            print('>>>> DFX data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadVaultData(self):
         print('>>>> Start update Vault data ... <<<<')

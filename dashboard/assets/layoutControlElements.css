@@ -1,7 +1,6 @@
 
 @media only screen and (min-width: 850px) {
     #coinsSelectionGraphic {width: 300px}
-    #dfxSelectGraph {width: 200px}
     #lockSelectService {width: 250px}
     #lockSelectGraph {width: 250px}
     #dfiSignalSelectGraph {width: 250px}
@@ -15,7 +14,6 @@
 
     @media (orientation: portrait) {
         #coinsSelectionGraphic {width: 180px}
-        #dfxSelectGraph {width: 180px}
         #lockSelectService {width: 180px}
         #lockSelectGraph {width: 180px}
         #dfiSignalSelectGraph {width: 180px}
@@ -26,7 +24,6 @@
 
     @media (orientation: landscape) {
         #coinsSelectionGraphic {width: 260px}
-        #dfxSelectGraph {width: 260px}
         #lockSelectService {width: 250px}
         #lockSelectGraph {width: 250px}
         #dfiSignalSelectGraph {width: 260px}
