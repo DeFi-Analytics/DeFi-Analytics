@@ -659,7 +659,7 @@ timeStampData = pd.Timestamp.now()
 # getQuantumTxData()
 # getQuantumLiquidity(timeStampData)
 
-calcFuturesSwapDiff()
+# calcFuturesSwapDiff()
 
 # DFIP Futures data
 try:
@@ -703,3 +703,9 @@ try:
 except:
     print('### Error in LOCK data acquisition')
 
+# Calc Futures data
+try:
+    calcFuturesSwapDiff()
+    print('Calc Futures USD data saved')
+except:
+    print('### Error in Calc Futures USD data acquisition')
