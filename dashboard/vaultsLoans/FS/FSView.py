@@ -27,7 +27,7 @@ class fsValueViewClass:
     def createFSValueGraph(data, dTokenSelection, bgImage):
         hoverTemplateRepresenation = '$%{y:,.0f}'
         yAxisLabel = 'Value in USD'
-        lastValidDate = datetime.utcfromtimestamp(data['BTC-DFI_lockedDFI'].dropna().index.values[-1].tolist()/1e9)
+        lastValidDate = datetime.utcfromtimestamp(data['FSMinted_USD_DUSD'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
 
         # Plotting long term price
