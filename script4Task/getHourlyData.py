@@ -711,10 +711,32 @@ def getTransferDomainData(timeStampData):
 
     print('   finished getting transferdomain data')
 
+def getDMCFeeData(timeStampData):
+    # get data from transferdomain listgovs entry
+    link = 'http://tn01.mydefichain.com/listgovs/'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+
+    # extract data of burned and paid fees on DMC layer
+    newData = pd.Series(data= 0, name=timeStampData, dtype=object, index=['DMCfeeBurned', 'DMCfeePriority'])
+    newData['DMCfeeBurned'] = tempData[8][0]['ATTRIBUTES']['v0/live/economy/evm/block/fee_burnt']
+    newData['DMCfeePriority'] = tempData[8][0]['ATTRIBUTES']['v0/live/economy/evm/block/fee_priority']
+
+    # add new data to existing dataframe
+    filepath = path + 'DMCfeeData.csv'
+    dfDMCFee = pd.read_csv(filepath, index_col=0)
+    # dfDMCFee = pd.DataFrame(columns=['DMCfeeBurned', 'DMCfeePriority'])
+    dfDMCFee = dfDMCFee.append(newData, sort=False)
+    dfDMCFee.to_csv(filepath)
+
+
+    print('   finished getting DMC fee data')
+
 timeStampData = pd.Timestamp.now()
 # getQuantumTxData()
 # getQuantumLiquidity(timeStampData)
 
+getDMCFeeData(timeStampData)
 
 # DFIP Futures data
 try:
