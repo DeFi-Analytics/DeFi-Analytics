@@ -655,11 +655,66 @@ def calcFuturesSwapDiff():
     print('   finished calculation FuturesSwap difference')
 
 
+def getTransferDomainData(timeStampData):
+    # get available DAT token on DVM layer
+    newDataAPI = True
+    nextPage = ''
+    availableTokenSeries = pd.Series(dtype='str')
+    while newDataAPI:
+        link = 'https://ocean.defichain.com/v0/mainnet/tokens?size=200'+nextPage
+        siteContent = requests.get(link)
+        tempData = json.loads(siteContent.text)
+
+        # check if there is a nextPage
+        if 'page' in tempData:
+            nextPage = '&next=' + tempData['page']['next']
+        else:
+            newDataAPI = False
+
+        # extract DAT token
+        for item in tempData['data']:
+            if item['isDAT'] & ~item['isLPS']:
+                availableTokenSeries[item['id']] = item['symbol']
+
+    # get data from transferdomain listgovs entry
+    link = 'http://tn01.mydefichain.com/listgovs/'
+    siteContent = requests.get(link)
+    tempData = json.loads(siteContent.text)
+
+    tempDataEVM = pd.DataFrame([tempData[8][0]['ATTRIBUTES']])
+    relevantCols = tempDataEVM.columns.str.contains('transferdomain/dvm-evm') & tempDataEVM.columns.str.contains('total')
+    tempDataEVM = tempDataEVM.loc[:,relevantCols]
+
+    tempDataDVM = pd.DataFrame([tempData[8][0]['ATTRIBUTES']])
+    relevantCols = tempDataDVM.columns.str.contains('transferdomain/evm-dvm') & tempDataDVM.columns.str.contains('total')
+    tempDataDVM = tempDataDVM.loc[:, relevantCols]
+
+    # create data structure for the current hour
+    tokenEntries = ('DMCtoken_DVM_'+availableTokenSeries.values).tolist()+('DMCtoken_EVM_'+availableTokenSeries.values).tolist()
+    newData = pd.Series(data= 0, name=timeStampData, dtype=object,
+                        index=tokenEntries)
+
+    for column in tempDataEVM:
+        tokenID = int(column.split('/')[-2])
+        newData['DMCtoken_EVM_' + availableTokenSeries[tokenID]] = tempDataEVM[column].values[0]
+
+    for column in tempDataDVM:
+        tokenID = int(column.split('/')[-2])
+        newData['DMCtoken_DVM_' + availableTokenSeries[tokenID]] = tempDataDVM[column].values[0]
+
+    # add new data to existing dataframe
+    filepath = path + 'DMCtokenData.csv'
+    dfDMCtoken = pd.read_csv(filepath, index_col=0)
+    # dfDMCtoken = pd.DataFrame(columns=tokenEntries)
+    dfDMCtoken = dfDMCtoken.append(newData, sort=False)
+    dfDMCtoken.to_csv(filepath)
+
+    print('   finished getting transferdomain data')
+
 timeStampData = pd.Timestamp.now()
 # getQuantumTxData()
 # getQuantumLiquidity(timeStampData)
 
-# calcFuturesSwapDiff()
 
 # DFIP Futures data
 try:
@@ -667,6 +722,14 @@ try:
     print('DFIP Futures data saved')
 except:
     print('### Error in DFIP Futures data acquisition')
+
+# DMC token data
+try:
+    getTransferDomainData(timeStampData)
+    print('DMC token data saved')
+except:
+    print('### Error in DMC token data acquisition')
+
 
 # Vaults data
 try:
