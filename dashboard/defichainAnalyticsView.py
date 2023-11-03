@@ -173,6 +173,31 @@ class defichainAnalyticsViewClass:
             ),
         ]
 
+        submenu_dmc = [
+            html.Li(
+                # use Row and Col components to position the chevrons
+                dbc.Row(
+                    [
+                        dbc.Col("DMC"),
+                        dbc.Col(
+                            html.I(className=PFEIL_ZU, id="submenu-dmc-arrow"), width="auto"
+                        ),
+                    ],
+                    className="my-1",
+                ),
+                className="submenu_linkstyle",
+                id="submenu-dmc",
+            ),
+            # we use the Collapse component to hide and reveal the navigation links
+            dbc.Collapse(
+                [
+                    dbc.NavLink("Paid Tx-Fee", href="/dmc?entry=dmcFees", className="linkstyle", id="dmcFees"),
+
+                ],
+                id="submenu-dmc-collapse",
+            ),
+        ]
+
         submenu_bscBridge = [
             html.Li(
                 # use Row and Col components to position the chevrons
@@ -325,8 +350,8 @@ class defichainAnalyticsViewClass:
             [
                 sidebar_header,
 
-                dbc.Collapse([html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_vaultsLoans + submenu_bscBridge +
-                                               submenu_token + submenu_community + submenu_about,
+                dbc.Collapse([html.Div(dbc.Nav(submenu_general + submenu_blockchain + submenu_dex + submenu_liquidityMining + submenu_vaultsLoans +
+                                               submenu_dmc + submenu_bscBridge + submenu_token + submenu_community + submenu_about,
                               vertical=True, id='navbar-container'), className="scrollbar_sidemenu"),
                              sidebar_footer],
                     id="menuResponsiveCollapse", className="menu_collapse"),
@@ -337,7 +362,7 @@ class defichainAnalyticsViewClass:
 
         MainWindow = dcc.Loading([html.Div(id="page-content", className="contentstyle"),
                                   refLink,
-                                  html.Div(id='hiddenDivTimestampsMenuClicked', children='0 0 0 0 0 0 0 0 0', style={'display':'none'})],
+                                  html.Div(id='hiddenDivTimestampsMenuClicked', children='0 0 0 0 0 0 0 0 0 0', style={'display':'none'})],
                                  type="default")
         self.trackVisit()
         self.layout = html.Div([dcc.Location(id="url"), sidebar, MainWindow])

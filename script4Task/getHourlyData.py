@@ -736,7 +736,7 @@ timeStampData = pd.Timestamp.now()
 # getQuantumTxData()
 # getQuantumLiquidity(timeStampData)
 
-getDMCFeeData(timeStampData)
+
 
 # DFIP Futures data
 try:
@@ -752,6 +752,12 @@ try:
 except:
     print('### Error in DMC token data acquisition')
 
+# DMC fee data
+try:
+    getDMCFeeData(timeStampData)
+    print('DMC fee data saved')
+except:
+    print('### Error in DMC fee data acquisition')
 
 # Vaults data
 try:

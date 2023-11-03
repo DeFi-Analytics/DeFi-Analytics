@@ -8,13 +8,14 @@ PFEIL_OFFEN = "fas fa-chevron-down mr-3"
 
 class defichainAnalyticsCallbacksClass:
     def __init__(self, defichainAnalyticsModel, generalController, blockchainController, dexController, liquidityMiningController, vaultsLoansController,
-                 bscBridgeController, tokenController, communityController, aboutController):
+                 dmcController, bscBridgeController, tokenController, communityController, aboutController):
         self.defichainAnalyticsModel = defichainAnalyticsModel
         self.generalController = generalController
         self.blockchainController = blockchainController
         self.dexController = dexController
         self.liquidityMiningController = liquidityMiningController
         self.vaultsLoansController = vaultsLoansController
+        self.dmcController = dmcController
         self.bscBridgeController = bscBridgeController
         self.tokenController = tokenController
         self.communityController = communityController
@@ -62,6 +63,8 @@ class defichainAnalyticsCallbacksClass:
                                              Input('dUSDMeasures', 'n_clicks_timestamp'),
                                              Input('scheme', 'n_clicks_timestamp'),
 
+                                             Input('dmcFees', 'n_clicks_timestamp'),
+
                                              Input('liquidityBridge', 'n_clicks_timestamp'),
                                              Input('nbSwapsBridge', 'n_clicks_timestamp'),
                                              Input('inOutFlow', 'n_clicks_timestamp'),
@@ -104,6 +107,7 @@ class defichainAnalyticsCallbacksClass:
             Input("submenu-dex", "n_clicks_timestamp"),
             Input("submenu-liquidityMining", "n_clicks_timestamp"),
             Input("submenu-vaultsLoans", "n_clicks_timestamp"),
+            Input("submenu-dmc", "n_clicks_timestamp"),
             Input("submenu-bscBridge", "n_clicks_timestamp"),
             Input("submenu-token", "n_clicks_timestamp"),
             Input("submenu-community", "n_clicks_timestamp"),
@@ -117,6 +121,7 @@ class defichainAnalyticsCallbacksClass:
             State("submenu-dex-collapse", "is_open"),
             State("submenu-liquidityMining-collapse", "is_open"),
             State("submenu-vaultsLoans-collapse", "is_open"),
+            State("submenu-dmc-collapse", "is_open"),
             State("submenu-bscBridge-collapse", "is_open"),
             State("submenu-token-collapse", "is_open"),
             State("submenu-community-collapse", "is_open"),
@@ -128,6 +133,7 @@ class defichainAnalyticsCallbacksClass:
             Output("submenu-dex-collapse", "is_open"),
             Output("submenu-liquidityMining-collapse", "is_open"),
             Output("submenu-vaultsLoans-collapse", "is_open"),
+            Output("submenu-dmc-collapse", "is_open"),
             Output("submenu-bscBridge-collapse", "is_open"),
             Output("submenu-token-collapse", "is_open"),
             Output("submenu-community-collapse", "is_open"),
@@ -138,6 +144,7 @@ class defichainAnalyticsCallbacksClass:
             Output("submenu-dex-arrow", "className"),
             Output("submenu-liquidityMining-arrow", "className"),
             Output("submenu-vaultsLoans-arrow", "className"),
+            Output("submenu-dmc-arrow", "className"),
             Output("submenu-bscBridge-arrow", "className"),
             Output("submenu-token-arrow", "className"),
             Output("submenu-community-arrow", "className"),
@@ -147,11 +154,11 @@ class defichainAnalyticsCallbacksClass:
 
         @app.callback(sidebar_menu_Output_Array, sidebar_subMenu_Input_Array, sidebar_menu_Status_Array)
         def toggle_collapse(*inArray):
-            urlPath=inArray[9]
-            strTimestampFromDiv=inArray[10]
+            urlPath=inArray[10]
+            strTimestampFromDiv=inArray[11]
 
             # new timestamps
-            timestamp_array=inArray[0:9]
+            timestamp_array=inArray[0:10]
             timestamp_array = [0 if entry is None else entry for entry in timestamp_array]
             strTimestampForDiv = ' '.join(str(entry) for entry in timestamp_array)
 
@@ -162,7 +169,7 @@ class defichainAnalyticsCallbacksClass:
             n_clicked = not(timestamp_oldArray == timestamp_array)                      # compare old and new timestamp list, true if different (clicked)
             urlLoadPage = not any(timestamp_oldArray)                                   # check if all old timestamp entries are 0 => page initially loaded
 
-            status_Array = inArray[11:]
+            status_Array = inArray[12:]
             status_Array = [False if entry is None else entry for entry in status_Array]
 
            #if there had been a click-event
@@ -182,6 +189,8 @@ class defichainAnalyticsCallbacksClass:
                                              False,
                                              False,
                                              False,
+                                             False,
+                                             PFEIL_ZU,
                                              PFEIL_ZU,
                                              PFEIL_ZU,
                                              PFEIL_ZU,
@@ -194,31 +203,34 @@ class defichainAnalyticsCallbacksClass:
                                              strTimestampForDiv]
                 if urlPath in ['/', '/general']:
                     sidebar_menu_Output_Array[0] = True
-                    sidebar_menu_Output_Array[9] = PFEIL_OFFEN
+                    sidebar_menu_Output_Array[10] = PFEIL_OFFEN
                 elif urlPath in ['/blockchain']:
                     sidebar_menu_Output_Array[1] = True
-                    sidebar_menu_Output_Array[10] = PFEIL_OFFEN
+                    sidebar_menu_Output_Array[11] = PFEIL_OFFEN
                 elif urlPath in ['/dex']:
                     sidebar_menu_Output_Array[2] = True
-                    sidebar_menu_Output_Array[11] = PFEIL_OFFEN
+                    sidebar_menu_Output_Array[12] = PFEIL_OFFEN
                 elif urlPath in ['/liquidityMining']:
                     sidebar_menu_Output_Array[3] = True
-                    sidebar_menu_Output_Array[12] = PFEIL_OFFEN
+                    sidebar_menu_Output_Array[13] = PFEIL_OFFEN
                 elif urlPath in ['/vaultsLoans']:
                     sidebar_menu_Output_Array[4] = True
-                    sidebar_menu_Output_Array[13] = PFEIL_OFFEN
-                elif urlPath in ['/bscBridge']:
-                    sidebar_menu_Output_Array[5] = True
                     sidebar_menu_Output_Array[14] = PFEIL_OFFEN
-                elif urlPath in ['/token']:
-                    sidebar_menu_Output_Array[6] = True
+                elif urlPath in ['/dmc']:
+                    sidebar_menu_Output_Array[5] = True
                     sidebar_menu_Output_Array[15] = PFEIL_OFFEN
-                elif urlPath in ['/community']:
-                    sidebar_menu_Output_Array[7] = True
+                elif urlPath in ['/bscBridge']:
+                    sidebar_menu_Output_Array[6] = True
                     sidebar_menu_Output_Array[16] = PFEIL_OFFEN
-                elif urlPath in ['/about']:
-                    sidebar_menu_Output_Array[8] = True
+                elif urlPath in ['/token']:
+                    sidebar_menu_Output_Array[7] = True
                     sidebar_menu_Output_Array[17] = PFEIL_OFFEN
+                elif urlPath in ['/community']:
+                    sidebar_menu_Output_Array[8] = True
+                    sidebar_menu_Output_Array[18] = PFEIL_OFFEN
+                elif urlPath in ['/about']:
+                    sidebar_menu_Output_Array[9] = True
+                    sidebar_menu_Output_Array[19] = PFEIL_OFFEN
             else:
                 outArray = status_Array
                 outArrowArray = [PFEIL_OFFEN if entry else PFEIL_ZU for entry in outArray]
@@ -263,6 +275,8 @@ class defichainAnalyticsCallbacksClass:
                                    'burnedDFI',
                                    'dUSDMeasures',
                                    'scheme',
+
+                                   'dmcFees',
 
                                    'liquidityBridge',
                                    'nbSwapsBridge',
@@ -323,6 +337,8 @@ class defichainAnalyticsCallbacksClass:
                                             Output('dUSDMeasures', 'className'),
                                             Output('scheme', 'className'),
 
+                                            Output('dmcFees', 'className'),
+
                                             Output('liquidityBridge', 'className'),
                                             Output('nbSwapsBridge', 'className'),
                                             Output('inOutFlow', 'className'),
@@ -369,6 +385,8 @@ class defichainAnalyticsCallbacksClass:
                         selectedEntry = 'tvl'
                     elif urlPath == '/vaultsLoans':
                         selectedEntry = 'nbVaults'
+                    elif urlPath == '/dmc':
+                        selectedEntry = 'dmcFees'
                     elif urlPath == '/bscBridge':
                         selectedEntry = 'liquidityBridge'
                     elif urlPath == '/token':
@@ -420,6 +438,8 @@ class defichainAnalyticsCallbacksClass:
                 pageContent = self.liquidityMiningController.getContent(selectedEntry)
             elif urlPath in ["/vaultsLoans"]:
                 pageContent = self.vaultsLoansController.getContent(selectedEntry)
+            elif urlPath in ["/dmc"]:
+                pageContent = self.dmcController.getContent(selectedEntry)
             elif urlPath in ["/bscBridge"]:
                 pageContent = self.bscBridgeController.getContent(selectedEntry)
             elif urlPath in ["/token"]:

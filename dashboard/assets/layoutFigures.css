@@ -73,6 +73,8 @@
     #figureBurnedDFI {height: 745px}
     #figureScheme {height: 705px}
 
+    #figureDMCfees {height: 705px}
+
     #figureBSCLiquidity {height: 745px}
     #figureBSCnbSwaps {height: 705px}
     #figureBSCInOutFlow {height: 705px}
@@ -179,6 +181,8 @@
         #figureScheme {height: 600px}
         #figurePremiumDToken {height: 600px}
 
+        #figureDMCfees {height: 600px}
+
         #figureBSCLiquidity {height: 600px}
         #figureBSCnbSwaps {height: 600px}
         #figureBSCInOutFlow {height: 600px}
@@ -239,6 +243,8 @@
         #figureBurnedDFI {height: 330px}
         #figureScheme {height: 330px}
         #figurePremiumDToken {height: 330px}
+
+        #figureDMCfees {height: 330px}
 
         #figureBSCLiquidity {height: 330px}
         #figureBSCnbSwaps {height: 330px}
