@@ -64,6 +64,7 @@ class defichainAnalyticsCallbacksClass:
                                              Input('scheme', 'n_clicks_timestamp'),
 
                                              Input('dmcFees', 'n_clicks_timestamp'),
+                                             Input('dmcToken', 'n_clicks_timestamp'),
 
                                              Input('liquidityBridge', 'n_clicks_timestamp'),
                                              Input('nbSwapsBridge', 'n_clicks_timestamp'),
@@ -277,6 +278,7 @@ class defichainAnalyticsCallbacksClass:
                                    'scheme',
 
                                    'dmcFees',
+                                   'dmcToken',
 
                                    'liquidityBridge',
                                    'nbSwapsBridge',
@@ -338,6 +340,7 @@ class defichainAnalyticsCallbacksClass:
                                             Output('scheme', 'className'),
 
                                             Output('dmcFees', 'className'),
+                                            Output('dmcToken', 'className'),
 
                                             Output('liquidityBridge', 'className'),
                                             Output('nbSwapsBridge', 'className'),

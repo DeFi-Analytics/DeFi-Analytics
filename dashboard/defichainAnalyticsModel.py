@@ -63,6 +63,7 @@ class defichainAnalyticsModelClass:
         self.updated_lock = None
         self.updated_redditMember = None
         self.updated_dmcFees = None
+        self.updated_dmcToken = None
 
 
         # background image for figures
@@ -551,6 +552,7 @@ class defichainAnalyticsModelClass:
         self.loadLOCKdata()
         self.loadFSValueData()
         self.loadDMCFeesData()
+        self.loadDMCTokenData()
 
 
     def loadHourlyDEXdata(self):
@@ -792,7 +794,7 @@ class defichainAnalyticsModelClass:
         print('>>>> Start update DMC fees data ... <<<<')
         filePath = self.dataPath + 'DMCfeeData.csv'
         fileInfo = pathlib.Path(filePath)
-        if fileInfo.stat() != self.updated_FSValue:
+        if fileInfo.stat() != self.updated_dmcFees:
             tStart = time.time()
             DMCFeeData = pd.read_csv(filePath, index_col=0)
             DMCFeeData['timeRounded'] = pd.to_datetime(DMCFeeData.index).floor('H')
@@ -805,6 +807,25 @@ class defichainAnalyticsModelClass:
 
             self.updated_dmcFees = fileInfo.stat()
             print('>>>> DMC fees data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
+
+
+    def loadDMCTokenData(self):
+        print('>>>> Start update DMC token data ... <<<<')
+        filePath = self.dataPath + 'DMCtokenData.csv'
+        fileInfo = pathlib.Path(filePath)
+        if fileInfo.stat() != self.updated_dmcToken:
+            tStart = time.time()
+            DMCTokenData = pd.read_csv(filePath, index_col=0)
+            DMCTokenData['timeRounded'] = pd.to_datetime(DMCTokenData.index).floor('H')
+            DMCTokenData.set_index(['timeRounded'], inplace=True)
+
+            # delete existing information and add new one
+            ind2Delete = self.hourlyData.columns.intersection(DMCTokenData.columns)                                                               # check if columns exist
+            self.hourlyData.drop(columns=ind2Delete, inplace=True)                                                                          # delete existing columns to add new ones
+            self.hourlyData = self.hourlyData.merge(DMCTokenData, how='outer', left_index=True, right_index=True)            # add new columns to daily table
+
+            self.updated_dmcToken = fileInfo.stat()
+            print('>>>> DMC token data loaded from csv-file <<<< ==== Columns: '+str(len(self.hourlyData.columns))+'  Rows: '+str(len(self.hourlyData.index))+'    Time needed: '+str(time.time()-tStart))
 
     def loadDUSDBurnBotData(self):
         print('>>>> Start update dUSD burn bot data ... <<<<')

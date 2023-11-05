@@ -192,7 +192,7 @@ class defichainAnalyticsViewClass:
             dbc.Collapse(
                 [
                     dbc.NavLink("Paid Tx-Fee", href="/dmc?entry=dmcFees", className="linkstyle", id="dmcFees"),
-
+                    dbc.NavLink("DAT-token on DMC", href="/dmc?entry=dmcToken", className="linkstyle", id="dmcToken"),
                 ],
                 id="submenu-dmc-collapse",
             ),

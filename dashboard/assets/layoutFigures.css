@@ -74,6 +74,7 @@
     #figureScheme {height: 705px}
 
     #figureDMCfees {height: 705px}
+    #figureDMCtoken {height: 705px}
 
     #figureBSCLiquidity {height: 745px}
     #figureBSCnbSwaps {height: 705px}
@@ -182,6 +183,7 @@
         #figurePremiumDToken {height: 600px}
 
         #figureDMCfees {height: 600px}
+        #figureDMCtoken {height: 600px}
 
         #figureBSCLiquidity {height: 600px}
         #figureBSCnbSwaps {height: 600px}
@@ -245,6 +247,7 @@
         #figurePremiumDToken {height: 330px}
 
         #figureDMCfees {height: 330px}
+        #figureDMCtoken {height: 330px}
 
         #figureBSCLiquidity {height: 330px}
         #figureBSCnbSwaps {height: 330px}
