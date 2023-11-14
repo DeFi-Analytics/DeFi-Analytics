@@ -15,6 +15,7 @@ path = scriptPath[:-31] + '/data/'
 filepath = path + 'snapshotData.csv'
 filepathMNList = path + 'currentMNList.csv'
 filePathVaults = path + 'vaultsData.csv'
+filepathEVMToken = path + 'DMCtokenData.csv'
 
 while True:
     print('Start updating ...')
@@ -98,10 +99,23 @@ while True:
         else:
             burnedDFIFees = np.NaN
 
-        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan[0][:-4]) + float(burnedDFIPaybackFee)
+        # get DFI from burned DMC fees
+        try:
+            link = 'https://api.mydefichain.com/v1/listgovs/'
+            siteContent = requests.get(link)
+            tempData = json.loads(siteContent.text)
+            if siteContent.status_code == 200:
+                burnedDFIMetaChainFees = tempData[8][0]['ATTRIBUTES']['v0/live/economy/evm/block/fee_burnt']
+            else:
+                burnedDFIMetaChainFees = 0
+        except:
+            burnedDFIMetaChainFees = 0
+
+        burnedDFIValue = float(burnedDFICoins) + float(burnedDFIFees) + float(burnedDFIRewards) + float(burnedDFIToken) + float(burnedDFIAuction) + float(burnedDFILoan[0][:-4]) \
+                         + float(burnedDFIPaybackFee) + float(burnedDFIMetaChainFees)
 
         # get DFI from LiquidityMining
-        print('... getting LM and token data')
+        print('... getting LM data')
         try:
             link='http://api.defichain.io/v1/listpoolpairs?start=0&limit=500&network=mainnet&including_start=false'
             siteContent = requests.get(link, timeout=60)
@@ -114,28 +128,17 @@ while True:
             print('### error lm api ')
             lmDFIValue = oldSnapshot['lmDFI'].values[0]
 
-        # get DFI-Token
-        # try:
-        #     link = "https://api.defichain.io/v1/gettokenrichlist?id=0&network=mainnet"
-        #     siteContent = requests.get(link, timeout=10)
-        #     if siteContent.status_code == 200:
-        #         dfDFIToken = pd.read_json(siteContent.text)
-        #         tokenDFIValue = dfDFIToken[dfDFIToken.address != addFoundation].balance.sum()
-        #     else:
-        #         tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
-        # except:
-        #     print('### error token richlist')
-        #     #tokenDFIValue = oldSnapshot['tokenDFI'].values[0]
-        #     tokenDFIValue = np.NaN
-        # calculated statistical data
-        # if np.isnan(tokenDFIValue):
-        #     tokenDFIValue = 0
-        #     bCorrectValues = False
-
-
+        print('... getting vaults data')
         # get DFI in vaults of last capture (time consumptive API)
         vaultsData = pd.read_csv(filePathVaults, index_col=0)
         vaultsDFIValue = vaultsData.sumDFI[vaultsData.sumDFI.notna()].iloc[-1]
+
+        print('... getting EVM token data')
+        # get DFI in vaults of last capture (time consumptive API)
+        tokenEVMData = pd.read_csv(filepathEVMToken, index_col=0)
+        dmcData = pd.DataFrame()
+        dmcData['tokenDMC'] = tokenEVMData['DMCtoken_EVM_DFI'] - tokenEVMData['DMCtoken_DVM_DFI']
+        dmcDFIValue = dmcData[dmcData['tokenDMC'].notna()].iloc[-1].values[0]
 
         if addFoundation in dfRichList.values:
             foundationDFIValue = dfRichList[dfRichList.address==addFoundation].balance.values[0]
@@ -157,9 +160,9 @@ while True:
             tokenDFIValue = np.NaN
 
         # workaround to estimate DFI Token
-        tokenDFIValue = mintedDFICoins - (mnDFIValue + otherDFIValue + lmDFIValue + erc20DFIValue + vaultsDFIValue + foundationDFIValue + fundDFIValue + burnedDFIValue + mnDFILockedValue)
+        tokenDFIValue = mintedDFICoins - (mnDFIValue + otherDFIValue + lmDFIValue + erc20DFIValue + vaultsDFIValue + foundationDFIValue + fundDFIValue + burnedDFIValue + mnDFILockedValue + dmcDFIValue)
 
-        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue + vaultsDFIValue + fundDFIValue + mnDFILockedValue
+        circDFIValue = mnDFIValue + otherDFIValue + lmDFIValue + tokenDFIValue + erc20DFIValue + vaultsDFIValue + fundDFIValue + mnDFILockedValue + dmcDFIValue
         totalDFI = circDFIValue+foundationDFIValue+burnedDFIValue
 
         maxDFIValue = 1200000000
@@ -172,7 +175,7 @@ while True:
             currDFIPrice = DFIData['defichain']['usd']
             currDFI24hVol = DFIData['defichain']['usd_24h_vol']
 
-            marketCapListCG = cg.get_coins_markets(vs_currency='usd', per_page=150)
+            marketCapListCG = cg.get_coins_markets(vs_currency='usd', per_page=300)
             marketCapList = pd.DataFrame.from_dict(marketCapListCG)
             marketCapRank = marketCapList[marketCapList.symbol == 'dfi'].iloc[0].market_cap_rank
         except:
@@ -185,12 +188,11 @@ while True:
 
         # get DFI amount on Bittrex
         try:
-            link = 'https://global.bittrex.com/api/v2.0/pub/currencies/GetWalletHealth?showAll=true'
+            link = 'https://api.bittrex.com/v3/markets/DFI-USDT/ticker'
             siteContent = requests.get(link, timeout=10)
             if siteContent.status_code == 200:
-                bittrexCoins = json.loads(siteContent.text)
-                matches = [x for x in bittrexCoins['result'] if x['Currency']['Currency']=='DFI']
-                bittrexDFIValue = matches[0]['Health']['WalletBalance']
+                bittrexData = json.loads(siteContent.text)
+                bittrexDFIValue = float(bittrexData['lastTradeRate'])
 
             else:
                 bittrexDFIValue = np.NaN
@@ -237,9 +239,9 @@ while True:
 
     print('... saving data')
     # convert single data to pandas series
-    colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'mnDFILocked', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'burnedDFI', 'circDFI',
+    colNames = ['date', 'nbMnId', 'nbOtherId', 'fundDFI',  'mnDFI', 'mnDFILocked', 'otherDFI', 'foundationDFI', 'lmDFI', 'tokenDFI', 'erc20DFI', 'dmcDFIValue', 'burnedDFI', 'circDFI',
                 'totalDFI', 'maxDFI', 'DFIprice', 'tradingVolume', 'marketCap', 'marketCapRank', 'blocksLeft', 'bCorrectValues', 'nbMNlocked5', 'nbMNlocked10', 'vaultsDFI', 'bittrexDFIValue']
-    listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, mnDFILockedValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, burnedDFIValue, circDFIValue,
+    listData = [nowSnapshot, nbMnId, nbOtherId, fundDFIValue, mnDFIValue, mnDFILockedValue, otherDFIValue, foundationDFIValue, lmDFIValue, tokenDFIValue, erc20DFIValue, dmcDFIValue, burnedDFIValue, circDFIValue,
                 totalDFI, maxDFIValue, currDFIPrice, currDFI24hVol, marketCap, marketCapRank, blocksLeft, bCorrectValues, nbMNlocked5, nbMNlocked10, vaultsDFIValue, bittrexDFIValue]
     seriesData = pd.Series(listData, index = colNames)
 
