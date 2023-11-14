@@ -712,15 +712,19 @@ def getTransferDomainData(timeStampData):
     print('   finished getting transferdomain data')
 
 def getDMCFeeData(timeStampData):
-    # get data from transferdomain listgovs entry
-    link = 'http://tn01.mydefichain.com/listgovs/'
-    siteContent = requests.get(link)
-    tempData = json.loads(siteContent.text)
+    newData = pd.Series(data=0, name=timeStampData, dtype=object, index=['DMCfeeBurned', 'DMCfeePriority'])
+    # try to get data from transferdomain listgovs entry
+    try:
+        link = 'https://api.mydefichain.com/v1/listgovs/'
+        siteContent = requests.get(link)
+        tempData = json.loads(siteContent.text)
 
-    # extract data of burned and paid fees on DMC layer
-    newData = pd.Series(data= 0, name=timeStampData, dtype=object, index=['DMCfeeBurned', 'DMCfeePriority'])
-    newData['DMCfeeBurned'] = tempData[8][0]['ATTRIBUTES']['v0/live/economy/evm/block/fee_burnt']
-    newData['DMCfeePriority'] = tempData[8][0]['ATTRIBUTES']['v0/live/economy/evm/block/fee_priority']
+        # extract data of burned and paid fees on DMC layer
+        newData['DMCfeeBurned'] = tempData[8][0]['ATTRIBUTES']['v0/live/economy/evm/block/fee_burnt']
+        newData['DMCfeePriority'] = tempData[8][0]['ATTRIBUTES']['v0/live/economy/evm/block/fee_priority']
+    except:
+        newData['DMCfeeBurned'] = np.nan
+        newData['DMCfeePriority'] = np.nan
 
     # add new data to existing dataframe
     filepath = path + 'DMCfeeData.csv'
