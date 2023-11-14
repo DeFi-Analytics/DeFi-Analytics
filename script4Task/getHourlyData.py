@@ -677,7 +677,7 @@ def getTransferDomainData(timeStampData):
                 availableTokenSeries[item['id']] = item['symbol']
 
     # get data from transferdomain listgovs entry
-    link = 'http://tn01.mydefichain.com/listgovs/'
+    link = 'https://api.mydefichain.com/v1/listgovs/'
     siteContent = requests.get(link)
     tempData = json.loads(siteContent.text)
 
@@ -739,7 +739,6 @@ def getDMCFeeData(timeStampData):
 timeStampData = pd.Timestamp.now()
 # getQuantumTxData()
 # getQuantumLiquidity(timeStampData)
-
 
 
 # DFIP Futures data
