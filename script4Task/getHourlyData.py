@@ -696,11 +696,11 @@ def getTransferDomainData(timeStampData):
 
     for column in tempDataEVM:
         tokenID = int(column.split('/')[-2])
-        newData['DMCtoken_EVM_' + availableTokenSeries[tokenID]] = tempDataEVM[column].values[0]
+        newData['DMCtoken_EVM_' + availableTokenSeries[str(tokenID)]] = tempDataEVM[column].values[0]
 
     for column in tempDataDVM:
         tokenID = int(column.split('/')[-2])
-        newData['DMCtoken_DVM_' + availableTokenSeries[tokenID]] = tempDataDVM[column].values[0]
+        newData['DMCtoken_DVM_' + availableTokenSeries[str(tokenID)]] = tempDataDVM[column].values[0]
 
     # add new data to existing dataframe
     filepath = path + 'DMCtokenData.csv'
