@@ -34,7 +34,7 @@ class feesViewClass:
             priorityFee = data['DMCfeePriority']
 
 
-        hoverTemplateRepresenation = '$%{y:,.0f}'
+        hoverTemplateRepresenation = '$%{y:,.4f}'
         yAxisLabel = 'Fee amount in DFI'
         lastValidDate = datetime.utcfromtimestamp(data['DMCfeeBurned'].dropna().index.values[-1].tolist()/1e9)
         date14DaysBack = lastValidDate - dateutil.relativedelta.relativedelta(days=14)
@@ -51,23 +51,23 @@ class feesViewClass:
 
         # generate fee sum line
         trace_FeeSum = dict(type='scatter', name='Overall', x=(burnedFee+priorityFee).dropna().index, y=(burnedFee+priorityFee).dropna(),
-                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.f}')
+                                  mode='lines', line=dict(color='#ff00af'), line_width=3, hovertemplate='%{y:,.4f}')
 
         # generate specific addresses
         trace_burnedFee = dict(type='scatter', name='Burned base fee',x=burnedFee.dropna().index, y=burnedFee.dropna(),
-                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f}', fill='tozeroy')
+                                 mode='lines', line=dict(color='#ff7fd7'), line_width=0, stackgroup='one', hovertemplate='%{y:,.4f}', fill='tozeroy')
 
         trace_priorityFee = dict(type='scatter', name='Priority fee', x=priorityFee.dropna().index, y=priorityFee.dropna(),
-                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.f}', fill='tonexty')
+                                    mode='lines', line=dict(color='#ffbfeb'), line_width=0, stackgroup='one', hovertemplate='%{y:,.4f}', fill='tonexty')
 
         figDMCfee.add_trace(trace_burnedFee, 1, 1)
         figDMCfee.add_trace(trace_priorityFee, 1, 1)
         figDMCfee.add_trace(trace_FeeSum, 1, 1)
 
-        figDMCfee.update_yaxes(title_text=yAxisLabel, tickformat=",.0f", gridcolor='#6c757d', color='#6c757d',
+        figDMCfee.update_yaxes(title_text=yAxisLabel, tickformat=",.1f", gridcolor='#6c757d', color='#6c757d',
                             zerolinecolor='#6c757d', row=1, col=1)
         figDMCfee.update_xaxes(title_text="Date", gridcolor='#6c757d', showticklabels=True, color='#6c757d', zerolinecolor='#6c757d',
-                            range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1)
+                            range=[date14DaysBack.strftime('%Y-%m-%d %H:%M:%S.%f'), lastValidDate], row=1, col=1),
 
         # Add range slider
         figDMCfee.update_layout(xaxis=dict(
