@@ -22,8 +22,7 @@ class dmcControllerClass:
             self.defichainAnalyticsModel.loadDMCFeesData()
             pageContent = self.feesView.getFeesContent()
         elif entry == 'dmcToken':
-            self.defichainAnalyticsModel.loadDMCTokenData
-
+            self.defichainAnalyticsModel.loadDMCTokenData()
             colNames = self.defichainAnalyticsModel.hourlyData.columns
             availableToken = colNames.str.contains('DMCtoken_DVM') & ~colNames.str.contains('v1') & ~colNames.str.contains('DFI') & ~colNames.str.contains('dUSD') & ~colNames.str.contains('BURN')
             listAvailableTokens = ['DFI', 'DUSD'] + colNames[availableToken].sort_values().str[13:].to_list()
