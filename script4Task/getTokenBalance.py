@@ -57,7 +57,7 @@ print('Check collaterals ...')
 #BTC
 print('... BTC ...')
 try:
-    link='https://blockchain.info/q/addressbalance/38pZuWUti3vSQuvuFYs8Lwbyje8cmaGhrT'
+    link='https://blockchain.info/q/addressbalance/3GcSHxkKY8ADMWRam51T1WYxYSb2vH62VL'
     siteContent = requests.get(link)
     BTCamount = float(siteContent.text)*1e-8
 except:
@@ -68,7 +68,7 @@ except:
 #ETH
 print('... ETH ...')
 try:
-    link='https://api.etherscan.io/api?module=account&action=balance&address=0x94fa70d079d76279e1815ce403e9b985bccc82ac&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+    link='https://api.etherscan.io/api?module=account&action=balance&address=0xC889Faf456439Fb932B9Ce3d4F43D8078177fD29&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
     siteContent = requests.get(link)
     apiContentAsDict=ast.literal_eval(siteContent.text)
     ETHamount = float(apiContentAsDict['result'])*1e-18
@@ -80,7 +80,7 @@ except:
 #USDT
 print('... USDT ...')
 try:
-    link='https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0xdac17f958d2ee523a2206206994597c13d831ec7&address=0x94fa70d079d76279e1815ce403e9b985bccc82ac&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+    link='https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0xdac17f958d2ee523a2206206994597c13d831ec7&address=0xC889Faf456439Fb932B9Ce3d4F43D8078177fD29&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
     siteContent = requests.get(link)
     apiContentAsDict=ast.literal_eval(siteContent.text)
     USDTamount = float(apiContentAsDict['result'])*1e-6
@@ -92,10 +92,10 @@ except:
 #DOGE
 print('... DOGE ...')
 try:
-    link='https://sochain.com/api/v2/get_address_balance/DOGE/D7jrXDgPYck8jL9eYvRrc7Ze8n2e2Loyba'
+    link='https://dogechain.info/api/v1/address/balance/9uv4fqPjSYNVNvqzbuGUMACBw67qQcLTxg'
     siteContent = requests.get(link)
     tempData = json.loads(siteContent.text)
-    DOGEamount = tempData['data']['confirmed_balance']
+    DOGEamount = float(tempData['balance'])
 except:
     DOGEamount = np.nan
     print('### Error in DOGE API')
@@ -128,7 +128,7 @@ except:
 #USDC
 print('... USDC ...')
 try:
-    link='https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&address=0x94fa70d079d76279e1815ce403e9b985bccc82ac&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+    link='https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&address=0xC889Faf456439Fb932B9Ce3d4F43D8078177fD29&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
     siteContent = requests.get(link)
     apiContentAsDict=ast.literal_eval(siteContent.text)
     USDCamount = float(apiContentAsDict['result'])*1e-6
@@ -140,7 +140,7 @@ except:
 #EUROC
 print('... EUROC ...')
 try:
-    link='https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c&address=0x94fa70d079d76279e1815ce403e9b985bccc82ac&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
+    link='https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c&address=0xC889Faf456439Fb932B9Ce3d4F43D8078177fD29&tag=latest&apikey=WZ8T48S9KDR1YWI8RJKT9PBRGB8GCU96AE'
     siteContent = requests.get(link)
     apiContentAsDict=ast.literal_eval(siteContent.text)
     EUROCamount = float(apiContentAsDict['result'])*1e-6
