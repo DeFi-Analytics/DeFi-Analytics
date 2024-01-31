@@ -92,7 +92,7 @@ class crpytoTokenViewClass:
         figTokenData.add_trace(trace_collateral, 2, 1)
 
         figTokenData.update_yaxes(title_text=y1Labeling, tickformat=",.1f", gridcolor='#6c757d', color='#6c757d',
-                                  zerolinecolor='#6c757d', range=y1Range, dtick=y1dTick, row=1, col=1)
+                                  zerolinecolor='#6c757d', range=y1Range, row=1, col=1)
         figTokenData.update_yaxes(title_text=y2Labeling, tickformat=tickFormatYAxis, gridcolor='#6c757d', color='#6c757d',
                                   zerolinecolor='#6c757d', row=2, col=1)
         figTokenData.update_xaxes(gridcolor='#6c757d', color='#6c757d', zerolinecolor='#6c757d', row=1, col=1)
@@ -130,16 +130,16 @@ class crpytoTokenViewClass:
                                        'Here you can see all burned tokens with the DEX-Explorer (',html.A('Link',href='https://dex.defichain.com/mainnet/address/8defichainBurnAddressXXXXXXXdRQkSm',target='_blank', className='defiLink'),')'],style={'text-align': 'justify'}),
 
                                html.P(['The Bitcoin address holding the real BTC for the DefiChain-BTC is',html.Br(),
-                                       html.B('38pZuWUti3vSQuvuFYs8Lwbyje8cmaGhrT'),html.Br(),
+                                       html.B('3GcSHxkKY8ADMWRam51T1WYxYSb2vH62VL'),html.Br(),
                                        'and I am using the following API for getting the data (',html.A('API-Link',href='https://blockchain.info/q/addressbalance/38pZuWUti3vSQuvuFYs8Lwbyje8cmaGhrT',target='_blank', className='defiLink'),')'],style={'text-align': 'justify'}),
                                html.P(['The ETH, USDT and USDC are all deposited on one Ethereum address, which is',html.Br(),
-                                       html.B('0x94fa70d079d76279e1815ce403e9b985bccc82ac'),html.Br(),
+                                       html.B('0xc889faf456439fb932b9ce3d4f43d8078177fd29'),html.Br(),
                                        'and can be get via Etherscan API (no Link because of individual key for access)',],style={'text-align': 'justify'}),
                                html.P(['The Dogecoin address holding the real DOGE is',html.Br(),
                                        html.B('D7jrXDgPYck8jL9eYvRrc7Ze8n2e2Loyba'),html.Br(),
                                        'You can track them with the following API (',html.A('API-Link',href=' https://sochain.com/api/v2/get_address_balance/DOGE/D7jrXDgPYck8jL9eYvRrc7Ze8n2e2Loyba',target='_blank', className='defiLink'),')'],style={'text-align': 'justify'}),
                                html.P(['The Litecoin address holding the real LTC is',html.Br(),
-                                       html.B('MLYQxJfnUfVqRwfYXjDJfmLbyA77hqzSXE'),html.Br(),
+                                       html.B('MTorFqmHaoFSBTmRGTnN1gXRrNqxa3tn2f'),html.Br(),
                                        'You can track them with the following API (',html.A('API-Link',href='https://sochain.com/api/v2/get_address_balance/LTC/MLYQxJfnUfVqRwfYXjDJfmLbyA77hqzSXE',target='_blank', className='defiLink'),')'],style={'text-align': 'justify'}),
 
                                html.P([html.B('Hint:'),' The presented diagrams are interactive. You can zoom in (select range with mouse) and rescale (double-click in diagram) as you like.'
