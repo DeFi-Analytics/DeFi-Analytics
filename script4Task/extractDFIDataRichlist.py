@@ -100,6 +100,13 @@ for richlistFile in foundRichlistFiles:
             fundDFIValue = rawRichlist[rawRichlist.address == addFund].balance.values[0]
         else:
             fundDFIValue = np.NaN
+        # get CF DFI from on-chain governance
+        linkCFinfo = 'https://api.mydefichain.com/v1/listcommunitybalances/'
+        siteContent = requests.get(linkCFinfo)
+        if siteContent.status_code==200:
+            tempData = json.loads(siteContent.text)
+            fundDFIValue = fundDFIValue + tempData['CommunityDevelopmentFunds']
+
 
         if addERC20 in rawRichlist.values:
             erc20DFIValue = rawRichlist[rawRichlist.address == addERC20].balance.values[0]

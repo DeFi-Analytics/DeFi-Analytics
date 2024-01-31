@@ -73,6 +73,14 @@ while True:
 
         if addFund in dfRichList.values:
             fundDFIValue = dfRichList[dfRichList.address == addFund].balance.values[0]
+        # get CF DFI from on-chain governance
+        linkCFinfo = 'https://api.mydefichain.com/v1/listcommunitybalances/'
+        siteContent = requests.get(linkCFinfo)
+        if siteContent.status_code==200:
+            tempData = json.loads(siteContent.text)
+            fundDFIValue = fundDFIValue + tempData['CommunityDevelopmentFunds']
+
+
         mnDFIOverallValue = dfRichList[condMN].balance.sum()
         otherDFIValue = dfRichList[condPrivateAddress].balance.sum()
         if addERC20 in dfRichList.values:
